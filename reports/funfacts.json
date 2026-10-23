@@ -1,0 +1,1656 @@
+{
+ "strict": {
+  "words": 20522,
+  "most_neighbours": [
+   {
+    "word": "არი",
+    "gloss": "is",
+    "freq": 47410,
+    "neighbours": 44
+   },
+   {
+    "word": "ბარი",
+    "gloss": "valley",
+    "freq": 3299,
+    "neighbours": 37
+   },
+   {
+    "word": "ალი",
+    "gloss": "blaze, flame, fire",
+    "freq": 4077,
+    "neighbours": 34
+   },
+   {
+    "word": "კარი",
+    "gloss": "door",
+    "freq": 15149,
+    "neighbours": 34
+   },
+   {
+    "word": "კერი",
+    "gloss": "curries, curry",
+    "freq": 703,
+    "neighbours": 32
+   },
+   {
+    "word": "ხარი",
+    "gloss": "ox, bull",
+    "freq": 1858,
+    "neighbours": 32
+   },
+   {
+    "word": "ვალი",
+    "gloss": "debt",
+    "freq": 5922,
+    "neighbours": 31
+   },
+   {
+    "word": "შარი",
+    "gloss": "",
+    "freq": 912,
+    "neighbours": 31
+   },
+   {
+    "word": "ბალი",
+    "gloss": "cherry",
+    "freq": 2967,
+    "neighbours": 30
+   },
+   {
+    "word": "თარი",
+    "gloss": "",
+    "freq": 152,
+    "neighbours": 30
+   }
+  ],
+  "most_neighbours_7plus_letters": [
+   {
+    "word": "მართული",
+    "gloss": "managed, administered",
+    "freq": 787,
+    "neighbours": 6
+   },
+   {
+    "word": "გამოდის",
+    "gloss": "to come out, to leave",
+    "freq": 52316,
+    "neighbours": 5
+   },
+   {
+    "word": "გამოსვლა",
+    "gloss": "form of გამოდის (noun-from-verb)",
+    "freq": 8016,
+    "neighbours": 5
+   },
+   {
+    "word": "გართული",
+    "gloss": "",
+    "freq": 1154,
+    "neighbours": 5
+   },
+   {
+    "word": "სართული",
+    "gloss": "storey, floor",
+    "freq": 3082,
+    "neighbours": 5
+   }
+  ],
+  "isolated_count": 13837,
+  "most_common_isolated": [
+   {
+    "word": "ძალიან",
+    "gloss": "very",
+    "freq": 427487
+   },
+   {
+    "word": "მაინც",
+    "gloss": "still, anyway",
+    "freq": 402974
+   },
+   {
+    "word": "შეიძლება",
+    "gloss": "it is possible, it may be that",
+    "freq": 388789
+   },
+   {
+    "word": "უკვე",
+    "gloss": "already",
+    "freq": 342669
+   },
+   {
+    "word": "იყოს",
+    "gloss": "let it/her/him be.",
+    "freq": 316357
+   },
+   {
+    "word": "მხოლოდ",
+    "gloss": "only",
+    "freq": 282184
+   },
+   {
+    "word": "აღარ",
+    "gloss": "no longer, not anymore",
+    "freq": 212231
+   },
+   {
+    "word": "ყველაფერი",
+    "gloss": "everything",
+    "freq": 206393
+   },
+   {
+    "word": "ყველაზე",
+    "gloss": "Forms the superlative of many adjectives.",
+    "freq": 196703
+   },
+   {
+    "word": "თუმცა",
+    "gloss": "though",
+    "freq": 172310
+   }
+  ],
+  "shortest_isolated": [
+   {
+    "word": "ლოლ",
+    "gloss": "Adaptation of LOL",
+    "freq": 19486
+   },
+   {
+    "word": "შოუ",
+    "gloss": "show",
+    "freq": 5792
+   },
+   {
+    "word": "ეუფ",
+    "gloss": "wow!, good grief!, yikes!, oh boy! (expressing strong surprise, astonishment, dismay, or admiration)",
+    "freq": 4012
+   },
+   {
+    "word": "უკვე",
+    "gloss": "already",
+    "freq": 342669
+   },
+   {
+    "word": "იყოს",
+    "gloss": "let it/her/him be.",
+    "freq": 316357
+   },
+   {
+    "word": "აღარ",
+    "gloss": "no longer, not anymore",
+    "freq": 212231
+   },
+   {
+    "word": "მიერ",
+    "gloss": "by, by means of, through (governs the genitive case; expresses the agent in passive or participial constructions)",
+    "freq": 130889
+   },
+   {
+    "word": "ძაან",
+    "gloss": "contraction of ძალიან (ʒalian, “very”)",
+    "freq": 113520
+   }
+  ],
+  "longest_with_a_neighbour": [
+   {
+    "word": "დამოუკიდებლობისათვის",
+    "gloss": "postpositional suffixed with -თვის of დამოუკიდებლობა (damouḳidebloba)",
+    "freq": 875
+   },
+   {
+    "word": "დამოუკიდებლობისთვის",
+    "gloss": "postpositional suffixed with -თვის of დამოუკიდებლობა (damouḳidebloba)",
+    "freq": 396
+   },
+   {
+    "word": "წინასწარმეტყველურად",
+    "gloss": "prophetically, presciently",
+    "freq": 28
+   },
+   {
+    "word": "დეინდუსტრიალიზაცია",
+    "gloss": "deindustrialization",
+    "freq": 0
+   },
+   {
+    "word": "რეინდუსტრიალიზაცია",
+    "gloss": "reindustrialization",
+    "freq": 0
+   }
+  ],
+  "diameter": {
+   "steps": 28,
+   "path": [
+    "იონური",
+    "მონური",
+    "მოდური",
+    "მოდერი",
+    "მოდელი",
+    "მორელი",
+    "მორევი",
+    "მორგვი",
+    "მორგი",
+    "მარგი",
+    "დარგი",
+    "დარი",
+    "დამი",
+    "დამა",
+    "დამბა",
+    "სამბა",
+    "სამება",
+    "ამება",
+    "აგება",
+    "აგებს",
+    "აგნებს",
+    "აგინებს",
+    "აშინებს",
+    "აშენებს",
+    "აშენება",
+    "შენება",
+    "შენდება",
+    "შეცდება",
+    "შეცოდება"
+   ]
+  },
+  "most_central": [
+   {
+    "word": "არი",
+    "gloss": "is",
+    "freq": 47410,
+    "avg_steps_to_others": 4.57
+   },
+   {
+    "word": "ალი",
+    "gloss": "blaze, flame, fire",
+    "freq": 4077,
+    "avg_steps_to_others": 4.65
+   },
+   {
+    "word": "ბარი",
+    "gloss": "valley",
+    "freq": 3299,
+    "avg_steps_to_others": 4.66
+   },
+   {
+    "word": "ბალი",
+    "gloss": "cherry",
+    "freq": 2967,
+    "avg_steps_to_others": 4.69
+   },
+   {
+    "word": "სარი",
+    "gloss": "pale, stake",
+    "freq": 551,
+    "avg_steps_to_others": 4.7
+   }
+  ],
+  "least_central": [
+   {
+    "word": "შეცოდება",
+    "gloss": "",
+    "freq": 461,
+    "avg_steps_to_others": 19.98
+   },
+   {
+    "word": "შეცნობა",
+    "gloss": "",
+    "freq": 643,
+    "avg_steps_to_others": 18.98
+   },
+   {
+    "word": "შეგუება",
+    "gloss": "",
+    "freq": 715,
+    "avg_steps_to_others": 18.98
+   },
+   {
+    "word": "შეგონება",
+    "gloss": "",
+    "freq": 369,
+    "avg_steps_to_others": 18.98
+   },
+   {
+    "word": "შეცდება",
+    "gloss": "passive of შეაცდენს (šeacdens)",
+    "freq": 146,
+    "avg_steps_to_others": 18.98
+   }
+  ],
+  "radius": 14,
+  "center": [
+   {
+    "word": "ბამბა",
+    "gloss": "cotton, cotton wool",
+    "freq": 709
+   },
+   {
+    "word": "დამბა",
+    "gloss": "dike, dyke, sea-wall",
+    "freq": 31
+   }
+  ],
+  "biggest_families": [
+   {
+    "pattern": "_არი",
+    "size": 17,
+    "words": [
+     "ბარი",
+     "დარი",
+     "ზარი",
+     "თარი",
+     "კარი",
+     "ლარი",
+     "პარი",
+     "სარი",
+     "ტარი",
+     "უარი",
+     "ფარი",
+     "ქარი",
+     "ღარი",
+     "შარი",
+     "ჭარი",
+     "ხარი",
+     "ჯარი"
+    ]
+   },
+   {
+    "pattern": "_ოლი",
+    "size": 16,
+    "words": [
+     "ბოლი",
+     "გოლი",
+     "დოლი",
+     "ზოლი",
+     "თოლი",
+     "იოლი",
+     "მოლი",
+     "ნოლი",
+     "ჟოლი",
+     "როლი",
+     "სოლი",
+     "ტოლი",
+     "ფოლი",
+     "ქოლი",
+     "ცოლი",
+     "ჰოლი"
+    ]
+   },
+   {
+    "pattern": "_ერი",
+    "size": 15,
+    "words": [
+     "ბერი",
+     "გერი",
+     "იერი",
+     "კერი",
+     "მერი",
+     "პერი",
+     "სერი",
+     "ტერი",
+     "ფერი",
+     "ქერი",
+     "ღერი",
+     "ცერი",
+     "ჭერი",
+     "ჯერი",
+     "ჰერი"
+    ]
+   },
+   {
+    "pattern": "_ალი",
+    "size": 14,
+    "words": [
+     "ბალი",
+     "გალი",
+     "ვალი",
+     "ლალი",
+     "მალი",
+     "ნალი",
+     "სალი",
+     "ქალი",
+     "შალი",
+     "ცალი",
+     "ძალი",
+     "ჭალი",
+     "ხალი",
+     "ჰალი"
+    ]
+   },
+   {
+    "pattern": "_ირი",
+    "size": 13,
+    "words": [
+     "აირი",
+     "ვირი",
+     "თირი",
+     "კირი",
+     "ნირი",
+     "პირი",
+     "სირი",
+     "ტირი",
+     "ფირი",
+     "ჩირი",
+     "ძირი",
+     "წირი",
+     "ჭირი"
+    ]
+   }
+  ],
+  "longest_shrink_chain": [
+   "წარსულში",
+   "წარსული",
+   "წასული",
+   "ასული",
+   "სული",
+   "სულ",
+   "სუ"
+  ],
+  "common_neighbour_pairs": [
+   [
+    {
+     "word": "არა",
+     "gloss": "no",
+     "freq": 917863
+    },
+    {
+     "word": "არც",
+     "gloss": "neither/nor, not … either",
+     "freq": 406541
+    }
+   ],
+   [
+    {
+     "word": "როგორ",
+     "gloss": "how",
+     "freq": 363148
+    },
+    {
+     "word": "როგორც",
+     "gloss": "as, like (introduces comparative or manner clauses)",
+     "freq": 469820
+    }
+   ],
+   [
+    {
+     "word": "ასე",
+     "gloss": "so, like this, like so, thus",
+     "freq": 363130
+    },
+    {
+     "word": "ისე",
+     "gloss": "in that way, in that manner",
+     "freq": 531713
+    }
+   ],
+   [
+    {
+     "word": "რომ",
+     "gloss": "that",
+     "freq": 2620644
+    },
+    {
+     "word": "ხომ",
+     "gloss": "Used when the response is expected to be confirmative. It is not used with the interrogative pronouns, adjectives or adv",
+     "freq": 285296
+    }
+   ],
+   [
+    {
+     "word": "ვერ",
+     "gloss": "Used to negate an action that one is unable to perform; can't",
+     "freq": 767423
+    },
+    {
+     "word": "ჯერ",
+     "gloss": "first",
+     "freq": 284305
+    }
+   ],
+   [
+    {
+     "word": "აბა",
+     "gloss": "used to encourage, literally or rhetorically, a particular response from the listener",
+     "freq": 277117
+    },
+    {
+     "word": "არა",
+     "gloss": "no",
+     "freq": 917863
+    }
+   ],
+   [
+    {
+     "word": "არა",
+     "gloss": "no",
+     "freq": 917863
+    },
+    {
+     "word": "მარა",
+     "gloss": "but",
+     "freq": 270230
+    }
+   ],
+   [
+    {
+     "word": "ახლა",
+     "gloss": "now",
+     "freq": 234839
+    },
+    {
+     "word": "ეხლა",
+     "gloss": "alternative form of ახლა (axla)",
+     "freq": 296733
+    }
+   ],
+   [
+    {
+     "word": "შენ",
+     "gloss": "you (singular, personal)",
+     "freq": 482545
+    },
+    {
+     "word": "შენი",
+     "gloss": "your (singular), yours",
+     "freq": 207816
+    }
+   ],
+   [
+    {
+     "word": "კიდე",
+     "gloss": "edge",
+     "freq": 207411
+    },
+    {
+     "word": "კიდევ",
+     "gloss": "again",
+     "freq": 336117
+    }
+   ],
+   [
+    {
+     "word": "მეორე",
+     "gloss": "second",
+     "freq": 195618
+    },
+    {
+     "word": "მერე",
+     "gloss": "then (soon afterward)",
+     "freq": 541275
+    }
+   ],
+   [
+    {
+     "word": "ჩვენ",
+     "gloss": "we (with no distinction between inclusive and exclusive we)",
+     "freq": 215118
+    },
+    {
+     "word": "ჩვენი",
+     "gloss": "our",
+     "freq": 176381
+    }
+   ],
+   [
+    {
+     "word": "ვინ",
+     "gloss": "who",
+     "freq": 179315
+    },
+    {
+     "word": "ვინც",
+     "gloss": "who",
+     "freq": 162155
+    }
+   ],
+   [
+    {
+     "word": "კაი",
+     "gloss": "nice, okay, well, good",
+     "freq": 221038
+    },
+    {
+     "word": "კაცი",
+     "gloss": "man",
+     "freq": 160035
+    }
+   ],
+   [
+    {
+     "word": "ისე",
+     "gloss": "in that way, in that manner",
+     "freq": 531713
+    },
+    {
+     "word": "ისევ",
+     "gloss": "again",
+     "freq": 155954
+    }
+   ]
+  ],
+  "hardest_common_pair": {
+   "from": {
+    "word": "როგორც",
+    "gloss": "as, like (introduces comparative or manner clauses)",
+    "freq": 469820
+   },
+   "to": {
+    "word": "ამაზე",
+    "gloss": "on this, about this, hereof",
+    "freq": 73618
+   },
+   "steps": 20,
+   "path": [
+    "როგორც",
+    "როგორი",
+    "როტორი",
+    "კოტორი",
+    "კოტრი",
+    "კიტრი",
+    "კირი",
+    "აირი",
+    "არი",
+    "არა",
+    "მარა",
+    "მარლა",
+    "მართლა",
+    "მართვა",
+    "მართვე",
+    "მათვე",
+    "მანვე",
+    "იმანვე",
+    "იმავე",
+    "ამავე",
+    "ამაზე"
+   ]
+  },
+  "fully_flexible_count": 114,
+  "fully_flexible_longest": [
+   {
+    "word": "მერე",
+    "gloss": "then (soon afterward)",
+    "freq": 541275
+   },
+   {
+    "word": "ჩემი",
+    "gloss": "my, mine (possession), singular first person possessive pronoun",
+    "freq": 425801
+   },
+   {
+    "word": "თემა",
+    "gloss": "theme",
+    "freq": 185595
+   },
+   {
+    "word": "წელი",
+    "gloss": "year",
+    "freq": 80826
+   },
+   {
+    "word": "ქალი",
+    "gloss": "woman",
+    "freq": 68841
+   },
+   {
+    "word": "სული",
+    "gloss": "spirit, ghost",
+    "freq": 29659
+   }
+  ]
+ },
+ "standard": {
+  "words": 187038,
+  "most_neighbours": [
+   {
+    "word": "არის",
+    "gloss": "to be",
+    "freq": 969805,
+    "neighbours": 83
+   },
+   {
+    "word": "არი",
+    "gloss": "is",
+    "freq": 47410,
+    "neighbours": 67
+   },
+   {
+    "word": "მარის",
+    "gloss": "",
+    "freq": 1084,
+    "neighbours": 66
+   },
+   {
+    "word": "ბარი",
+    "gloss": "valley",
+    "freq": 3299,
+    "neighbours": 62
+   },
+   {
+    "word": "კარი",
+    "gloss": "door",
+    "freq": 15149,
+    "neighbours": 62
+   },
+   {
+    "word": "ალი",
+    "gloss": "blaze, flame, fire",
+    "freq": 4077,
+    "neighbours": 61
+   },
+   {
+    "word": "არა",
+    "gloss": "no",
+    "freq": 917863,
+    "neighbours": 61
+   },
+   {
+    "word": "არია",
+    "gloss": "aria",
+    "freq": 1216,
+    "neighbours": 59
+   },
+   {
+    "word": "ბარა",
+    "gloss": "",
+    "freq": 95,
+    "neighbours": 57
+   },
+   {
+    "word": "ვალი",
+    "gloss": "debt",
+    "freq": 5922,
+    "neighbours": 57
+   }
+  ],
+  "most_neighbours_7plus_letters": [
+   {
+    "word": "ფარების",
+    "gloss": "form of ფარი (genitive plural)",
+    "freq": 570,
+    "neighbours": 26
+   },
+   {
+    "word": "კარების",
+    "gloss": "form of კარი (genitive plural)",
+    "freq": 1479,
+    "neighbours": 22
+   },
+   {
+    "word": "მილების",
+    "gloss": "",
+    "freq": 447,
+    "neighbours": 22
+   },
+   {
+    "word": "ხარების",
+    "gloss": "form of ხარი (genitive plural)",
+    "freq": 517,
+    "neighbours": 22
+   },
+   {
+    "word": "მონების",
+    "gloss": "form of მონა (genitive plural)",
+    "freq": 745,
+    "neighbours": 21
+   }
+  ],
+  "isolated_count": 48406,
+  "most_common_isolated": [
+   {
+    "word": "ფორუმზე",
+    "gloss": "",
+    "freq": 61152
+   },
+   {
+    "word": "შესაბამისად",
+    "gloss": "accordingly, correspondingly, conformably",
+    "freq": 52358
+   },
+   {
+    "word": "რავიცი",
+    "gloss": "alternative spelling of რა ვიცი (ra vici)",
+    "freq": 38011
+   },
+   {
+    "word": "ზოგადად",
+    "gloss": "generally",
+    "freq": 33276
+   },
+   {
+    "word": "მითუმეტეს",
+    "gloss": "a fortiori",
+    "freq": 30948
+   },
+   {
+    "word": "ესეიგი",
+    "gloss": "",
+    "freq": 30716
+   },
+   {
+    "word": "არასდროს",
+    "gloss": "never",
+    "freq": 29483
+   },
+   {
+    "word": "რეალურად",
+    "gloss": "substantially",
+    "freq": 27264
+   },
+   {
+    "word": "ხანდახან",
+    "gloss": "sometimes",
+    "freq": 24262
+   },
+   {
+    "word": "კონკრეტულად",
+    "gloss": "concretely",
+    "freq": 23616
+   }
+  ],
+  "shortest_isolated": [
+   {
+    "word": "ეუფ",
+    "gloss": "wow!, good grief!, yikes!, oh boy! (expressing strong surprise, astonishment, dismay, or admiration)",
+    "freq": 4012
+   },
+   {
+    "word": "პროფ",
+    "gloss": "",
+    "freq": 3466
+   },
+   {
+    "word": "ჟორჟ",
+    "gloss": "",
+    "freq": 632
+   },
+   {
+    "word": "უფორ",
+    "gloss": "",
+    "freq": 598
+   },
+   {
+    "word": "ნაკვ",
+    "gloss": "",
+    "freq": 588
+   },
+   {
+    "word": "ჟიულ",
+    "gloss": "",
+    "freq": 479
+   },
+   {
+    "word": "ჭუჭუ",
+    "gloss": "penis, willy",
+    "freq": 395
+   },
+   {
+    "word": "თრეშ",
+    "gloss": "",
+    "freq": 383
+   }
+  ],
+  "longest_with_a_neighbour": [
+   {
+    "word": "ურთიერთდამოკიდებულებათა",
+    "gloss": "form of ურთიერთდამოკიდებულება (archaic ergative plural)",
+    "freq": 5
+   },
+   {
+    "word": "ურთიერთდამოკიდებულებასა",
+    "gloss": "form of ურთიერთდამოკიდებულება (dative singular)",
+    "freq": 4
+   },
+   {
+    "word": "ურთიერთდამოკიდებულებები",
+    "gloss": "form of ურთიერთდამოკიდებულება (plural)",
+    "freq": 11
+   },
+   {
+    "word": "ურთიერთდამოკიდებულებებს",
+    "gloss": "form of ურთიერთდამოკიდებულება (dative plural)",
+    "freq": 12
+   },
+   {
+    "word": "ურთიერთდამოკიდებულებისა",
+    "gloss": "form of ურთიერთდამოკიდებულება (genitive singular)",
+    "freq": 16
+   }
+  ],
+  "diameter": {
+   "steps": 47,
+   "path": [
+    "განეცადოს",
+    "განიცადოს",
+    "განიცადო",
+    "განიცადა",
+    "განეცადა",
+    "განეცხადა",
+    "განაცხადა",
+    "განაცხადი",
+    "განაცხადის",
+    "განაცხადეს",
+    "განაცხადებს",
+    "განაცხადების",
+    "განცხადების",
+    "განცხადებას",
+    "განცხადება",
+    "გაცხადება",
+    "გაცხარება",
+    "გახარება",
+    "გახარებ",
+    "გახარე",
+    "გახარა",
+    "ახარა",
+    "აარა",
+    "მარა",
+    "მალა",
+    "მოლა",
+    "მოვლა",
+    "მოვლას",
+    "მოვლეს",
+    "მოავლეს",
+    "მოახლეს",
+    "მოახლეთ",
+    "მოახლეთა",
+    "მოსახლეთა",
+    "მოსახლება",
+    "მოსახლეობა",
+    "მოსახლეობას",
+    "მოსახლეობის",
+    "მოსახლეების",
+    "მოახლეების",
+    "მოახლოების",
+    "მიახლოების",
+    "მიახლოებას",
+    "მიახლოება",
+    "მიახლოვება",
+    "მიახლოვდება",
+    "მიუახლოვდება",
+    "მოუახლოვდება"
+   ]
+  },
+  "most_central": [
+   {
+    "word": "არი",
+    "gloss": "is",
+    "freq": 47410,
+    "avg_steps_to_others": 6.7
+   },
+   {
+    "word": "ალი",
+    "gloss": "blaze, flame, fire",
+    "freq": 4077,
+    "avg_steps_to_others": 6.74
+   },
+   {
+    "word": "არის",
+    "gloss": "to be",
+    "freq": 969805,
+    "avg_steps_to_others": 6.74
+   },
+   {
+    "word": "არა",
+    "gloss": "no",
+    "freq": 917863,
+    "avg_steps_to_others": 6.75
+   },
+   {
+    "word": "მარა",
+    "gloss": "but",
+    "freq": 270230,
+    "avg_steps_to_others": 6.75
+   }
+  ],
+  "least_central": [
+   {
+    "word": "ურმებზე",
+    "gloss": "form of ურემი (dative on-position plural)",
+    "freq": 26,
+    "avg_steps_to_others": 28.71
+   },
+   {
+    "word": "ნორმებზე",
+    "gloss": "",
+    "freq": 145,
+    "avg_steps_to_others": 28.71
+   },
+   {
+    "word": "მოუახლოვდება",
+    "gloss": "to come closer, to approach (the speaker or someone with them)",
+    "freq": 27,
+    "avg_steps_to_others": 27.76
+   },
+   {
+    "word": "განეცადოს",
+    "gloss": "",
+    "freq": 24,
+    "avg_steps_to_others": 27.75
+   },
+   {
+    "word": "განვიცადოთ",
+    "gloss": "",
+    "freq": 69,
+    "avg_steps_to_others": 27.75
+   }
+  ],
+  "biggest_families": [
+   {
+    "pattern": "_არის",
+    "size": 23,
+    "words": [
+     "აარის",
+     "ბარის",
+     "გარის",
+     "ვარის",
+     "ზარის",
+     "თარის",
+     "იარის",
+     "კარის",
+     "ლარის",
+     "მარის",
+     "ნარის",
+     "პარის",
+     "ჟარის",
+     "სარის",
+     "ტარის",
+     "უარის",
+     "ფარის",
+     "ქარის",
+     "ღარის",
+     "შარის",
+     "ხარის",
+     "ჯარის",
+     "ჰარის"
+    ]
+   },
+   {
+    "pattern": "_არი",
+    "size": 23,
+    "words": [
+     "ბარი",
+     "დარი",
+     "ვარი",
+     "ზარი",
+     "თარი",
+     "კარი",
+     "ლარი",
+     "პარი",
+     "ჟარი",
+     "სარი",
+     "ტარი",
+     "უარი",
+     "ფარი",
+     "ქარი",
+     "ღარი",
+     "შარი",
+     "ჩარი",
+     "ცარი",
+     "წარი",
+     "ჭარი",
+     "ხარი",
+     "ჯარი",
+     "ჰარი"
+    ]
+   },
+   {
+    "pattern": "_ილი",
+    "size": 23,
+    "words": [
+     "ბილი",
+     "გილი",
+     "დილი",
+     "ვილი",
+     "კილი",
+     "მილი",
+     "ნილი",
+     "პილი",
+     "რილი",
+     "ტილი",
+     "უილი",
+     "ფილი",
+     "ქილი",
+     "ღილი",
+     "შილი",
+     "ჩილი",
+     "ცილი",
+     "ძილი",
+     "წილი",
+     "ჭილი",
+     "ხილი",
+     "ჯილი",
+     "ჰილი"
+    ]
+   },
+   {
+    "pattern": "_არა",
+    "size": 22,
+    "words": [
+     "აარა",
+     "ბარა",
+     "დარა",
+     "ეარა",
+     "ზარა",
+     "თარა",
+     "იარა",
+     "კარა",
+     "მარა",
+     "პარა",
+     "ტარა",
+     "უარა",
+     "ფარა",
+     "ქარა",
+     "ყარა",
+     "შარა",
+     "ჩარა",
+     "ცარა",
+     "ძარა",
+     "ხარა",
+     "ჯარა",
+     "ჰარა"
+    ]
+   },
+   {
+    "pattern": "_ალი",
+    "size": 21,
+    "words": [
+     "ბალი",
+     "გალი",
+     "ვალი",
+     "ზალი",
+     "კალი",
+     "ლალი",
+     "მალი",
+     "ნალი",
+     "პალი",
+     "რალი",
+     "სალი",
+     "ტალი",
+     "ქალი",
+     "ღალი",
+     "შალი",
+     "ცალი",
+     "ძალი",
+     "წალი",
+     "ჭალი",
+     "ხალი",
+     "ჰალი"
+    ]
+   }
+  ],
+  "longest_shrink_chain": [
+   "რომელთაგანაც",
+   "რომელთაგანც",
+   "რომელთაგან",
+   "რომელთგან",
+   "რომელთან",
+   "რომელთა",
+   "რომელთ",
+   "რომელ",
+   "რომლ",
+   "რომ",
+   "რო"
+  ],
+  "common_neighbour_pairs": [
+   [
+    {
+     "word": "არა",
+     "gloss": "no",
+     "freq": 917863
+    },
+    {
+     "word": "არც",
+     "gloss": "neither/nor, not … either",
+     "freq": 406541
+    }
+   ],
+   [
+    {
+     "word": "როგორ",
+     "gloss": "how",
+     "freq": 363148
+    },
+    {
+     "word": "როგორც",
+     "gloss": "as, like (introduces comparative or manner clauses)",
+     "freq": 469820
+    }
+   ],
+   [
+    {
+     "word": "ასე",
+     "gloss": "so, like this, like so, thus",
+     "freq": 363130
+    },
+    {
+     "word": "ისე",
+     "gloss": "in that way, in that manner",
+     "freq": 531713
+    }
+   ],
+   [
+    {
+     "word": "რომ",
+     "gloss": "that",
+     "freq": 2620644
+    },
+    {
+     "word": "ხომ",
+     "gloss": "Used when the response is expected to be confirmative. It is not used with the interrogative pronouns, adjectives or adv",
+     "freq": 285296
+    }
+   ],
+   [
+    {
+     "word": "ვერ",
+     "gloss": "Used to negate an action that one is unable to perform; can't",
+     "freq": 767423
+    },
+    {
+     "word": "ჯერ",
+     "gloss": "first",
+     "freq": 284305
+    }
+   ],
+   [
+    {
+     "word": "აბა",
+     "gloss": "used to encourage, literally or rhetorically, a particular response from the listener",
+     "freq": 277117
+    },
+    {
+     "word": "არა",
+     "gloss": "no",
+     "freq": 917863
+    }
+   ],
+   [
+    {
+     "word": "არა",
+     "gloss": "no",
+     "freq": 917863
+    },
+    {
+     "word": "მარა",
+     "gloss": "but",
+     "freq": 270230
+    }
+   ],
+   [
+    {
+     "word": "ახლა",
+     "gloss": "now",
+     "freq": 234839
+    },
+    {
+     "word": "ეხლა",
+     "gloss": "alternative form of ახლა (axla)",
+     "freq": 296733
+    }
+   ],
+   [
+    {
+     "word": "შენ",
+     "gloss": "you (singular, personal)",
+     "freq": 482545
+    },
+    {
+     "word": "შენი",
+     "gloss": "your (singular), yours",
+     "freq": 207816
+    }
+   ],
+   [
+    {
+     "word": "კიდე",
+     "gloss": "edge",
+     "freq": 207411
+    },
+    {
+     "word": "კიდევ",
+     "gloss": "again",
+     "freq": 336117
+    }
+   ],
+   [
+    {
+     "word": "მეორე",
+     "gloss": "second",
+     "freq": 195618
+    },
+    {
+     "word": "მერე",
+     "gloss": "then (soon afterward)",
+     "freq": 541275
+    }
+   ],
+   [
+    {
+     "word": "ჩვენ",
+     "gloss": "we (with no distinction between inclusive and exclusive we)",
+     "freq": 215118
+    },
+    {
+     "word": "ჩვენი",
+     "gloss": "our",
+     "freq": 176381
+    }
+   ],
+   [
+    {
+     "word": "ვინ",
+     "gloss": "who",
+     "freq": 179315
+    },
+    {
+     "word": "ვინც",
+     "gloss": "who",
+     "freq": 162155
+    }
+   ],
+   [
+    {
+     "word": "კაი",
+     "gloss": "nice, okay, well, good",
+     "freq": 221038
+    },
+    {
+     "word": "კაცი",
+     "gloss": "man",
+     "freq": 160035
+    }
+   ],
+   [
+    {
+     "word": "ისე",
+     "gloss": "in that way, in that manner",
+     "freq": 531713
+    },
+    {
+     "word": "ისევ",
+     "gloss": "again",
+     "freq": 155954
+    }
+   ]
+  ],
+  "hardest_common_pair": {
+   "from": {
+    "word": "შემთხვევაში",
+    "gloss": "in case of",
+    "freq": 142253
+   },
+   "to": {
+    "word": "გამომდინარე",
+    "gloss": "consequent, inasmuch as",
+    "freq": 33727
+   },
+   "steps": 23,
+   "path": [
+    "შემთხვევაში",
+    "შემთხვევაშ",
+    "შემთხვევა",
+    "ემთხვევა",
+    "მთხვევა",
+    "მეხვევა",
+    "ეხვევა",
+    "ხვევა",
+    "ხევა",
+    "ხედვა",
+    "მედვა",
+    "მედგა",
+    "მედგარ",
+    "მდგარ",
+    "მდგარი",
+    "მდნარი",
+    "მდინარი",
+    "მცინარი",
+    "მოცინარი",
+    "მომცინარი",
+    "მომდინარი",
+    "ამომდინარი",
+    "ამომდინარე",
+    "გამომდინარე"
+   ]
+  },
+  "fully_flexible_count": 1826,
+  "fully_flexible_longest": [
+   {
+    "word": "დიდების",
+    "gloss": "form of დიდება (genitive singular)",
+    "freq": 2124
+   },
+   {
+    "word": "მონების",
+    "gloss": "form of მონა (genitive plural)",
+    "freq": 745
+   },
+   {
+    "word": "მონებას",
+    "gloss": "",
+    "freq": 39
+   },
+   {
+    "word": "მოდელი",
+    "gloss": "model, sampler",
+    "freq": 19466
+   },
+   {
+    "word": "დიდება",
+    "gloss": "glory, fame",
+    "freq": 6369
+   },
+   {
+    "word": "სერიის",
+    "gloss": "",
+    "freq": 4674
+   }
+  ]
+ },
+ "loneliest": [
+  {
+   "word": "გადმოსაკონტრრევოლუციონერებლებისნაირებისათვისაცო",
+   "gloss": "said that it is also for those who are like the ones that need to be re-counter-revolutionized",
+   "freq": 0,
+   "nearest_edits": 27
+  },
+  {
+   "word": "სოციოპოლიტიკურეკონომიკური",
+   "gloss": "sociopoliticoeconomic",
+   "freq": 0,
+   "nearest_edits": 9
+  },
+  {
+   "word": "ხმამაღლამოლაპარაკე",
+   "gloss": "person who speaks loudly",
+   "freq": 7,
+   "nearest_edits": 8
+  },
+  {
+   "word": "მულტიინსტრუმენტალისტი",
+   "gloss": "multi-instrumentalist",
+   "freq": 6,
+   "nearest_edits": 8
+  },
+  {
+   "word": "ვარდისფერსაყელოიანი",
+   "gloss": "pink-collar worker, pink-collar person",
+   "freq": 0,
+   "nearest_edits": 8
+  },
+  {
+   "word": "ურთიერთპატივისცემა",
+   "gloss": "",
+   "freq": 121,
+   "nearest_edits": 7
+  },
+  {
+   "word": "ფეხიფეხგადადებული",
+   "gloss": "cross-legged",
+   "freq": 4,
+   "nearest_edits": 7
+  },
+  {
+   "word": "ელექტროკარდიოსტიმულატორი",
+   "gloss": "pacemaker (device)",
+   "freq": 1,
+   "nearest_edits": 7
+  },
+  {
+   "word": "ინვაირონმენტალიზმი",
+   "gloss": "environmentalism",
+   "freq": 0,
+   "nearest_edits": 7
+  },
+  {
+   "word": "მხოლოდდამხოლოდ",
+   "gloss": "solely",
+   "freq": 382,
+   "nearest_edits": 6
+  }
+ ],
+ "loneliest_common": [
+  {
+   "word": "მაშასადამე",
+   "gloss": "consequently",
+   "freq": 8099,
+   "nearest_edits": 4
+  },
+  {
+   "word": "საკანონმდებლო",
+   "gloss": "legislative, legislation-related",
+   "freq": 4612,
+   "nearest_edits": 4
+  },
+  {
+   "word": "სურვილისამებრ",
+   "gloss": "ad lib, ad libitum",
+   "freq": 1423,
+   "nearest_edits": 4
+  },
+  {
+   "word": "ვეებერთელა",
+   "gloss": "gigantic, immense, huge",
+   "freq": 1097,
+   "nearest_edits": 4
+  },
+  {
+   "word": "დედამოტყნული",
+   "gloss": "motherfucker",
+   "freq": 1030,
+   "nearest_edits": 4
+  },
+  {
+   "word": "მითუმეტეს",
+   "gloss": "a fortiori",
+   "freq": 30948,
+   "nearest_edits": 3
+  },
+  {
+   "word": "ჯერჯერობით",
+   "gloss": "thus far; up to the present, yet",
+   "freq": 18780,
+   "nearest_edits": 3
+  },
+  {
+   "word": "სხვათაშორის",
+   "gloss": "inter alia",
+   "freq": 15873,
+   "nearest_edits": 3
+  },
+  {
+   "word": "საინფორმაციო",
+   "gloss": "informational, information-related, information-pertaining, for information, for informing",
+   "freq": 10033,
+   "nearest_edits": 3
+  },
+  {
+   "word": "სატელეფონო",
+   "gloss": "for telephony, telephone-related, telephone-pertaining",
+   "freq": 8336,
+   "nearest_edits": 3
+  }
+ ],
+ "loneliest_short": [
+  {
+   "word": "აუდიო",
+   "gloss": "audio",
+   "freq": 5375,
+   "nearest_edits": 2
+  },
+  {
+   "word": "ეუფ",
+   "gloss": "wow!, good grief!, yikes!, oh boy! (expressing strong surprise, astonishment, dismay, or admiration)",
+   "freq": 4012,
+   "nearest_edits": 2
+  },
+  {
+   "word": "უვიზო",
+   "gloss": "visa-free",
+   "freq": 668,
+   "nearest_edits": 2
+  },
+  {
+   "word": "პროჭი",
+   "gloss": "anus",
+   "freq": 575,
+   "nearest_edits": 2
+  },
+  {
+   "word": "ჭუჭუ",
+   "gloss": "penis, willy",
+   "freq": 395,
+   "nearest_edits": 2
+  },
+  {
+   "word": "ზებრა",
+   "gloss": "zebra",
+   "freq": 317,
+   "nearest_edits": 2
+  },
+  {
+   "word": "კორსო",
+   "gloss": "",
+   "freq": 244,
+   "nearest_edits": 2
+  },
+  {
+   "word": "კაშნე",
+   "gloss": "muffler, scarf",
+   "freq": 157,
+   "nearest_edits": 2
+  },
+  {
+   "word": "რვავე",
+   "gloss": "all eight",
+   "freq": 115,
+   "nearest_edits": 2
+  },
+  {
+   "word": "უნშიუ",
+   "gloss": "",
+   "freq": 114,
+   "nearest_edits": 2
+  }
+ ],
+ "loneliest_nearest": [
+  {
+   "word": "გადმოსაკონტრრევოლუციონერებლებისნაირებისათვისაცო",
+   "nearest": "კონტრრევოლუციონერები",
+   "edits": 27
+  },
+  {
+   "word": "სოციოპოლიტიკურეკონომიკური",
+   "nearest": "სოციოეკონომიკური",
+   "edits": 9
+  },
+  {
+   "word": "ხმამაღლამოლაპარაკე",
+   "nearest": "მოლაპარაკე",
+   "edits": 8
+  }
+ ],
+ "palindromes": [
+  "აცაბაცა",
+  "როგორ",
+  "იმამი",
+  "ოხოხო",
+  "ესსე"
+ ]
+}

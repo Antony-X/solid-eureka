@@ -20,6 +20,13 @@
   --leaf-soft: #e2efe8;
   --series-1: #2a78d6;
   --series-2: #eb6834;
+  --sea: #e9e7ee;             /* map: water between clusters */
+  --land: #fdfcfe;            /* map: a cluster's ground */
+  --land-line: #d6d2dd;
+  --dot: #3a3542;
+  --dot-form: #a29cab;
+  --edge: #c7c2cf;
+  --shadow: rgba(25, 22, 29, 0.14);
   --display: "Noto Serif Georgian", "Sylfaen", Georgia, serif;
   --body: "Noto Sans Georgian", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -29,20 +36,34 @@
     --bg: #121014; --surface: #1b181e; --ink: #f0edf2; --ink-2: #c3bec9; --muted: #8f8996;
     --line: #2f2b34; --grid: #2a272e; --accent: #e88aab; --accent-ink: #1b0b12; --accent-soft: #3b1e2a;
     --leaf: #82c9a5; --leaf-soft: #1c3127; --series-1: #3987e5; --series-2: #d95926; color-scheme: dark;
+    --sea: #0c0b0e; --land: #1f1c23; --land-line: #39343f; --dot: #d9d4df; --dot-form: #7b7584; --edge: #423c49;
+    --shadow: rgba(0, 0, 0, 0.5);
   }
 }
 :root[data-theme="dark"] {
   --bg: #121014; --surface: #1b181e; --ink: #f0edf2; --ink-2: #c3bec9; --muted: #8f8996;
   --line: #2f2b34; --grid: #2a272e; --accent: #e88aab; --accent-ink: #1b0b12; --accent-soft: #3b1e2a;
   --leaf: #82c9a5; --leaf-soft: #1c3127; --series-1: #3987e5; --series-2: #d95926; color-scheme: dark;
+  --sea: #0c0b0e; --land: #1f1c23; --land-line: #39343f; --dot: #d9d4df; --dot-form: #7b7584; --edge: #423c49;
+  --shadow: rgba(0, 0, 0, 0.5);
 }
 * { box-sizing: border-box; }
 body {
   background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 28px 64px;
+  padding-block: 0 64px;
 }
-.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+[hidden] { display: none !important; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.topnav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+.navin { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; gap: 16px; }
+.brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--accent); text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 2px; margin-left: auto; }
+.tabs button { font: inherit; font-size: 14.5px; font-weight: 500; color: var(--ink-2); background: transparent; border: 0; border-bottom: 2px solid transparent; padding: 14px 12px 12px; cursor: pointer; touch-action: manipulation; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-top: 28px; display: flex; flex-direction: column; gap: 40px; }
+.view { display: flex; flex-direction: column; gap: 32px; }
 h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
 h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
 h2 { font-size: 26px; font-weight: 700; }
@@ -141,6 +162,55 @@ ul.notes { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14
 footer { font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; }
 footer a { color: var(--ink-2); }
 
+/* ---------- cluster map ---------- */
+.statusrow { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; }
+.btn.sm { padding: 5px 12px; font-size: 13px; }
+.maptools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.find { display: flex; gap: 8px; flex: 1 1 280px; min-width: 0; }
+.find input { flex: 1; min-width: 0; font-family: var(--display); font-size: 18px; padding: 7px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.find input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mapsum { font-size: 14px; color: var(--ink-2); max-width: 80ch; }
+.view.tight { gap: 18px; }
+.maprandom { position: absolute; top: 10px; left: 10px; z-index: 1; font: inherit; font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--accent); cursor: pointer; touch-action: manipulation; box-shadow: 0 1px 3px var(--shadow); }
+.maprandom:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.mapsum b { color: var(--ink); }
+.mapbox { position: relative; height: 62vh; height: clamp(340px, 62svh, 700px); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--sea); }
+.mapbox canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; outline: none; }
+.mapbox canvas.drag { cursor: grabbing; }
+.mapbox canvas:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+.zoom { position: absolute; top: 10px; right: 10px; display: grid; gap: 6px; }
+.zoom button { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: 19px; line-height: 1; cursor: pointer; touch-action: manipulation; box-shadow: 0 1px 3px var(--shadow); }
+.zoom button.fit { font-size: 12px; font-weight: 600; }
+.zoom button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.mapmsg { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--ink-2); font-size: 14px; pointer-events: none; }
+.mapcard { position: absolute; left: 10px; right: 10px; bottom: 10px; max-width: 430px; max-height: 52%; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; box-shadow: 0 6px 22px var(--shadow); }
+.mapcard .x { position: absolute; top: 4px; right: 4px; width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 20px; cursor: pointer; }
+.mapcard .x:hover { color: var(--ink); }
+.mc-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; padding-right: 30px; }
+.mc-head .w { font-family: var(--display); font-size: 22px; line-height: 1.2; overflow-wrap: anywhere; }
+.mc-gl, .mc-line { font-size: 13.5px; color: var(--ink-2); }
+.mc-line b { color: var(--ink); font-weight: 600; }
+.mc-chips { max-height: 96px; }
+.maphint { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; color: var(--muted); }
+.key { display: inline-flex; align-items: center; gap: 6px; }
+.key i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--c); }
+.key i.line { width: 16px; height: 2px; border-radius: 1px; }
+.key i.ring { width: 12px; height: 12px; background: var(--land); border: 1px solid var(--land-line); }
+tr.click td.ka { font-size: 14px; }
+@media (max-width: 600px) {
+  .rung { grid-template-columns: 44px minmax(0, 1fr); row-gap: 2px; }
+  .rung .meta { grid-column: 2; justify-items: start; text-align: left; }
+  .rung .gl { max-width: none; }
+  #view-clusters h1 { font-size: 28px; }
+  #view-clusters header p { font-size: 14px; }
+  .find input { font-size: 17px; }
+}
+@media (max-width: 440px) {
+  .brand { display: none; }
+  .tabs { margin: 0; width: 100%; }
+  .tabs button { flex: 1; padding-inline: 4px; }
+}
+
 @media (max-width: 760px) {
   .result, .grid2 { grid-template-columns: 1fr; }
   .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -153,9 +223,19 @@ footer a { color: var(--ink-2); }
 }
 </style>
 
-<div class="wrap">
+<nav class="topnav" aria-label="Pages">
+  <div class="navin gutter">
+    <a class="brand" href="#ladder" lang="ka">სიტყვების კიბე</a>
+    <div class="tabs">
+      <button data-view="ladder" aria-current="page">Ladder</button>
+      <button data-view="clusters">Clusters</button>
+      <button data-view="findings">Findings</button>
+    </div>
+  </div>
+</nav>
+<div class="wrap gutter">
+ <div class="view" id="view-ladder">
   <header>
-    <div class="ka">სიტყვების კიბე</div>
     <h1>Georgian Word Ladder</h1>
     <p class="ink2">Change one letter at a time (swap, add or remove) and every step must be a real Georgian word. Search any two words below. The graph is built from <span id="hdr-count" class="mono">…</span> words merged from six open Georgian word lists.</p>
   </header>
@@ -175,17 +255,73 @@ footer a { color: var(--ink-2); }
       <button class="btn ghost" id="random">Random puzzle</button>
       <button class="btn" id="go">Find ladder</button>
     </div>
-    <div class="status" id="status" aria-live="polite">Loading the dictionary…</div>
+    <div class="statusrow">
+      <div class="status" id="status" aria-live="polite">Loading the dictionary…</div>
+      <button class="btn ghost sm" id="ladder-map" hidden>Show on map</button>
+    </div>
     <div class="alts" id="alts"></div>
     <div class="result">
-      <ol class="ladder" id="ladder"></ol>
+      <ol class="ladder" id="rungs"></ol>
       <div class="panel" id="panel"><div class="empty">Select a word on the ladder to see every word one edit away.</div></div>
     </div>
   </div>
 
-  <section id="findings">
+ </div>
+
+ <div class="view tight" id="view-clusters" hidden>
+  <header>
+    <h1>Word clusters</h1>
+    <p class="ink2">A cluster is a group of words where a ladder joins any two of them. The disc is the largest cluster; each island around it is a cluster no ladder can leave.</p>
+  </header>
+  <div class="maptools">
+    <form class="find" id="map-find" role="search">
+      <input id="map-q" placeholder="Find a word, e.g. ვაშლი" autocomplete="off" spellcheck="false" lang="ka" aria-label="Find a word on the map">
+      <button class="btn" type="submit">Find</button>
+    </form>
+    <div class="seg" role="group" aria-label="Dictionary">
+      <button id="cm-strict" aria-pressed="true" title="Only dictionary headwords">Dictionary words</button>
+      <button id="cm-standard" aria-pressed="false" title="Headwords plus attested inflected forms">All word forms</button>
+    </div>
+  </div>
+  <div style="display:grid;gap:10px">
+    <div class="mapbox" id="mapbox">
+      <button class="maprandom" id="map-random">Random island</button>
+      <canvas id="map-canvas" tabindex="0" aria-label="Map of word clusters. Drag to move, scroll or pinch to zoom, tap a word for details. Arrow keys move, plus and minus zoom, 0 shows the whole map."></canvas>
+      <div class="zoom">
+        <button id="z-in" aria-label="Zoom in">+</button>
+        <button id="z-out" aria-label="Zoom out">−</button>
+        <button id="z-fit" class="fit" aria-label="Show the whole map">Fit</button>
+      </div>
+      <div class="mapmsg" id="map-msg">Loading the map…</div>
+      <div class="mapcard" id="map-card" hidden></div>
+    </div>
+    <div class="maphint">
+      <span class="key"><i style="--c:var(--dot)"></i>dictionary word</span>
+      <span class="key" id="key-form"><i style="--c:var(--dot-form)"></i>word form</span>
+      <span class="key"><i class="line" style="--c:var(--edge)"></i>one-letter change between nearby words (zoom in; tap a word for all of its links)</span>
+      <span class="key"><i class="ring"></i>cluster</span>
+      <span>Drag to move · scroll or pinch to zoom · double-tap to zoom in · tap a word or island</span>
+    </div>
+  </div>
+  <div class="mapsum" id="map-sum"></div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Biggest clusters</h3>
+      <p>Most common words first. Select a row to fly to it.</p>
+      <div class="tablewrap"><table id="cl-top"></table></div>
+    </div>
+    <div class="card">
+      <h3>Cluster sizes</h3>
+      <p id="cl-sizes-note"></p>
+      <div class="bars" id="cl-sizes"></div>
+    </div>
+  </div>
+ </div>
+
+ <div class="view" id="view-findings" hidden>
+  <section>
     <div class="eyebrow">Exploratory analysis</div>
-    <h2>What the graph looks like</h2>
+    <h1>What the graph looks like</h1>
     <div class="tiles" id="tiles"></div>
     <div class="grid2">
       <div class="card">
@@ -241,6 +377,7 @@ footer a { color: var(--ink-2); }
       <ul class="notes" id="notes"></ul>
     </div>
   </section>
+ </div>
 
   <footer>
     <div>Sources: GeoWordsDatabase (D. Bumbeishvili, MIT) incl. its 4.8M-token web scrape, akalongman/geo-words (MIT), Hunspell ka_GE (MIT/CC-BY), Crúbadán (K. Scannell, CC-BY 4.0), English Wiktionary via kaikki.org (CC-BY-SA). Glosses come from Wiktionary.</div>
@@ -251,6 +388,7 @@ footer a { color: var(--ink-2); }
 <script id="words-data" type="text/plain">__WORDS__</script>
 <script id="stats-data" type="application/json">__STATS__</script>
 <script id="puzzle-data" type="application/json">__PUZZLES__</script>
+<script id="map-strict" type="text/plain">__MAP_STRICT__</script>
 <script>
 (() => {
 const ABC = "აბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ";
@@ -261,7 +399,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 const fmt = (n) => n >= 1e6 ? (n / 1e6).toFixed(2).replace(/\.?0+$/, "") + "M" : n >= 1e4 ? Math.round(n / 1e3) + "K" : n.toLocaleString("en-US");
 
 let WORDS = [], INFO = new Map(), SETS = {}, NB = { strict: new Map(), standard: new Map() };
-let mode = "strict", current = null;
+let mode = "strict", current = null, shownPath = null, ladderMode = null;
 
 /* ---------- data ---------- */
 async function loadWords() {
@@ -358,12 +496,15 @@ function setMode(m) {
   mode = m;
   $("m-strict").setAttribute("aria-pressed", m === "strict");
   $("m-standard").setAttribute("aria-pressed", m === "standard");
+  $("cm-strict").setAttribute("aria-pressed", m === "strict");
+  $("cm-standard").setAttribute("aria-pressed", m === "standard");
 }
 function status(html) { $("status").innerHTML = html; }
 
 function run() {
   const a = $("from").value.trim(), b = $("to").value.trim();
-  $("alts").innerHTML = ""; $("ladder").innerHTML = "";
+  $("alts").innerHTML = ""; $("rungs").innerHTML = "";
+  ladderMode = mode; shownPath = null; $("ladder-map").hidden = true;
   const missing = [a, b].filter((w) => !SETS[mode].has(w));
   if (!a || !b) return status("Type a start word and a target word.");
   if (missing.length) {
@@ -400,15 +541,16 @@ function levenshtein(a, b) {
 }
 function wordHTML(w, hi) { return [...w].map((c, i) => i === hi ? `<mark>${c}</mark>` : c).join(""); }
 function drawLadder(path) {
-  $("ladder").innerHTML = path.map((w, k) => {
+  shownPath = path; $("ladder-map").hidden = path.length < 2;
+  $("rungs").innerHTML = path.map((w, k) => {
     const e = k ? editOf(path[k - 1], w) : null;
     const tier = isHead(w) ? `<span class="pill h">headword</span>` : `<span class="pill f">form</span>`;
     return `<li class="rung" data-w="${esc(w)}" tabindex="0"><span class="n">${k === 0 ? "start" : "step " + k}</span><span class="w" lang="ka">${wordHTML(w, e ? e.i : -1)}</span><span class="meta">${e ? `<span class="op">${esc(e.op)}</span>` : tier}<span class="gl">${esc(explain(w))}</span></span></li>`;
   }).join("");
   showWord(path[0]);
 }
-$("ladder").addEventListener("click", (e) => { const r = e.target.closest(".rung"); if (r) showWord(r.dataset.w); });
-$("ladder").addEventListener("keydown", (e) => { if (e.key === "Enter") { const r = e.target.closest(".rung"); if (r) showWord(r.dataset.w); } });
+$("rungs").addEventListener("click", (e) => { const r = e.target.closest(".rung"); if (r) showWord(r.dataset.w); });
+$("rungs").addEventListener("keydown", (e) => { if (e.key === "Enter") { const r = e.target.closest(".rung"); if (r) showWord(r.dataset.w); } });
 
 function showWord(w) {
   current = w;
@@ -419,10 +561,11 @@ function showWord(w) {
     <div class="ink2" style="font-size:13.5px">${esc(explain(w)) || "<span class='muted'>No gloss in Wiktionary.</span>"}</div>
     <div class="eyebrow">${nb.length} neighbour${nb.length === 1 ? "" : "s"} in this mode</div>
     <div class="chips">${nb.map((v) => `<button class="chip ${isHead(v) ? "" : "f"}" data-w="${esc(v)}" title="${esc(explain(v))}">${esc(v)}<small>${esc(editOf(w, v).op)}</small></button>`).join("") || `<span class="empty">No word is one edit away.</span>`}</div>
-    <div class="row"><button class="btn ghost" id="as-from">Use as start</button><button class="btn ghost" id="as-to">Use as target</button></div>`;
+    <div class="row"><button class="btn ghost" id="as-from">Use as start</button><button class="btn ghost" id="as-to">Use as target</button><button class="btn ghost" id="on-map">Show on map</button></div>`;
   $("panel").querySelector(".chips").onclick = (e) => { const c = e.target.closest(".chip"); if (c) showWord(c.dataset.w); };
   $("as-from").onclick = () => { $("from").value = current; run(); };
   $("as-to").onclick = () => { $("to").value = current; run(); };
+  $("on-map").onclick = () => { go("clusters"); atlas.showWord(current); };
 }
 
 $("go").onclick = run;
@@ -435,6 +578,8 @@ $("random").onclick = () => {
   const p = pool[Math.floor(Math.random() * pool.length)];
   $("from").value = p.start; $("to").value = p.target; run();
 };
+
+/*__ATLAS__*/
 
 /* ---------- findings ---------- */
 const S = STATS.modes.strict, T = STATS.modes.standard;
@@ -521,7 +666,7 @@ function charts() {
     return `<tr class="click" data-a="${esc(p.start)}" data-b="${esc(p.target)}" data-m="${S.pairs[i].steps == null ? "standard" : "strict"}"><td><span class="ka">${esc(p.start)} → ${esc(p.target)}</span><br><span class="muted" style="font-size:12px">${esc(p.english)}</span></td><td class="num">${p.edit_distance}</td>${cell(p)}${cell(q)}</tr>`;
   }).join("");
   $("pairs").innerHTML = `<thead><tr><th>Pair</th><th style="text-align:right">Edit dist.</th><th style="text-align:right">Dict.</th><th style="text-align:right">Forms</th></tr></thead><tbody>${pairRows}</tbody>`;
-  $("pairs").onclick = (e) => { const r = e.target.closest("tr.click"); if (!r) return; $("from").value = r.dataset.a; $("to").value = r.dataset.b; setMode(r.dataset.m); run(); document.querySelector(".tool").scrollIntoView({ behavior: "smooth" }); };
+  $("pairs").onclick = (e) => { const r = e.target.closest("tr.click"); if (!r) return; $("from").value = r.dataset.a; $("to").value = r.dataset.b; setMode(r.dataset.m); go("ladder"); run(); };
 
   const gl = (w) => { const v = explain(w); return v ? `<br><span class="muted" style="font-size:12px">${esc(v.slice(0, 28))}</span>` : ""; };
   $("hubs").innerHTML = `<thead><tr><th>Hub</th><th style="text-align:right">Links</th></tr></thead><tbody>${S.hub_headwords.slice(0, 10).map(([w, d]) => `<tr><td class="ka">${esc(w)}${gl(w)}</td><td class="num">${d}</td></tr>`).join("")}</tbody>`;
@@ -543,9 +688,11 @@ function charts() {
 }
 
 tiles(); charts();
-loadWords().then(() => {
+const wordsReady = loadWords();
+wordsReady.then(() => {
   $("hdr-count").textContent = WORDS.length.toLocaleString("en-US");
   run();
 }).catch((err) => status("This browser could not unpack the word list (" + esc(err.message) + "). A current version of Chrome, Safari, Firefox or Edge is needed."));
+go(location.hash.slice(1));
 })();
 </script>

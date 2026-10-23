@@ -28,9 +28,12 @@ The two words are 4 edits apart, so 4 steps is the shortest any ladder can be.
 | `data/game/standard_words.txt` | 187,038 headwords and attested word forms |
 | `data/game/{strict,standard}_edges.tsv.gz` | the graph: every pair of words one edit apart (`sub` or `ins`) |
 | `data/game/puzzles.tsv` | 480 generated puzzles in four difficulty levels, with step count, number of optimal solutions and one example solution |
+| `data/game/{strict,standard}_clusters.tsv.gz` | every word's cluster (connected component; 0 = largest) and its position on the cluster map |
 | `reports/EDA.md` | findings: graph structure, hubs, bottlenecks, longest ladders, everyday pairs, game-design advice |
 | `reports/stats.json` | every number behind the report |
-| `web/index.html` | self-contained interactive explorer: ladder finder for any two words, neighbour browser, charts |
+| `web/index.html` | the explorer, with three pages: **Ladder** (shortest ladders between any two words), **Clusters** (a pan-and-zoom map of every cluster) and **Findings** (the charts) |
+| `web/clusters-standard.bin` | map data for "All word forms", loaded by the Clusters page on demand (the dictionary-word map is embedded) |
+| `web/template.html`, `web/atlas.js` | page source and the cluster-map engine; `ladder.export_web` combines them with the data |
 
 ## Dictionary modes
 
@@ -42,6 +45,18 @@ The two words are 4 edits apart, so 4 steps is the shortest any ladder can be.
 For the game, the recommendation is to draw start and target from strict and accept any standard word as a step.
 See `reports/EDA.md` §5.
 
+## Cluster map
+
+A cluster is a connected component: a ladder joins any two of its words, and no ladder leaves it.
+The Clusters page draws every cluster with two or more words. The largest is a disc in the middle and the
+others are islands in rings around it, biggest first. Tap a word for its gloss, cluster and neighbours,
+search for a word to fly to it, or use "Show on map" on the Ladder page to see a ladder as a route.
+
+The layout is computed offline by `ladder/clusters.py`. The main cluster starts from a DrL force layout,
+refined by a short Fruchterman–Reingold run, then spread evenly over a disc. Islands get their own
+force layouts. To stay smooth on phones the page draws at most a few thousand words directly. Further
+out it uses cached 256 px tiles and a 2048 px overview image. Labels are capped and picked by word frequency.
+
 ## Rebuild
 
 ```bash
@@ -49,7 +64,9 @@ pip install -r requirements.txt
 scripts/fetch_sources.sh               # ~400 MB of raw sources into data/raw (git-ignored)
 python -m ladder.build_wordlist        # -> data/words_all.tsv.gz        (~2 min)
 python -m ladder.analyze               # -> data/game/*, reports/stats.json (~5 min)
-python -m ladder.export_web            # -> web/index.html
+python -m ladder.clusters              # -> data/game/*_clusters.tsv.gz (~3 min)
+python -m ladder.export_web            # -> web/index.html, web/clusters-standard.bin
+python -m http.server -d web           # the "All word forms" map is fetched, so open it over HTTP
 ```
 
 Other CLI commands:

@@ -1,0 +1,551 @@
+<title>Georgian Word Ladder</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600&family=Noto+Serif+Georgian:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one 1040px column. The ladder tool opens the page; findings follow as rungs of evidence. */
+:root {
+  --bg: #f6f5f8;
+  --surface: #fdfcfe;
+  --ink: #19161d;
+  --ink-2: #534e5a;
+  --muted: #858090;
+  --line: #e3e0e8;
+  --grid: #e7e5ea;
+  --accent: #7d1f42;          /* saperavi */
+  --accent-ink: #ffffff;
+  --accent-soft: #f4e4eb;
+  --leaf: #2d6a4d;            /* vine leaf: word forms */
+  --leaf-soft: #e2efe8;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --display: "Noto Serif Georgian", "Sylfaen", Georgia, serif;
+  --body: "Noto Sans Georgian", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121014; --surface: #1b181e; --ink: #f0edf2; --ink-2: #c3bec9; --muted: #8f8996;
+    --line: #2f2b34; --grid: #2a272e; --accent: #e88aab; --accent-ink: #1b0b12; --accent-soft: #3b1e2a;
+    --leaf: #82c9a5; --leaf-soft: #1c3127; --series-1: #3987e5; --series-2: #d95926; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121014; --surface: #1b181e; --ink: #f0edf2; --ink-2: #c3bec9; --muted: #8f8996;
+  --line: #2f2b34; --grid: #2a272e; --accent: #e88aab; --accent-ink: #1b0b12; --accent-soft: #3b1e2a;
+  --leaf: #82c9a5; --leaf-soft: #1c3127; --series-1: #3987e5; --series-2: #d95926; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 26px; font-weight: 700; }
+h3 { font-size: 17px; font-weight: 500; font-family: var(--body); }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+.ink2 { color: var(--ink-2); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+header { display: grid; gap: 10px; }
+header .ka { font-family: var(--display); color: var(--accent); font-size: 18px; }
+
+/* ---------- ladder tool ---------- */
+.tool { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 18px; }
+.inputs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.field input {
+  font-family: var(--display); font-size: 24px; padding: 10px 14px; border-radius: 10px; width: 100%;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+}
+.field input:focus-visible, button:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.swap { height: 50px; width: 44px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); cursor: pointer; font-size: 18px; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--bg); }
+.seg button { border: 0; background: transparent; color: var(--ink-2); padding: 6px 14px; border-radius: 999px; cursor: pointer; font: inherit; font-size: 13.5px; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.btn { border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 600; padding: 8px 18px; border-radius: 999px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.spacer { flex: 1; }
+.status { font-size: 14px; color: var(--ink-2); min-height: 22px; }
+.status b { color: var(--ink); }
+.result { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 22px; }
+.ladder { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; position: relative; }
+.ladder::before, .ladder::after { content: ""; position: absolute; top: 18px; bottom: 18px; width: 3px; background: var(--line); border-radius: 2px; }
+.ladder::before { left: 0; } .ladder::after { right: 0; }
+.rung { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 9px 16px; border-bottom: 3px solid var(--line); cursor: pointer; }
+.rung:last-child { border-bottom: 0; }
+.rung:hover, .rung.sel { background: var(--accent-soft); }
+.rung .n { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.rung .w { font-family: var(--display); font-size: 24px; letter-spacing: 0.01em; overflow-wrap: anywhere; }
+.rung .w mark { background: transparent; color: var(--accent); font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.rung .meta { display: grid; justify-items: end; gap: 2px; text-align: right; }
+.rung .op { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+.rung .gl { font-size: 12.5px; color: var(--muted); max-width: 22ch; }
+.pill { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; padding: 1px 8px; border-radius: 999px; }
+.pill.h { background: var(--accent-soft); color: var(--accent); }
+.pill.f { background: var(--leaf-soft); color: var(--leaf); }
+.alts { display: flex; flex-wrap: wrap; gap: 6px; }
+.alts button { font: inherit; font-size: 12.5px; border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+.alts button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.panel { border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 12px; align-content: start; background: var(--bg); min-width: 0; }
+.panel .head { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.panel .head .w { font-family: var(--display); font-size: 26px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; max-height: 260px; overflow-y: auto; }
+.chip { font-family: var(--display); font-size: 15px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 3px 9px; cursor: pointer; }
+.chip.f { color: var(--leaf); }
+.chip small { font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-left: 4px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+.empty { color: var(--muted); font-size: 14px; }
+
+/* ---------- findings ---------- */
+section { display: grid; gap: 18px; }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 4px; align-content: start; }
+.tile .v { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; }
+.tile .l { font-size: 13px; color: var(--ink-2); }
+.tile .s { font-size: 12px; color: var(--muted); }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; min-width: 0; align-content: start; }
+.card p { font-size: 14px; color: var(--ink-2); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--ink-2); }
+.legend span::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; background: var(--c); }
+.chart { position: relative; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { fill: var(--muted); font-family: var(--mono); font-size: 11px; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.12); white-space: nowrap; }
+.tip i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: var(--c); }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th { text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); }
+td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.ka, .ka { font-family: var(--display); }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+td .path { font-family: var(--display); font-size: 13px; color: var(--ink-2); }
+tr.click { cursor: pointer; }
+tr.click:hover td { background: var(--accent-soft); }
+.bars { display: grid; gap: 5px; }
+.bar { display: grid; grid-template-columns: 54px minmax(0, 1fr) 54px; gap: 8px; align-items: center; font-size: 12.5px; }
+.bar .k { font-family: var(--display); font-size: 15px; }
+.bar .t { height: 10px; border-radius: 0 4px 4px 0; background: var(--c); }
+.bar .n { font-family: var(--mono); font-size: 11.5px; color: var(--muted); text-align: right; }
+.long { font-family: var(--display); font-size: 14px; line-height: 1.9; color: var(--ink-2); overflow-wrap: anywhere; }
+.long b { color: var(--accent); font-weight: 700; }
+ul.notes { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; color: var(--ink-2); max-width: 72ch; }
+footer { font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; }
+footer a { color: var(--ink-2); }
+
+@media (max-width: 760px) {
+  .result, .grid2 { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .inputs { grid-template-columns: 1fr; }
+  .swap { width: 100%; height: 36px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rung { animation: rise .25s ease both; }
+  @keyframes rise { from { transform: translateY(4px); } to { transform: none; } }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="ka">სიტყვების კიბე</div>
+    <h1>Georgian Word Ladder</h1>
+    <p class="ink2">Change one letter at a time (swap, add or remove) and every step must be a real Georgian word. Search any two words below. The graph is built from <span id="hdr-count" class="mono">…</span> words merged from six open Georgian word lists.</p>
+  </header>
+
+  <div class="tool" aria-label="Ladder finder">
+    <div class="inputs">
+      <div class="field"><label for="from">From</label><input id="from" value="ვაშლი" autocomplete="off" spellcheck="false" lang="ka"></div>
+      <button class="swap" id="swap" title="Swap words" aria-label="Swap start and target">⇄</button>
+      <div class="field"><label for="to">To</label><input id="to" value="მსხალი" autocomplete="off" spellcheck="false" lang="ka"></div>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Dictionary">
+        <button id="m-strict" aria-pressed="true" title="Only dictionary headwords">Dictionary words</button>
+        <button id="m-standard" aria-pressed="false" title="Headwords plus attested inflected forms">All word forms</button>
+      </div>
+      <span class="spacer"></span>
+      <button class="btn ghost" id="random">Random puzzle</button>
+      <button class="btn" id="go">Find ladder</button>
+    </div>
+    <div class="status" id="status" aria-live="polite">Loading the dictionary…</div>
+    <div class="alts" id="alts"></div>
+    <div class="result">
+      <ol class="ladder" id="ladder"></ol>
+      <div class="panel" id="panel"><div class="empty">Select a word on the ladder to see every word one edit away.</div></div>
+    </div>
+  </div>
+
+  <section id="findings">
+    <div class="eyebrow">Exploratory analysis</div>
+    <h2>What the graph looks like</h2>
+    <div class="tiles" id="tiles"></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Short words connect, long words are islands</h3>
+        <p>Share of words at each length that sit in the largest connected component, the part where any word can reach any other.</p>
+        <div class="legend"><span style="--c:var(--series-1)">Dictionary words</span><span style="--c:var(--series-2)">All word forms</span></div>
+        <div class="chart" id="ch-len"></div>
+      </div>
+      <div class="card">
+        <h3>How far apart two random words are</h3>
+        <p>Shortest ladder length between random pairs inside the largest component.</p>
+        <div class="legend"><span style="--c:var(--series-1)">Dictionary words</span><span style="--c:var(--series-2)">All word forms</span></div>
+        <div class="chart" id="ch-dist"></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Which letters swap most</h3>
+        <p id="sub-note"></p>
+        <div class="grid2" style="gap:14px">
+          <div><div class="eyebrow" style="margin-bottom:6px">Dictionary words</div><div class="bars" id="sub-strict"></div></div>
+          <div><div class="eyebrow" style="margin-bottom:6px">All word forms</div><div class="bars" id="sub-standard"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Everyday pairs</h3>
+        <p>Shortest ladders between related words. Edit distance is the lower bound; a ladder that matches it wastes no moves. Select a row to load it.</p>
+        <div class="tablewrap"><table id="pairs"></table></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Hubs and keystones (dictionary words)</h3>
+        <p>Hubs have the most neighbours. Keystones are bottlenecks: removing one cuts that many words off from the main component.</p>
+        <div class="grid2" style="gap:14px">
+          <div class="tablewrap"><table id="hubs"></table></div>
+          <div class="tablewrap"><table id="keys"></table></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>The longest ladders</h3>
+        <p>Diameter of the largest component: the two words that are furthest apart, with the forced route between them.</p>
+        <div id="longest"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Common words with no neighbours at all</h3>
+      <p>Frequent dictionary words that no single edit turns into another word. They can never appear in a ladder, so leave them out of puzzles.</p>
+      <div class="long" id="hermits"></div>
+    </div>
+    <div class="card">
+      <h3>Notes for game design</h3>
+      <ul class="notes" id="notes"></ul>
+    </div>
+  </section>
+
+  <footer>
+    <div>Sources: GeoWordsDatabase (D. Bumbeishvili, MIT) incl. its 4.8M-token web scrape, akalongman/geo-words (MIT), Hunspell ka_GE (MIT/CC-BY), Crúbadán (K. Scannell, CC-BY 4.0), English Wiktionary via kaikki.org (CC-BY-SA). Glosses come from Wiktionary.</div>
+    <div>“Dictionary words” are Wiktionary lemmas plus nominatives whose case forms appear in the corpora. “All word forms” adds any inflection attested in three or more independent sources.</div>
+  </footer>
+</div>
+
+<script id="words-data" type="text/plain">__WORDS__</script>
+<script id="stats-data" type="application/json">__STATS__</script>
+<script id="puzzle-data" type="application/json">__PUZZLES__</script>
+<script>
+(() => {
+const ABC = "აბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ";
+const $ = (id) => document.getElementById(id);
+const STATS = JSON.parse($("stats-data").textContent);
+const PUZZLES = JSON.parse($("puzzle-data").textContent);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmt = (n) => n >= 1e6 ? (n / 1e6).toFixed(2).replace(/\.?0+$/, "") + "M" : n >= 1e4 ? Math.round(n / 1e3) + "K" : n.toLocaleString("en-US");
+
+let WORDS = [], INFO = new Map(), SETS = {}, NB = { strict: new Map(), standard: new Map() };
+let mode = "strict", current = null;
+
+/* ---------- data ---------- */
+async function loadWords() {
+  const b64 = $("words-data").textContent.trim();
+  const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+  const text = await new Response(stream).text();
+  const lines = text.split("\n");
+  WORDS = new Array(lines.length);
+  const strict = new Set(), standard = new Set();
+  lines.forEach((line, i) => {
+    const tab = line.indexOf("\t");
+    const w = tab < 0 ? line : line.slice(0, tab);
+    WORDS[i] = w;
+    standard.add(w);
+    if (tab >= 0) {
+      const rest = line.slice(tab + 1);
+      if (rest[0] === "*") { strict.add(w); if (rest.length > 1) INFO.set(w, { gloss: rest.slice(1) }); }
+      else if (rest[0] === "=") INFO.set(w, { lemma: +rest.slice(1) });
+    }
+  });
+  for (const [w, v] of INFO) if (v.lemma !== undefined) v.lemma = WORDS[v.lemma];
+  SETS = { strict, standard };
+}
+const isHead = (w) => SETS.strict.has(w);
+function explain(w) {
+  const v = INFO.get(w);
+  if (!v) return "";
+  if (v.gloss) return v.gloss;
+  if (v.lemma) { const g = INFO.get(v.lemma); return "form of " + v.lemma + (g && g.gloss ? " (" + g.gloss + ")" : ""); }
+  return "";
+}
+
+/* ---------- graph: neighbours are generated on demand ---------- */
+function neighbours(w, m = mode) {
+  const cache = NB[m];
+  if (cache.has(w)) return cache.get(w);
+  const set = SETS[m], out = [], seen = new Set([w]);
+  const add = (s) => { if (!seen.has(s) && set.has(s)) { seen.add(s); out.push(s); } };
+  for (let i = 0; i < w.length; i++) {
+    const pre = w.slice(0, i), suf = w.slice(i + 1);
+    add(pre + suf);
+    for (const c of ABC) if (c !== w[i]) add(pre + c + suf);
+  }
+  for (let i = 0; i <= w.length; i++) {
+    const pre = w.slice(0, i), suf = w.slice(i);
+    for (const c of ABC) add(pre + c + suf);
+  }
+  cache.set(w, out);
+  return out;
+}
+
+/* Bidirectional BFS that keeps every parent, so it can count and list all shortest ladders. */
+function ladder(a, b, limit = 60) {
+  if (a === b) return { d: 0, count: 1, paths: [[a]] };
+  const side = (root) => ({ dist: new Map([[root, 0]]), par: new Map([[root, []]]), cnt: new Map([[root, 1]]), front: [root], depth: 0 });
+  const A = side(a), B = side(b);
+  while (A.front.length && B.front.length) {
+    const S = A.front.length <= B.front.length ? A : B, O = S === A ? B : A;
+    const depth = S.depth + 1, next = [];
+    for (const u of S.front) for (const v of neighbours(u)) {
+      if (!S.dist.has(v)) { S.dist.set(v, depth); S.par.set(v, [u]); next.push(v); }
+      else if (S.dist.get(v) === depth) S.par.get(v).push(u);
+    }
+    S.front = next; S.depth = depth;
+    for (const v of next) S.cnt.set(v, S.par.get(v).reduce((t, p) => t + S.cnt.get(p), 0));
+    const meets = next.filter((v) => O.dist.has(v));
+    if (meets.length) {
+      const best = Math.min(...meets.map((v) => depth + O.dist.get(v)));
+      const mid = meets.filter((v) => depth + O.dist.get(v) === best);
+      const count = mid.reduce((t, v) => t + S.cnt.get(v) * O.cnt.get(v), 0);
+      const walk = (X, v) => { const res = []; const go = (n, acc) => { if (res.length >= limit) return; const ps = X.par.get(n); if (!ps.length) { res.push([n, ...acc]); return; } for (const p of ps) go(p, [n, ...acc]); }; go(v, []); return res; };
+      const paths = [];
+      for (const v of mid) {
+        const left = walk(A, v), right = walk(B, v).map((p) => p.slice().reverse());
+        for (const l of left) for (const r of right) { if (paths.length < limit) paths.push([...l, ...r.slice(1)]); }
+      }
+      return { d: best, count, paths };
+    }
+  }
+  return null;
+}
+
+function editOf(x, y) {
+  let i = 0;
+  while (i < Math.min(x.length, y.length) && x[i] === y[i]) i++;
+  if (x.length === y.length) return { i, op: x[i] + "→" + y[i] };
+  if (y.length > x.length) return { i, op: "+" + y[i] };
+  return { i: -1, op: "−" + x[i] };
+}
+
+/* ---------- ladder UI ---------- */
+function setMode(m) {
+  mode = m;
+  $("m-strict").setAttribute("aria-pressed", m === "strict");
+  $("m-standard").setAttribute("aria-pressed", m === "standard");
+}
+function status(html) { $("status").innerHTML = html; }
+
+function run() {
+  const a = $("from").value.trim(), b = $("to").value.trim();
+  $("alts").innerHTML = ""; $("ladder").innerHTML = "";
+  const missing = [a, b].filter((w) => !SETS[mode].has(w));
+  if (!a || !b) return status("Type a start word and a target word.");
+  if (missing.length) {
+    const msgs = missing.map((w) => SETS.standard.has(w)
+      ? `<b class="ka">${esc(w)}</b> is a word form, not a dictionary headword. Switch to “All word forms” to use it.`
+      : `<b class="ka">${esc(w)}</b> is not in the dictionary${suggest(w)}`);
+    return status(msgs.join("<br>"));
+  }
+  const t0 = performance.now();
+  const r = ladder(a, b);
+  const ms = Math.round(performance.now() - t0);
+  if (!r) return status(`No ladder connects <b class="ka">${esc(a)}</b> and <b class="ka">${esc(b)}</b> with ${mode === "strict" ? "dictionary words only. Try “All word forms”." : "the current dictionary."}`);
+  const lev = levenshtein(a, b);
+  status(`<b>${r.d} steps</b> · ${r.count.toLocaleString("en-US")} shortest ladder${r.count === 1 ? "" : "s"} · edit distance ${lev}${r.d === lev ? " (no wasted moves)" : ""} <span class="muted">· ${ms} ms</span>`);
+  if (r.paths.length > 1) {
+    $("alts").innerHTML = r.paths.slice(0, 24).map((p, i) => `<button aria-pressed="${i === 0}" data-i="${i}">Ladder ${i + 1}</button>`).join("") + (r.count > 24 ? `<span class="muted" style="font-size:12.5px;align-self:center">+${(r.count - 24).toLocaleString("en-US")} more</span>` : "");
+    $("alts").onclick = (e) => { const btn = e.target.closest("button"); if (!btn) return; [...$("alts").querySelectorAll("button")].forEach((x) => x.setAttribute("aria-pressed", x === btn)); drawLadder(r.paths[+btn.dataset.i]); };
+  }
+  drawLadder(r.paths[0]);
+}
+function suggest(w) {
+  const near = [];
+  for (let i = 0; i < w.length && near.length < 6; i++) for (const c of ABC) { const s = w.slice(0, i) + c + w.slice(i + 1); if (s !== w && SETS[mode].has(s)) near.push(s); }
+  return near.length ? `. Did you mean ${near.slice(0, 6).map((s) => `<b class="ka">${esc(s)}</b>`).join(", ")}?` : ". Check the spelling (Georgian letters only).";
+}
+function levenshtein(a, b) {
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    for (let j = 1; j <= b.length; j++) cur.push(Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] !== b[j - 1])));
+    prev = cur;
+  }
+  return prev[b.length];
+}
+function wordHTML(w, hi) { return [...w].map((c, i) => i === hi ? `<mark>${c}</mark>` : c).join(""); }
+function drawLadder(path) {
+  $("ladder").innerHTML = path.map((w, k) => {
+    const e = k ? editOf(path[k - 1], w) : null;
+    const tier = isHead(w) ? `<span class="pill h">headword</span>` : `<span class="pill f">form</span>`;
+    return `<li class="rung" data-w="${esc(w)}" tabindex="0"><span class="n">${k === 0 ? "start" : "step " + k}</span><span class="w" lang="ka">${wordHTML(w, e ? e.i : -1)}</span><span class="meta">${e ? `<span class="op">${esc(e.op)}</span>` : tier}<span class="gl">${esc(explain(w))}</span></span></li>`;
+  }).join("");
+  showWord(path[0]);
+}
+$("ladder").addEventListener("click", (e) => { const r = e.target.closest(".rung"); if (r) showWord(r.dataset.w); });
+$("ladder").addEventListener("keydown", (e) => { if (e.key === "Enter") { const r = e.target.closest(".rung"); if (r) showWord(r.dataset.w); } });
+
+function showWord(w) {
+  current = w;
+  document.querySelectorAll(".rung").forEach((r) => r.classList.toggle("sel", r.dataset.w === w));
+  const nb = neighbours(w).slice().sort((x, y) => (isHead(y) - isHead(x)) || x.localeCompare(y, "ka"));
+  $("panel").innerHTML = `
+    <div class="head"><span class="w ka">${esc(w)}</span>${isHead(w) ? `<span class="pill h">headword</span>` : `<span class="pill f">form</span>`}</div>
+    <div class="ink2" style="font-size:13.5px">${esc(explain(w)) || "<span class='muted'>No gloss in Wiktionary.</span>"}</div>
+    <div class="eyebrow">${nb.length} neighbour${nb.length === 1 ? "" : "s"} in this mode</div>
+    <div class="chips">${nb.map((v) => `<button class="chip ${isHead(v) ? "" : "f"}" data-w="${esc(v)}" title="${esc(explain(v))}">${esc(v)}<small>${esc(editOf(w, v).op)}</small></button>`).join("") || `<span class="empty">No word is one edit away.</span>`}</div>
+    <div class="row"><button class="btn ghost" id="as-from">Use as start</button><button class="btn ghost" id="as-to">Use as target</button></div>`;
+  $("panel").querySelector(".chips").onclick = (e) => { const c = e.target.closest(".chip"); if (c) showWord(c.dataset.w); };
+  $("as-from").onclick = () => { $("from").value = current; run(); };
+  $("as-to").onclick = () => { $("to").value = current; run(); };
+}
+
+$("go").onclick = run;
+$("swap").onclick = () => { const t = $("from").value; $("from").value = $("to").value; $("to").value = t; run(); };
+$("m-strict").onclick = () => { setMode("strict"); run(); };
+$("m-standard").onclick = () => { setMode("standard"); run(); };
+["from", "to"].forEach((id) => $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") run(); }));
+$("random").onclick = () => {
+  const pool = PUZZLES.filter((p) => p.mode === mode);
+  const p = pool[Math.floor(Math.random() * pool.length)];
+  $("from").value = p.start; $("to").value = p.target; run();
+};
+
+/* ---------- findings ---------- */
+const S = STATS.modes.strict, T = STATS.modes.standard;
+function tiles() {
+  const t = [
+    [fmt(STATS.vocabulary_any_source), "distinct strings in the raw sources", `${fmt(STATS.tiers.headword)} dictionary words, ${fmt(STATS.tiers.headword + STATS.tiers.form)} with word forms`],
+    [`${S.giant_pct}% / ${T.giant_pct}%`, "of words reach the main component", `${fmt(S.giant)} dictionary words / ${fmt(T.giant)} with forms`],
+    [`${S.distances.mean} / ${T.distances.mean}`, "average ladder length (steps)", "between random pairs in the main component"],
+    [`${S.longest_ladder.length} / ${T.longest_ladder.length}${T.longest_ladder.exact ? "" : "+"}`, "longest shortest ladder", "dictionary words / all word forms"],
+  ];
+  $("tiles").innerHTML = t.map(([v, l, s]) => `<div class="tile"><div class="v">${v}</div><div class="l">${l}</div><div class="s">${s}</div></div>`).join("");
+}
+
+function lineChart(el, series, { xLabel, yFmt, yMax }) {
+  const W = 480, H = 240, m = { l: 40, r: 12, t: 12, b: 34 };
+  const xs = [...new Set(series.flatMap((s) => s.points.map((p) => p[0])))].sort((a, b) => a - b);
+  const x0 = xs[0], x1 = xs[xs.length - 1];
+  const ymax = yMax ?? Math.max(...series.flatMap((s) => s.points.map((p) => p[1]))) * 1.08;
+  const X = (x) => m.l + (x - x0) / (x1 - x0) * (W - m.l - m.r);
+  const Y = (y) => H - m.b - y / ymax * (H - m.t - m.b);
+  const ticks = niceTicks(ymax);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(xLabel)}">`;
+  for (const t of ticks) svg += `<line x1="${m.l}" x2="${W - m.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--grid)" stroke-width="1"/><text x="${m.l - 6}" y="${Y(t) + 4}" text-anchor="end">${yFmt(t)}</text>`;
+  const step = Math.ceil(xs.length / 10);
+  xs.forEach((x, i) => { if (i % step === 0 || i === xs.length - 1) svg += `<text x="${X(x)}" y="${H - m.b + 16}" text-anchor="middle">${x}</text>`; });
+  svg += `<line x1="${m.l}" x2="${W - m.r}" y1="${H - m.b}" y2="${H - m.b}" stroke="var(--line)" stroke-width="1"/>`;
+  svg += `<text x="${(m.l + W - m.r) / 2}" y="${H - 2}" text-anchor="middle">${esc(xLabel)}</text>`;
+  for (const s of series) {
+    svg += `<path d="${s.points.map((p, i) => (i ? "L" : "M") + X(p[0]).toFixed(1) + " " + Y(p[1]).toFixed(1)).join(" ")}" fill="none" stroke="var(${s.color})" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  }
+  svg += `<line class="guide" x1="0" x2="0" y1="${m.t}" y2="${H - m.b}" stroke="var(--muted)" stroke-width="1" visibility="hidden"/>`;
+  for (const s of series) svg += `<circle class="dot" data-s="${s.name}" r="4" fill="var(${s.color})" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>`;
+  svg += `<rect x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent"/></svg><div class="tip" hidden></div>`;
+  el.innerHTML = svg;
+  const root = el.querySelector("svg"), tip = el.querySelector(".tip"), guide = root.querySelector(".guide");
+  root.addEventListener("pointermove", (e) => {
+    const pt = root.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    const p = pt.matrixTransform(root.getScreenCTM().inverse());
+    const x = xs.reduce((best, v) => Math.abs(X(v) - p.x) < Math.abs(X(best) - p.x) ? v : best, xs[0]);
+    guide.setAttribute("x1", X(x)); guide.setAttribute("x2", X(x)); guide.setAttribute("visibility", "visible");
+    let rows = `<div style="margin-bottom:3px"><b>${esc(xLabel)} ${x}</b></div>`;
+    series.forEach((s, k) => {
+      const v = (s.points.find((q) => q[0] === x) || [x, null])[1];
+      const dot = root.querySelectorAll(".dot")[k];
+      if (v == null) { dot.setAttribute("visibility", "hidden"); return; }
+      dot.setAttribute("cx", X(x)); dot.setAttribute("cy", Y(v)); dot.setAttribute("visibility", "visible");
+      rows += `<div><i style="--c:var(${s.color})"></i>${esc(s.name)}: ${yFmt(v, true)}</div>`;
+    });
+    tip.innerHTML = rows; tip.hidden = false;
+    const box = el.getBoundingClientRect(), px = (X(x) / W) * box.width;
+    tip.style.left = Math.min(px + 12, box.width - tip.offsetWidth) + "px"; tip.style.top = "8px";
+  });
+  root.addEventListener("pointerleave", () => { tip.hidden = true; guide.setAttribute("visibility", "hidden"); root.querySelectorAll(".dot").forEach((d) => d.setAttribute("visibility", "hidden")); });
+}
+function niceTicks(max) {
+  const raw = max / 4, mag = 10 ** Math.floor(Math.log10(raw)), step = [1, 2, 2.5, 5, 10].map((k) => k * mag).find((s) => s >= raw);
+  const out = []; for (let t = 0; t <= max + 1e-9; t += step) out.push(+t.toFixed(6)); return out;
+}
+
+function charts() {
+  const lenPts = (M) => Object.entries(M.by_length).map(([L, v]) => [+L, v.giant_pct]);
+  lineChart($("ch-len"), [
+    { name: "Dictionary words", color: "--series-1", points: lenPts(S) },
+    { name: "All word forms", color: "--series-2", points: lenPts(T) },
+  ], { xLabel: "word length (letters)", yFmt: (v) => Math.round(v) + "%", yMax: 100 });
+  const distPts = (M) => { const h = M.distances.hist, tot = Object.values(h).reduce((a, b) => a + b, 0); return Object.entries(h).map(([d, c]) => [+d, 100 * c / tot]); };
+  lineChart($("ch-dist"), [
+    { name: "Dictionary words", color: "--series-1", points: distPts(S) },
+    { name: "All word forms", color: "--series-2", points: distPts(T) },
+  ], { xLabel: "ladder length (steps)", yFmt: (v, tip) => tip ? v.toFixed(1) + "% of pairs" : Math.round(v) + "%" });
+
+  const bars = (el, M, color) => {
+    const top = M.sub_pairs_top.slice(0, 10), max = top[0][1];
+    $(el).innerHTML = top.map(([k, n]) => `<div class="bar"><span class="k">${esc(k)}</span><span class="t" style="width:${100 * n / max}%;--c:var(${color})"></span><span class="n">${fmt(n)}</span></div>`).join("");
+  };
+  bars("sub-strict", S, "--series-1"); bars("sub-standard", T, "--series-2");
+  const pos = (M) => { const p = M.edit_position, t = p.first + p.middle + p.last; return `${Math.round(100 * p.first / t)}% first letter, ${Math.round(100 * p.middle / t)}% middle, ${Math.round(100 * p.last / t)}% last`; };
+  $("sub-note").innerHTML = `Dictionary words mostly swap vowels (ა↔ი, ა↔ო). With word forms the top swaps are grammar: nominative <span class="ka">-ი</span> ↔ dative <span class="ka">-ს</span>, and <span class="ka">-თ</span> ↔ <span class="ka">-ს</span>. Edit position: dictionary words ${pos(S)}; all forms ${pos(T)}.`;
+
+  const pairRows = S.pairs.map((p, i) => {
+    const q = T.pairs[i];
+    const cell = (x) => x.steps == null ? `<td class="num muted">${x.missing ? "n/a" : "none"}</td>` : `<td class="num">${x.steps}<span class="muted"> ×${x.n_shortest}</span></td>`;
+    const ex = (S.pairs[i].paths && S.pairs[i].paths[0]) || (q.paths && q.paths[0]) || [];
+    return `<tr class="click" data-a="${esc(p.start)}" data-b="${esc(p.target)}" data-m="${S.pairs[i].steps == null ? "standard" : "strict"}"><td><span class="ka">${esc(p.start)} → ${esc(p.target)}</span><br><span class="muted" style="font-size:12px">${esc(p.english)}</span></td><td class="num">${p.edit_distance}</td>${cell(p)}${cell(q)}</tr>`;
+  }).join("");
+  $("pairs").innerHTML = `<thead><tr><th>Pair</th><th style="text-align:right">Edit dist.</th><th style="text-align:right">Dict.</th><th style="text-align:right">Forms</th></tr></thead><tbody>${pairRows}</tbody>`;
+  $("pairs").onclick = (e) => { const r = e.target.closest("tr.click"); if (!r) return; $("from").value = r.dataset.a; $("to").value = r.dataset.b; setMode(r.dataset.m); run(); document.querySelector(".tool").scrollIntoView({ behavior: "smooth" }); };
+
+  const gl = (w) => { const v = explain(w); return v ? `<br><span class="muted" style="font-size:12px">${esc(v.slice(0, 28))}</span>` : ""; };
+  $("hubs").innerHTML = `<thead><tr><th>Hub</th><th style="text-align:right">Links</th></tr></thead><tbody>${S.hub_headwords.slice(0, 10).map(([w, d]) => `<tr><td class="ka">${esc(w)}${gl(w)}</td><td class="num">${d}</td></tr>`).join("")}</tbody>`;
+  $("keys").innerHTML = `<thead><tr><th>Keystone</th><th style="text-align:right">Cuts off</th></tr></thead><tbody>${S.keystones_top.slice(0, 10).map(([w, d]) => `<tr><td class="ka">${esc(w)}${gl(w)}</td><td class="num">${d}</td></tr>`).join("")}</tbody>`;
+
+  const longest = (M, label) => { const p = M.longest_ladder.path; return `<div class="eyebrow" style="margin:6px 0 2px">${label}: ${M.longest_ladder.length} steps${M.longest_ladder.exact ? "" : " or more"}</div><div class="long"><b>${esc(p[0])}</b> → ${p.slice(1, -1).map(esc).join(" → ")} → <b>${esc(p[p.length - 1])}</b></div>`; };
+  $("longest").innerHTML = longest(S, "Dictionary words") + longest(T, "All word forms");
+  $("hermits").innerHTML = S.hermits.slice(0, 30).map((w) => `<span title="${esc(explain(w))}">${esc(w)}</span>`).join(" · ");
+
+  const iso = (M, L) => M.by_length[L].isolated_pct;
+  $("notes").innerHTML = [
+    `Puzzle words should be 3–6 letters. Among dictionary words, ${iso(S, 4)}% of 4-letter words have no neighbour, against ${iso(S, 8)}% of 8-letter words.`,
+    `“Dictionary words” mode is strict but sparse: only ${S.giant_pct}% of headwords can reach each other. Allowing inflected forms lifts that to ${T.giant_pct}% (${fmt(T.giant)} words), and in that mode ladders run mostly through grammar endings.`,
+    `A good default: pick the start and target from dictionary words, and accept any attested form as a step. Short ladders then exist for most everyday pairs.`,
+    `The graph is a small world with tight neighbourhoods (clustering ${S.giant_clustering}, assortativity ${S.giant_assortativity}): hubs link to hubs, mostly short words ending in <span class="ka">-ი</span> such as <span class="ka">ბარი, კარი, ხარი</span>.`,
+    `${fmt(S.giant_articulation_points)} dictionary words are single points of failure in the main component. Check keystones such as <span class="ka">${esc(S.keystones_top[0][0])}</span> by hand, because one bad entry there can break or create many ladders.`,
+    `Puzzle difficulty is more than length. The number of shortest ladders (shown as ×N) measures how forgiving a pair is: a pair with ×1 has one solution, while ×30 tolerates many routes.`,
+  ].map((s) => `<li>${s}</li>`).join("");
+}
+
+tiles(); charts();
+loadWords().then(() => {
+  $("hdr-count").textContent = WORDS.length.toLocaleString("en-US");
+  run();
+}).catch((err) => status("This browser could not unpack the word list (" + esc(err.message) + "). A current version of Chrome, Safari, Firefox or Edge is needed."));
+})();
+</script>

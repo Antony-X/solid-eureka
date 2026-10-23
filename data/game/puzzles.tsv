@@ -1,0 +1,481 @@
+mode	level	steps	n_shortest	start	target	start_en	target_en	example_solution
+strict	easy	4	1	სოფელი	მოდული	village, country, countryside	module	სოფელი სორელი მორელი მოდელი მოდული
+strict	easy	4	9	გალია	კარი	cage (esp. for birds)	door	გალია გალი ხალი ხარი კარი
+strict	easy	3	1	ქურდი	ჯარი	thief	army, host (military force, not necessarily the armed forces of a nation)	ქურდი ქური ქარი ჯარი
+strict	easy	4	3	ხეირი	ბარი	avail, advantage, benefit	valley	ხეირი სეირი სირი სარი ბარი
+strict	easy	4	4	ბანი	რომი	bass	rum	ბანი ტანი ტონი ტომი რომი
+strict	easy	4	3	ბანი	ქილა	bass	jar, pot	ბანი ქანი ქალი ქალა ქილა
+strict	easy	3	1	ქილა	ციკლი	jar, pot	cycle	ქილა ცილა ცილი ციკლი
+strict	easy	4	4	ქილა	ყბა	jar, pot	jaw, jowl	ქილა სილა სია ყია ყბა
+strict	easy	4	1	ქილა	კიდე	jar, pot	edge	ქილა ფილა ფილე ფიდე კიდე
+strict	easy	3	1	წაშლა	დანა	delete, clear	knife	წაშლა დაშლა დაშნა დანა
+strict	easy	4	2	სიმი	სოჭი	string	fir	სიმი სამი სათი სოთი სოჭი
+strict	easy	4	3	სიმი	მტერი	string	enemy, foe (Someone who is hostile)	სიმი სირი ტირი ტერი მტერი
+strict	easy	4	1	მითი	ნავთი	myth	kerosene	მითი მათი მართი ნართი ნავთი
+strict	easy	4	6	სველი	ასლი	wet	emmer, a type of wheat (Triticum dicoccum)	სველი ველი იელი ისლი ასლი
+strict	easy	4	2	სველი	ზარი	wet	terror, fear; consternation	სველი სელი სერი სარი ზარი
+strict	easy	4	1	ბნელი	ბმული	black, dark, gloomy, morose, murky, recondite, saturnine	link	ბნელი ნელი ნული მული ბმული
+strict	easy	4	7	ბნელი	ქალა	black, dark, gloomy, morose, murky, recondite, saturnine	skull	ბნელი ბნელა ბელა ბალა ქალა
+strict	easy	4	1	ფუნტი	ბოლი	pound	smoke	ფუნტი ფუტი ფული ფოლი ბოლი
+strict	easy	3	1	სოჭი	ასული	fir	daughter	სოჭი სოლი სული ასული
+strict	easy	4	3	წინა	ცა	front	sky, firmament	წინა ბინა ბია ია ცა
+strict	easy	4	2	სალი	ბურჯი	steep	bastion	სალი ბალი ბარი ბარჯი ბურჯი
+strict	easy	4	3	სალი	ლუდი	steep	beer	სალი სული ცული ცუდი ლუდი
+strict	easy	3	3	ღერო	ქერა	blade, haulm, stalk, stem	blond, blonde	ღერო ბერო ბერა ქერა
+strict	easy	4	1	ხიდი	კიტრი	bridge	cucumber	ხიდი ხილი კილი კირი კიტრი
+strict	easy	3	1	ჭორი	წერა	gossip, rumour, whispering	fate, destiny	ჭორი ჭერი ჭერა წერა
+strict	easy	4	3	ჭორი	ფერადი	gossip, rumour, whispering	colourful	ჭორი ფორი ფორდი ფერდი ფერადი
+strict	easy	4	1	ჭორი	ატამი	gossip, rumour, whispering	peach (fruit)	ჭორი ტორი ტომი ატომი ატამი
+strict	easy	3	2	ტურა	ბარი	jackal (mammal), Canis aureus	valley	ტურა ტური ტარი ბარი
+strict	easy	4	3	ტურა	ბგერა	jackal (mammal), Canis aureus	sound	ტურა ქურა ქერა ბერა ბგერა
+strict	easy	3	1	გუნდი	მური	team	smut, soot	გუნდი გუნი მუნი მური
+strict	easy	4	2	ბურჯი	შორი	bastion	distant, far	ბურჯი ბარჯი ბარი შარი შორი
+strict	easy	4	3	ტურა	ბგერა	jackal (mammal), Canis aureus	sound	ტურა ქურა ქერა ბერა ბგერა
+strict	easy	3	1	ტურა	სვლა	jackal (mammal), Canis aureus	an act of walking	ტურა სურა სულა სვლა
+strict	easy	4	5	ტურა	არხი	jackal (mammal), Canis aureus	canal	ტურა ტური ტარი არი არხი
+strict	easy	4	1	მზა	რუქა	ready, ready-made	misspelling of რუკა (ruḳa)	მზა მა რა რქა რუქა
+strict	easy	4	1	რძე	ბარი	milk	valley	რძე რე არე არი ბარი
+strict	easy	4	1	ხელი	ქეიფი	hand	feast	ხელი სელი სელფი სეიფი ქეიფი
+strict	easy	4	4	მამი	თხილი	colloquial hypocoristic vocative singular of მამა (mama), dad, daddy	hazelnut	მამი ხამი ხალი ხილი თხილი
+strict	easy	4	2	თოფი	კაი	gun	nice, okay, well, good	თოფი როფი როი რაი კაი
+strict	easy	4	2	მამა	ქორი	father	northern goshawk (Astur gentilis)	მამა ქამა ქარა ქარი ქორი
+strict	easy	4	1	მამა	ცომი	father	dough	მამა ამა ომა ომი ცომი
+strict	easy	4	2	ჯოგი	პიარი	drove, herd	public relations	ჯოგი ჯორი ჯარი პარი პიარი
+strict	easy	4	2	ფაილი	ოლქი	file	district, province	ფაილი ფილი ილი ოლი ოლქი
+strict	easy	4	1	ფაილი	შუბი	file	spear, lance	ფაილი ფილი შილი შიბი შუბი
+strict	easy	4	8	ველი	თოფი	field	gun	ველი ცელი ცოლი ცოფი თოფი
+strict	easy	4	1	როლი	უბანი	role	neighborhood, district, area, region	როლი ბოლი ბალი ბანი უბანი
+strict	easy	4	1	როლი	სენა	role	pantry, larder	როლი სოლი სელი სენი სენა
+strict	easy	3	1	როლი	სარი	role	pale, stake	როლი სოლი სალი სარი
+strict	easy	3	3	პირი	არსი	mouth (opening in the face)	essence	პირი აირი აისი არსი
+strict	easy	4	8	პირი	ეული	mouth (opening in the face)	completely alone	პირი წირი წილი წული ეული
+strict	easy	3	1	პირი	ღერო	mouth (opening in the face)	blade, haulm, stalk, stem	პირი პერი ღერი ღერო
+strict	easy	3	1	ილი	ვაჟი	cardamom	son	ილი ალი ვალი ვაჟი
+strict	easy	3	1	ილი	ჯერი	cardamom	turn, time	ილი იელი იერი ჯერი
+strict	easy	4	2	არსი	რქა	essence	horn	არსი არი არა რა რქა
+strict	easy	3	1	ალა	წერა	a flour hopper in a mill	fate, destiny	ალა არა ერა წერა
+strict	easy	3	1	მწირი	ნიჭი	poor	talent, gift	მწირი წირი ნირი ნიჭი
+strict	easy	3	1	თივა	ტივი	hay	raft	თივა ცივა ცივი ტივი
+strict	easy	3	3	კერი	თასი	curries, curry	bowl, chalice	კერი კესი კასი თასი
+strict	easy	4	2	კერი	ბრენდი	curries, curry	brand (a specific product, service, or provider)	კერი ბერი ბედი ბენდი ბრენდი
+strict	easy	3	1	დათვი	ლაღი	bear	happy, cheerful, full of life, energetic, vigorous	დათვი დავი დაღი ლაღი
+strict	medium	6	1	სოფელი	თოვლი	village, country, countryside	snow	სოფელი სოველი სველი სელი სოლი თოლი თოვლი
+strict	medium	6	2	ქვიშა	უნარი	sand	capability, proficiency	ქვიშა ქვირა ქირა ქარა ქარი ქნარი უნარი
+strict	medium	6	4	ბრუნი	ფრაზა	rev, span, turn, wind	phrase	ბრუნი ბუნი ბუზი ბაზი ბაზა რაზა ფრაზა
+strict	medium	5	1	ბრუნი	ზანგი	rev, span, turn, wind	black (negroid African)	ბრუნი ბუნი ბანი ჩანი ჩანგი ზანგი
+strict	medium	6	1	მაქო	ნაძვი	shuttle	spruce	მაქო მაქ აქ აი ავი ნავი ნაძვი
+strict	medium	6	1	მეორადი	ტერი	secondary	Terry	მეორადი მეორედი მეორედ მეორე მერე მერი ტერი
+strict	medium	5	11	პლანი	მალი	plan (set of intended actions)	fast, speedy	პლანი კლანი კლასი ლასი ლალი მალი
+strict	medium	6	5	პლანი	მესია	plan (set of intended actions)	messiah	პლანი კლანი კლასი კასი კესი მესი მესია
+strict	medium	6	5	გვამი	ფიქრი	cadaver, corpse, (dead) body	thought	გვამი გვარი ღვარი ღარი ფარი ფირი ფიქრი
+strict	medium	5	2	შტო	ავი	branch, bough	currish	შტო ტო ხო ახო ახი ავი
+strict	medium	5	2	შტო	უგზო	branch, bough	pathless, roadless	შტო რტო რო ურო უგო უგზო
+strict	medium	5	1	მაისი	გვარი	May	surname	მაისი მასი კასი კარი კვარი გვარი
+strict	medium	6	1	მაისი	ნიშანი	May	sign, mark, symbol	მაისი აისი აირი ნირი ნიში ნიშნი ნიშანი
+strict	medium	6	1	ნორჩი	ბრუნი	young, youthful, fresh	rev, span, turn, wind	ნორჩი მორჩი მორი მური მუნი ბუნი ბრუნი
+strict	medium	6	2	ნორჩი	მა	young, youthful, fresh	clipping of მამა (mama) or მამი (mami); dad, daddy (used chiefly as a direct address)	ნორჩი მორჩი მორი ორი ომი მი მა
+strict	medium	6	1	გალია	გრანტი	cage (esp. for birds)	grant	გალია გალი განი კანი კანტი რანტი გრანტი
+strict	medium	5	1	გალია	უფალი	cage (esp. for birds)	The Lord	გალია გალი ბალი ბრალი ურალი უფალი
+strict	medium	5	9	გელა	ბანძი	poker	uncool	გელა გალა გალი განი განძი ბანძი
+strict	medium	5	2	ხეირი	ურო	avail, advantage, benefit	hammer, mallet	ხეირი სეირი სირი სური სურო ურო
+strict	medium	5	5	ხეირი	აბი	avail, advantage, benefit	pill (small portion of a drug or drugs to be taken orally)	ხეირი სეირი სერი ერი არი აბი
+strict	medium	5	13	ბანი	ნაშთი	bass	remnant	ბანი დანი დავი ნავი ნავთი ნაშთი
+strict	medium	6	2	მითი	ტაქსი	myth	taxi	მითი მილი მალი ვალი ვალსი ვაქსი ტაქსი
+strict	medium	6	7	მითი	მიწა	myth	ground, land	მითი მილი მალი მალა მანა მინა მიწა
+strict	medium	5	1	მერვე	სველი	eighth	wet	მერვე მერე მერი სერი სელი სველი
+strict	medium	6	3	პასტა	ოდა	pasta	ode	პასტა დასტა დასმა დამა ამა ომა ოდა
+strict	medium	5	3	სველი	გავა	wet	breech, croup, crupper	სველი ველი ვალი გალი გალა გავა
+strict	medium	5	2	არსი	ბაგე	essence	lip	არსი ასი ბასი ბაჟი ბაჟე ბაგე
+strict	medium	6	12	არსი	კინო	essence	movie	არსი ასი დასი დანი დანო დინო კინო
+strict	medium	5	2	არსი	ნიშა	essence	niche	არსი აისი აირი ნირი ნიში ნიშა
+strict	medium	5	1	პირადი	სიმი	personal, private	string	პირადი პირარი პიარი პირი სირი სიმი
+strict	medium	6	2	პირადი	ოსი	personal, private	Ossetian	პირადი პირარი პიარი პარი არი ორი ოსი
+strict	medium	5	2	ფერია	ბრუნი	fairy, sprite	rev, span, turn, wind	ფერია ფერი ფენი ბენი ბუნი ბრუნი
+strict	medium	5	4	ჭკუა	თემა	mind	theme	ჭკუა ჭკა ოკა ომა თმა თემა
+strict	medium	6	1	ფუნტი	ბანანი	pound	banana (fruit)	ფუნტი ბუნტი ბუნი ბანი ბანკი ბანაკი ბანანი
+strict	medium	6	1	ყანა	გუდა	cornfield	wineskin, leather bag	ყანა განა განი გუნი გუნდი გუნდა გუდა
+strict	medium	6	9	წონა	წერა	weight	fate, destiny	წონა მონა მანა მარა ძარა ძერა წერა
+strict	medium	5	1	წონა	ფაუნა	weight	fauna	წონა წინა სინა სუნა საუნა ფაუნა
+strict	medium	6	2	ყალბი	იხვი	counterfeit, false, fake, mock, shoddy, spurious, bastardy	duck (aquatic bird)	ყალბი სალბი სალი ალი ილი ივი იხვი
+strict	medium	5	2	ყალბი	მამრი	counterfeit, false, fake, mock, shoddy, spurious, bastardy	masculine	ყალბი სალბი სალი მალი მამი მამრი
+strict	medium	6	1	სოჭი	შობა	fir	Christmas	სოჭი ლოჭი ლორი შორი შორს შობს შობა
+strict	medium	5	1	მაფია	ბიძა	mafia	uncle	მაფია მანია მანა მინა ბინა ბიძა
+strict	medium	5	1	წინა	ჯორი	front	mule	წინა წონა ტონა ტონი ტორი ჯორი
+strict	medium	6	2	წინა	ტაო	front	fiber	წინა მინა მანა მარა ტარა ტარო ტაო
+strict	medium	5	2	სალი	უხვი	steep	abundant, plentiful	სალი ალი ილი ივი იხვი უხვი
+strict	medium	6	1	ღერო	ცენტრში	blade, haulm, stalk, stem	postpositional suffixed with -ში of ცენტრი (cenṭri)	ღერო ღერი ცერი ცეტი ცენტი ცენტრი ცენტრში
+strict	medium	5	1	ცა	კიბო	sky, firmament	barnacle	ცა ია ბია ბიო ბიბო კიბო
+strict	medium	5	1	ცა	ბრბო	sky, firmament	crowd, mob	ცა ია ბია ბიო ბიბო ბრბო
+strict	medium	5	2	ცა	ბანკი	sky, firmament	bank, bankers	ცა რა რაი რაკი ბაკი ბანკი
+strict	medium	5	1	ხიდი	გამა	bridge	gamma, gammas	ხიდი ხილი ხალი გალი გალა გამა
+strict	medium	5	1	ხიდი	ჯართი	bridge	crocks, shards (of pottery)	ხიდი ხილი ხალი ხარი ჯარი ჯართი
+strict	medium	6	1	ცენტრი	პოსტი	centre	post (assigned station)	ცენტრი ცენტი კენტი კერტი კორტი პორტი პოსტი
+strict	medium	6	1	ლანდი	კალა	ghost, phantom	tin	ლანდი ლანჩი ქანჩი ქანი ქალი ქალა კალა
+strict	medium	6	5	გოლფი	ნასკი	golf	sock	გოლფი გოლი ბოლი ბოსი ბასი ბასკი ნასკი
+strict	medium	5	2	გოლფი	ჭაჭა	golf	grape pomace	გოლფი გოლი გალი გალა ჭალა ჭაჭა
+strict	medium	6	7	გოლფი	ტკბილი	golf	sweet	გოლფი გოლი ცოლი ცილი კილი კბილი ტკბილი
+strict	medium	6	1	სოფლელი	მარილი	villager	salt	სოფლელი სოფელი სორელი მორელი მორიელი მარიელი მარილი
+strict	medium	6	3	სოფლელი	იოლი	villager	easy	სოფლელი სოფელი სოველი სველი ველი იელი იოლი
+strict	medium	5	1	კამარა	გალია	arc, arch, vault	cage (esp. for birds)	კამარა კმარა მარა მალა გალა გალია
+strict	medium	5	2	გუნდი	შოკი	team	shock	გუნდი გუნი გონი ჭონი ჭოკი შოკი
+strict	medium	5	1	ბებო	ფუჭი	grandma	futile, vein	ბებო ბერო ბერი ფერი ფური ფუჭი
+strict	hard	7	4	სოფელი	გუნდი	village, country, countryside	team	სოფელი სოველი სველი სელი სული სუნი გუნი გუნდი
+strict	hard	9	2	ქვიშა	გრიპი	sand	influenza, flu, grippe	ქვიშა ქვია ღვია ღია ია იფ იფი რიფი გრიფი გრიპი
+strict	hard	8	1	ქვიშა	ფრანკი	sand	franc	ქვიშა ქვია ქვა რვა რა რაი რაკი ფრაკი ფრანკი
+strict	hard	7	2	მაქო	კლუბი	shuttle	club	მაქო მაქ მას მასი კასი კუსი კუბი კლუბი
+strict	hard	7	4	მაქო	ზღვარი	shuttle	bound, brink, verge	მაქო მაქ აქ აი არი ღარი ღვარი ზღვარი
+strict	hard	8	5	მეორადი	არსი	secondary	essence	მეორადი მეორედი მეორედ მეორე მორე ორე არე არი არსი
+strict	hard	8	4	პლანი	ხილვა	plan (set of intended actions)	vision, apparition, revelation (a mystical or religious experience)	პლანი კლანი კანი ხანი ხანა ხათა ხალთა ხალვა ხილვა
+strict	hard	9	28	რჩეული	ტაში	chosen, chosen one	applause, cheers	რჩეული არჩეული არეული ასეული ასული ასალი ალალი ლალი ლაში ტაში
+strict	hard	9	1	რჩეული	ჭიქა	chosen, chosen one	glass, cup, mug	რჩეული არჩეული არეული ასეული ასული სული სულა სილა სიქა ჭიქა
+strict	hard	8	40	გვამი	სქესი	cadaver, corpse, (dead) body	sex	გვამი გვარი კვარი კვალი ძვალი ძველი სველი სქელი სქესი
+strict	hard	7	1	შტო	ნაღდი	branch, bough	real	შტო რტო არტო მარტო მარტი მარდი ნარდი ნაღდი
+strict	hard	8	2	მაისი	წრიული	May	circular	მაისი აისი ასი ასლი ასული ასეული არეული არიული წრიული
+strict	hard	8	2	ტალახი	როკი	clay, mud	rock music	ტალახი ტალანი ბალანი ბანანი ბანაკი ბანკი ბაკი რაკი როკი
+strict	hard	9	2	ბატონი	ძირი	gentleman, mister, sir	bilge	ბატონი ბალონი ბალანი პალანი პლანი კლანი კანი კარი კირი ძირი
+strict	hard	7	5	ნორჩი	ყანა	young, youthful, fresh	cornfield	ნორჩი მორჩი მორი შორი შარი შარა შანა ყანა
+strict	hard	9	2	ქურდი	მშრალი	thief	dry	ქურდი ქური მური მორი მორგი მორგვი მორევი მორელი მორალი მშრალი
+strict	hard	8	1	ქურდი	მამაცი	thief	adventurous, brave, doughty, gallant, game, hardy, plucky, valiant, venturesome, venturous, ironside	ქურდი ქური მური მუარი მყარი მაყარი მაყალი მამალი მამაცი
+strict	hard	7	2	გელა	გარეთა	poker	external, outward	გელა გალა ალა არა არე გარე გარეთ გარეთა
+strict	hard	7	1	გელა	ნორმა	poker	standard	გელა მელა მელია მერია ფერია ფერმა ფორმა ნორმა
+strict	hard	8	7	წაშლა	მაქო	delete, clear	shuttle	წაშლა წაბლა დაბლა დაბა დამა ამა მა მაქ მაქო
+strict	hard	8	2	მერვე	განსჯა	eighth	verbal noun of განსჯის (gansǯis) and განისჯება (ganisǯeba): judgement, judgment (the act of judging)	მერვე მერე მერი გერი გენი განი განა განჯა განსჯა
+strict	hard	8	2	მერვე	ღრიალი	eighth	roar	მერვე მერე მერი ცერი ცელი ცალი ციალი რიალი ღრიალი
+strict	hard	8	2	კანკალი	ტანი	quake, shiver, shivers, tremble, tremor, dodder, quake, shiver, tremble	body (of a person or an animal)	კანკალი კაკალი კაკანი ბაკანი ბანანი ბანაკი ბანკი ტანკი ტანი
+strict	hard	8	6	პასტა	კერძი	pasta	dish, meal	პასტა დასტა დასმა დამა დამი დარი კარი კერი კერძი
+strict	hard	9	13	პასტა	ნათელი	pasta	bright, lighted, light (having light; luminous, illuminated)	პასტა კასტა კატა ხატა ხატი ნატი ნალი ნაკლი ნაკელი ნათელი
+strict	hard	8	2	ბატკანი	მატლი	lamb	larva, maggot	ბატკანი ბაკანი ბანანი ბანაკი ბანკი ბაკი ბალი მალი მატლი
+strict	hard	8	8	საერთო	ძრავა	common, shared	engine	საერთო საერო სარო სარი კარი კავი კრავი ძრავი ძრავა
+strict	hard	7	10	საერთო	პორტი	common, shared	waterfront, port	საერთო საერო სარო სარი ფარი ფორი ფორტი პორტი
+strict	hard	7	6	საერთო	ჭია	common, shared	worm	საერთო საერო სარო ტარო ტარა არა ჭრა ჭია
+strict	hard	8	2	ბალახი	მადლი	grass	virtue, charity, goodness	ბალახი ბალანი ბანანი ბანაკი ბანკი ბაკი ბალი მალი მადლი
+strict	hard	7	3	ბალახი	დენი	grass	current	ბალახი ბალანი ბანანი ბანაკი ბანკი ბანი დანი დენი
+strict	hard	8	7	პირადი	ესეთი	personal, private	like that	პირადი პირარი პიარი პარი პერი პენი სენი ესენი ესეთი
+strict	hard	8	16	ბნელი	ცოცხი	black, dark, gloomy, morose, murky, recondite, saturnine	broom	ბნელი წნელი წელი წილი ფილი ფიცი ფიცხი ფოცხი ცოცხი
+strict	hard	7	9	ფერია	ვაკე	fairy, sprite	plain, plane	ფერია მერია მესია მესი მასი მასე მაკე ვაკე
+strict	hard	7	9	ფუნტი	გია	pound	juniper tree	ფუნტი ბუნტი ბუნი სუნი სუნა სინა სია გია
+strict	hard	7	6	ყანა	ექო	cornfield	echo, re-echo	ყანა დანა დამა ამა ამო აზო ეზო ექო
+strict	hard	8	1	ყანა	მამალი	cornfield	male animal, bird or insect	ყანა ხანა ხანი ხარი მხარი მყარი მაყარი მაყალი მამალი
+strict	hard	8	2	წონა	ტერაქტი	weight	act of terrorism, terrorist act	წონა ტონა ტონი ტანი ტახი ტახტი ტაქტი ტრაქტი ტერაქტი
+strict	hard	7	2	ყალბი	უცხო	counterfeit, false, fake, mock, shoddy, spurious, bastardy	strange	ყალბი სალბი სალი ალი ალო ახო ცხო უცხო
+strict	hard	7	5	სოჭი	ბირჟა	fir	exchange, stock exchange	სოჭი სოლი ბოლი ბალი ბაჟი ბაჟა ბარჟა ბირჟა
+strict	hard	7	14	მაფია	ლუდი	mafia	beer	მაფია მათია მათი მალი მული მუქი ლუქი ლუდი
+strict	hard	8	4	ღერო	წმინდა	blade, haulm, stalk, stem	holy	ღერო ბერო ბერა ბრა ბია ბინა წინა წინდა წმინდა
+strict	hard	7	1	ცენტრი	ჩივილი	centre	lament, bitch, complain, mourn, plain	ცენტრი ცენტი ცეტი ცელი ცილი ცვილი ჩვილი ჩივილი
+strict	hard	9	1	ცენტრი	ტალანტი	centre	talent	ცენტრი ცენტი კენტი კანტი კანი კლანი პლანი პალანი ტალანი ტალანტი
+strict	hard	9	6	ლანდი	ღამე	ghost, phantom	night	ლანდი ლანჩი ქანჩი ქანი დანი დაი რაი რამ რამე ღამე
+strict	hard	7	2	ტურა	ქვრივი	jackal (mammal), Canis aureus	widow	ტურა ტური ტირი ტივი კივი კრივი კვრივი ქვრივი
+strict	hard	8	12	კამარა	რიგი	arc, arch, vault	series, line, queue	კამარა კმარა მარა ტარა ტარი ტირი ტიკი რიკი რიგი
+strict	hard	8	1	კამარა	ლინკი	arc, arch, vault	link	კამარა კმარა მარა მანა მინა სინა სინი ლინი ლინკი
+strict	hard	8	9	გუნდი	ჩვევა	team	habit, custom, practice, wont	გუნდი გუნი სუნი სუნა სენა ვენა წვენა წვევა ჩვევა
+strict	hard	7	1	ბურჯი	ტიტული	bastion	appellation	ბურჯი ბარჯი ბარი ტარი ტირი ტილი ტიული ტიტული
+strict	hard	8	2	ბურჯი	ბალახი	bastion	grass	ბურჯი ბარჯი ბარი ბაკი ბანკი ბანაკი ბანანი ბალანი ბალახი
+strict	hard	9	1	წარსული	სარჩელი	past, antecedent, bygones	lawsuit, counterclaim	წარსული წასული ასული ასეული არეული გარეული გართული სართული სარჩული სარჩელი
+strict	hard	8	4	წარსული	ცნება	past, antecedent, bygones	idea, notion, concept	წარსული წასული ასული სული სელი ნელი ნები ნება ცნება
+strict	hard	7	2	წარსული	ღია	past, antecedent, bygones	opened (door, etc.)	წარსული წასული ასული სული სულა სილა სია ღია
+strict	hard	7	1	ბებო	ირემი	grandma	deer	ბებო ბერო ბერი კერი კეპი კრეპი კრემი ირემი
+strict	hard	9	7	მზა	უსახელო	ready, ready-made	nameless, unnamed, untitled	მზა ბზა ბაზა ბალა ბალი სალი სახლი სახელი სახელო უსახელო
+strict	hard	7	3	რძე	ნდობა	milk	confidence, trust, trusts, confide, credit, relied, faith	რძე რე რა არა აბა დაბა დობა ნდობა
+strict	hard	9	7	ტირილი	ძვირი	cry	expensive, costly, dear	ტირილი ტირიფი ტარიფი არიფი რიფი რიკი ტიკი ტირი ვირი ძვირი
+strict	hard	8	1	ტირილი	ყელი	cry	throat	ტირილი ტირიფი ტარიფი არიფი რიფი იფი ილი იელი ყელი
+strict	hard	7	16	კუ	ტრიალი	tortoise, turtle	turning, spinning (on its or some other axis)	კუ აუ აი ალი ვალი რვალი რიალი ტრიალი
+strict	expert	10	10	ბრუნი	წაგება	rev, span, turn, wind	loss (opposite of profit)	ბრუნი ბუნი ბანი ბალი ბალა ბალბა ბამბა სამბა სამება წამება წაგება
+strict	expert	11	5	მეორადი	ფოტო	secondary	photo, photo-	მეორადი მეორედი მეორედ მეორე მერე მერი მესი მისი ფისი ფისო ფოსო ფოტო
+strict	expert	10	1	რჩეული	კოკა	chosen, chosen one	a narrow-necked round clay pitcher; a wine jar	რჩეული არჩეული არეული ასეული ასული სული სოლი სოჭი კოჭი კოჭა კოკა
+strict	expert	10	2	გვამი	გრაფიკი	cadaver, corpse, (dead) body	graph	გვამი გვარი კვარი კარი კარტი კანტი რანტი გრანტი გრანიტი გრაფიტი გრაფიკი
+strict	expert	10	11	ტალახი	ფრენა	clay, mud	flight	ტალახი ტალანი პალანი პლანი კლანი კანი დანი დანა დენა ფენა ფრენა
+strict	expert	12	2	ტალახი	კოხტა	clay, mud	dainty, dapper, soigné, soignee	ტალახი ტალანი პალანი პლანი კლანი კანი ხანი ხანა ხატა კატა კასტა კოსტა კოხტა
+strict	expert	10	2	ბატონი	გორა	gentleman, mister, sir	hill	ბატონი ბალონი ბალანი ბანანი ბანაკი ბანკი ბაკი ბარი ბორი ბორა გორა
+strict	expert	11	38	ბატონი	ფილმი	gentleman, mister, sir	movie, film, motion picture	ბატონი ბალონი ბალანი პალანი პლანი კლანი კლასი ლასი ფასი ფისი ფილი ფილმი
+strict	expert	10	47	წაშლა	ჰაკერი	delete, clear	hacker	წაშლა დაშლა დაღლა მაღლა მალა მალი ნალი ნაკლი ნაკელი ნაკერი ჰაკერი
+strict	expert	11	4	სიმი	ივლისი	string	July	სიმი მიმი მისი მისია მესია მელია ელია ელის თლის თვლის ივლის ივლისი
+strict	expert	11	5	კანკალი	ზონა	quake, shiver, shivers, tremble, tremor, dodder, quake, shiver, tremble	zone	კანკალი კაკალი კაკანი ბაკანი ბალანი პალანი პლანი კლანი კლონი კონი კონა ზონა
+strict	expert	11	5	კანკალი	ქულა	quake, shiver, shivers, tremble, tremor, dodder, quake, shiver, tremble	point (a unit of scoring in a game or competition)	კანკალი კაკალი კაკანი ბაკანი ბანანი ბანაკი ბანკი ბაკი ბალი ბალა ქალა ქულა
+strict	expert	13	5	ბატკანი	გამართვა	lamb	holding, organizing (an event)	ბატკანი ბაკანი ბანანი ბანაკი ბანკი მანკი მაიკი მაიკა მარკა მარლა მართლა მართვა ამართვა გამართვა
+strict	expert	10	4	ბატკანი	ელვა	lamb	lightning	ბატკანი ბაკანი ბანანი ბანაკი ბანკი ბაკი ბალი ალი ალა ალვა ელვა
+strict	expert	11	1	სარჩელი	ცვლა	lawsuit, counterclaim	shift, turn, watch (allotted period of work)	სარჩელი სარჩული სართული გართული გარეული არეული ასეული ასული სული სულა სვლა ცვლა
+strict	expert	13	2	სარჩელი	ჩივილი	lawsuit, counterclaim	lament, bitch, complain, mourn, plain	სარჩელი სარჩული სართული გართული გარეული არეული ასეული ასული სული ცული ცილი ცვილი ჩვილი ჩივილი
+strict	expert	14	1	სარჩელი	ერბო	lawsuit, counterclaim	ghee, ghi; butter	სარჩელი სარჩული სართული გართული გარეული არეული ასეული ასული სული სური სურო ურო ურდო ერდო ერბო
+strict	expert	11	42	ბალახი	ტიტული	grass	appellation	ბალახი ბალანი პალანი პლანი კლანი კლონი კონი ტონი ტოლი ტილი ტიული ტიტული
+strict	expert	10	13	ფერია	დამდგარი	fairy, sprite	stand-up	ფერია ფარია ფარი უარი მუარი მყარი მაყარი მაგარი მდგარი ამდგარი დამდგარი
+strict	expert	10	25	ჭკუა	სერიალი	mind	serial	ჭკუა ჭკა ჭრა რა რაი რაკი ტრაკი ტრალი ტრიალი სრიალი სერიალი
+strict	expert	11	20	ჭკუა	წრიული	mind	circular	ჭკუა ჭკა სკა სია სილა სულა სული ასული ასეული არეული არიული წრიული
+strict	expert	12	23	სამოსი	გარსი	apparel, garb, clothes	capsule, casing, integument, membrane, tunic	სამოსი სამასი სამანი საკანი ბაკანი ბანანი ბანაკი ბანკი ბაკი ბარი ქარი ქარსი გარსი
+strict	expert	11	5	სამოსი	ასლი	apparel, garb, clothes	emmer, a type of wheat (Triticum dicoccum)	სამოსი სამასი სამანი საკანი ბაკანი ბანანი ბანაკი ბანკი ბასკი ბასი ასი ასლი
+strict	expert	11	5	სამოსი	ჭალა	apparel, garb, clothes	bottomland, floodplain, flood meadow	სამოსი სამასი სამანი საკანი ბაკანი ბანანი ბანაკი ბანკი ბაკი ბალი ბალა ჭალა
+strict	expert	10	11	მაფია	ბრინჯი	mafia	rice	მაფია მათია მათი მალი მილი ხილი ხიჭი ბიჭი ბიჯი ბრიჯი ბრინჯი
+strict	expert	10	2	ლანდი	სალონი	ghost, phantom	salon	ლანდი ლანჩი ქანჩი ქანი კანი კლანი პლანი პალანი ბალანი ბალონი სალონი
+strict	expert	10	2	სოფლელი	კურტკა	villager	jacket	სოფლელი სოფელი სოველი სველი სელი სერი სერია კერია კურია კურკა კურტკა
+strict	expert	11	1	კაკალი	დარაჯი	walnut-tree, Juglans regia	guard (mostly of a building)	კაკალი კაკანი ბაკანი ბალანი პალანი პლანი კლანი კრანი ფრანი ფარანი დარანი დარაჯი
+strict	expert	10	2	კაკალი	ცა	walnut-tree, Juglans regia	sky, firmament	კაკალი კაკანი ბაკანი ბანანი ბანაკი ბანკი ბაკი რაკი რაი რა ცა
+strict	expert	13	3	კაკალი	კვირას	walnut-tree, Juglans regia	dative singular of კვირა (ḳvira)	კაკალი კაკანი ბაკანი ბანანი ბანაკი ბანკი ბაკი ბარი ქარი ქარა ქირა ქვირა კვირა კვირას
+strict	expert	13	1	ტირილი	საბანი	cry	blanket	ტირილი ტირიფი ტარიფი არიფი რიფი რიკი რაკი ბაკი ბანკი ბანაკი ბანანი ბაკანი საკანი საბანი
+strict	expert	11	3	ჭარბი	სამოსი	excess	apparel, garb, clothes	ჭარბი ჭარი ბარი ბაკი ბანკი ბანაკი ბანანი ბაკანი საკანი სამანი სამასი სამოსი
+strict	expert	11	4	ხეობა	კულტი	valley	cult	ხეობა ხმობა ძმობა ძობა დობა დება ნება ნები კები კეტი კელტი კულტი
+strict	expert	11	1	მარხვა	მკვრივი	ember, fast	adamant, resilient, solid, taut	მარხვა მართვა მართლა მარლა მალა მალი მილი კილი კივი კრივი კვრივი მკვრივი
+strict	expert	10	13	ჯიუტი	მამიდა	stubborn, strong-willed	aunt (father's side), paternal aunt, the sister of one's father, father’s cousin	ჯიუტი იუტი იოტი იოლი მოლი მალი მათი მათია მაგია მაგიდა მამიდა
+strict	expert	10	2	კერი	ივნისი	curries, curry	June	კერი კერია მერია მელია ელია ელის თლის თვლის ივლის ივლისი ივნისი
+strict	expert	10	4	ბუმი	სამოსი	boom	apparel, garb, clothes	ბუმი ბუკი ბაკი ბანკი ბანაკი ბანანი ბაკანი საკანი სამანი სამასი სამოსი
+strict	expert	10	8	ასაკი	მამული	age	country-seat, (landed) estate, manor	ასაკი ასალი ახალი ხალი ხარი მხარი მყარი მაყარი მაყალი მამალი მამული
+strict	expert	10	4	ასაკი	დიდება	age	glory, fame	ასაკი ასალი სალი სელი ნელი ნები ნება გნება გინება დინება დიდება
+strict	expert	10	4	ცუგა	გოგონა	doggy	alternative spelling of გოგო (gogo)	ცუგა ცუგო უგო ურო ურა ბრა ბორა გორა გოგრა გოგორა გოგონა
+strict	expert	11	6	საპონი	დრამა	soap	drama	საპონი სალონი ბალონი ბალანი პალანი პლანი კლანი კანი დანი დანა დამა დრამა
+strict	expert	12	2	საპონი	რუკა	soap	map	საპონი სალონი ბალონი ბალანი ბანანი ბანაკი ბანკი ბაკი ბუკი ბუქი რუქი რუქა რუკა
+strict	expert	12	15	საპონი	ფლორა	soap	Flora, flora	საპონი სალონი ბალონი ბალანი ბანანი ბანაკი ბანკი ბაკი ბარი ბორი ლორი ფლორი ფლორა
+strict	expert	12	6	პოპი	ივლისი	Of or relating to pop music	July	პოპი პონი პენი პერი მერი მერია მელია ელია ელის თლის თვლის ივლის ივლისი
+strict	expert	10	3	მაღალი	ღრმა	tall	deep, profound	მაღალი მაყალი მაყარი მყარი მუარი უარი არი არა ბრა ბრმა ღრმა
+strict	expert	10	5	ერთობა	კბილი	unity, oneness	tooth	ერთობა ერობა ქრობა ქრება ქება ქერა კერა კერი კირი კილი კბილი
+strict	expert	10	2	კაცი	ქართულ	man	dative/adverbial of ქართული (kartuli)	კაცი კასი ასი ასლი ასული ასეული არეული გარეული გართული ქართული ქართულ
+strict	expert	12	15	ქვრივი	გოგონა	widow	alternative spelling of გოგო (gogo)	ქვრივი კვრივი კრივი კივი კევი კერი კერა ბერა ბორა გორა გოგრა გოგორა გოგონა
+strict	expert	11	3	ნიჭი	ქართულ	talent, gift	dative/adverbial of ქართული (kartuli)	ნიჭი ღიჭი ღილი ღული სული ასული ასეული არეული გარეული გართული ქართული ქართულ
+strict	expert	11	2	პოპი	ჩვეული	Of or relating to pop music	customary, habitual, inherent, usual, wonted, accustomed	პოპი პაპი აპი ალი ასლი ასული ასეული არეული არჩეული რჩეული რვეული ჩვეული
+strict	expert	13	112	მეფე	გაგება	king	a tool for fishing	მეფე მერე მერი ბერი ბერა ბელა ბალა ბალბა ბამბა სამბა სამება წამება წაგება გაგება
+strict	expert	10	11	კაბა	ბატონი	dress, frock	gentleman, mister, sir	კაბა კალა ბალა ბალი ბაკი ბანკი ბანაკი ბანანი ბალანი ბალონი ბატონი
+strict	expert	12	12	ღირსი	ტრამვაი	meritorious, deserving (of punishment, award etc.)	tram	ღირსი ღირს ძირს ძირი ტირი ტარი დარი დამი დამა დრამა ტრამა ტრამვა ტრამვაი
+strict	expert	11	5	პოსტი	წოდება	post (assigned station)	title, rank, appellation, official designation (officially granted for merit, status, or promotion)	პოსტი პორტი კორტი კერტი კეტი კები ნები ნება გნება გონება გოდება წოდება
+strict	expert	10	5	ტკივილი	ბგერა	pain, ache, hurt	sound	ტკივილი კივილი ჩივილი ჩვილი შვილი შველი ველი ბელი ბერი ბერა ბგერა
+strict	expert	11	1	ტკივილი	მყრალი	pain, ache, hurt	fetid, malodorous	ტკივილი კივილი ჩივილი ჩვილი შვილი შველი სველი სოველი სორელი მორელი მორალი მყრალი
+strict	expert	10	4	ძმობა	ლექსი	brotherhood, fraternity	lyric, poem, verse	ძმობა ძობა შობა შობს შორს შორი შური შუქი ლუქი ლუქსი ლექსი
+strict	expert	10	15	კერძო	მარხვა	private	ember, fast	კერძო კერძი კერი ფერი ფარი ფარა მარა მარლა მართლა მართვა მარხვა
+strict	expert	12	1	ზნეობა	წვეთი	morality	drop, droplet	ზნეობა ზეობა ხეობა ხმობა ძმობა ძობა დობა დება დენა ვენა წვენა წვენი წვეთი
+strict	expert	12	3	ზნეობა	ფუჭი	morality	futile, vein	ზნეობა ზეობა ხეობა ხმობა ძმობა ძობა შობა შობს შორს შორი შური ფური ფუჭი
+standard	easy	4	1	საიტი	ნივთი	website	thing	საიტი ნაიტი ნაითი ნავთი ნივთი
+standard	easy	4	2	საიტი	ჯერი	website	turn, time	საიტი სიტი სეტი სერი ჯერი
+standard	easy	4	1	მურაბა	სუფრა	murabba, jam, preserve, preserves	tablecloth	მურაბა მურაა მურა სურა სუფრა
+standard	easy	4	1	პლანი	შუბი	plan (set of intended actions)	spear, lance	პლანი პანი შანი შაბი შუბი
+standard	easy	4	2	დელი	ცხადი	crazy, mad	distinct, evident, manifest, matter of course, perspicuous, transparent, unreserved, visible	დელი ცელი ცალი ცადი ცხადი
+standard	easy	4	22	მიკი	ბოსი	clitoris	boss, superior	მიკი მივი მოვი ბოვი ბოსი
+standard	easy	4	3	ბენდი	ხერხი	band (group of musicians)	jigsaw, saw	ბენდი ბენკი ბერკი ხერკი ხერხი
+standard	easy	3	1	ბანდა	დაფა	gang	plate, table, tablet, bench	ბანდა ბანა დანა დაფა
+standard	easy	4	1	ბანდა	გრანტი	gang	grant	ბანდა ბანდი განდი გრანდი გრანტი
+standard	easy	4	2	ნაზი	თივა	delicate, soft, tender	hay	ნაზი ნავი ნავა თავა თივა
+standard	easy	4	3	ჟანრი	შუბი	genre	spear, lance	ჟანრი ჟარი შარი შური შუბი
+standard	easy	4	7	ჰაუსი	ხანა	house, house music	a more or less long period of history, especially one considered remarkable or noteworthy	ჰაუსი ჰანსი ჰანს ჰანა ხანა
+standard	easy	4	9	ჰაუსი	გული	house, house music	heart	ჰაუსი ჰუსი კუსი კული გული
+standard	easy	4	1	ისარი	კარაქი	arrow	butter	ისარი სარი კარი კარქი კარაქი
+standard	easy	4	1	პიკი	მზა	peak, pike	ready, ready-made	პიკი მიკი მიკა მკა მზა
+standard	easy	3	2	ჭია	ქერა	worm	blond, blonde	ჭია ჭრა ერა ქერა
+standard	easy	4	1	დელტა	ქერი	delta	barley	დელტა დელა დელი ქელი ქერი
+standard	easy	4	6	სენა	ფა	pantry, larder	fa	სენა სინა სია ია ფა
+standard	easy	4	6	ატამი	აბი	peach (fruit)	pill (small portion of a drug or drugs to be taken orally)	ატამი ატმი ახმი ახი აბი
+standard	easy	4	1	ძაღლი	გოგი	dog	outer (last) finger joint, phalanx	ძაღლი ძალი გალი გოლი გოგი
+standard	easy	3	1	კირი	პორტი	lime, calcium oxide	waterfront, port	კირი კორი კორტი პორტი
+standard	easy	4	3	კირი	მყარი	lime, calcium oxide	solid, hard, settled, stable, steadfast, steady, stony, sure-footed, cast-iron	კირი კარი ხარი მხარი მყარი
+standard	easy	4	1	ბანკი	ლხინი	bank, bankers	banquet, feast	ბანკი ბანი ბინი ლინი ლხინი
+standard	easy	4	1	ლხინი	ვაჟი	banquet, feast	son	ლხინი ლინი ვინი ვანი ვაჟი
+standard	easy	4	3	მი	ჩიტი	E, mi (note)	bird	მი მით მითი ჩითი ჩიტი
+standard	easy	4	1	აურა	სუსტი	aura	weak	აურა სურა სუსა სუსტ სუსტი
+standard	easy	4	4	მწერი	მისია	insect	mission	მწერი მერი მერია მესია მისია
+standard	easy	3	1	მწერი	მალი	insect	fast, speedy	მწერი მერი მელი მალი
+standard	easy	3	1	თაღი	ბოზი	arc, arch	whore, prostitute, tart	თაღი ბაღი ბაზი ბოზი
+standard	easy	4	1	მედია	დე	media, news media	clipping of დედა (deda) or დედი (dedi); mom, mum, mummy (used chiefly as a direct address)	მედია მდია დია და დე
+standard	easy	4	10	მედია	მაისი	media, news media	May	მედია მესია მესი მეისი მაისი
+standard	easy	3	3	მედია	ფერი	media, news media	color, hue	მედია მერია ფერია ფერი
+standard	easy	4	3	მხნე	მტერი	resolute, brave, strong	enemy, foe (Someone who is hostile)	მხნე მხრე მხრი მერი მტერი
+standard	easy	4	1	ძეგლი	ოსი	monument, memorial	Ossetian	ძეგლი ძელი ელი ოლი ოსი
+standard	easy	4	5	ძეგლი	ასლი	monument, memorial	emmer, a type of wheat (Triticum dicoccum)	ძეგლი ძელი იელი ისლი ასლი
+standard	easy	4	3	შაქარი	ფასი	sugar	price, cost	შაქარი შაქრი შარი ფარი ფასი
+standard	easy	4	6	ბრალი	ზიანი	fault (mistake or error)	damage, detriment, harm, injuries, injury, mischief	ბრალი ბრიალი რიალი რიანი ზიანი
+standard	easy	3	1	ელვა	ელჩი	lightning	ambassador, envoy	ელვა ელია ელი ელჩი
+standard	easy	4	1	გიჟი	სიო	crazy, mad, lunatic	breeze	გიჟი გიჟ გია სია სიო
+standard	easy	4	1	ფა	ბიჯო	fa	vocative singular of ბიჭი (bič̣i).	ფა ია ბია ბიო ბიჯო
+standard	easy	3	2	ყელი	ხანი	throat	A period of time; time	ყელი ხელი ხენი ხანი
+standard	easy	3	1	ყელი	ძალა	throat	power, force, strength	ყელი ძელი ძალი ძალა
+standard	easy	4	4	პრიზი	პიკი	prize	peak, pike	პრიზი კრიზი კრიკი რიკი პიკი
+standard	easy	4	1	რაზმი	კარგ	brigade, posse	dative/adverbial of კარგი (ḳargi)	რაზმი რამი კამი კარი კარგ
+standard	easy	3	3	კარტი	ფარა	card	herd, flock	კარტი კარტა კარა ფარა
+standard	easy	4	1	კარტი	ბატონი	card	gentleman, mister, sir	კარტი კარნი ბარნი ბარონი ბატონი
+standard	easy	4	2	კაკალი	კარავი	walnut-tree, Juglans regia	tabernacle, tent	კაკალი კაკლი კაკვი კარვი კარავი
+standard	easy	4	2	კაკალი	გული	walnut-tree, Juglans regia	heart	კაკალი კაკლი კალი გალი გული
+standard	easy	4	3	გუდა	ვადა	wineskin, leather bag	a crossing point of the sabre	გუდა ბუდა ბედა ვედა ვადა
+standard	easy	3	1	გუდა	უჯრა	wineskin, leather bag	drawer	გუდა გურა ურა უჯრა
+standard	easy	4	3	გუდა	ყრუ	wineskin, leather bag	deaf person	გუდა გურა გურუ ყურუ ყრუ
+standard	easy	3	1	კუჭი	ლომი	stomach (digestive organ)	lion	კუჭი კოჭი ლოჭი ლომი
+standard	easy	3	1	ბრაზი	ბედი	anger, dander	fate	ბრაზი ბაზი ბადი ბედი
+standard	easy	3	1	ვადა	წერა	a crossing point of the sabre	fate, destiny	ვადა ვედა ვერა წერა
+standard	easy	4	1	ცოლი	რომაული	wife	Roman	ცოლი როლი რომლი რომული რომაული
+standard	easy	4	1	ჩეხი	დედანი	Czech	the original; that which has not been copied	ჩეხი ჩედი დედი დედაი დედანი
+standard	easy	4	1	ჩეხი	შვება	Czech	relief, solace, comfort, mitigation (of pain, sorrow, or hardship)	ჩეხი შეხი შები შვები შვება
+standard	easy	3	1	საიტი	ბაღი	website	garden	საიტი ბაიტი ბატი ბაღი
+standard	easy	4	1	ბურჯი	ციფრი	bastion	figure, numeral	ბურჯი ბური ცური ციური ციფრი
+standard	easy	4	3	ბურჯი	რთული	bastion	complicated, complex, difficult, arduous, multiplex	ბურჯი ბური თური თული რთული
+standard	medium	5	25	საიტი	ჯორი	website	mule	საიტი საინი სანი ჯანი ჯარი ჯორი
+standard	medium	6	12	ნაშა	ღერძი	attractive and relatively easy woman	axle, kingpin, pivot	ნაშა ვაშა ვაში ვარი ღარი ღერი ღერძი
+standard	medium	6	29	ნაშა	ეკრანი	attractive and relatively easy woman	screen	ნაშა ვაშა ვანა ვანი რანი კრანი ეკრანი
+standard	medium	5	1	ყრუ	წნევა	deaf person	pressure	ყრუ ყრა ერა წერა წევა წნევა
+standard	medium	5	3	ყრუ	ტახტი	deaf person	ottoman bench	ყრუ ყრი არი ახი ახტი ტახტი
+standard	medium	5	5	ფრე	ძრავი	draw, tie	alternative form of ძრავა (ʒrava)	ფრე არე არვე არავე არავი ძრავი
+standard	medium	6	6	ფრე	თხოვნა	draw, tie	request, petition, entreaty, plea, favor	ფრე ორე თორე თორა თოვა თოვნა თხოვნა
+standard	medium	6	4	ფრე	აზოტი	draw, tie	nitrogen	ფრე ფორე ფორი ზორი ზოვი აზოვი აზოტი
+standard	medium	6	46	სარი	უშნო	pale, stake	ugly	სარი სანი სენი ძენი ძენო უენო უშნო
+standard	medium	6	21	კვანძი	ფერი	bowline, node, nodule	color, hue	კვანძი კვანტი კანტი კენტი კენი კერი ფერი
+standard	medium	5	15	პლანი	ტივი	plan (set of intended actions)	raft	პლანი კლანი კანი კავი კივი ტივი
+standard	medium	6	4	ხსნარი	გამა	solution (liquid)	gamma, gammas	ხსნარი ხსნადი ხსნად ხანად ხანა განა გამა
+standard	medium	6	7	ხსნარი	კალა	solution (liquid)	tin	ხსნარი ხსნადი ხსნად ხანად ხანა ხალა კალა
+standard	medium	6	4	ერთობა	ქერქი	unity, oneness	bark (of a tree)	ერთობა ერთობ ერთო ერთი ერჩი ქერჩი ქერქი
+standard	medium	6	4	ერთობა	ხანი	unity, oneness	A period of time; time	ერთობა ერობა რობა რობი რონი რანი ხანი
+standard	medium	5	2	დელი	შლანგი	crazy, mad	hose	დელი დენი ლენი ლენგი ლანგი შლანგი
+standard	medium	6	5	ცბიერი	ვედრო	astute, wily	bucket	ცბიერი ციერი ცერი ცერა ცედრა ვედრა ვედრო
+standard	medium	5	2	ცბიერი	ფესვი	astute, wily	root (the part of plant)	ცბიერი ციერი იერი ფერი ფესი ფესვი
+standard	medium	6	21	მიკი	დაცული	clitoris	cordoned, defended, guarded, patrolled, plugged, policed, protected, safeguarded, secured, shielded, treasured, vindicat	მიკი მილი მული სული ასული დასული დაცული
+standard	medium	5	4	ბენდი	თესლი	band (group of musicians)	seed	ბენდი ბედი ბელი გელი გესლი თესლი
+standard	medium	6	15	ბენდი	გრაფი	band (group of musicians)	earl, grave, count	ბენდი რენდი რეიდი რიდი რიფი გრიფი გრაფი
+standard	medium	6	1	ხარჯი	პილოტი	expense, outlay	pilot	ხარჯი ხარი ლარი ლორი ლოტი ილოტი პილოტი
+standard	medium	5	10	ხარჯი	კონა	expense, outlay	collection, bundle	ხარჯი ხაჯი ხანი კანი კონი კონა
+standard	medium	5	1	ხარჯი	სესია	expense, outlay	session	ხარჯი ხარი სარი სერი სერია სესია
+standard	medium	5	1	ტრამვაი	ამაო	tram	futile, nugatory, otiose, vain	ტრამვაი ტრამვა ტრამა რამა ამა ამაო
+standard	medium	5	6	სხეული	მამი	body, corpus	colloquial hypocoristic vocative singular of მამა (mama), dad, daddy	სხეული ხეული ხელი ხალი მალი მამი
+standard	medium	5	2	სხეული	ზედა	body, corpus	upper, top	სხეული ხეული ხელი ხედი ზედი ზედა
+standard	medium	6	5	სხეული	პაპა	body, corpus	grandad, granddad	სხეული ხეული ეული პული პალი პალა პაპა
+standard	medium	6	104	ბანდა	ცომი	gang	dough	ბანდა ბანდი ბადი ბამი ნამი ნომი ცომი
+standard	medium	5	12	ნაზი	მახათი	delicate, soft, tender	packing needle	ნაზი მაზი მათი მაგთი მაგათი მახათი
+standard	medium	5	1	ისარი	რძე	arrow	milk	ისარი სარი არი არე რე რძე
+standard	medium	5	2	ყუთი	უგზო	box	pathless, roadless	ყუთი წუთი წუთო უთო უგო უგზო
+standard	medium	5	6	პიკი	კაცური	peak, pike	manly, masculine	პიკი პირი კირი კიური კაური კაცური
+standard	medium	6	13	პიკი	პლატო	peak, pike	plateau	პიკი პინკი პინკ პინო პიანო პლანო პლატო
+standard	medium	5	2	დიადი	მხნე	stately, sublime	resolute, brave, strong	დიადი დადი დანი მანი მანე მხნე
+standard	medium	6	4	დიადი	წრიული	stately, sublime	circular	დიადი დიდი რიდი რილი რიალი წრიალი წრიული
+standard	medium	6	3	კაპიკი	მარსი	kopek	The winning state in which the winner has all their chips removed, while the other player has none.	კაპიკი კაპიკს კაპის კარის მარის მარსს მარსი
+standard	medium	6	18	ხეირი	დოზა	avail, advantage, benefit	dose	ხეირი ეირი კირი კირა კორა დორა დოზა
+standard	medium	5	2	ნაკლები	მაზერი	comparative degree of ცოტა (coṭa): less, fewer (a smaller amount or number of)	motherboard	ნაკლები ნალები ნაზები ლაზები ლაზერი მაზერი
+standard	medium	5	7	ჭია	ფაილი	worm	file	ჭია ჭის ფის ფაის ფაილს ფაილი
+standard	medium	6	4	ჭია	სიმღერა	worm	song	ჭია ჭრა ჭერა ღერა მღერა იმღერა სიმღერა
+standard	medium	6	2	ბასრი	რჩევა	edgy, keen, sharp, trenchant	advice, counsel	ბასრი ბასი რასი რავი რავა რევა რჩევა
+standard	medium	5	3	დეტალი	ზეცა	detail, particular	sky	დეტალი მეტალი მეტალ მეტა მეცა ზეცა
+standard	medium	5	4	წერილი	მეორე	letter (message)	second	წერილი მერილი მერილ მერი მერე მეორე
+standard	medium	6	101	პრესა	ღორი	the press, the news media, the news industry	pig	პრესა პიესა პირსა ღირსა ღორსა ღორს ღორი
+standard	medium	5	9	სენა	არაკი	pantry, larder	fable	სენა სანა სანი რანი არანი არაკი
+standard	medium	6	1	პონტი	პირადი	situation	personal, private	პონტი პონი პანი პარი პიარი პირარი პირადი
+standard	medium	6	6	რადიუსი	სერი	radius	hill	რადიუსი რადიუს რადის სადის სადი სედი სერი
+standard	medium	6	1	ახსნა	ფესვი	setting loose, setting free	root (the part of plant)	ახსნა ხსნა ხსნი ხენი ფენი ფესი ფესვი
+standard	medium	5	4	ახსნა	დაი	setting loose, setting free	used to address a female	ახსნა ხსნა ხანა დანა დაია დაი
+standard	medium	5	1	ძაღლი	ბუშტი	dog	bubble	ძაღლი ძალი ბალი ბული ბუში ბუშტი
+standard	medium	6	3	ძაღლი	ღვინო	dog	wine	ძაღლი ძალი ვალი ვანი ვინი ღვინი ღვინო
+standard	medium	5	3	დაქალი	კატა	very close female friend	cat	დაქალი დაბალი დაბალ დაბა კაბა კატა
+standard	medium	6	4	დაქალი	ტილო	very close female friend	canvas, linen, sackcloth, sailcloth	დაქალი დალალი ალალი ლალი ტალი ტილი ტილო
+standard	medium	5	4	ლხინი	კვალი	banquet, feast	trail	ლხინი ლინი ვინი ვანი ვალი კვალი
+standard	medium	5	1	ძეხვი	ტოლი	sausage	equal	ძეხვი ძეგვი ძეგლი ძელი ტელი ტოლი
+standard	medium	5	1	ძეხვი	ნამი	sausage	dew, morning dew	ძეხვი ნეხვი ნესვი ნესი ნასი ნამი
+standard	medium	5	1	ძეხვი	აბი	sausage	pill (small portion of a drug or drugs to be taken orally)	ძეხვი ძეგვი ეგვი გვი ავი აბი
+standard	medium	6	1	ცხრილი	ტურფა	table	beautiful, charming	ცხრილი ცხრილს ცხრის ცურის ტურის ტურია ტურფა
+standard	medium	6	2	მი	ისტორია	E, mi (note)	history	მი ომი ტომი ტორი სტორი სტორია ისტორია
+standard	hard	9	37	ლიდერი	ქიმია	leader	chemistry	ლიდერი რიდერი რიდენი იდენი ისენი ისინი სინი სიმი ქიმი ქიმია
+standard	hard	9	1	შეღებილი	ქეში	coloured, coloured, dyed	cash (physical money in the form of coins or bills)	შეღებილი შეღებული შენებული შენებური შენებრი შენები ენები ნები ნეში ქეში
+standard	hard	7	21	ნაშა	ტალახი	attractive and relatively easy woman	clay, mud	ნაშა ვაშა ვალა სალა სალამ სალამი სალახი ტალახი
+standard	hard	7	4	მურაბა	ახსნა	murabba, jam, preserve, preserves	setting loose, setting free	მურაბა მურაა მურა ხურა ხარა ხანა ხსნა ახსნა
+standard	hard	7	88	მურაბა	ვაჟი	murabba, jam, preserve, preserves	son	მურაბა მურაა მურა მარა მამა მამი ვამი ვაჟი
+standard	hard	9	6	ვანდალი	კარმა	Vandal	karma	ვანდალი სანდალი სანგალი მანგალი მაგალი მარალი მარლი მარლა მარმა კარმა
+standard	hard	9	13	ფიბულა	თურქი	fibula	Of Turkish descent	ფიბულა ფაბულა ტაბულა ტაბლა ტალა ტარა თარა თარი თური თურქი
+standard	hard	7	3	ყრუ	მეგრელი	deaf person	Mingrelian	ყრუ ყრი ერი მერი მერე მეგრე მეგრელ მეგრელი
+standard	hard	9	6	დროებითი	ტანი	extemporary, provisional, temporary, ad interim	body (of a person or an animal)	დროებითი დროებით დროები უროები ურჩები რჩები რაები რაბი რანი ტანი
+standard	hard	8	3	გლეხი	გამზირი	countryman, peasant, rustic	avenue (type of street)	გლეხი გლენი ლენი ლინი ლირი აირი ამირი გამირი გამზირი
+standard	hard	7	2	წამიერი	კაცი	instantaneous, passing	man	წამიერი წამიერ ამიერ ამირ ამის კამის კამი კაცი
+standard	hard	8	4	წამიერი	ღირსი	instantaneous, passing	meritorious, deserving (of punishment, award etc.)	წამიერი წამიერ ამიერ ამირ ამირი აირი პირი პირსი ღირსი
+standard	hard	9	4	წამიერი	ბადალი	instantaneous, passing	equal	წამიერი წამიერ ამიერ ამირ ამის ალის ბალის ბალი ბაალი ბადალი
+standard	hard	7	2	საუბარში	ქაოსი	postpositional suffixed with -ში of საუბარი (saubari)	chaos	საუბარში საუბარი სუბარი უბარი ბარი ქარი ქარსი ქაოსი
+standard	hard	9	27	საუბარში	კოცნა	postpositional suffixed with -ში of საუბარი (saubari)	kiss	საუბარში საუბარი სუბარი უბარი უბანი ბანი კანი კონი კონა კოცნა
+standard	hard	7	21	სარი	საწოლი	pale, stake	bed	სარი ქარი ქარნი ქარონი მარონი მაწონი საწონი საწოლი
+standard	hard	8	31	სარი	ნუსხა	pale, stake	bill	სარი სარის ნარის ნავის ნუვის ნუხის ნუსხის ნუსხას ნუსხა
+standard	hard	8	1	კვანძი	უწყვეტი	bowline, node, nodule	continuous, incessant, unceasing, uninterrupted	კვანძი კვანტი კვატი კვარი კვერი წვერი წვეტი წყვეტი უწყვეტი
+standard	hard	8	3	კვანძი	გოგონა	bowline, node, nodule	alternative spelling of გოგო (gogo)	კვანძი კვანტი კანტი კონტი კონი გონი გოგნი გოგონი გოგონა
+standard	hard	7	1	ხსნარი	მადლი	solution (liquid)	virtue, charity, goodness	ხსნარი ხსნარს ხსნას ხანას ხადას მადას მადლს მადლი
+standard	hard	9	4	ტერი	საბურავი	Terry	tyre (of a car, etc)	ტერი ტური ტურა ხურა ხურავ ხურავს ახურავს სახურავს სახურავი საბურავი
+standard	hard	7	9	ტერი	სინდისი	Terry	conscience	ტერი ტირი ტირის ტინის შინის შინდის შინდისი სინდისი
+standard	hard	8	2	ტერი	საკუთარი	Terry	own	ტერი სერი სარი საკი საკუ საკუთ საკუთრ საკუთარ საკუთარი
+standard	hard	8	27	ერთობა	გრძელი	unity, oneness	long	ერთობა ერობა ერება ეგება ეგები გები გელი გძელი გრძელი
+standard	hard	8	23	დელი	საწვავი	crazy, mad	fuel	დელი დელის დალის დავის დაწვის დაწვას დაწვავს საწვავს საწვავი
+standard	hard	9	34	ცბიერი	უცნობი	astute, wily	unacknowledged, unacquainted, unfamiliar, unknown, newcomer, stranger, unknown	ცბიერი ციერი იერი ერი ერნი ერნო ეცნო ეცნობ უცნობ უცნობი
+standard	hard	7	6	ყვირილი	ქმარი	cry, shout, yell	husband	ყვირილი ყვირილს ყვირის ვირის ქირის ქმრის ქმრი ქმარი
+standard	hard	9	5	ყვირილი	ფასადი	cry, shout, yell	façade, frontage	ყვირილი ყვირილს ყვირის ვირის ვარის ვარდის ფარდის ფარადის ფასადის ფასადი
+standard	hard	9	6	ტურიზმი	თითი	touring, tourism	finger	ტურიზმი პურიზმი პურიზმის პრიზმის პრიზის პიზის პირის პირი თირი თითი
+standard	hard	9	8	ტურიზმი	ქერი	touring, tourism	barley	ტურიზმი პურიზმი პურიზმის პრიზმის პრიზის პიზის პირის პერის პერი ქერი
+standard	hard	8	1	ძმასთან	გავლენა	postpositional suffixed with -თან of ძმა (ʒma)	influence	ძმასთან მასთან თასთან თავთან თავთა თავლა გავლა გავლნა გავლენა
+standard	hard	7	1	სიბერე	ნიორი	senility	garlic	სიბერე სიბერეს სიბერის იბერის იერის იორის ნიორის ნიორი
+standard	hard	8	2	ცოცხი	გრძედი	broom	longitude	ცოცხი ცოცხლი ცეცხლი ცეხლი ცელი ძელი გძელი გრძელი გრძედი
+standard	hard	7	2	წიგნი	ქინძი	book	coriander	წიგნი შიგნი შინი ნინი ნინის ნინძის ქინძის ქინძი
+standard	hard	7	45	წიგნი	კარმა	book	karma	წიგნი წილნი წილი წალი კალი კალია კარია კარმა
+standard	hard	7	2	წიგნი	გამზირი	book	avenue (type of street)	წიგნი შიგნი შინი მინი ამინი ამირი გამირი გამზირი
+standard	hard	8	27	ტრამვაი	ბოლო	tram	last	ტრამვაი ტრამვა ტრამა რამა გამა გალა გოლა ბოლა ბოლო
+standard	hard	8	1	ასტრა	შანსი	aster	chance, hazard	ასტრა ასტრ ასსრ ასსდ ასოდ ასო ასი შასი შანსი
+standard	hard	7	4	ნაზი	გამართული	delicate, soft, tender	streamlined, straightened	ნაზი მაზი მაზლი მარლი მართლი მართული ამართული გამართული
+standard	hard	7	32	ჟანრი	მყუდრო	genre	calm, tranquil, having a pleasant ambiance	ჟანრი ჯანრი ჯარი ჯარო ყარო ყურო ყუდრო მყუდრო
+standard	hard	8	122	ჟანრი	ყოფილი	genre	former, ex-	ჟანრი ჟანრის ჟარის ფარის ფორის ყორის ყოფის ყოფილს ყოფილი
+standard	hard	8	5	მაგიდა	სეტყვა	table	hail	მაგიდა მაგია მაშია მშია მშვა მყვა ტყვა სტყვა სეტყვა
+standard	hard	8	8	მაგიდა	ყოფილი	table	former, ex-	მაგიდა მაგია მალია მალის მოლის ყოლის ყოფის ყოფილს ყოფილი
+standard	hard	8	4	სასჯელი	ნივთი	penalization, punishment	thing	სასჯელი საჯელი სათელი სათლი სალი ნალი ნავი ნავთი ნივთი
+standard	hard	9	10	ჰაუსი	პირობითი	house, house music	conditional, provisory	ჰაუსი მაუსი მარსი პარსი პირსი პიროსი პიროსის პირობის პირობითს პირობითი
+standard	hard	8	8	ისარი	კუდიანი	arrow	tailed	ისარი სარი ქარი ქური ქუდი ქუდია ქუდიან ქუდიანი კუდიანი
+standard	hard	7	3	ყუთი	ქცევა	box	behavior, conduct, demeanor, manner	ყუთი ყული ნული ნელი ნელა ნევა ქნევა ქცევა
+standard	hard	9	6	ყუთი	მარცვალი	box	grain, kernel, seed	ყუთი ყული ღული ღალი აღალი მაღალი მავალი მრავალი მარავალი მარცვალი
+standard	hard	7	16	ვითომ	მავნე	faux, pretend, fake (always followed by a noun)	adverse	ვითომ მითომ მითამ მინამ მანამ მანა მანე მავნე
+standard	hard	7	20	ვითომ	ტანკი	faux, pretend, fake (always followed by a noun)	military tank	ვითომ ვითამ ვითა ვინა ვანა ტანა ტანკა ტანკი
+standard	hard	8	3	ფილტვი	წვიმა	lung	rain	ფილტვი ფილტვის ილტვის ელტვის ელვის ეწვის ეწვია ეწვიმა წვიმა
+standard	hard	8	2	ფილტვი	ექო	lung	echo, re-echo	ფილტვი ფილტვის ილტვის ელტვის ელვის ექვის ექვს ექოს ექო
+standard	hard	9	2	ფილტვი	კარგი	lung	nice, okay, well, good	ფილტვი ფილტვის ილტვის ელტვის ელვის ალვის არვის კარვის კარვი კარგი
+standard	hard	8	23	შემდეგი	ძამა	next, subsequent	alternative form of ძამია (ʒamia)	შემდეგი შედეგი შედგი შედი გედი გემი გემა გამა ძამა
+standard	hard	8	1	შემდეგი	მიდგომა	next, subsequent	stance, approach	შემდეგი შედეგი შედგი შედგა მედგა მოდგა მოდგმა მოდგომა მიდგომა
+standard	hard	8	7	დიადი	მეგრული	stately, sublime	Mingrelian (refers to objects; for humans see მეგრელი (megreli))	დიადი დიდი რიდი რილი რული ტრული მტრული მეტრული მეგრული
+standard	hard	7	14	კაპიკი	კოხტა	kopek	dainty, dapper, soigné, soignee	კაპიკი კაპაკი კაზაკი კაზაკ კაზა კატა კოტა კოხტა
+standard	hard	9	63	კაპიკი	ჭკუა	kopek	mind	კაპიკი კაპაკი კაზაკი კაზაკ კაზა კარა არა ჭრა ჭკა ჭკუა
+standard	hard	8	8	მცნება	გვიანი	Commandment	late	მცნება ცნება გნება გება გენა გინა გვინა გვიანა გვიანი
+standard	hard	9	33	მცნება	ორსული	Commandment	pregnant	მცნება ცნება გნება გება გელა გელი გული რგული ორგული ორსული
+standard	expert	10	5	ლიდერი	ცვლადი	leader	variable	ლიდერი რიდერი რიდენი იდენი დენი დელი ცელი ცელა ცვლა ცვლად ცვლადი
+standard	expert	25	45	ლიდერი	მიახლოებითი	leader	approximate	ლიდერი რიდერი რიდენი როდენი ოდენი ოდენ ოდეს ოსეს მოსეს მოვსეს მოვლეს მოავლეს მოახლეს მოახლეთ მოახლეთა მოსახლეთა მოსახლება მოსახლეობა მოსახლეობას მოსახლეობის მოსახლეების მოახლეების მოახლოების მიახლოების მიახლოებით მიახლოებითი
+standard	expert	12	25	შეღებილი	მხარე	coloured, coloured, dyed	side; direction	შეღებილი შეღებული შენებული შენეული შერეული შრეული რეული ეული მული მური მუარი მხარი მხარე
+standard	expert	10	1	შეღებილი	რეალისტი	coloured, coloured, dyed	realist	შეღებილი შეღებული შენებული შენეული შერეული შრეული რეული რეალი რეალის რეალისტ რეალისტი
+standard	expert	10	4	ვანდალი	აბანო	Vandal	bathroom	ვანდალი სანდალი სანგალი მანგალი მაგალი მახალი ახალი ახალო ახადო აბადო აბანო
+standard	expert	11	8	ვანდალი	პენსია	Vandal	benefit, pension, superannuation	ვანდალი სანდალი სანგალი მანგალი მაგალი მაგლი მალი მანი პანი პენი პენია პენსია
+standard	expert	11	3	ფიბულა	მოსავალი	fibula	crop, crops, harvest	ფიბულა ფაბულა ტაბულა ტაბლა ტალა მალა მოლა მოსა მოსავ მოსავი მოსავლი მოსავალი
+standard	expert	12	9	ფიბულა	კურიერი	fibula	courier	ფიბულა ფაბულა ტაბულა ტაბუა ტაბუ ტაბი ტარბი ტარები კარები კარტები კარტერი კარიერი კურიერი
+standard	expert	19	6	მოხსენება	გუგული	report	cuckoo	მოხსენება მოხსენიება მოიხსენიება მოიხსენიებს მოიხსენებს მოახსენებს მახსენებს ახსენებს ახსენებ ახსენე ახსენა ახდენა ადენა დენა გენა გეგა გუგა გუგუა გუგუაი გუგული
+standard	expert	17	3	მოხსენება	პლატო	report	plateau	მოხსენება მოხსენიება მოიხსენიება მოიხსენიებს მოიხსენებს მოახსენებს მახსენებს ახსენებს ახსენებ ახსენე ახსენა ახსნა ხსნა ხანა პანა პანო პლანო პლატო
+standard	expert	16	6	მოხსენება	მთა	report	mountain, hill	მოხსენება მოხსენიება მოიხსენიება მოიხსენიებს მოიხსენებს მოახსენებს მახსენებს ახსენებს ახსენებ ახსენე ახსენა ახსნა ხსნა ხანა ხათა მათა მთა
+standard	expert	13	11	დროებითი	მეტოქე	extemporary, provisional, temporary, ad interim	competitor, contender, rival	დროებითი დროებით დროები უროები ურგები ერგები ერები მერები მერების მერობის მეტობის მეტოქის მეტოქეს მეტოქე
+standard	expert	10	6	დროებითი	ასო	extemporary, provisional, temporary, ad interim	alphabet letter (symbol)	დროებითი დროებით დროები უროები ურგები ურგებ არგებ არგე არე ასე ასო
+standard	expert	14	84	გლეხი	კვლევითი	countryman, peasant, rustic	research-related, research-based	გლეხი გლენი გენი გუნი გული კული კულა კულავ კვლავ კვლევ კვლევა კვლევას კვლევის კვლევით კვლევითი
+standard	expert	11	4	გლეხი	რექტორი	countryman, peasant, rustic	provost, rector	გლეხი გლენი ლენი ლეში ნეში ნეტში ნეტაი ნეტარი ნექტარი ჰექტარი ჰექტორი რექტორი
+standard	expert	11	7	მომღერალი	კიტრი	singer	cucumber	მომღერალი მომღერლი მომღერი მომწერი მომწერა მოიწერა მიწერა მიწერი მიერი ტიერი ტიტრი კიტრი
+standard	expert	10	1	მომღერალი	პოზა	singer	pose	მომღერალი მომღერლი მომღერი მომწერი მომწერა მოწერა მოწევა მოწვა მოვა პოვა პოზა
+standard	expert	18	1	მომღერალი	დარბაზი	singer	hall, chamber	მომღერალი მომღერლი მომღერი მომწერი მომწერა მოწერა მოწევა მოწვა მაწვა დაწვა დასვა დასჯა დასაჯა დარაჯა დარაჯმა დარაზმა დარბაზმა დარბაზია დარბაზი
+standard	expert	12	92	საუბარში	მონეტა	postpositional suffixed with -ში of საუბარი (saubari)	coin	საუბარში საუბარი სუბარი უბარი უბანი ბანი მანი მანე მანეს მონეს მონებს მონება მონეტა
+standard	expert	10	16	პლანი	ჩანაწერი	plan (set of intended actions)	record, entry, note (written note or record)	პლანი პანი სანი სარი საარი საფარი საფერი საწერი ასაწერი ჩასაწერი ჩანაწერი
+standard	expert	10	19	ყვირილი	არმაზი	cry, shout, yell	Armazi (the supreme deity in the Georgian pantheon)	ყვირილი ყვირილს ყვირის ვირის ვინის ვინი ვანი რანი არანი არმანი არმაზი
+standard	expert	16	54	ტურიზმი	აწმყოში	touring, tourism	postpositional suffixed with -ში of აწმყო (ac̣mq̇o)	ტურიზმი პურიზმი პურიზმის პრიზმის პრიზის პარიზის პარიის პარის პარია არია აწია აწყა აწყო აწმყო აწმყოს აწმყოსი აწმყოში
+standard	expert	11	1	სისხლიანი	ილუზია	bloodstained, gory, sanguinary, blooded	illusion	სისხლიანი სისხლიან სისხლია სისხლის სიხლის სილის სულის სუზის აუზის აუზია ალუზია ილუზია
+standard	expert	13	2	სისხლიანი	მურტალი	bloodstained, gory, sanguinary, blooded	alternative form of მურდალი (murdali)	სისხლიანი სისხლიან სისხლია სისხლის სიხლის სილის მილის მოლის მორლის მორალის მორალი მორდალი მურდალი მურტალი
+standard	expert	12	15	სისხლიანი	მითიური	bloodstained, gory, sanguinary, blooded	mythical	სისხლიანი სისხლიან სისხლია სისხლის სიხლის სილის ცილის ცილი ციული ციური მიური მითური მითიური
+standard	expert	13	94	მიკი	მეხუთე	clitoris	fifth	მიკი მიტი მეტი მეტა მება ამება ეამება ეხამება ეხატება ეხუტება ეხუთება მეხუთება მეხუთეა მეხუთე
+standard	expert	13	37	ძმასთან	დანიელი	postpositional suffixed with -თან of ძმა (ʒma)	Dane, danish person	ძმასთან მასთან მისთან მისთა მისია მილია მილის დილის დეილის დებილის დებილი დენილი დენიელი დანიელი
+standard	expert	12	1	ძმასთან	უკანალი	postpositional suffixed with -თან of ძმა (ʒma)	buttocks	ძმასთან მასთან ფასთან ფასიან ფასიანი ბასიანი ბანიანი კანიანი კანიონი კანონი უკანონი უკანანი უკანალი
+standard	expert	15	6	შემთხვევითი	მთვარე	random, accidental, casual	moon	შემთხვევითი შემთხვევით შემთხვევია შემთხვევა ემთხვევა მთხვევა მეხვევა ეხვევა ხვევა ხველა ხვალა ხვალ თვალ თვარ მთვარ მთვარე
+standard	expert	16	14	შემთხვევითი	რაჭველი	random, accidental, casual	someone from Racha, Rachian person	შემთხვევითი შემთხვევით შემთხვევია შემთხვევა ემთხვევა მთხვევა მეხვევა მეწვევა ეწვევა წვევა წვება წვები წავები ნავები ნაველი რაველი რაჭველი
+standard	expert	15	14	შემთხვევითი	მაჩვი	random, accidental, casual	Eurasian badger	შემთხვევითი შემთხვევით შემთხვევია შემთხვევა ემთხვევა მთხვევა მეხვევა ეხვევა ხვევა ხევა ხესა მესა მასა მასაი მასვი მაჩვი
+standard	expert	10	94	სიბერე	ჩივილი	senility	lament, bitch, complain, mourn, plain	სიბერე სიბერეს სიბერის იბერის ბერის წერის წირის წივის წივილს წივილი ჩივილი
+standard	expert	10	19	სიბერე	სახსარი	senility	joint	სიბერე სიბერეს სიბერის იბერის ბერის ბარის ბარი სარი საარი სახარი სახსარი
+standard	expert	10	4	ცოცხი	ტაქტიკა	broom	tactics	ცოცხი ფოცხი ფოცხის ფაცხის კაცხის კახის ტახის ტახტის ტახტისა ტაქტისა ტაქტიკა
+standard	expert	15	1	ცოცხი	მოსახლეობა	broom	population	ცოცხი ცოცხით ცოცვით მოცვით მოცვი მოვი მოვის მოვლის მოვლეს მოავლეს მოახლეს მოახლეთ მოახლეთა მოსახლეთა მოსახლება მოსახლეობა
+standard	expert	13	2	ტრამვაი	საზიანო	tram	deleterious, hurtful, injurious, wrongful	ტრამვაი ტრამვა ტრამა რამა რადა სადა სადაო სადარო საჯარო საჯაროდ საზაროდ საზიაროდ საზიარო საზიანო
+standard	expert	10	9	ასტრა	ეშხი	aster	attractiveness	ასტრა ასტრ ასსრ ასსდ ასოდ ასოს ასლს ასლი აშლი ეშლი ეშხი
+standard	expert	15	20	ასტრა	მორალური	aster	moral, ethical	ასტრა ასტრ ასსრ ასსდ ასოდ ასოს ასლს ასულს ასული ასური ალური ალურ რალურ ორალურ ორალური მორალური
+standard	expert	11	24	მაგიდა	უჯრედი	table	cell	მაგიდა მაგია მაგის მეგის მების რების კრების კრებს უკრებს უჯრებს უჯრები უჯრედი
+standard	expert	14	8	სასჯელი	კვლევითი	penalization, punishment	research-related, research-based	სასჯელი საჯელი სათელი სათლი სალი კალი კალა კვლა კვლავ კვლევ კვლევა კვლევას კვლევის კვლევით კვლევითი
+standard	expert	11	11	სასჯელი	სითბო	penalization, punishment	warmth, coolness	სასჯელი საჯელი სათელი სათლი სალი ბალი ბილი ბიბი ბიბო ბილბო სილბო სითბო
+standard	expert	13	7	ვითომ	განაკვეთი	faux, pretend, fake (always followed by a noun)	rate (a monetary charge calculated as a percentage)	ვითომ თითომ თითოს თითის თივის თავის ნავის ნავთის ნაკვთის ნაკვეთის გაკვეთის განკვეთის განაკვეთის განაკვეთი
+standard	expert	10	9	შემდეგი	კოცონი	next, subsequent	bonfire, camp-fire, smudge	შემდეგი შედეგი შედგი შედი კედი კედის კოდის კონის კოცნის კოცონის კოცონი
+standard	expert	14	33	კაცისთვის	გოლფი	postpositional suffixed with -თვის of კაცი (ḳaci)	golf	კაცისთვის კარისთვის ქარისთვის ქალისთვის ალისთვის ამისთვის მისთვის ისთვის სთვის თვის გვის გლის გოლის გოლფს გოლფი
+standard	expert	14	71	კაცისთვის	ენა	postpositional suffixed with -თვის of კაცი (ḳaci)	language	კაცისთვის კარისთვის ქარისთვის ქალისთვის ალისთვის ამისთვის მისთვის ისთვის სთვის თვის ვის ძის ძია ძნა ენა
+standard	expert	15	98	კაცისთვის	წამალი	postpositional suffixed with -თვის of კაცი (ḳaci)	medicine	კაცისთვის კარისთვის ქარისთვის ქალისთვის ალისთვის ამისთვის მისთვის ისთვის სთვის სათვის სათის სათლს სათლი სათალი სამალი წამალი
+standard	expert	11	9	ხეირი	სახელობითი	avail, advantage, benefit	nominative	ხეირი სეირი სერი ასერი ასები ასლები ახლები სახლები სახლებით სახელებით სახელობით სახელობითი
+standard	expert	10	38	ხეირი	ნაყოფი	avail, advantage, benefit	fruit (part of a plant)	ხეირი ხვირი ვირი ვარი ვამი ნამი ნამო ნამყო ნამყოფ ნამყოფი ნაყოფი
+standard	expert	10	17	საგმირო	ინფო	heroic	abbreviation of ინფორმაცია (inpormacia)	საგმირო საამირო საამისო საამის სამის ამის მის ის ისო იფო ინფო
+standard	expert	16	42	საგმირო	შეშინებული	heroic	afraid, aghast, apprehensive, frightened, boggled, bugged, frighted, frightened, intimidated, panicked, scared, shied, s	საგმირო საამირო საამისო საამის სალმის სალის რალის რულის რული რეული შრეული შერეული შენეული შენებული შეგნებული შეგინებული შეშინებული
+standard	expert	10	67	დეტალი	კრიტიკა	detail, particular	criticism, critique	დეტალი მეტალი მეტალ მეტა კეტა კიტა კიტს კიტის კრიტის კრიტიკ კრიტიკა
+standard	expert	11	63	წერილი	აყვანა	letter (message)	adoption	წერილი წერილს წერის კერის კარის კანის კლანის ალანის ალვანის აყვანის აყვანას აყვანა
+standard	expert	11	19	პრესა	საწყალი	the press, the news media, the news industry	pitiable, pitiful, poor	პრესა არესა არევა არევას დარევას დაევას დაწვას დაწვავს საწვავს საწვავი საწყავი საწყალი
+standard	expert	11	105	ვერცხლი	ჯაჭვი	silver (chemical element)	chain	ვერცხლი ვეცხლი ცეცხლი ცეხლი ცელი ცალი რალი რავი რავს ჯავს ჯაჭვს ჯაჭვი
+standard	expert	10	4	ვერცხლი	ჰიმნი	silver (chemical element)	anthem	ვერცხლი ვეცხლი ცეცხლი ცეხლი ცელი გელი გილი გიცი გიცნი გიმნი ჰიმნი
+standard	expert	11	10	მეკარე	რითმა	porter	rhyme	მეკარე მეკარეს მეკარის მაკარის მაზარის მაზრის მარის მათის მათია მითია რითია რითმა
+standard	expert	10	7	ატამი	სარკმელი	peach (fruit)	a small window, set within a larger window, that can open independently	ატამი ასამი ასალი სალი სათლი სათელი საჯელი სასჯელი სასმელი საკმელი სარკმელი
+standard	expert	10	16	ნუსხა	რომაული	bill	Roman	ნუსხა ნუსხას ნუსხის ნუხის ნულის რულის როლის როლი რომლი რომული რომაული
+standard	expert	11	17	პონტი	ფორმულა	situation	formula	პონტი პორტი პორტს ფორტს ფორას ფორმას ნორმას ნორმალს ნორმალი ნორმული ფორმული ფორმულა
+standard	expert	12	5	მატერია	გაკვეთილი	matter, substance	lesson	მატერია მტერია მერია მერის ნერის ნარის ნართის ნავთის ნაკვთის ნაკვეთის გაკვეთის გაკვეთილს გაკვეთილი

@@ -32,7 +32,7 @@ The two words are 4 edits apart, so 4 steps is the shortest any ladder can be.
 | `reports/EDA.md` | findings: graph structure, hubs, bottlenecks, longest ladders, everyday pairs, game-design advice |
 | `reports/stats.json` | every number behind the report |
 | `web/index.html` | the explorer, with three pages: **Ladder** (shortest ladders between any two words), **Clusters** (a pan-and-zoom map of every cluster) and **Findings** (the charts) |
-| `web/clusters-standard.bin` | map data for "All word forms", loaded by the Clusters page on demand (the dictionary-word map is embedded) |
+| `web/clusters-standard.txt` | map data for "All word forms" (gzipped binary, base64), loaded by the Clusters page on demand; the dictionary-word map is embedded |
 | `web/template.html`, `web/atlas.js` | page source and the cluster-map engine; `ladder.export_web` combines them with the data |
 
 ## Dictionary modes
@@ -65,7 +65,7 @@ scripts/fetch_sources.sh               # ~400 MB of raw sources into data/raw (g
 python -m ladder.build_wordlist        # -> data/words_all.tsv.gz        (~2 min)
 python -m ladder.analyze               # -> data/game/*, reports/stats.json (~5 min)
 python -m ladder.clusters              # -> data/game/*_clusters.tsv.gz (~3 min)
-python -m ladder.export_web            # -> web/index.html, web/clusters-standard.bin
+python -m ladder.export_web            # -> web/index.html, web/clusters-standard.txt
 python -m http.server -d web           # the "All word forms" map is fetched, so open it over HTTP
 ```
 

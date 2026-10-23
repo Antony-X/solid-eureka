@@ -1,8 +1,8 @@
 """Bundle the word list, stats, puzzles and cluster maps into the explorer page.
 
 Writes web/index.html from web/template.html with web/atlas.js (the cluster map) inlined. The
-page is self-contained except for the large map of all word forms, web/clusters-standard.bin,
-which it fetches when that map is first opened.
+page is self-contained except for the large map of all word forms, web/clusters-standard.txt
+(base64 text, so any static host serves it), which it fetches when that map is first opened.
 """
 import base64
 import csv
@@ -91,8 +91,8 @@ def main():
     strict_map, n, k = cluster_blob("strict", words)
     print(f"strict map: {n:,} words in {k:,} clusters, {len(strict_map) / 1e3:.0f} KB (embedded)")
     standard_map, n, k = cluster_blob("standard", words)
-    (WEB / "clusters-standard.bin").write_bytes(standard_map)
-    print(f"standard map: {n:,} words in {k:,} clusters, {len(standard_map) / 1e6:.2f} MB -> web/clusters-standard.bin")
+    (WEB / "clusters-standard.txt").write_text(base64.b64encode(standard_map).decode("ascii"), encoding="ascii")
+    print(f"standard map: {n:,} words in {k:,} clusters, {len(standard_map) / 1e6:.2f} MB -> web/clusters-standard.txt")
 
     safe = lambda obj: json.dumps(obj, ensure_ascii=False).replace("</", "<\\/")
     page = (WEB / "template.html").read_text(encoding="utf8")

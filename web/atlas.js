@@ -26,6 +26,11 @@ const atlas = (() => {
 
   /* ---- data ---- */
   const gunzip = (buf) => new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
+  function fromBase64(text) {
+    const bin = atob(text.trim()), out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out.buffer;
+  }
 
   function parse(buf, m) {
     const dv = new DataView(buf);
@@ -84,14 +89,14 @@ const atlas = (() => {
   function load(m) {
     if (!store[m]) {
       store[m] = (async () => {
-        let buf;
-        if (m === "strict") buf = Uint8Array.from(atob($("map-strict").textContent.trim()), (c) => c.charCodeAt(0)).buffer;
+        let text;
+        if (m === "strict") text = $("map-strict").textContent;   // small, so it ships inside the page
         else {
-          const res = await fetch("clusters-standard.bin");
+          const res = await fetch("clusters-standard.txt");
           if (!res.ok) throw new Error("HTTP " + res.status);
-          buf = await res.arrayBuffer();
+          text = await res.text();
         }
-        return parse(await gunzip(buf), m);
+        return parse(await gunzip(fromBase64(text)), m);
       })();
       store[m].catch(() => { delete store[m]; });
     }
@@ -101,7 +106,7 @@ const atlas = (() => {
   function show(m, then) {
     const t = ++token;
     if (!D || D.mode !== m) {
-      msg.textContent = m === "standard" ? "Loading the map of all word forms (about 0.7 MB)…" : "Loading the map…";
+      msg.textContent = m === "standard" ? "Loading the map of all word forms (about 1 MB)…" : "Loading the map…";
       msg.hidden = false;
     }
     return wordsReady.then(() => load(m)).then((data) => {

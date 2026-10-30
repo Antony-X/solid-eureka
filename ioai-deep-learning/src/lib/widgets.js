@@ -173,12 +173,12 @@
     function draw() {
       const C = Plot.colors(), ctx = cv.ctx;
       cv.clear(C.paper);
-      Plot.axes(ctx, sx, sy, { font: 22 });
+      Plot.axes(ctx, sx, sy, { font: 26 });
       if (o.showTarget !== false) Plot.fn(ctx, sx, sy, o.f, { color: C.muted, width: 3, dash: [10, 10] });
       ctx.save();
-      X.forEach((x, i) => Plot.dot(ctx, sx(x[0]), sy(Y[i]), 6, C.c0));
+      X.forEach((x, i) => Plot.dot(ctx, sx(x[0]), sy(Y[i]), 6, C.paper, C.muted));
       ctx.restore();
-      Plot.fn(ctx, sx, sy, x => S.net.predict([x]), { color: C.grad, width: 5 });
+      Plot.fn(ctx, sx, sy, x => S.net.predict([x]), { color: C.ink, width: 5 });
       if (R.loss) { R.epoch.set(S.epoch); R.loss.set(S.loss.toFixed(4)); }
     }
     const R = {};
@@ -232,7 +232,7 @@
         const lab = o.labels && o.labels[l] && o.labels[l][i];
         if (lab) s += `<text x="${xs[l]}" y="${ys[l][i]}" text-anchor="middle" dominant-baseline="central" font-family="var(--font-math)" font-style="italic" font-size="${o.r * 1.05}" fill="var(--ink)">${lab}</text>`;
       }
-      if (o.layerNames && o.layerNames[l]) s += `<text x="${xs[l]}" y="${o.h - 14}" text-anchor="middle" font-family="var(--font-mono)" font-size="22" fill="var(--muted)">${o.layerNames[l]}</text>`;
+      if (o.layerNames && o.layerNames[l]) s += `<text x="${xs[l]}" y="${o.h - 14}" text-anchor="middle" font-family="var(--font-mono)" font-size="28" fill="var(--muted)">${o.layerNames[l]}</text>`;
     });
     return s + '</svg>';
   };
@@ -246,15 +246,16 @@
     o = Object.assign({ w: 1500, h: 620, notes: false }, o || {});
     const W = o.w, H = o.h;
     const bw = 300, bh = 120;
-    const top = 70, bot = H - bh - (o.notes ? 120 : 40);
+    const top = o.notes ? 110 : 70, bot = H - bh - (o.notes ? 100 : 40);
     const X = [40, (W - bw) / 2, W - bw - 40];
     const node = (x, y, label, sub, color, step) =>
       `<g ${step ? `data-step="${step}"` : ''}><rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="10" fill="var(--paper)" stroke="${color}" stroke-width="5"/>` +
       `<text x="${x + bw / 2}" y="${y + bh / 2 + 2}" text-anchor="middle" dominant-baseline="central" font-family="var(--font-display)" font-weight="800" font-size="46" fill="${color}">${label}</text>` +
-      (o.notes && sub ? `<text x="${x + bw / 2}" y="${y + bh + 46}" text-anchor="middle" font-family="var(--font-mono)" font-size="27" fill="var(--muted)">${sub}</text>` : '') + '</g>';
+      (o.notes && sub ? `<text x="${x + bw / 2}" y="${y < H / 2 ? y - 26 : y + bh + 46}" text-anchor="middle" font-family="var(--font-mono)" font-size="28" fill="var(--muted)">${sub}</text>` : '') + '</g>';
     const arrow = (x1, y1, x2, y2, color, step) => {
       const a = Math.atan2(y2 - y1, x2 - x1), h = 22;
-      return `<g ${step ? `data-step="${step}"` : ''}><line x1="${x1}" y1="${y1}" x2="${x2 - Math.cos(a) * h * 0.7}" y2="${y2 - Math.sin(a) * h * 0.7}" stroke="${color}" stroke-width="6" stroke-linecap="round"/>` +
+      const dash = color === 'var(--grad)' ? ' stroke-dasharray="16 12"' : '';
+      return `<g ${step ? `data-step="${step}"` : ''}><line x1="${x1}" y1="${y1}" x2="${x2 - Math.cos(a) * h * 0.7}" y2="${y2 - Math.sin(a) * h * 0.7}" stroke="${color}" stroke-width="6" stroke-linecap="round"${dash}/>` +
         `<polygon points="${x2},${y2} ${x2 - h * Math.cos(a - 0.45)},${y2 - h * Math.sin(a - 0.45)} ${x2 - h * Math.cos(a + 0.45)},${y2 - h * Math.sin(a + 0.45)}" fill="${color}"/></g>`;
     };
     const ink = 'var(--ink)', g = 'var(--grad)';
@@ -388,12 +389,14 @@
     function draw() {
       const C = Plot.colors(), ctx = cv.ctx;
       cv.clear(C.paper);
-      Plot.heat(ctx, (x, y) => NN.sigmoid(S.net.predict(prep([x, y]))), fr, { res: 70, mid: 0.45, span: 0.3, strength: 0.75 });
+      Plot.heat(ctx, (x, y) => NN.sigmoid(S.net.predict(prep([x, y]))), fr, { res: 70, mid: 0.45, span: 0.3, strength: 0.6 });
       if (o.dots) {
         ctx.save();
-        for (let i = 0; i < Math.min(X.length, o.showDots || 1500); i++) {
-          ctx.globalAlpha = 0.55;
-          Plot.dot(ctx, fr.sx(X[i][0]), fr.sy(X[i][1]), 3.2, Y[i] ? C.c1 : C.c0);
+        ctx.lineWidth = 1.5;
+        for (let i = 0; i < Math.min(X.length, o.showDots || 800); i++) {
+          ctx.beginPath(); ctx.arc(fr.sx(X[i][0]), fr.sy(X[i][1]), 5, 0, 2 * Math.PI);
+          ctx.fillStyle = Y[i] ? C.c1 : C.c0; ctx.fill();
+          ctx.strokeStyle = C.paper; ctx.stroke();
         }
         ctx.restore();
       }

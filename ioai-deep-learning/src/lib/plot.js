@@ -99,14 +99,14 @@
       xt.forEach(v => { const p = Math.round(sx(v)) + 0.5; ctx.beginPath(); ctx.moveTo(p, y0); ctx.lineTo(p, y1); ctx.stroke(); });
       yt.forEach(v => { const p = Math.round(sy(v)) + 0.5; ctx.beginPath(); ctx.moveTo(x0, p); ctx.lineTo(x1, p); ctx.stroke(); });
     }
-    ctx.strokeStyle = C.muted; ctx.lineWidth = 2;
+    ctx.strokeStyle = C.muted; ctx.lineWidth = 2.5;
     if (opt.zero !== false) {
       if (sy.domain[0] <= 0 && sy.domain[1] >= 0) { ctx.beginPath(); ctx.moveTo(x0, sy(0)); ctx.lineTo(x1, sy(0)); ctx.stroke(); }
       if (sx.domain[0] <= 0 && sx.domain[1] >= 0) { ctx.beginPath(); ctx.moveTo(sx(0), y0); ctx.lineTo(sx(0), y1); ctx.stroke(); }
     }
     if (opt.labels !== false) {
       ctx.fillStyle = C.muted;
-      ctx.font = `${opt.font || 22}px ${C.fontMono}`;
+      ctx.font = `${opt.font || 26}px ${C.fontMono}`;
       const fmt = opt.fmt || (v => +v.toFixed(3) + '');
       ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       const yb = opt.xAt != null ? sy(opt.xAt) : y1;
@@ -114,7 +114,7 @@
       ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
       const xl = opt.yAt != null ? sx(opt.yAt) : x0;
       yt.forEach(v => { if (opt.skipZero && v === 0) return; ctx.fillText(fmt(v), xl - 10, sy(v)); });
-      ctx.font = `${opt.font || 22}px ${C.fontBody}`;
+      ctx.font = `${opt.font || 28}px ${C.fontBody}`;
       if (opt.xlabel) { ctx.textAlign = 'right'; ctx.textBaseline = 'bottom'; ctx.fillStyle = C.ink; ctx.fillText(opt.xlabel, x1, (opt.xAt != null ? sy(opt.xAt) : y1) - 8); }
       if (opt.ylabel) { ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.ink; ctx.fillText(opt.ylabel, (opt.yAt != null ? sx(opt.yAt) : x0) + 10, y0 + 2); }
     }

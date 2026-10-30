@@ -90,7 +90,13 @@ def main():
         '<meta name="description" content="A 3-hour visual lecture on neural networks for olympiad training">\n'
         f"<style>\n{css}\n</style>\n"
     )
-    body = f'<div id="deck" role="application" aria-label="Slides"></div>\n<script>\n{js}\n</script>\n'
+    defs = ('<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'
+            '<marker id="ah-ink" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="5" markerHeight="5" markerUnits="strokeWidth" orient="auto-start-reverse">'
+            '<path d="M0,0 L12,6 L0,12 z" style="fill:var(--ink)"/></marker>'
+            '<marker id="ah-grad" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="5" markerHeight="5" markerUnits="strokeWidth" orient="auto-start-reverse">'
+            '<path d="M1,1 L11,6 L1,11" style="fill:none;stroke:var(--grad);stroke-width:2.2;stroke-linejoin:round"/></marker>'
+            '</defs></svg>\n')
+    body = defs + f'<div id="deck" role="application" aria-label="Slides"></div>\n<script>\n{js}\n</script>\n'
 
     full = (
         "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"

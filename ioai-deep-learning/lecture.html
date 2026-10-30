@@ -64,19 +64,20 @@
   --bg: #eef0f3;            /* around the stage */
   --paper: #fbfbf8;         /* slide surface */
   --ink: #141b2d;           /* text and main strokes */
-  --muted: #5d6679;         /* secondary text, axes */
-  --rule: #c9ced8;          /* hairlines */
-  --grid: #e4e7ed;          /* plot and paper grid */
-  --c0: #2a64c8;            /* class 0 / "miss" / negative */
-  --c1: #e2731b;            /* class 1 / "made" / positive */
-  --grad: #c22a73;          /* gradients, learning, the thing that moves */
-  --ok: #1f8a5b;
-  --bad: #c0392b;
-  --hi: #fff1b8;            /* highlighter */
+  --muted: #4f586b;         /* secondary text, axes */
+  --rule: #b9c0cc;          /* hairlines */
+  --grid: #e1e5eb;          /* grid inside plots */
+  --paper-grid: #eaedf2;    /* faint graph paper behind slides */
+  --c0: #2266d0;            /* class 0 / "miss" / negative */
+  --c1: #c85400;            /* class 1 / "made" / positive */
+  --grad: #a8145f;          /* gradients and learning */
+  --ok: #16794f;
+  --bad: #b8261a;
+  --hi: #ffe27a;            /* highlighter */
   --code-bg: #f1f2f6;
-  --c0-soft: #dfe8f7;
-  --c1-soft: #fbe6d4;
-  --grad-soft: #f6dce8;
+  --c0-soft: #d8e3f2;
+  --c1-soft: #f3e0d0;
+  --grad-soft: #eed6e0;
   --font-display: 'Archivo', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
   --font-body: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'Cascadia Code', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
@@ -84,16 +85,16 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #090c13; --paper: #121725; --ink: #e9edf5; --muted: #9aa4b8; --rule: #323b51; --grid: #1f2638;
-    --c0: #5b97ff; --c1: #ff9d4a; --grad: #ff5fa6; --ok: #43c08a; --bad: #ff6b5e; --hi: #4a4120;
-    --code-bg: #0d1220; --c0-soft: #1b2a48; --c1-soft: #3d2a1a; --grad-soft: #3a1a2c;
+    --bg: #090c13; --paper: #121725; --ink: #e9edf5; --muted: #a7b0c2; --rule: #3a445c; --grid: #222a3d; --paper-grid: #181f2f;
+    --c0: #6aa6ff; --c1: #ff9a3d; --grad: #f0448f; --ok: #4cc795; --bad: #ff7366; --hi: #5a4a12;
+    --code-bg: #0d1220; --c0-soft: #253655; --c1-soft: #46342a; --grad-soft: #43213c;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #090c13; --paper: #121725; --ink: #e9edf5; --muted: #9aa4b8; --rule: #323b51; --grid: #1f2638;
-  --c0: #5b97ff; --c1: #ff9d4a; --grad: #ff5fa6; --ok: #43c08a; --bad: #ff6b5e; --hi: #4a4120;
-  --code-bg: #0d1220; --c0-soft: #1b2a48; --c1-soft: #3d2a1a; --grad-soft: #3a1a2c;
+  --bg: #090c13; --paper: #121725; --ink: #e9edf5; --muted: #a7b0c2; --rule: #3a445c; --grid: #222a3d; --paper-grid: #181f2f;
+  --c0: #6aa6ff; --c1: #ff9a3d; --grad: #f0448f; --ok: #4cc795; --bad: #ff7366; --hi: #5a4a12;
+  --code-bg: #0d1220; --c0-soft: #253655; --c1-soft: #46342a; --grad-soft: #43213c;
   color-scheme: dark;
 }
 
@@ -123,13 +124,13 @@ body {
 .slide {
   position: absolute; inset: 0;
   box-sizing: border-box;
-  padding: 84px 104px 80px;
+  padding: 96px 96px 72px;
   background-color: var(--paper);
   background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
   background-size: 48px 48px;
-  background-position: -1px -1px;
+  background-position: 0 0;
   font-size: 40px;
   line-height: 1.3;
   display: flex; flex-direction: column; gap: 32px;
@@ -149,14 +150,14 @@ body {
 .slide h3 { font-size: 44px; line-height: 1.1; font-weight: 700; }
 .slide p { margin: 0; max-width: 28em; }
 .kicker {
-  font-family: var(--font-mono); font-size: 24px; letter-spacing: .14em; text-transform: uppercase;
+  font-family: var(--font-mono); font-size: 28px; letter-spacing: .1em; text-transform: uppercase;
   color: var(--muted); font-weight: 500;
 }
 .big { font-family: var(--font-display); font-size: 104px; line-height: 1; font-weight: 800; font-stretch: 110%; letter-spacing: -0.015em; text-wrap: balance; }
 .huge { font-family: var(--font-display); font-size: 220px; line-height: .9; font-weight: 800; font-stretch: 115%; letter-spacing: -0.02em; }
 .lead { font-size: 48px; line-height: 1.25; }
-.small { font-size: 30px; }
-.tiny { font-size: 24px; color: var(--muted); }
+.small { font-size: 32px; }
+.tiny { font-size: 28px; color: var(--muted); }
 .muted { color: var(--muted); }
 .c0 { color: var(--c0); } .c1 { color: var(--c1); } .grad { color: var(--grad); }
 .ok { color: var(--ok); } .bad { color: var(--bad); }
@@ -198,19 +199,16 @@ mark { background: var(--hi); color: inherit; padding: 0 .12em; border-radius: 4
 /* small labelled marker for activity types: predict / try / paper / code / pair */
 .tag {
   display: inline-flex; align-items: center; gap: .5em;
-  font-family: var(--font-mono); font-size: 24px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
-  padding: 8px 16px 7px; border: 2.5px solid currentColor; border-radius: 6px; color: var(--muted);
+  font-family: var(--font-mono); font-size: 28px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  padding: 8px 18px 7px; border: 3px solid currentColor; border-radius: 0; color: var(--ink);
   width: fit-content;
 }
-.tag-predict { color: var(--grad); }
-.tag-try { color: var(--c0); }
-.tag-paper { color: var(--c1); }
-.tag-code { color: var(--ink); }
-.tag-pair { color: var(--ok); }
+.tag-try, .tag-paper, .tag-code, .tag-pair { color: var(--ink); }
+.tag-predict { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .tag-warn { color: var(--bad); }
 
 /* boxed figure / panel, used sparingly */
-.panel { background: var(--paper); border: 2px solid var(--rule); border-radius: 10px; padding: 28px 32px; }
+.panel { background: var(--paper); border: 2px solid var(--rule); border-radius: 4px; padding: 28px 32px; }
 .panel-tight { padding: 16px 20px; }
 .callout { border-left: 8px solid var(--grad); padding: 8px 0 8px 28px; }
 
@@ -233,47 +231,37 @@ mark { background: var(--hi); color: inherit; padding: 0 .12em; border-radius: 4
 /* ---------- code ---------- */
 pre.code {
   margin: 0; font-family: var(--font-mono); font-size: 34px; line-height: 1.5;
-  background: var(--code-bg); border-radius: 10px; padding: 28px 36px; color: var(--ink);
-  overflow: hidden; white-space: pre; tab-size: 4; border: 2px solid var(--rule);
+  background: var(--code-bg); border-radius: 0; padding: 28px 36px; color: var(--ink);
+  overflow: hidden; white-space: pre; tab-size: 4; border: 0; border-left: 6px solid var(--ink); max-width: 100%; box-sizing: border-box;
   font-variant-ligatures: none;
 }
 pre.code-s { font-size: 28px; padding: 22px 28px; }
 pre.code-l { font-size: 40px; }
 pre.code code { font-family: inherit; }
 pre.code .ln { display: inline-block; min-width: 100%; transition: opacity .3s ease, background-color .3s ease; border-radius: 4px; }
-pre.code.has-hl .ln { opacity: .32; }
-pre.code.has-hl .ln.hl { opacity: 1; background: var(--hi); }
-.t-kw { color: #8b2fc9; font-weight: 600; }
-.t-str { color: #1d7a45; }
-.t-num { color: #b44f0c; }
+pre.code.has-hl .ln { opacity: .45; }
+pre.code.has-hl .ln.hl { opacity: 1; background: var(--hi); box-shadow: -14px 0 0 var(--hi), 14px 0 0 var(--hi); }
+.t-kw, .t-dec { color: var(--ink); font-weight: 700; }
+.t-str { color: var(--ok); }
+.t-num { color: var(--ink); }
 .t-com { color: var(--muted); font-style: italic; }
-.t-fn { color: #1d5fbf; }
-.t-bi { color: #0f7a8a; }
-.t-self { color: #a33b67; font-style: italic; }
+.t-fn, .t-bi { color: var(--ink); }
+.t-self { color: var(--ink); font-style: italic; }
 .t-attr { color: inherit; }
-.t-dec { color: #8b2fc9; }
 .t-op { color: var(--muted); }
-:root[data-theme="dark"] .t-kw { color: #d199ff; } :root[data-theme="dark"] .t-str { color: #7fd99a; }
-:root[data-theme="dark"] .t-num { color: #ffb070; } :root[data-theme="dark"] .t-fn { color: #82b4ff; }
-:root[data-theme="dark"] .t-bi { color: #6fd3e0; } :root[data-theme="dark"] .t-self { color: #ff8fbd; } :root[data-theme="dark"] .t-dec { color: #d199ff; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .t-kw { color: #d199ff; } :root:not([data-theme="light"]) .t-str { color: #7fd99a; }
-  :root:not([data-theme="light"]) .t-num { color: #ffb070; } :root:not([data-theme="light"]) .t-fn { color: #82b4ff; }
-  :root:not([data-theme="light"]) .t-bi { color: #6fd3e0; } :root:not([data-theme="light"]) .t-self { color: #ff8fbd; } :root:not([data-theme="light"]) .t-dec { color: #d199ff; }
-}
 code.ic { font-family: var(--font-mono); font-size: .85em; background: var(--code-bg); padding: .05em .3em; border-radius: 6px; border: 1.5px solid var(--rule); white-space: nowrap; }
 
 /* ---------- demo controls ---------- */
 canvas { display: block; touch-action: none; }
 .ui-row { display: flex; flex-wrap: wrap; gap: 20px 32px; align-items: center; }
-.ui-slider { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 20px; font-size: 30px; min-width: 0; }
+.ui-slider { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 20px; font-size: 32px; min-width: 0; }
 .ui-slider-label { color: var(--muted); white-space: nowrap; }
 .ui-slider-value { font-family: var(--font-mono); font-size: 30px; min-width: 4.2em; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
 .ui-slider input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; min-width: 220px; height: 44px; background: transparent; cursor: pointer; margin: 0; }
 .ui-slider input[type=range]::-webkit-slider-runnable-track { height: 8px; background: var(--rule); border-radius: 4px; }
 .ui-slider input[type=range]::-moz-range-track { height: 8px; background: var(--rule); border-radius: 4px; }
-.ui-slider input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 36px; height: 36px; border-radius: 50%; background: var(--grad); margin-top: -14px; border: 4px solid var(--paper); box-shadow: 0 0 0 2px var(--grad); }
-.ui-slider input[type=range]::-moz-range-thumb { width: 28px; height: 28px; border-radius: 50%; background: var(--grad); border: 4px solid var(--paper); box-shadow: 0 0 0 2px var(--grad); }
+.ui-slider input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 36px; height: 36px; border-radius: 50%; background: var(--ink); margin-top: -14px; border: 4px solid var(--paper); box-shadow: 0 0 0 2px var(--ink); }
+.ui-slider input[type=range]::-moz-range-thumb { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); border: 4px solid var(--paper); box-shadow: 0 0 0 2px var(--ink); }
 .ui-slider input[type=range]:focus-visible { outline: 3px solid var(--grad); outline-offset: 4px; border-radius: 8px; }
 .ui-btn {
   font-family: var(--font-body); font-size: 30px; font-weight: 700; color: var(--ink);
@@ -290,14 +278,14 @@ canvas { display: block; touch-action: none; }
 .ui-choice button:first-child { border-left: 0; }
 .ui-choice button.is-on { background: var(--ink); color: var(--paper); }
 .ui-readout { display: flex; flex-direction: column; gap: 2px; }
-.ui-readout-label { font-family: var(--font-mono); font-size: 20px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.ui-readout-label { font-family: var(--font-mono); font-size: 26px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .ui-readout-value { font-family: var(--font-mono); font-size: 44px; font-weight: 600; font-variant-numeric: tabular-nums; }
 
 /* ---------- deck chrome ---------- */
 .deck-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 6px; display: flex; gap: 3px; z-index: 5; opacity: .9; }
 .deck-bar-seg { background: color-mix(in srgb, var(--rule) 60%, transparent); position: relative; }
 .deck-bar-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--muted); transition: width .3s ease; }
-.deck-bar-seg.is-current .deck-bar-fill { background: var(--grad); }
+.deck-bar-seg.is-current .deck-bar-fill { background: var(--ink); }
 .deck-corner {
   position: absolute; right: 18px; bottom: 14px; z-index: 5; display: flex; gap: 14px; align-items: baseline;
   font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: .06em; pointer-events: none; opacity: .75;
@@ -372,7 +360,7 @@ canvas { display: block; touch-action: none; }
 .courtnet-side { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
 .timer { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
 .timer-face { font-family: var(--font-mono); font-size: 200px; line-height: 1; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; color: var(--ink); }
-.timer.is-done .timer-face { color: var(--grad); }
+.timer.is-done .timer-face { color: var(--paper); background: var(--ink); padding: 0 .1em; }
 svg.net { overflow: visible; max-width: 100%; height: auto; }
 svg.loop { max-width: 100%; height: auto; overflow: visible; }
 .map { display: flex; flex-direction: column; gap: 10px; }
@@ -386,9 +374,36 @@ svg.loop { max-width: 100%; height: auto; overflow: visible; }
 .map-row.task .map-bar span { background: var(--c1); }
 .map-min { font-family: var(--font-mono); font-size: 26px; color: var(--muted); }
 
+/* ---------- diagram vocabulary (inline SVG with class="dg") ---------- */
+svg.dg { overflow: visible; max-width: 100%; height: auto; }
+.dg text { dominant-baseline: central; }
+.dg .nrn { fill: var(--paper); stroke: var(--ink); stroke-width: 3.5; }
+.dg .nrn.in { fill: var(--code-bg); }
+.dg .nrn.out { stroke-width: 5; }
+.dg .nrn.on { fill: var(--hi); }
+.dg .w { stroke-linecap: round; stroke-opacity: .85; stroke: var(--muted); stroke-width: 3; }
+.dg .w.pos { stroke: var(--c1); } .dg .w.neg { stroke: var(--c0); }
+.dg .w.off { stroke: var(--rule); stroke-dasharray: 2 8; }
+.dg .box { fill: var(--paper); stroke: var(--ink); stroke-width: 3; }
+.dg .box.act { fill: var(--code-bg); }
+.dg .flow { fill: none; stroke: var(--ink); stroke-width: 5; marker-end: url(#ah-ink); }
+.dg .back { fill: none; stroke: var(--grad); stroke-width: 5; stroke-dasharray: 14 10; marker-end: url(#ah-grad); }
+.dg .lbl { font: 600 30px var(--font-mono); fill: var(--ink); text-anchor: middle; }
+.dg .lbl-s { font: 500 28px var(--font-mono); fill: var(--muted); text-anchor: middle; }
+.dg .lbl-m { font: italic 36px var(--font-math); fill: var(--ink); text-anchor: middle; }
+.dg .lbl-g { font: italic 36px var(--font-math); fill: var(--grad); text-anchor: middle; }
+.dg .lbl-b { font: 800 40px var(--font-display); fill: var(--ink); text-anchor: middle; }
+.dg .t-data { fill: var(--code-bg); stroke: var(--ink); stroke-width: 3; }
+.dg .t-param { fill: var(--grad-soft); stroke: var(--ink); stroke-width: 3; }
+.dg .t-gradt { fill: none; stroke: var(--grad); stroke-width: 4; stroke-dasharray: 12 8; }
+.dg .t-shared { stroke: var(--ink); stroke-width: 7; }
+.dg .t-clash { stroke: var(--bad); stroke-width: 7; }
+.dg .c0 { fill: var(--c0); } .dg .c1 { fill: var(--c1); } .dg .ink { fill: var(--ink); } .dg .muted { fill: var(--muted); }
+
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><marker id="ah-ink" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="5" markerHeight="5" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M0,0 L12,6 L0,12 z" style="fill:var(--ink)"/></marker><marker id="ah-grad" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="5" markerHeight="5" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M1,1 L11,6 L1,11" style="fill:none;stroke:var(--grad);stroke-width:2.2;stroke-linejoin:round"/></marker></defs></svg>
 <div id="deck" role="application" aria-label="Slides"></div>
 <script>
 /* NN: a tiny, readable neural-network toolkit for the live demos.
@@ -747,14 +762,14 @@ svg.loop { max-width: 100%; height: auto; overflow: visible; }
       xt.forEach(v => { const p = Math.round(sx(v)) + 0.5; ctx.beginPath(); ctx.moveTo(p, y0); ctx.lineTo(p, y1); ctx.stroke(); });
       yt.forEach(v => { const p = Math.round(sy(v)) + 0.5; ctx.beginPath(); ctx.moveTo(x0, p); ctx.lineTo(x1, p); ctx.stroke(); });
     }
-    ctx.strokeStyle = C.muted; ctx.lineWidth = 2;
+    ctx.strokeStyle = C.muted; ctx.lineWidth = 2.5;
     if (opt.zero !== false) {
       if (sy.domain[0] <= 0 && sy.domain[1] >= 0) { ctx.beginPath(); ctx.moveTo(x0, sy(0)); ctx.lineTo(x1, sy(0)); ctx.stroke(); }
       if (sx.domain[0] <= 0 && sx.domain[1] >= 0) { ctx.beginPath(); ctx.moveTo(sx(0), y0); ctx.lineTo(sx(0), y1); ctx.stroke(); }
     }
     if (opt.labels !== false) {
       ctx.fillStyle = C.muted;
-      ctx.font = `${opt.font || 22}px ${C.fontMono}`;
+      ctx.font = `${opt.font || 26}px ${C.fontMono}`;
       const fmt = opt.fmt || (v => +v.toFixed(3) + '');
       ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       const yb = opt.xAt != null ? sy(opt.xAt) : y1;
@@ -762,7 +777,7 @@ svg.loop { max-width: 100%; height: auto; overflow: visible; }
       ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
       const xl = opt.yAt != null ? sx(opt.yAt) : x0;
       yt.forEach(v => { if (opt.skipZero && v === 0) return; ctx.fillText(fmt(v), xl - 10, sy(v)); });
-      ctx.font = `${opt.font || 22}px ${C.fontBody}`;
+      ctx.font = `${opt.font || 28}px ${C.fontBody}`;
       if (opt.xlabel) { ctx.textAlign = 'right'; ctx.textBaseline = 'bottom'; ctx.fillStyle = C.ink; ctx.fillText(opt.xlabel, x1, (opt.xAt != null ? sy(opt.xAt) : y1) - 8); }
       if (opt.ylabel) { ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.ink; ctx.fillText(opt.ylabel, (opt.yAt != null ? sx(opt.yAt) : x0) + 10, y0 + 2); }
     }
@@ -1283,12 +1298,12 @@ svg.loop { max-width: 100%; height: auto; overflow: visible; }
     function draw() {
       const C = Plot.colors(), ctx = cv.ctx;
       cv.clear(C.paper);
-      Plot.axes(ctx, sx, sy, { font: 22 });
+      Plot.axes(ctx, sx, sy, { font: 26 });
       if (o.showTarget !== false) Plot.fn(ctx, sx, sy, o.f, { color: C.muted, width: 3, dash: [10, 10] });
       ctx.save();
-      X.forEach((x, i) => Plot.dot(ctx, sx(x[0]), sy(Y[i]), 6, C.c0));
+      X.forEach((x, i) => Plot.dot(ctx, sx(x[0]), sy(Y[i]), 6, C.paper, C.muted));
       ctx.restore();
-      Plot.fn(ctx, sx, sy, x => S.net.predict([x]), { color: C.grad, width: 5 });
+      Plot.fn(ctx, sx, sy, x => S.net.predict([x]), { color: C.ink, width: 5 });
       if (R.loss) { R.epoch.set(S.epoch); R.loss.set(S.loss.toFixed(4)); }
     }
     const R = {};
@@ -1342,7 +1357,7 @@ svg.loop { max-width: 100%; height: auto; overflow: visible; }
         const lab = o.labels && o.labels[l] && o.labels[l][i];
         if (lab) s += `<text x="${xs[l]}" y="${ys[l][i]}" text-anchor="middle" dominant-baseline="central" font-family="var(--font-math)" font-style="italic" font-size="${o.r * 1.05}" fill="var(--ink)">${lab}</text>`;
       }
-      if (o.layerNames && o.layerNames[l]) s += `<text x="${xs[l]}" y="${o.h - 14}" text-anchor="middle" font-family="var(--font-mono)" font-size="22" fill="var(--muted)">${o.layerNames[l]}</text>`;
+      if (o.layerNames && o.layerNames[l]) s += `<text x="${xs[l]}" y="${o.h - 14}" text-anchor="middle" font-family="var(--font-mono)" font-size="28" fill="var(--muted)">${o.layerNames[l]}</text>`;
     });
     return s + '</svg>';
   };
@@ -1356,15 +1371,16 @@ svg.loop { max-width: 100%; height: auto; overflow: visible; }
     o = Object.assign({ w: 1500, h: 620, notes: false }, o || {});
     const W = o.w, H = o.h;
     const bw = 300, bh = 120;
-    const top = 70, bot = H - bh - (o.notes ? 120 : 40);
+    const top = o.notes ? 110 : 70, bot = H - bh - (o.notes ? 100 : 40);
     const X = [40, (W - bw) / 2, W - bw - 40];
     const node = (x, y, label, sub, color, step) =>
       `<g ${step ? `data-step="${step}"` : ''}><rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="10" fill="var(--paper)" stroke="${color}" stroke-width="5"/>` +
       `<text x="${x + bw / 2}" y="${y + bh / 2 + 2}" text-anchor="middle" dominant-baseline="central" font-family="var(--font-display)" font-weight="800" font-size="46" fill="${color}">${label}</text>` +
-      (o.notes && sub ? `<text x="${x + bw / 2}" y="${y + bh + 46}" text-anchor="middle" font-family="var(--font-mono)" font-size="27" fill="var(--muted)">${sub}</text>` : '') + '</g>';
+      (o.notes && sub ? `<text x="${x + bw / 2}" y="${y < H / 2 ? y - 26 : y + bh + 46}" text-anchor="middle" font-family="var(--font-mono)" font-size="28" fill="var(--muted)">${sub}</text>` : '') + '</g>';
     const arrow = (x1, y1, x2, y2, color, step) => {
       const a = Math.atan2(y2 - y1, x2 - x1), h = 22;
-      return `<g ${step ? `data-step="${step}"` : ''}><line x1="${x1}" y1="${y1}" x2="${x2 - Math.cos(a) * h * 0.7}" y2="${y2 - Math.sin(a) * h * 0.7}" stroke="${color}" stroke-width="6" stroke-linecap="round"/>` +
+      const dash = color === 'var(--grad)' ? ' stroke-dasharray="16 12"' : '';
+      return `<g ${step ? `data-step="${step}"` : ''}><line x1="${x1}" y1="${y1}" x2="${x2 - Math.cos(a) * h * 0.7}" y2="${y2 - Math.sin(a) * h * 0.7}" stroke="${color}" stroke-width="6" stroke-linecap="round"${dash}/>` +
         `<polygon points="${x2},${y2} ${x2 - h * Math.cos(a - 0.45)},${y2 - h * Math.sin(a - 0.45)} ${x2 - h * Math.cos(a + 0.45)},${y2 - h * Math.sin(a + 0.45)}" fill="${color}"/></g>`;
     };
     const ink = 'var(--ink)', g = 'var(--grad)';
@@ -1498,12 +1514,14 @@ svg.loop { max-width: 100%; height: auto; overflow: visible; }
     function draw() {
       const C = Plot.colors(), ctx = cv.ctx;
       cv.clear(C.paper);
-      Plot.heat(ctx, (x, y) => NN.sigmoid(S.net.predict(prep([x, y]))), fr, { res: 70, mid: 0.45, span: 0.3, strength: 0.75 });
+      Plot.heat(ctx, (x, y) => NN.sigmoid(S.net.predict(prep([x, y]))), fr, { res: 70, mid: 0.45, span: 0.3, strength: 0.6 });
       if (o.dots) {
         ctx.save();
-        for (let i = 0; i < Math.min(X.length, o.showDots || 1500); i++) {
-          ctx.globalAlpha = 0.55;
-          Plot.dot(ctx, fr.sx(X[i][0]), fr.sy(X[i][1]), 3.2, Y[i] ? C.c1 : C.c0);
+        ctx.lineWidth = 1.5;
+        for (let i = 0; i < Math.min(X.length, o.showDots || 800); i++) {
+          ctx.beginPath(); ctx.arc(fr.sx(X[i][0]), fr.sy(X[i][1]), 5, 0, 2 * Math.PI);
+          ctx.fillStyle = Y[i] ? C.c1 : C.c0; ctx.fill();
+          ctx.strokeStyle = C.paper; ctx.stroke();
         }
         ctx.restore();
       }
@@ -2168,6 +2186,172 @@ Deck.slide({
 });
 
 } catch (e) { console.error('section 00-opening.js failed', e); }
+
+/* ===== 05-break.js ===== */
+try {
+Deck.section({ id: 'brk', title: 'Break', minutes: 10 });
+
+Deck.css(`
+.sec-brk .brk-grid { display: grid; grid-template-columns: 2fr 3fr; gap: 96px; align-items: start; flex: 1; min-height: 0; }
+.sec-brk .puzzle { display: flex; flex-direction: column; gap: 28px; }
+.sec-brk .truth { font-family: var(--font-mono); font-size: 34px; border-collapse: collapse; }
+.sec-brk .truth td, .sec-brk .truth th { padding: 6px 26px; text-align: center; border-bottom: 2px solid var(--rule); }
+.sec-brk .truth th { font-size: 26px; color: var(--muted); font-weight: 600; }
+`);
+
+Deck.slide({
+  id: 'brk-timer',
+  title: 'Break: 10 minutes',
+  html: `
+  <div class="kicker">break</div>
+  <div class="brk-grid">
+    <div class="col">
+      <h2>Ten minutes</h2>
+      <div id="brk-timer"></div>
+    </div>
+    <div class="puzzle">
+      <span class="tag tag-paper">optional puzzle</span>
+      <p class="lead">What does this network compute for 0/1 inputs?</p>
+      <div class="row" style="gap:40px;align-items:center">
+      ${(() => {
+        // h1 = ReLU(x1 + x2), h2 = ReLU(x1 + x2 - 1), y = h1 - 2 h2  ->  XOR
+        const IN = [[60, 70], [60, 290]], HID = [[330, 70], [330, 290]], OUT = [560, 180];
+        const e = (p, q, cls, lab, t) => {
+          const lx = p[0] + (q[0] - p[0]) * t, ly = p[1] + (q[1] - p[1]) * t;
+          return `<line class="w ${cls}" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" style="stroke-width:6"/>` +
+            `<rect x="${lx - 24}" y="${ly - 20}" width="48" height="40" fill="var(--paper)"/><text class="lbl" x="${lx}" y="${ly}">${lab}</text>`;
+        };
+        return `<svg class="dg" viewBox="0 0 640 380" width="560" height="333" role="img" aria-label="2-2-1 ReLU network">
+          ${e(IN[0], HID[0], 'pos', '1', 0.5)}${e(IN[0], HID[1], 'pos', '1', 0.28)}
+          ${e(IN[1], HID[0], 'pos', '1', 0.28)}${e(IN[1], HID[1], 'pos', '1', 0.5)}
+          ${e(HID[0], OUT, 'pos', '+1', 0.5)}${e(HID[1], OUT, 'neg', '−2', 0.5)}
+          <circle class="nrn in" cx="60" cy="70" r="40"/><text class="lbl-m" x="60" y="70">x₁</text>
+          <circle class="nrn in" cx="60" cy="290" r="40"/><text class="lbl-m" x="60" y="290">x₂</text>
+          <circle class="nrn" cx="330" cy="70" r="40"/><text class="lbl-s" x="330" y="14">bias 0</text>
+          <circle class="nrn" cx="330" cy="290" r="40"/><text class="lbl-s" x="330" y="352">bias −1</text>
+          <circle class="nrn out" cx="560" cy="180" r="40"/><text class="lbl-m" x="560" y="180">y</text>
+          <path d="M312,82 L330,82 L348,58" fill="none" style="stroke:var(--ink);stroke-width:4"/>
+          <path d="M312,302 L330,302 L348,278" fill="none" style="stroke:var(--ink);stroke-width:4"/>
+        </svg>`;
+      })()}
+      <table class="truth">
+        <tr><th>x₁</th><th>x₂</th><th>y</th></tr>
+        <tr><td>0</td><td>0</td><td><span data-step="1">0</span></td></tr>
+        <tr><td>0</td><td>1</td><td><span data-step="1">1</span></td></tr>
+        <tr><td>1</td><td>0</td><td><span data-step="1">1</span></td></tr>
+        <tr><td>1</td><td>1</td><td><span data-step="1">0</span></td></tr>
+      </table>
+      </div>
+      <p class="lead" data-step="2"><b>XOR</b>, the function one neuron can't learn.</p>
+    </div>
+  </div>`,
+  init(el, api) {
+    Widgets.timer(api, el.querySelector('#brk-timer'), 10, { auto: true });
+  },
+  notes: `
+  <p class="time">10 min</p>
+  <p class="do">The timer starts by itself when this slide appears (Pause/Reset if needed). Leave the slide up during the break. Students who stay can try the puzzle on paper.</p>
+  <p class="ask">What does this network output for the four inputs?</p>
+  <p class="ans">Hidden 1 = ReLU(x₁ + x₂), hidden 2 = ReLU(x₁ + x₂ − 1), y = h₁ − 2h₂. For (0,0): 0. For (0,1) or (1,0): h₁ = 1, h₂ = 0, so y = 1. For (1,1): h₁ = 2, h₂ = 1, y = 2 − 2 = 0. That is XOR: exactly the function Minsky and Papert showed a single perceptron cannot compute, solved with just two hidden ReLU neurons.</p>
+  <p class="do">After the break press → twice to reveal the truth table and the answer, and spend one minute on it before the next section. It is a nice bridge back in: "a hidden layer of two neurons solves the problem that froze the field for a decade".</p>`,
+});
+
+} catch (e) { console.error('section 05-break.js failed', e); }
+
+/* ===== 10-wrap.js ===== */
+try {
+Deck.section({ id: 'wrap', title: 'Wrap-up', minutes: 3 });
+
+Deck.css(`
+.sec-wrap .can { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 80px; font-size: 40px; }
+.sec-wrap .can div { display: flex; gap: 22px; align-items: baseline; }
+.sec-wrap .can b { font-family: var(--font-mono); color: var(--muted); font-weight: 600; font-size: 30px; min-width: 1.6em; }
+.sec-wrap .tasks { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; align-items: end; }
+.sec-wrap .task { display: flex; flex-direction: column; gap: 20px; }
+`);
+
+Deck.slide({
+  id: 'wrap-loop',
+  title: 'The whole lecture in one picture',
+  html: `
+  <h2>The whole lecture in one picture</h2>
+  <div class="fill-center">${Widgets.loopSVG({ w: 1560, h: 640, notes: true })}</div>`,
+  notes: `
+  <p class="time">2 min</p>
+  <p class="say">This is the picture from the very beginning, now with today's words under every box. Data: scaled, in batches, split into training and validation. Model: linear layers with activations in between, stacked. Loss: MSE for numbers, binary cross-entropy for yes/no, cross-entropy for classes. Gradients: one call, loss.backward(). Update: optimizer.step(), and Adam with learning rate 1e-3 is the default you start with.</p>
+  <p class="ask">Ask two or three students to explain one arrow each, in their own words.</p>
+  <p class="ans">Good answers mention: the model outputs logits; the loss compares predictions with labels; backward computes ∂loss/∂weight for every weight; the optimizer moves each weight a small step against its gradient; we repeat for many epochs and watch the validation loss.</p>`,
+});
+
+Deck.slide({
+  id: 'wrap-can',
+  title: 'You can now…',
+  html: `
+  <h2>What you can do now</h2>
+  <div class="can">
+    <div><b>1</b>explain why hidden layers need activations</div>
+    <div><b>2</b>count parameters and predict tensor shapes</div>
+    <div><b>3</b>pick the loss for a task</div>
+    <div><b>4</b>train an MLP in PyTorch without copying</div>
+    <div><b>5</b>read a loss curve and fix the learning rate</div>
+    <div><b>6</b>use gradients to change an input, not a weight</div>
+  </div>`,
+  notes: `
+  <p class="time">30 s</p>
+  <p class="say">Six skills from today. The first three are theory you will be asked about; the last three are what wins practical rounds.</p>
+  <p class="do">Ask for a show of hands on each line. Anything with few hands is what to repeat at the start of tomorrow.</p>`,
+});
+
+Deck.slide({
+  id: 'wrap-tasks',
+  title: 'Now: two tasks',
+  html: `
+  <h2>Now: two tasks. Tomorrow: harder ones.</h2>
+  <div class="tasks grow">
+    <div class="task"><div id="wrap-court"></div><h3>Kobe: will it go in?</h3><p class="small muted">2 inputs · ≤ 3 linear layers · ≤ 8 neurons</p></div>
+    <div class="task">
+      <svg class="dg" viewBox="0 0 760 420" width="760" height="420" role="img" aria-label="frozen model with one missing input">
+        <rect class="box" x="300" y="70" width="240" height="280" style="stroke-width:5"/>
+        <text class="lbl-b" x="420" y="190">model</text>
+        <text class="lbl-s" x="420" y="246">frozen</text>
+        ${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => {
+          const y = 80 + i * 29;
+          const miss = i === 3;
+          return `<line class="${miss ? 'back' : 'flow'}" x1="${miss ? 120 : 150}" y1="${y}" x2="292" y2="${y}" style="stroke-width:4"/>` +
+            `<text class="${miss ? 'lbl-g' : 'lbl-s'}" x="${miss ? 80 : 110}" y="${y}" style="${miss ? 'font-size:34px' : 'font-size:26px'}">${miss ? '?' : 'x' + i}</text>`;
+        }).join('')}
+        <line class="flow" x1="548" y1="210" x2="690" y2="210"/>
+        <text class="lbl-m" x="726" y="210">y</text>
+      </svg>
+      <h3>Inversion: find the missing input</h3><p class="small muted">frozen model · 1000 rows · score by MSE</p>
+    </div>
+  </div>`,
+  init(el, api) {
+    const host = el.querySelector('#wrap-court');
+    const fr = Widgets.courtFrame(0, 0, 560);
+    const cv = Plot.canvas(host, 560, Math.ceil(fr.h));
+    const draw = () => {
+      const C = Plot.colors();
+      cv.clear(C.paper);
+      const ctx = cv.ctx;
+      ctx.lineWidth = 1.2;
+      for (let i = 0; i < 700; i++) {
+        const [x, y] = KOBE.X[i];
+        ctx.beginPath(); ctx.arc(fr.sx(x), fr.sy(y), 4, 0, 2 * Math.PI);
+        ctx.fillStyle = KOBE.Y[i] ? C.c1 : C.c0; ctx.fill(); ctx.strokeStyle = C.paper; ctx.stroke();
+      }
+      Widgets.drawCourt(ctx, fr, { color: C.ink, width: 3 });
+    };
+    draw();
+    api.onTheme(draw);
+  },
+  notes: `
+  <p class="time">30 s</p>
+  <p class="say">Now you solve two olympiad tasks with exactly what we covered. Kobe: a tiny legal network that predicts whether a shot goes in. Inversion: a frozen network and a missing input column, which you recover with gradients. Tomorrow we continue with harder tasks, so note which parts of today felt shaky.</p>
+  <p class="do">Hand out the task files and the starter notebooks (notebooks/02 and 03). Remind them: baseline first, validation split, and save the best model.</p>`,
+});
+
+} catch (e) { console.error('section 10-wrap.js failed', e); }
 
 Deck.start();
 </script>

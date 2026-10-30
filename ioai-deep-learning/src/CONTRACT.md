@@ -29,10 +29,11 @@ so always prefix selectors with it. Section-only helper functions go inside the 
 file wrapped in a block or IIFE (`(() => { … })();` or `{ … }`) so they do not leak globals.
 
 ### Stage
-The slide is a fixed **1920×1080** box (scaled to the screen). Padding is 84px
-top, 104px sides, 80px bottom, so usable area is about **1712×916**. The slide
-is a flex column with `gap: 32px`. Nothing may overflow it; `tools/shoot.js`
-reports overflow.
+The slide is a fixed **1920×1080** box (scaled to the screen). Padding is 96px top,
+96px sides, 72px bottom (safe frame x 96–1824, y 96–1008). The slide is a flex column
+with `gap: 32px`; a typical slide is an `h2` headline band (96–192) and content from
+~240 to 1008. Keep anything essential above y≈930 (heads block the bottom of a
+projected image). Nothing may overflow; `tools/shoot.js` reports overflow.
 
 ### Build steps (fragments)
 * `data-step="k"` — hidden until step k, then stays (k ≥ 1).
@@ -87,30 +88,47 @@ reports overflow.
 
 ## Visual language (follow strictly)
 
+Read `src/DESIGN.md` (design review and spec): §2 projector constraints, §4 layout,
+§5 the 12 slide templates, §6 diagram vocabulary, §7 animation rules. Key rules:
+
 * **Colours only through tokens**: in CSS use `var(--ink)`, `var(--muted)`, `var(--c0)`,
   `var(--c1)`, `var(--grad)`, `var(--ok)`, `var(--bad)`, `var(--rule)`, `var(--grid)`,
   `var(--paper)`, `var(--hi)`, `var(--c0-soft)`, `var(--c1-soft)`, `var(--grad-soft)`, `var(--code-bg)`.
+  Red/green (`--bad`/`--ok`) are not colour-blind safe: always pair them with a ✓/✗ glyph or a word.
   In canvas use `Plot.colors()` **inside the draw function** (so theme switches work).
   No literal hex colours anywhere in section files. Inline SVG uses `fill="var(--c0)"` style
   attributes or `style="stroke: var(--ink)"`.
-* **Meaning of colours, everywhere**: `--c0` blue = class 0 / negative / "miss";
-  `--c1` orange = class 1 / positive / "made"; `--grad` magenta = gradients, learning,
-  the optimizer, anything that moves/updates; `--ink` = the model / structure;
-  `--ok`/`--bad` only for right/wrong verdicts.
+* **Meaning of colours, everywhere**: `--c0` blue = class 0 / negative weight / "miss";
+  `--c1` orange = class 1 / positive weight / "made"; `--grad` magenta = gradients and
+  learning only (gradient arrows, the optimizer's path, parameters being updated) — never
+  decoration, never UI chrome; `--ink` = the model, data flow, structure, the fitted curve;
+  `--muted` = targets/reference curves (dashed) and axes; `--ok`/`--bad` only for verdicts.
+* **Diagrams**: inline SVG with `class="dg"` and the classes from DESIGN.md §6.2, which
+  are already in engine.css: `.nrn` (`.in`, `.out`, `.on`), `.w` (`.pos` orange, `.neg` blue,
+  `.off` dotted), `.box` (`.act`), `.flow` (ink arrow, `marker-end` built in), `.back`
+  (dashed magenta gradient arrow), `.lbl` (30px mono), `.lbl-s` (28px muted mono), `.lbl-m`
+  (36px maths italic), `.lbl-g` (36px magenta maths), `.lbl-b` (40px display), tensors
+  `.t-data`, `.t-param`, `.t-gradt`, `.t-shared`, `.t-clash`. Arrow markers `#ah-ink`
+  and `#ah-grad` exist globally. Neuron radius 28 (≤8 per layer), 20 (≤16), 40 (close-up).
+  Gradient flow is always dashed magenta, on its own lane, never on the same line as data flow.
+  Label marks directly; no legends; never rotate text.
+* **Line weights**: axes 2.5px, decision boundary 4px ink, model curve 5px ink, target
+  curve 3px dashed muted, arrows 5px; nothing meaningful thinner than 3px.
+* **Dots**: radius 6–8 with a 2px paper outline; at most ~800 drawn.
 * **Minimal text**: a slide is one visual plus a few words. Headline ≤ 8 words, and
   prefer a headline that states the claim ("Stacked linear layers are still one line")
   over a topic label. Body text ≤ 15 words per slide outside code. Explanations go in
-  the notes, not on the slide.
+  the notes, not on the slide. A slide with code has ≤ 12 lines of ≤ 50 characters.
 * Type classes: `h1` (title), `h2` (slide headline, 68px), `h3`, `.big` (104px statement),
   `.huge` (220px), `.lead` (48px), `.small` (30px), `.tiny` (24px muted, the smallest allowed),
   `.kicker` (mono eyebrow), `.muted`, `.c0 .c1 .grad .ok .bad`, `mark`. Minimum on-slide
-  font size is 24px (canvas labels ≥ 20px).
+  font size is **28px** (24px only for source credits); canvas text ≥ 26px.
 * Maths without a library: `<span class="m"><i>w</i><sub>1</sub><i>x</i><sub>1</sub> + <i>b</i></span>`
   inline, or a display line `<p class="eq">…</p>`. `.frac` for fractions:
   `<span class="frac"><span>1</span><span>N</span></span>`.
 * Layout helpers: `.row`, `.col`, `.split` (+ `.split-37/46/64/73`), `.grow`, `.center`,
   `.fill-center`, `.stack`, `.bottom`, `.panel` (use sparingly), `.callout`, `.tbl`.
-* Activity markers (text, no icons): `<span class="tag tag-predict">predict</span>`,
+* Activity markers (text, no icons; all ink, `tag-predict` is filled): `<span class="tag tag-predict">predict</span>`,
   `tag-try` (try it live), `tag-paper` (on paper), `tag-code` (live coding), `tag-pair`
   (pair discussion), `tag-warn` (pitfall).
 * Canvas sizes are in stage pixels; typical big plot 700–860px square. Use
@@ -119,7 +137,11 @@ reports overflow.
   slide lifecycle (use `api.loop`). Animated demos should start in a meaningful,
   readable state (draw once in `init`), never an empty box.
 * Controls: buttons say exactly what they do ("Train", "Reset", "Step"). Sliders
-  show their value. Keep controls large (they are styled already).
+  show their value. Keep controls large (they are styled already). In a live-demo
+  layout put readouts at the top of the side column and controls below them.
+  Demos start paused but already drawn; tune them so the interesting phase lasts 5–10 s.
+* Builds: one new thing per step, normally ≤ 5 steps; focus by dimming, never glow/pulse.
+  A figure shared by consecutive slides keeps the same position.
 * Do not use emoji. Do not put borders/shadows on everything. Left-align by default.
 
 ## Speaker notes format

@@ -6,16 +6,12 @@ Deck.slide({
   cls: 'plain',
   html: `
   <div class="split split-46">
-    <div class="col gap-l">
-      <div class="kicker">IOAI training · deep learning</div>
-      <h1>Neural<br>networks,<br>hands&#8209;on</h1>
-      <p class="lead muted">From straight lines to any function.</p>
-    </div>
+    <h1>Neural<br>networks,<br>hands&#8209;on</h1>
     <div class="fill-center" id="open-spiral"></div>
   </div>`,
   init(el, api) {
     const pg = Widgets.playground(api, el.querySelector('#open-spiral'), {
-      size: 820, data: 'spiral', n: 400, hidden: [8, 8], act: 'tanh', opt: 'adam', lr: 0.02,
+      size: 860, data: 'spiral', n: 400, hidden: [8, 8], act: 'tanh', opt: 'adam', lr: 0.02,
       steps: 6, autoplay: true, controls: [], readouts: false, res: 64, maxEpochs: 6000, dot: 6,
     });
     // restart the show every time we come back to the title
@@ -23,7 +19,7 @@ Deck.slide({
   },
   notes: `
   <p class="time">1 min</p>
-  <p class="say">Today we go from models that draw one straight line to neural networks, which can learn almost any shape. Everything on these slides is computed live in this browser.</p>
+  <p class="say">Welcome to the IOAI deep-learning training. Today we go from models that draw one straight line to neural networks, which can learn almost any shape: from straight lines to any function. Everything on these slides is computed live in this browser.</p>
   <p class="do">Let the spiral train while you talk: a network with 105 numbers inside is learning to separate two interleaved spirals right now.</p>
   <p class="ask">Could one straight line separate these two spirals?</p>
   <p class="ans">No. In the first hour you will see why a network can.</p>
@@ -113,7 +109,7 @@ Deck.css(`
 .sec-open .recall-row .n { font-family: var(--font-mono); font-size: 40px; color: var(--muted); }
 .sec-open .recall-row .q { font-size: 48px; line-height: 1.2; }
 .sec-open .recall-row .a { font-size: 48px; line-height: 1.2; border-left: 8px solid var(--ok); padding-left: 28px; }
-.sec-open .kobe-grid { display: grid; grid-template-columns: 720px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
+.sec-open .kobe-grid { display: grid; grid-template-columns: 780px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
 .sec-open .kobe-pct { font-family: var(--font-display); font-weight: 800; font-size: 200px; line-height: .9; font-stretch: 110%; }
 .sec-open .kobe-key { font-size: 40px; }
 .sec-open .kobe-key b { font-weight: 700; }
@@ -151,17 +147,17 @@ Deck.slide({
     <div class="col gap-l">
       <div class="col">
         <span class="tag tag-predict">predict</span>
-        <h2>25,697 Kobe Bryant shots. What % went in?</h2>
-        <p class="kobe-key"><b class="c1">● orange: in</b> &nbsp; <b class="c0">● blue: missed</b></p>
+        <h2>Kobe's 25,697 shots: what % went in?</h2>
+        <p class="kobe-key"><b class="c1">● in</b> &nbsp; <b class="c0">● missed</b></p>
       </div>
       <div data-step="1"><div class="kobe-pct">44.6%</div></div>
-      <p class="lead" data-step="2">So always guessing <b class="c0">“miss”</b> is right <b>55%</b> of the time.</p>
+      <p class="lead" data-step="2">Always <b class="c0">“miss”</b>: right <b>55%</b></p>
     </div>
   </div>`,
   init(el, api) {
     const host = el.querySelector('#open-kobe-court');
-    const fr = Widgets.courtFrame(0, 0, 720);
-    const cv = Plot.canvas(host, 720, Math.ceil(fr.h));
+    const fr = Widgets.courtFrame(0, 0, 780);
+    const cv = Plot.canvas(host, 780, Math.ceil(fr.h));
     const draw = () => {
       const C = Plot.colors(), ctx = cv.ctx;
       cv.clear(C.paper);
@@ -179,7 +175,7 @@ Deck.slide({
   notes: `
   <p class="time">2 min</p>
   <p class="say">Our running example is real data: Kobe Bryant's shots from 20 NBA seasons, each with its position on the court. Basket at the bottom; orange went in, blue missed. It is also the data of your first task this afternoon.</p>
-  <p class="do">Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → the consequence.</p>
+  <p class="do">Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → the consequence: always guessing "miss" is right 55% of the time.</p>
   <p class="ask">If 44.6% went in, how often is a "model" right that always says "miss"?</p>
   <p class="ans">About 55%. A model that does not clearly beat 55% has learned nothing; even the best reach only about 61%, because the same spot gives both makes and misses.</p>
   <p>Data: Kaggle "Kobe Bryant Shot Selection", 25,697 labelled shots (1996–2016); 800 are drawn. Kobe died in a helicopter crash in 2020; if it comes up, be respectful.</p>`,

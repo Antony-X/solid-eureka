@@ -3,6 +3,7 @@ Deck.section({ id: 'brk', title: 'Break', minutes: 10 });
 Deck.css(`
 .sec-brk .brk-grid { display: grid; grid-template-columns: 720px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
 .sec-brk .brk-grid .timer-face { font-size: 240px; }
+.sec-brk .brk-big .timer-face { font-size: 360px; }
 .sec-brk .brk-next { display: flex; flex-direction: column; gap: 40px; }
 .sec-brk .tb { display: flex; flex-direction: column; gap: 44px; margin-top: 8px; }
 .sec-brk .tb-row { display: grid; grid-template-columns: 56px 1fr 230px; gap: 32px; align-items: baseline; font-size: 44px; line-height: 1.2; }
@@ -49,6 +50,22 @@ Deck.css(`
     <p class="say">Ten minutes of break: stand up, drink water, look out of a window. When we come back we play a game: ten claims about neural networks, true or bluff?</p>
     <p class="do">The timer starts by itself (Pause or Reset if needed) and only runs while this slide is visible, so keep it on screen. At 0:00 the numbers turn white on black.</p>
     <p>The game is on the next two slides, about 3 minutes in total; if you are short on time, play only the first.</p>`,
+  });
+
+  // plain break used by the main (lean) deck: just the clock
+  Deck.slide({
+    id: 'brk-plain',
+    title: 'Break: 10 minutes',
+    html: `
+    <h2>Break</h2>
+    <div class="fill-center brk-big"><div id="brk-plain-timer"></div></div>`,
+    init(el, api) {
+      Widgets.timer(api, el.querySelector('#brk-plain-timer'), 10, { auto: true });
+    },
+    notes: `
+    <p class="time">10 min</p>
+    <p class="say">Ten minutes: stand up, drink water. After the break we make the network learn.</p>
+    <p class="do">The timer starts by itself and only runs while this slide is on screen (Pause or Reset if needed).</p>`,
   });
 
   const playNotes = `

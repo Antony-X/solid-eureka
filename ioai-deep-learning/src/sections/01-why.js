@@ -4,7 +4,7 @@ Deck.css(`
 .sec-why .why-side { display: flex; flex-direction: column; gap: 28px; }
 .sec-why .why-side .lead { max-width: 16em; }
 .sec-why .why-lay { display: grid; grid-template-columns: 768px 1fr; gap: 96px; flex: 1; min-height: 0; align-items: start; }
-.sec-why .why-lay3 { display: grid; grid-template-columns: 960px 1fr; gap: 72px; flex: 1; min-height: 0; align-items: start; }
+.sec-why .why-lay3 { display: grid; grid-template-columns: 1240px 1fr; gap: 64px; flex: 1; min-height: 0; align-items: center; }
 .sec-why .why-lay3 canvas { cursor: grab; }
 .sec-why .why-task { font-size: 40px; line-height: 1.35; }
 .sec-why .why-task b { font-family: var(--font-mono); color: var(--muted); margin-right: 14px; }
@@ -56,13 +56,13 @@ Deck.css(`
       const box = document.createElement('div');
       box.className = 'why-side';
       box.innerHTML = `<span class="tag tag-predict">predict</span>
-        <p class="lead" data-step="1">No. Logistic regression = one line. It gets stuck near <b>60%</b>.</p>`;
+        <p class="lead" data-step="1">No: one line stalls near <b>60%</b>.</p>`;
       side.insertBefore(box, side.firstChild);
     },
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">A toy dataset: orange dots in the middle, a blue ring around them. You may have seen logistic regression; if not, it is the simplest classifier, and its border between the colours is always one straight line. Can one straight line put all orange on one side and all blue on the other?</p>
-    <p class="do">Show of hands. Press <b>Train</b>: the line swings for about a second, then stays straight. Readouts: loss stays near 0.68, accuracy stops near 59% (it started at 58%). Press → for the answer.</p>
+    <p class="do">Show of hands. Press <b>Train</b>: the line swings for about a second, then stays straight. Readouts: loss stays near 0.68, accuracy stops near 59% (it started at 58%). Press → for the answer: no, logistic regression is one line and gets stuck near 60%.</p>
     <p class="ask">Why can't it do better, however long we train?</p>
     <p class="ans">Every straight line leaves both colours on both sides: the orange is surrounded. Training longer only polishes the line; it cannot bend it.</p>
     <p>Maths for you: p = σ(w₁x₁ + w₂x₂ + b); the 50% border w₁x₁ + w₂x₂ + b = 0 is a line.</p>`,
@@ -204,24 +204,16 @@ Deck.css(`
   Deck.slide({
     id: 'why-lift',
     title: 'Fix 1: invent a feature (lift to 3-D)',
+    steps: 4,
     html: `
-    <h2>Fix 1: lift the dots, then one flat cut works</h2>
+    <h2>Fix 1: lift the dots, then cut flat</h2>
     <div class="why-lay3">
       <div id="why-lift"></div>
-      <div class="why-side">
-        <div class="stack">
-          <p class="lead" data-only="0">Seen from above: the same circle data.</p>
-          <p class="lead dim-after" data-step="1">Lift each dot: further out = higher.</p>
-        </div>
-        <p class="lead dim-after" data-step="2">One flat sheet now separates them.</p>
-        <p class="lead dim-after" data-step="3">Dropped to the floor, the cut is a circle.</p>
-        <p class="lead" data-step="4"><b>But which lift for Kobe's court?</b></p>
-        <p class="tiny" data-step="1">drag to rotate</p>
-      </div>
+      <p class="lead" data-step="4"><b>Which lift for Kobe's court?</b></p>
     </div>`,
     init(el, api) {
       const D = NN.data.circle(300, 101, 0);
-      const W = 960, H = 768, S = 285, ZS = 1.3, CUT = 0.36;   // inner r² ≤ 0.25, outer r² ≥ 0.50
+      const W = 1240, H = 784, S = 295, ZS = 1.3, CUT = 0.36;   // inner r² ≤ 0.25, outer r² ≥ 0.50
       const cv = Plot.canvas(el.querySelector('#why-lift'), W, H);
       const st = { t: 0, pitch: 90, yaw: 0, plane: 0, ring: 0 };
       const goal = { t: 0, pitch: 90, yaw: 0, plane: 0, ring: 0 };
@@ -311,8 +303,8 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Fix 1: invent a new feature, a trick you may have seen in classical ML. Lift each dot by its distance from the centre: the blue ring rises and a flat sheet slides between the colours. Dropped back to the floor, that flat cut is a circle.</p>
-    <p class="do">→ the dots rise; drag the picture to spin it. → the sheet, → the circle, → the question.</p>
+    <p class="say">Fix 1: invent a new feature, a trick you may have seen in classical ML. We start seen from above: the same circle data. Lift each dot by its distance from the centre (further out = higher): the blue ring rises and one flat sheet slides between the colours. Dropped back to the floor, that flat cut is a circle.</p>
+    <p class="do">→ the dots rise; drag the picture to spin it. → the sheet, → the circle, → the question. (4 presses.)</p>
     <p class="ask">Which height would you invent for Kobe's court? For a spiral?</p>
     <p class="ans">For Kobe, distance from the rim, but you had to know basketball. For a spiral, nobody knows. And the Kobe task gives the network only x and y, so it must invent features itself: next slide.</p>
     <p>Maths for you: height z = x² + y²; the sheet z = 0.36 lands on the floor as a circle of radius 0.6 (the idea behind kernel SVMs).</p>`,
@@ -336,8 +328,8 @@ Deck.css(`
       box.className = 'why-side';
       box.innerHTML = `<span class="tag tag-predict">predict</span>
         <div class="stack">
-          <p class="lead" data-only="0">Four straight edges: what shape?</p>
-          <p class="lead" data-step="1">Four straight edges fence in the orange.</p>
+          <p class="lead" data-only="0">Four edges: what shape?</p>
+          <p class="lead" data-step="1">A fence around the orange.</p>
         </div>`;
       side.insertBefore(box, side.firstChild);
     },

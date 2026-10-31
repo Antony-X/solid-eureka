@@ -85,7 +85,6 @@ Deck.css(`
         <text class="lbl-b" id="n1-o" x="874" y="330" style="font-size:56px;text-anchor:start">0</text>
       </svg>
       <div class="neu-side">
-        <p class="n1-cap" style="font-size:34px;font-weight:600;margin:0"></p>
         <div class="n1-plot"></div>
         <div class="neu-ctl"></div>
       </div>
@@ -128,7 +127,6 @@ Deck.css(`
         Plot.dot(ctx, sx(zc), sy(f(zc)), 12, C.ink, C.paper);
         Plot.text(ctx, 'output', sx(0) + 14, 30, { size: 28, color: C.ink, base: 'top' });
         Plot.text(ctx, 'sum', 660, sy(0) - 12, { size: 28, color: C.ink, align: 'right' });
-        $('.n1-cap').textContent = S.act === 'relu' ? 'ReLU: a negative sum becomes 0' : 'sigmoid: this neuron is logistic regression';
       }
       const sl = [
         UI.slider(ctl, { label: 'weight 1', min: -2, max: 2, step: 0.1, value: S.w[0], fmt: v => fnum(v, 1), oninput: v => { S.w[0] = v; draw(); } }),
@@ -157,12 +155,11 @@ Deck.css(`
     id: 'neu-line',
     title: 'One neuron cuts the court with a line',
     html: `
-    <h2>One neuron cuts the court with a straight line</h2>
+    <h2>One neuron draws one straight line</h2>
     <div class="neu-demo">
       <div class="n2-court"></div>
       <div class="neu-side" style="align-self:stretch">
         <div class="neu-readouts"></div>
-        <p class="neu-cap" style="margin-top:8px">Arrow: the orange side, where this neuron says "made".</p>
         <div class="neu-ctl" style="margin-top:auto"></div>
       </div>
     </div>`,
@@ -469,9 +466,9 @@ Deck.css(`
         <g data-step="1"><text class="lbl-s" x="202" y="690">weights + biases</text></g>
         <g data-step="3"><text class="lbl-b" x="1060" y="640" style="font-size:56px">= 105</text></g>
       </svg>
-      <div class="qa">
+      <div class="qa" style="align-self:center">
         <div><p class="q">2-16-1?</p><p class="a" data-step="4">65 · illegal for Kobe</p></div>
-        <div><p class="q">784-128-10?<br><span class="neu-cap">(digit images)</span></p><p class="a" data-step="5">101,770</p></div>
+        <div><p class="q">784-128-10?</p><p class="a" data-step="5">101,770</p></div>
       </div>
     </div>`,
     notes: `

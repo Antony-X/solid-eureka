@@ -145,7 +145,7 @@ Deck.css(`
     id: 'act-zoo',
     title: 'The activation zoo',
     html: `
-    <h2>Any bend will do: the activation zoo</h2>
+    <h2>Activations: any bend will do</h2>
     <div class="zoo">${ZOO.map(k => `
       <div class="zoo-cell" data-k="${k}">
         <h3>${NN.act[k].name}</h3>
@@ -154,9 +154,9 @@ Deck.css(`
         <div class="zoo-ro grad" data-step="1"><span>slope</span><b class="vd">0</b></div>
       </div>`).join('')}
     </div>
-    <p class="small muted">input <b class="mono" id="act-z">0.0</b> · point at any plot</p>`,
+    <div class="zoo-ro"><span>input</span><b id="act-z">0.0</b></div>`,
     init(el, api) {
-      const W = 336, H = 500;
+      const W = 336, H = 560;
       let z0 = 0;
       const cells = ZOO.map(k => {
         const c = el.querySelector(`.zoo-cell[data-k="${k}"]`);
@@ -194,7 +194,7 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">Almost any bend works. ReLU: zero for negative inputs, the input itself for positive ones; Leaky ReLU keeps a small slope on the left. Sigmoid squashes into 0 to 1, tanh is the same S from −1 to 1, and GELU is a smooth ReLU used in models like GPT.</p>
-    <p class="do">Press → to show the magenta dashed <b>slope</b> curves. Sweep the pointer across the sigmoid plot and stop at the middle.</p>
+    <p class="do">Press → to show the magenta dashed <b>slope</b> curves. Point at any plot: all five follow the same input. Sweep the pointer across the sigmoid plot and stop at the middle.</p>
     <p class="ask">What is the largest slope the sigmoid ever has?</p>
     <p class="ans">0.25, at input 0; far from 0 it is flat. ReLU's slope is 1 for every positive input. Training relies on these slopes and flat spots barely learn: one reason ReLU is the usual default.</p>
     <p>Avoid "the neuron fires": these are smooth bends, not on/off switches.</p>`,
@@ -317,11 +317,11 @@ with torch.no_grad():
       <div class="side" id="act-hg-side"><div class="ro-row" id="act-hg-ro"></div></div>
     </div>`,
     init(el, api) {
-      const W = 1056, H = 680;
+      const W = 1056, H = 760;
       const cv = Plot.canvas(el.querySelector('#act-hg-cv'), W, H);
       const B = box(W, H, [-1, 1], [-1.6, 1.4], { l: 70, b: 52 });
       const ro = el.querySelector('#act-hg-ro');
-      const rN = UI.readout(ro, 'hinges'), rE = UI.readout(ro, 'error');
+      const rE = UI.readout(ro, 'error');
       let N = 3, fit = hingeFit(N);
       const side = el.querySelector('#act-hg-side');
       const ch = UI.choice(side, [1, 2, 3, 5, 8, 16, 32].map(v => ({ value: v, label: String(v) })), N, v => { N = v; fit = hingeFit(N); draw(); }, { label: 'hinges' });
@@ -334,7 +334,6 @@ with torch.no_grad():
         curve(ctx, B, target, C.muted, 3, [12, 10]);
         curve(ctx, B, fit.f, C.ink, 6, null, 800);
         fit.knots.forEach(t => Plot.dot(ctx, B.sx(t), B.sy(fit.f(t)), N > 16 ? 6 : 9, C.ink, C.paper));
-        rN.set(N);
         rE.set(fit.mse < 0.0001 ? fit.mse.toFixed(6) : fit.mse.toFixed(4));
       }
       draw();

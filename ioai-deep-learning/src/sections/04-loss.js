@@ -2,11 +2,10 @@ Deck.section({ id: 'loss', title: 'Loss: how wrong are we?', minutes: 13 });
 
 Deck.css(`
 .sec-loss .lx-grid { display: grid; grid-template-columns: 960px 1fr; gap: 72px; flex: 1; min-height: 0; align-items: start; }
-.sec-loss .lx-grid.wide { grid-template-columns: 1104px 1fr; }
+.sec-loss .lx-grid.wide { grid-template-columns: 1200px 1fr; }
 .sec-loss .lx-side { display: flex; flex-direction: column; gap: 32px; min-width: 0; height: 100%; }
 .sec-loss .lx-side .ui-row { gap: 20px; }
 .sec-loss .lx-side .ui-readout-label { font-size: 28px; }
-.sec-loss .lx-note { font-size: 34px; color: var(--muted); }
 .sec-loss .lx-ctl { margin-top: auto; display: flex; flex-direction: column; gap: 24px; }
 .sec-loss canvas.lx-drag { cursor: grab; }
 .sec-loss .lx-made { font-family: var(--font-display); font-weight: 800; font-size: 48px; color: var(--c1); }
@@ -29,11 +28,11 @@ Deck.css(`
 .sec-loss .lx-pick .hd { font-family: var(--font-mono); font-size: 28px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 12px; border-bottom: 2px solid var(--rule); align-self: end; }
 .sec-loss .lx-pick .cell { padding: 14px 0; border-bottom: 2px solid var(--rule); min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
 .sec-loss .lx-pick .what { font-family: var(--font-display); font-weight: 750; font-size: 56px; line-height: 1.05; }
-.sec-loss .lx-pick .eg { font-size: 32px; color: var(--muted); }
 .sec-loss .lx-pick .last { font-size: 44px; }
 .sec-loss .lx-pick .fn { font-family: var(--font-mono); font-size: 40px; font-weight: 600; }
 .sec-loss .lx-pick [data-step] { transition: opacity .35s ease, transform .35s ease; }
-.sec-loss .lx-vote { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; align-items: start; }
+.sec-loss .lx-vote { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; align-items: center; flex: 1; min-height: 0; }
+.sec-loss .lx-opts .tag { align-self: flex-start; }
 .sec-loss .lx-opts { display: flex; flex-direction: column; gap: 44px; padding-top: 12px; }
 .sec-loss .lx-opt { display: flex; gap: 28px; align-items: center; font-size: 52px; line-height: 1.1; }
 .sec-loss .lx-opt b { font-family: var(--font-mono); font-size: 40px; font-weight: 600; min-width: 64px; height: 64px; display: grid; place-items: center; border: 3px solid var(--ink); }
@@ -104,12 +103,11 @@ Deck.css(`
       <div class="lx-mse-cv"></div>
       <div class="lx-side">
         <div class="lx-mse-ro"></div>
-        <p class="lx-note">Each dot: % of Kobe's shots made from that distance.<br>Each miss becomes a square.</p>
-        <div class="lx-ctl"><p class="small muted">Drag the line's end dots.</p><div class="ui-row lx-mse-btn"></div></div>
+        <div class="lx-ctl"><div class="ui-row lx-mse-btn"></div></div>
       </div>
     </div>`,
     init(el, api) {
-      const W = 1104, H = 720, L = 120, R = 36, T = 64, B = 96;
+      const W = 1200, H = 760, L = 120, R = 36, T = 64, B = 96;
       const cv = Plot.canvas(el.querySelector('.lx-mse-cv'), W, H, 'lx-drag');
       const Y0 = 25, Y1 = 70, XM = 31;
       // wide x axis so a 10-point miss (one square) fits between two neighbouring dots
@@ -202,7 +200,7 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">The loss is one number that says how wrong the model is; training makes it small. Dots: the share of Kobe's shots made from each distance; the line is our model. Each miss becomes a square, and the loss is the average square: the mean squared error.</p>
-    <p class="do">Point at the big square at 0–4 ft. Drag an end dot to grow and shrink squares, then press <b>Fit the line</b>: loss 64 → 18.</p>
+    <p class="do">Point at the big square at 0–4 ft. Drag one of the line's two black end dots to grow and shrink squares, then press <b>Fit the line</b>: loss 64 → 18.</p>
     <p class="ask">A miss of 10 points costs 100. What does a miss of 20 cost?</p>
     <p class="ans">400, four times as much: big misses are very expensive, so the line works hardest to avoid them.</p>
     <p>PyTorch: <code>nn.MSELoss()</code>, the loss for predicting numbers, as in the inversion task.</p>`,
@@ -587,26 +585,26 @@ Deck.css(`
     <div class="lx-pick">
       <span class="hd"></span><span class="hd">you predict</span><span class="hd">last layer</span><span class="hd">PyTorch loss</span>
       <div class="cell" data-step="1">${glyphNum}</div>
-      <div class="cell" data-step="1"><span class="what">a number</span><span class="eg">inversion task's output</span></div>
+      <div class="cell" data-step="1"><span class="what">a number</span></div>
       <div class="cell" data-step="1"><span class="last">1 output</span></div>
       <div class="cell" data-step="1"><span class="fn">nn.MSELoss()</span></div>
       <div class="cell" data-step="2">${glyphYes}</div>
-      <div class="cell" data-step="2"><span class="what">yes / no</span><span class="eg">Kobe: in or out?</span></div>
+      <div class="cell" data-step="2"><span class="what">yes / no</span></div>
       <div class="cell" data-step="2"><span class="last">1 score</span></div>
       <div class="cell" data-step="2"><span class="fn">nn.BCEWithLogitsLoss()</span></div>
       <div class="cell" data-step="3">${glyphK}</div>
-      <div class="cell" data-step="3"><span class="what">one of K</span><span class="eg">shot type: jump, layup, dunk…</span></div>
+      <div class="cell" data-step="3"><span class="what">one of K</span></div>
       <div class="cell" data-step="3"><span class="last">K scores</span></div>
       <div class="cell" data-step="3"><span class="fn">nn.CrossEntropyLoss()</span></div>
     </div>
-    <p class="lead" data-step="4">The last layer is plain <b>Linear</b>: the loss adds sigmoid or softmax.</p>`,
+    <p class="lead" data-step="4">No sigmoid or softmax in the model: the loss adds it.</p>`,
     notes: `
     <p class="time">2 min</p>
     <p class="say">Three kinds of questions cover almost every task, each with its loss. Before each row, let the class guess.</p>
     <p class="do">→ Row 1, a number (the inversion task): one output, mean squared error.</p>
     <p class="do">→ Row 2, yes/no (Kobe): one score, BCEWithLogitsLoss, the forecast loss; targets 0. or 1. as floats.</p>
-    <p class="do">→ Row 3, one of K classes: K scores; softmax turns them into shares (the bars), and the loss punishes a low share for the right answer.</p>
-    <p class="do">→ The rule: the model ends with plain Linear; the loss does the squashing.</p>
+    <p class="do">→ Row 3, one of K classes (for example Kobe's shot type: jump shot, layup, dunk, other): K scores; softmax turns them into shares (the bars), and the loss punishes a low share for the right answer.</p>
+    <p class="do">→ The rule: the model ends with a plain Linear layer, no sigmoid or softmax; the loss does the squashing itself.</p>
     <p class="ask">Which of 10 digits is in an image: how many outputs, which loss?</p>
     <p class="ans">10 scores, nn.CrossEntropyLoss. Untrained, each class gets 10%, so the first loss is about 2.3.</p>
     <p>CrossEntropyLoss wants raw scores and class numbers 0 … K−1 as integers, not one-hot.</p>`,
@@ -619,7 +617,7 @@ Deck.css(`
     id: 'loss-vote',
     title: 'Cliffhanger: sigmoid + BCEWithLogitsLoss',
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>A sigmoid at the end. What happens?</h2></div>
+    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>Sigmoid at the end: what happens?</h2></div>
     <div class="lx-vote">
       ${Code.py(`
         class MLP(nn.Module):
@@ -635,9 +633,9 @@ Deck.css(`
         <div class="lx-opt"><b>2</b>it trains normally</div>
         <div class="lx-opt"><b>3</b>it trains, but is quietly worse</div>
         <div class="lx-opt"><b>4</b>the loss becomes NaN</div>
+        <span class="tag tag-pair" data-step="2">pairs · 1 min</span>
       </div>
-    </div>
-    <p class="lead" data-step="2">Talk 1 minute with a neighbour, then vote again.</p>`,
+    </div>`,
     steps: 2,
     notes: `
     <p class="time">2 min</p>

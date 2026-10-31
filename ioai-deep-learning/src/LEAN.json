@@ -14,7 +14,6 @@
  },
  "slides": [
   "open-title",
-  "open-map",
   "open-refresh",
   "open-kobe",
   "why-line",
@@ -33,15 +32,12 @@
   "loss-ce",
   "loss-pick",
   "loss-vote",
-  "brk-timer",
-  "brk-tb1",
-  "brk-tb2",
+  "brk-plain",
   "opt-lr",
   "opt-batch",
   "opt-race",
   "opt-default",
   "loop-beats",
-  "loop-live",
   "loop-court",
   "loop-setup",
   "loop-code",
@@ -52,7 +48,6 @@
   "gen-overfit",
   "gen-cures",
   "gen-doctor",
-  "task-kobe",
   "task-rules",
   "task-predict",
   "task-fold",
@@ -61,7 +56,6 @@
   "task-toys",
   "task-code",
   "task-plan",
-  "wrap-loop",
-  "wrap-tasks"
+  "wrap-loop"
  ]
 }

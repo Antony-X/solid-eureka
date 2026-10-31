@@ -1,6 +1,7 @@
 """Assemble the slide deck into one self-contained HTML file.
 
-    python tools/build.py            # writes lecture.html and build/lecture.artifact.html
+    python tools/build.py            # the main (lean) deck: lecture.html, following src/LEAN.json
+    python tools/build.py --full     # every slide: lecture-full.html
 
 lecture.html is a complete document that works offline (fonts are embedded).
 build/lecture.artifact.html is the same page without <!doctype>/<html>/<head>/<body>,
@@ -80,6 +81,10 @@ def main():
     if only:
         sections = [p for p in sections if p.name in only]
     scripts = [read(p) for p in libs] + [read(SRC / "engine.js")]
+    # the main deck follows src/LEAN.json (a shorter selection); --full keeps every slide
+    full_deck = "--full" in argv or only is not None
+    if not full_deck and (SRC / "LEAN.json").exists():
+        scripts.append("Deck.plan = " + read(SRC / "LEAN.json") + ";")
     scripts += [f"/* ===== {p.name} ===== */\ntry {{\n{read(p)}\n}} catch (e) {{ console.error('section {p.name} failed', e); }}" for p in sections]
     scripts.append("Deck.start();")
     js = "\n\n".join(scripts).replace("</script", "<\\/script")
@@ -108,11 +113,12 @@ def main():
         out.write_text(full, encoding="utf-8")
         print(f"{out}: {len(full.encode()) / 1024:.0f} KB, {len(sections)} section files")
         return
-    (ROOT / "lecture.html").write_text(full, encoding="utf-8")
+    name = "lecture-full" if full_deck else "lecture"
+    (ROOT / f"{name}.html").write_text(full, encoding="utf-8")
     (ROOT / "build").mkdir(exist_ok=True)
-    (ROOT / "build" / "lecture.artifact.html").write_text(head + body, encoding="utf-8")
+    (ROOT / "build" / f"{name}.artifact.html").write_text(head + body, encoding="utf-8")
     kb = len(full.encode()) / 1024
-    print(f"lecture.html: {kb:.0f} KB, {len(sections)} section files")
+    print(f"{name}.html: {kb:.0f} KB, {len(sections)} section files")
 
 
 if __name__ == "__main__":

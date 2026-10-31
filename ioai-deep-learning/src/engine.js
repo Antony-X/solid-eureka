@@ -517,8 +517,25 @@
   new MutationObserver(themeChanged).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   /* ---------- start ---------- */
+  // A plan picks and orders slides for a shorter deck:
+  // Deck.plan = { slides: ['id', ...], minutes: { sectionId: n } } (set by the build)
+  function applyPlan() {
+    const plan = D.plan;
+    if (!plan) return;
+    const rank = new Map(plan.slides.map((id, k) => [id, k]));
+    D.slides = D.slides.filter(s => rank.has(s.id)).sort((a, b) => rank.get(a.id) - rank.get(b.id));
+    D.sections.forEach(sec => {
+      sec.slides = D.slides.filter(s => s.section === sec);
+      if (plan.minutes && plan.minutes[sec.id] != null) sec.minutes = plan.minutes[sec.id];
+    });
+    D.sections = D.sections.filter(sec => sec.slides.length);
+    // keep section order, slides grouped by section
+    D.slides = [].concat(...D.sections.map(sec => sec.slides));
+  }
+
   D.start = function () {
     D.docTitle = document.title;
+    applyPlan();
     try {
       const saved = localStorage.getItem('deck-theme');
       if (saved && saved !== 'system') document.documentElement.setAttribute('data-theme', saved);

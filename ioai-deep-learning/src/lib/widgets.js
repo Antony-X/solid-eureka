@@ -66,7 +66,7 @@
       neuronBox.innerHTML = '';
       nCanv = [];
       const h = o.hidden[0] || 0;
-      const sz = Math.min(110, Math.floor((o.size - 12 * (h - 1)) / Math.max(1, h)));
+      const sz = Math.min(o.neuronSize || 110, Math.floor((o.size - 12 * (h - 1)) / Math.max(1, h)));
       for (let j = 0; j < h; j++) nCanv.push(Plot.canvas(neuronBox, sz, sz, 'pg-neuron'));
     }
     function drawNeurons() {

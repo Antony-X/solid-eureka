@@ -70,7 +70,7 @@ projected image). Nothing may overflow; `tools/shoot.js` reports overflow.
   `NN.optimizer('sgd'|'momentum'|'rmsprop'|'adam', {lr, beta, b1, b2, eps, wd})` → `.step(params, grads)`;
   datasets `NN.data.circle|xor|spiral|moons|blobs(n, seed, noise)` → `{X, Y}` in about [-1,1]².
 * **`Widgets`** — `Widgets.playground(api, parent, {size, data, hidden, act, opt, lr, steps,
-  autoplay, controls:['play','reset','step','act','hidden','lr','data','opt'], neurons, readouts,
+  autoplay, controls:['play','reset','step','act','hidden','lr','data','opt'], neurons, neuronSize, readouts,
   acts, hiddenChoices, maxEpochs})` and `Widgets.fit1d(api, parent, {w, h, f, xs, ys, n, hidden,
   act, lr, steps, controls:['play','reset','width'], noise})`,
   `Widgets.netSVG({sizes:[2,4,1], w, h, r, labels:[['x₁','x₂'],…], layerNames:['input','hidden','output'], weights:(l,i,j)=>w, fills})`

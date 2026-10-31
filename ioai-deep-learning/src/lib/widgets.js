@@ -420,6 +420,7 @@
     if (o.controls.includes('reset')) UI.button(ctl, 'Reset', () => { makeNet(); draw(); });
     if (o.controls.includes('norm')) UI.choice(ctl, [{ value: true, label: 'scaled inputs' }, { value: false, label: 'raw inputs' }], o.normalize, v => { o.normalize = v; Xin = X.map(prep); makeNet(); draw(); });
     if (o.controls.includes('act')) UI.choice(ctl, ['relu', 'tanh', 'sigmoid'].map(v => ({ value: v, label: NN.act[v].name })), o.act, v => { o.act = v; makeNet(); draw(); });
+    if (o.controls.includes('opt')) UI.choice(ctl, [{ value: 'sgd', label: 'SGD' }, { value: 'adam', label: 'Adam' }], o.opt, v => { o.opt = v; o.lr = v === 'sgd' ? (o.sgdLr || 0.05) : (o.adamLr || 0.01); makeNet(); draw(); });
     if (o.controls.includes('dots')) UI.choice(ctl, [{ value: true, label: 'shots on' }, { value: false, label: 'shots off' }], o.dots, v => { o.dots = v; draw(); });
     function sync() { if (playBtn) playBtn.textContent = S.playing ? 'Pause' : 'Train'; }
     makeNet(); sync(); draw();

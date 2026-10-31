@@ -76,7 +76,7 @@ projected image). Nothing may overflow; `tools/shoot.js` reports overflow.
   `Widgets.netSVG({sizes:[2,4,1], w, h, r, labels:[['x₁','x₂'],…], layerNames:['input','hidden','output'], weights:(l,i,j)=>w, fills})`
   → SVG string of a fully connected network (edges colour by weight sign if `weights` given),
   `Widgets.timer(api, parent, minutes, {auto})` → big countdown with Start/Reset,
-  `Widgets.courtNet(api, parent, {w, hidden, act, lr, normalize, controls:['play','reset','norm','act','dots'], dots, n})`
+  `Widgets.courtNet(api, parent, {w, hidden, act, opt:'adam'|'sgd', lr, sgdLr, adamLr, normalize, controls:['play','reset','norm','act','opt','dots'], dots, n, maxEpochs})`
   → a 2-8-8-1 MLP training live on Kobe Bryant's real shots with a probability heatmap on the court,
   `Widgets.courtFrame(left, top, w)` + `Widgets.drawCourt(ctx, frame, {color, width})` to draw an NBA half
   court in shot-log units (tenths of feet, hoop at (0,0), x∈[−250,250], y∈[−47.5,422.5]).

@@ -1,11 +1,11 @@
 Deck.section({ id: 'brk', title: 'Break', minutes: 10 });
 
 Deck.css(`
-.sec-brk .brk-grid { display: grid; grid-template-columns: 2fr 3fr; gap: 96px; align-items: start; flex: 1; min-height: 0; }
-.sec-brk .puzzle { display: flex; flex-direction: column; gap: 28px; }
-.sec-brk .truth { font-family: var(--font-mono); font-size: 34px; border-collapse: collapse; }
-.sec-brk .truth td, .sec-brk .truth th { padding: 6px 26px; text-align: center; border-bottom: 2px solid var(--rule); }
-.sec-brk .truth th { font-size: 26px; color: var(--muted); font-weight: 600; }
+.sec-brk .brk-grid { display: grid; grid-template-columns: 560px 1fr; gap: 80px; align-items: start; flex: 1; min-height: 0; }
+.sec-brk .tb { display: flex; flex-direction: column; gap: 22px; }
+.sec-brk .tb-row { display: grid; grid-template-columns: 44px 1fr 170px; gap: 24px; align-items: baseline; font-size: 34px; line-height: 1.25; }
+.sec-brk .tb-n { font-family: var(--font-mono); color: var(--muted); font-size: 30px; }
+.sec-brk .tb-v { font-family: var(--font-mono); font-weight: 700; font-size: 30px; text-transform: uppercase; letter-spacing: .06em; }
 `);
 
 Deck.slide({
@@ -18,49 +18,30 @@ Deck.slide({
       <h2>Ten minutes</h2>
       <div id="brk-timer"></div>
     </div>
-    <div class="puzzle">
-      <span class="tag tag-paper">optional puzzle</span>
-      <p class="lead">What does this network compute for 0/1 inputs?</p>
-      <div class="row" style="gap:40px;align-items:center">
-      ${(() => {
-        // h1 = ReLU(x1 + x2), h2 = ReLU(x1 + x2 - 1), y = h1 - 2 h2  ->  XOR
-        const IN = [[60, 70], [60, 290]], HID = [[330, 70], [330, 290]], OUT = [560, 180];
-        const e = (p, q, cls, lab, t) => {
-          const lx = p[0] + (q[0] - p[0]) * t, ly = p[1] + (q[1] - p[1]) * t;
-          return `<line class="w ${cls}" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" style="stroke-width:6"/>` +
-            `<rect x="${lx - 24}" y="${ly - 20}" width="48" height="40" fill="var(--paper)"/><text class="lbl" x="${lx}" y="${ly}">${lab}</text>`;
-        };
-        return `<svg class="dg" viewBox="0 0 640 380" width="560" height="333" role="img" aria-label="2-2-1 ReLU network">
-          ${e(IN[0], HID[0], 'pos', '1', 0.5)}${e(IN[0], HID[1], 'pos', '1', 0.28)}
-          ${e(IN[1], HID[0], 'pos', '1', 0.28)}${e(IN[1], HID[1], 'pos', '1', 0.5)}
-          ${e(HID[0], OUT, 'pos', '+1', 0.5)}${e(HID[1], OUT, 'neg', '−2', 0.5)}
-          <circle class="nrn in" cx="60" cy="70" r="40"/><text class="lbl-m" x="60" y="70">x₁</text>
-          <circle class="nrn in" cx="60" cy="290" r="40"/><text class="lbl-m" x="60" y="290">x₂</text>
-          <circle class="nrn" cx="330" cy="70" r="40"/><text class="lbl-s" x="330" y="14">bias 0</text>
-          <circle class="nrn" cx="330" cy="290" r="40"/><text class="lbl-s" x="330" y="352">bias −1</text>
-          <circle class="nrn out" cx="560" cy="180" r="40"/><text class="lbl-m" x="560" y="180">y</text>
-          <path d="M312,82 L330,82 L348,58" fill="none" style="stroke:var(--ink);stroke-width:4"/>
-          <path d="M312,302 L330,302 L348,278" fill="none" style="stroke:var(--ink);stroke-width:4"/>
-        </svg>`;
-      })()}
-      <table class="truth">
-        <tr><th>x₁</th><th>x₂</th><th>y</th></tr>
-        <tr><td>0</td><td>0</td><td><span data-step="1">0</span></td></tr>
-        <tr><td>0</td><td>1</td><td><span data-step="1">1</span></td></tr>
-        <tr><td>1</td><td>0</td><td><span data-step="1">1</span></td></tr>
-        <tr><td>1</td><td>1</td><td><span data-step="1">0</span></td></tr>
-      </table>
+    <div class="col">
+      <div class="row"><span class="tag tag-pair">true or bluff?</span></div>
+      <div class="tb">
+        <div class="tb-row"><span class="tb-n">1</span><span class="tb-s">In 1958 the New York Times said the Navy expects the perceptron to be “conscious of its existence”.</span><span class="tb-v ok" data-step="1">✓ true</span></div>
+        <div class="tb-row"><span class="tb-n">2</span><span class="tb-s">Minsky &amp; Papert proved multi-layer networks can't learn XOR.</span><span class="tb-v bad" data-step="2">✗ bluff</span></div>
+        <div class="tb-row"><span class="tb-n">3</span><span class="tb-s">Dropout was inspired by bank tellers being moved around.</span><span class="tb-v ok" data-step="3">✓ true</span></div>
+        <div class="tb-row"><span class="tb-n">4</span><span class="tb-s">AlexNet (2012) was trained on two gaming GPUs.</span><span class="tb-v ok" data-step="4">✓ true</span></div>
+        <div class="tb-row"><span class="tb-n">5</span><span class="tb-s">Grokking was found because someone forgot to stop training before a vacation.</span><span class="tb-v ok" data-step="5">✓ true</span></div>
+        <div class="tb-row"><span class="tb-n">6</span><span class="tb-s">Gradient descent was invented for neural networks.</span><span class="tb-v bad" data-step="6">✗ bluff</span></div>
       </div>
-      <p class="lead" data-step="2"><b>XOR</b>, the function one neuron can't learn.</p>
     </div>
   </div>`,
   init(el, api) {
     Widgets.timer(api, el.querySelector('#brk-timer'), 10, { auto: true });
   },
   notes: `
-  <p class="time">10 min</p>
-  <p class="do">The timer starts by itself when this slide appears (Pause/Reset if needed). Leave the slide up during the break. Students who stay can try the puzzle on paper.</p>
-  <p class="ask">What does this network output for the four inputs?</p>
-  <p class="ans">Hidden 1 = ReLU(x₁ + x₂), hidden 2 = ReLU(x₁ + x₂ − 1), y = h₁ − 2h₂. For (0,0): 0. For (0,1) or (1,0): h₁ = 1, h₂ = 0, so y = 1. For (1,1): h₁ = 2, h₂ = 1, y = 2 − 2 = 0. That is XOR: exactly the function Minsky and Papert showed a single perceptron cannot compute, solved with just two hidden ReLU neurons.</p>
-  <p class="do">After the break press → twice to reveal the truth table and the answer, and spend one minute on it before the next section. It is a nice bridge back in: "a hidden layer of two neurons solves the problem that froze the field for a decade".</p>`,
+  <p class="time">10 min break + 3 min game after it</p>
+  <p class="do">The timer starts by itself when this slide appears (Pause/Reset if needed). Leave the slide up; students can think about the six statements during the break. After the break, read each statement aloud, students hold up a hand for "true" or a fist for "bluff", then press → to reveal the verdict and tell the one-line story.</p>
+  <ol>
+    <li><b>True.</b> NYT, 8 July 1958: the Navy revealed "the embryo of an electronic computer that it expects will be able to walk, talk, see, write, reproduce itself and be conscious of its existence." The hype was enormous for a machine that drew one straight line.</li>
+    <li><b>Bluff.</b> Minsky &amp; Papert's 1969 book proved that a <i>single-layer</i> perceptron can't compute XOR. They knew multi-layer networks could represent it but doubted they could be trained. The book was read as a verdict on all neural nets and funding dried up. Backprop (popularised in 1986) answered it; the XOR network from section 2 has just two hidden neurons.</li>
+    <li><b>True.</b> Geoffrey Hinton (Reddit AMA, 2016): his bank kept moving tellers around, he guessed it was to stop employees cooperating to defraud the bank, and realised that randomly removing different neurons on each example would stop neurons from "conspiring" — that is, from overfitting.</li>
+    <li><b>True.</b> Krizhevsky, Sutskever and Hinton trained AlexNet for five to six days on two GTX 580 gaming cards, and won ImageNet 2012 with 15.3% top-5 error against 26.2% for second place. That started the deep-learning boom.</li>
+    <li><b>True</b> (as reported by Quanta Magazine). At OpenAI, a team member went on vacation and forgot to stop a run; the network, long after memorising its training set, suddenly generalised perfectly. "We got lucky… and by lucky, I mean forgetful."</li>
+    <li><b>Bluff.</b> Augustin-Louis Cauchy described steepest descent in 1847, more than a century before neural networks. "Your optimizer's grandfather was born in 1847."</li>
+  </ol>`,
 });

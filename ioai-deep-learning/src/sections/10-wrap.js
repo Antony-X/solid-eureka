@@ -1,4 +1,4 @@
-Deck.section({ id: 'wrap', title: 'Wrap-up', minutes: 3 });
+Deck.section({ id: 'wrap', title: 'Wrap-up', minutes: 8 });
 
 Deck.css(`
 .sec-wrap .can { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 80px; font-size: 40px; }

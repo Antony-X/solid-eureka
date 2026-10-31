@@ -123,7 +123,7 @@ Deck.css(`
     saddle: {
       f: (x, y) => x * x - y * y + y * y * y * y / 4 + 1, g: (x, y) => [2 * x, -2 * y + y * y * y],
       start: [-1.8, 0.001], levels: [0.1, 0.4, 0.7, 1, 1.6, 2.5, 4, 6, 8.5, 11], shade: f => f / 13,
-      marks: [{ x: 0, y: 0, label: 'saddle', dx: 66, dy: 40 }, { x: 0, y: SQ2, label: 'bottom', dx: -88, dy: 0 }, { x: 0, y: -SQ2, label: 'bottom', dx: 80, dy: 0 }],
+      marks: [{ x: 0, y: 0, label: 'saddle', dx: 66, dy: 40 }, { x: 0, y: SQ2, label: 'bottom', dx: -150, dy: -12 }, { x: 0, y: -SQ2, label: 'bottom', dx: 80, dy: 0 }],
     },
     bowl: {
       f: (x, y) => 0.5 * (x * x + y * y), g: (x, y) => [x, y],
@@ -313,7 +313,7 @@ Deck.css(`
     R.onTick(() => {
       stepEl.textContent = R.k + ' / ' + R.steps;
       run.textContent = R.playing ? 'Pause' : 'Run';
-      head.querySelector('.rh-v').textContent = R.mode === 'arrive' ? 'at a bottom after' : 'loss';
+      head.querySelector('.rh-v').textContent = R.mode === 'arrive' ? 'steps to a bottom' : 'loss';
       kinds.forEach(k => {
         const r = R.racers.find(x => x.kind === k), el = rows[k];
         el.classList.toggle('off', !r || !!r.off);
@@ -321,7 +321,7 @@ Deck.css(`
         if (!r) return;
         el.querySelector('.nm').innerHTML = `${r.name}<small>lr ${r.lr}</small>`;
         el.querySelector('.v').textContent = r.dead ? 'blew up'
-          : R.mode === 'arrive' ? (r.doneAt != null ? r.doneAt + ' steps' : '–') : fmtLoss(r.loss);
+          : R.mode === 'arrive' ? (r.doneAt != null ? String(r.doneAt) : '–') : fmtLoss(r.loss);
       });
     });
   }

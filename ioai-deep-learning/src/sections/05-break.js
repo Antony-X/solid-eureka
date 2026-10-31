@@ -64,11 +64,11 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>${playNotes}
     <ol>
-      <li><b>True.</b> 1958, about a machine that could only draw one straight line: hype is old.</li>
-      <li><b>Bluff.</b> They proved it only for networks <i>without</i> a hidden layer; the book was misread as "neural nets don't work" and funding dried up for years.</li>
-      <li><b>True.</b> Hinton's bank kept moving tellers so they could not team up to cheat; switching off random neurons during training stops them "conspiring". That is dropout.</li>
-      <li><b>Bluff.</b> Hebb (1949) had the idea; the catchy sentence is Carla Shatz's, from 1992.</li>
-      <li><b>True.</b> Two GTX 580 gaming cards, five to six days; it won ImageNet 2012 by a huge margin and started the deep-learning boom.</li>
+      <li><b>True.</b> About a machine that could only draw one straight line: hype is old.</li>
+      <li><b>Bluff.</b> Only for networks <i>without</i> a hidden layer, but the book was read as "neural nets don't work" and funding dried up.</li>
+      <li><b>True.</b> Hinton's bank moved tellers so they could not team up to cheat; dropping random neurons stops them "conspiring".</li>
+      <li><b>Bluff.</b> Hebb (1949) had the idea; the catchy sentence is Carla Shatz's (1992).</li>
+      <li><b>True.</b> Two GTX 580 cards, five to six days; it won ImageNet 2012 and started the deep-learning boom.</li>
     </ol>`,
   });
 
@@ -82,12 +82,12 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>${playNotes}
     <ol start="6">
-      <li><b>True</b> (as the researchers tell it). Someone at OpenAI went on holiday and left a run going; long after memorising its training data, the network suddenly generalised. That is "grokking".</li>
-      <li><b>Bluff.</b> No fixed limit has been found; attention dips and comes back, and doing something brings it back, which is why this lecture keeps you busy.</li>
-      <li><b>True.</b> Kingma and Ba's 2014 paper had about 200,000 citations by 2025, and Adam is the optimizer you will type this afternoon.</li>
-      <li><b>Bluff.</b> Imitating one realistic model of a single brain neuron took a deep network of five to eight layers (2021): artificial neurons are a cartoon.</li>
+      <li><b>True</b> (as the researchers tell it). Someone left a run going over a holiday; long after memorising, the network suddenly generalised: "grokking".</li>
+      <li><b>Bluff.</b> No fixed limit exists; attention dips and comes back when you do something.</li>
+      <li><b>True.</b> About 200,000 by 2025; you will type Adam this afternoon.</li>
+      <li><b>Bluff.</b> Imitating one realistic brain neuron took a deep network of five to eight layers (2021).</li>
       <li><b>Bluff.</b> Cauchy described it in 1847, a century before neural networks.</li>
     </ol>
-    <p class="say">Ask: "Who got 8 or more right?" Then move on to how the network actually learns.</p>`,
+    <p class="say">Ask: "Who got 8 or more right?" Then move on to how the network learns.</p>`,
   });
 }

@@ -62,10 +62,10 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">A toy dataset: orange dots in the middle, a blue ring around them. You may have seen logistic regression; if not, it is the simplest classifier, and its border between the colours is always one straight line. Can one straight line put all orange on one side and all blue on the other?</p>
-    <p class="do">Show of hands: yes or no. Press <b>Train</b>: the line swings round for about a second, then stays straight. Point at the readouts: the loss stays near 0.68 and the accuracy stops near 59% (it started at 58%). Press → for the answer; <b>Reset</b> and <b>Train</b> again if someone wants a second look.</p>
+    <p class="do">Show of hands. Press <b>Train</b>: the line swings for about a second, then stays straight. Readouts: loss stays near 0.68, accuracy stops near 59% (it started at 58%). Press → for the answer.</p>
     <p class="ask">Why can't it do better, however long we train?</p>
-    <p class="ans">Every straight line leaves orange and blue dots on both sides: the orange is surrounded. Training longer only polishes the line; it cannot bend it.</p>
-    <p>Maths for you: logistic regression computes p = σ(w₁x₁ + w₂x₂ + b), and its 50% border, w₁x₁ + w₂x₂ + b = 0, is a straight line.</p>`,
+    <p class="ans">Every straight line leaves both colours on both sides: the orange is surrounded. Training longer only polishes the line; it cannot bend it.</p>
+    <p>Maths for you: p = σ(w₁x₁ + w₂x₂ + b); the 50% border w₁x₁ + w₂x₂ + b = 0 is a line.</p>`,
   });
 
   /* ---------- 2 · Kobe: A1 pair activity ---------- */
@@ -311,11 +311,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Fix 1: invent a new feature, a trick you may have seen in classical ML. Lift every dot by its distance from the centre: orange stays low, the blue ring goes high, and a flat sheet now slides between them. Drop that cut back to the floor and it is a circle.</p>
-    <p class="do">→ the dots rise (about 1 s); drag the picture to spin it so everyone sees the gap. → the sheet, → the circle on the floor, → the question.</p>
+    <p class="say">Fix 1: invent a new feature, a trick you may have seen in classical ML. Lift each dot by its distance from the centre: the blue ring rises and a flat sheet slides between the colours. Dropped back to the floor, that flat cut is a circle.</p>
+    <p class="do">→ the dots rise; drag the picture to spin it. → the sheet, → the circle, → the question.</p>
     <p class="ask">Which height would you invent for Kobe's court? For a spiral?</p>
-    <p class="ans">For Kobe, distance from the rim, but you had to know basketball. For a spiral, nobody has a good guess. And the Kobe task gives the network only x and y, so it must invent its features itself: next slide.</p>
-    <p>Maths for you: the height is z = x² + y²; inner dots have z ≤ 0.25 and outer ones z ≥ 0.5, so the sheet z = 0.36 separates them and lands on the floor as the circle of radius 0.6. A flat cut in a bigger space is a curved border in the original one (the idea behind kernel SVMs).</p>`,
+    <p class="ans">For Kobe, distance from the rim, but you had to know basketball. For a spiral, nobody knows. And the Kobe task gives the network only x and y, so it must invent features itself: next slide.</p>
+    <p>Maths for you: height z = x² + y²; the sheet z = 0.36 lands on the floor as a circle of radius 0.6 (the idea behind kernel SVMs).</p>`,
   });
 
   /* ---------- 5 · fix 2: a hidden layer learns the features ---------- */
@@ -343,13 +343,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">2.5 min</p>
-    <p class="say">Fix 2: let the network learn the features itself. The hidden layer is four one-line models side by side, the four small squares, and one more neuron on top combines their answers.</p>
-    <p class="ask">Each small square is split by one straight edge. What shape will four of them make in the big picture?</p>
-    <p class="ans">Take guesses, do not confirm yet. After training: the four edges join into one closed fence around the orange (often lopsided, like a rounded triangle; any closed shape works).</p>
-    <p class="do">Press <b>Train</b>: the shape forms in about 4 s and reaches 100% in about 5. Point at each small square (still a straight edge), then trace its side of the fence in the big picture. Press → for the answer.</p>
-    <p class="ask">The small squares are straight. How does the big picture become round?</p>
-    <p class="ans">The last neuron says "orange" only where all four agree you are inside. More neurons give more walls, so a smoother shape.</p>
-    <p>The net is 2-4-1 with tanh, trained with Adam (lr 0.01); a small square's colour is that neuron's output. Hidden neurons need not mean anything; here they just happen to be readable.</p>`,
+    <p class="say">Fix 2: let the network learn the features. The hidden layer is four one-line models side by side, the small squares; one more neuron on top combines their answers.</p>
+    <p class="ask">Each small square is cut by one straight edge. What shape will four of them make?</p>
+    <p class="do">Take guesses, then press <b>Train</b>: the shape forms in about 4 s. Point at each small square, then trace its side of the fence in the big picture. Press →.</p>
+    <p class="ans">A closed fence around the orange, often lopsided. The last neuron says "orange" only where all four agree you are inside; more neurons give more walls and a smoother shape.</p>
+    <p>The net is 2-4-1 with tanh, trained with Adam. Hidden neurons need not mean anything; here they just happen to be readable.</p>`,
   });
 
   /* ---------- 6 · takeaway ---------- */

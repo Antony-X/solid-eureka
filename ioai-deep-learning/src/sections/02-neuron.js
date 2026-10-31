@@ -143,11 +143,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">A neuron does three things: multiply each input by its weight, add them up with a bias, then bend the result. With a sigmoid as the bend, one neuron is exactly the one-line model from before (logistic regression, if you have seen it). Inside networks we usually bend with ReLU: keep positive sums, turn negative sums into 0.</p>
-    <p class="do">Inputs are fixed at 1 and 2. Point at weigh (numbers on the arrows; orange = positive, blue = negative), add (0.5 + 2 − 1 = 1.5), bend (ReLU keeps 1.5). Drag "weight 1" to −2: the sum becomes −1 and the output snaps to 0, "the neuron is off". Drag it back, then click "sigmoid": the output becomes a chance between 0 and 1.</p>
-    <p class="ask">With ReLU, what is the output if the sum is −3? If it is +3?</p>
-    <p class="ans">0 and 3: negative sums are switched off, positive ones pass through unchanged.</p>
-    <p>Maths for you: output = φ(w₁x₁ + w₂x₂ + b), with φ = ReLU, max(0, z), or the sigmoid σ; the bias is a weight on an input that is always 1. Avoid "it works like a brain cell": real neurons are far more complex.</p>`,
+    <p class="say">A neuron multiplies each input by its weight, adds them up with a bias, then bends the result. With a sigmoid as the bend it is exactly the one-line model from before (logistic regression, if you have seen it). Inside networks we usually bend with ReLU: keep positive sums, turn negative ones into 0.</p>
+    <p class="do">Inputs are 1 and 2: point at weigh, add (0.5 + 2 − 1 = 1.5), bend (ReLU keeps 1.5). Drag "weight 1" to −2: the sum is −1 and the output snaps to 0, "the neuron is off". Click "sigmoid": the output becomes a chance.</p>
+    <p class="ask">With ReLU, what comes out for a sum of −3? Of +3?</p>
+    <p class="ans">0 and 3: negative sums are switched off, positive ones pass through.</p>
+    <p>Maths for you: output = φ(w₁x₁ + w₂x₂ + b), φ = ReLU, max(0, z), or σ. Avoid "it works like a brain cell": real neurons are far more complex.</p>`,
   });
 
   /* =====================================================================
@@ -229,11 +229,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Now feed the neuron every position on Kobe's court: orange where it says "made", blue where it says "missed". Whatever the weights, the border is always a straight line, and the arrow points to the orange side.</p>
-    <p class="do">"turn" rotates the line (the two weights), "shift" moves it towards or away from the rim (the bias), "steepness" makes the colour change sharp or soft. At the start the line is 10 ft out: read the accuracy, 54.5%, worse than "always miss" (55.4%). Let students direct you to beat 55%: the best is about 59%, a line hugging the rim (turn about −90°, shift about 1 ft). Switch to ReLU once: the far side turns plain paper, the neuron is off there.</p>
-    <p class="ask">Kobe scores near the rim and misses far away, in every direction. Can one straight line separate near from far?</p>
-    <p class="ans">No: "near the rim" has a curved border. One line gets about 59%; the full network gets about 61% by combining several lines.</p>
-    <p>The arrow is the weight pair (w₁, w₂), always at right angles to the line; the bias moves the line without turning it. Accuracy is measured on the 6,000 shots stored in the deck (500 are drawn).</p>`,
+    <p class="say">Now feed the neuron every spot on Kobe's court: orange where it says "made", blue where it says "missed". Whatever the weights, the border is always a straight line; the arrow points to the orange side.</p>
+    <p class="do">Start: the line is 10 ft out, accuracy 54.5%, worse than "always miss" (55.4%). Let students steer turn (the weights), shift (the bias) and steepness to beat 55%: the best is about 59%, a line hugging the rim. Switch to ReLU once: the far side goes plain, the neuron is off there.</p>
+    <p class="ask">Kobe scores near the rim and misses far away, in every direction. Can one line separate near from far?</p>
+    <p class="ans">No: "near the rim" has a curved border. One line gets about 59%; the full network, combining several lines, about 61%.</p>
+    <p>The arrow is the weight pair (w₁, w₂), at right angles to the line.</p>`,
   });
 
   /* =====================================================================
@@ -476,11 +476,11 @@ Deck.css(`
     </div>`,
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Every arrow is one weight, and every neuron after the inputs has one bias. Learning means finding good values for all these numbers. Let's count them for the Kobe network: 2 inputs, two hidden layers of 8, one output.</p>
-    <p class="do">Press → per layer and let the room call out the number first: 2×8 + 8 = <b>24</b>, 8×8 + 8 = <b>72</b>, 8×1 + 1 = <b>9</b>, total <b>105</b>. Give pairs one minute for the right side, then reveal: 2-16-1 = 32 + 16 + 16 + 1 = <b>65</b>; 784-128-10 (28×28 digit images) = <b>101,770</b>.</p>
-    <p class="ask">2-16-1 has fewer numbers than 2-8-8-1. Is it allowed in the Kobe task?</p>
-    <p class="ans">No. The rule is at most 3 linear layers with at most 8 neurons each, not a parameter budget, and breaking it scores 0. 2-8-8-1 is the largest legal network.</p>
-    <p>Rule of thumb: nn.Linear(in, out) has in × out + out numbers; in PyTorch, sum(p.numel() for p in model.parameters()) counts them.</p>`,
+    <p class="say">Every arrow is one weight, and every neuron after the inputs has one bias. Learning means finding good values for all these numbers. Let's count them for the Kobe network.</p>
+    <p class="do">Press → per layer and let the room call out first: 2×8 + 8 = <b>24</b>, 8×8 + 8 = <b>72</b>, 8×1 + 1 = <b>9</b>, total <b>105</b>. Pairs take a minute for the right side: 2-16-1 = <b>65</b>; 784-128-10 (digit images) = <b>101,770</b>.</p>
+    <p class="ask">2-16-1 has fewer numbers. Is it allowed in the Kobe task?</p>
+    <p class="ans">No. The rule is at most 3 linear layers of at most 8 neurons each, not a number budget; breaking it scores 0.</p>
+    <p>Rule of thumb: nn.Linear(in, out) has in × out + out numbers.</p>`,
   });
 
   /* =====================================================================
@@ -623,11 +623,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">This is a real 2-8-8-1 network, the largest the Kobe task allows, already trained on 20,000 of Kobe's shots. The court colour is its answer everywhere: orange where it thinks he scores more often, blue where he misses more. Click a spot: the position goes in on the left, every layer does weigh-add-bend, and a chance comes out on the right.</p>
-    <p class="do">It starts on a mid-range shot from the left elbow (about 41%). Click "Rim" (about 60%), "Corner 3" (about 35%), "Half court" (about 5%), then anywhere. Thick orange arrows push the next neuron up, blue ones push it down, dotted ones carry nothing because the neuron before is off. "Real shot" also shows what really happened; "lines on" draws each first-layer neuron's straight cut.</p>
+    <p class="say">A real 2-8-8-1 network, already trained on 20,000 of Kobe's shots; the court colour is its answer everywhere. Click a spot: the position goes in on the left, every layer does weigh-add-bend, and a chance comes out on the right.</p>
+    <p class="do">Click "Rim" (about 60%), "Corner 3" (about 35%), "Half court" (about 5%), then anywhere. Orange arrows push the next neuron up, blue push it down, dotted carry nothing (the neuron before is off). "Real shot" also shows what happened.</p>
     <p class="ask">Even at the rim it only says about 60%. Is the network bad?</p>
-    <p class="ans">No, basketball is noisy: Kobe made about 62% at the rim. The network is right about 61% of the time, against 55% for "always miss", close to the best anyone gets from position alone.</p>
-    <p>Inputs are in units of 10 ft (rim at (0, 0)); the output circle shows the raw score, which the sigmoid turns into the percentage. Neurons showing 0 for every spot are "dead" ReLUs: off for every shot, so they never learn; common and harmless here.</p>`,
+    <p class="ans">No, basketball is noisy: Kobe made about 62% at the rim. The network is right about 61% of the time, against 55% for "always miss", close to the best possible.</p>
+    <p>Inputs are in units of 10 ft; the output circle shows the raw score before the sigmoid. Neurons stuck at 0 everywhere are "dead" ReLUs: they never learn.</p>`,
   });
 
   /* =====================================================================
@@ -683,11 +683,11 @@ Deck.css(`
     </div>`,
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Here is the Kobe network as PyTorch code: a class with two parts. __init__ builds the parts, three linear layers and two ReLUs, which hold the 105 numbers; forward gives the route the data takes through them. You never call forward yourself: model(x) does it.</p>
-    <p class="do">→ 1 highlights __init__ (the parts), → 2 highlights forward (the arrows: the route). → 3: 32 random shots in, shape (32, 1) out, one number per shot, and 105 parameters, as counted by hand. → 4: the Kobe-task warning.</p>
+    <p class="say">The Kobe network as PyTorch code: a class with two parts. __init__ builds the parts, three linear layers and two ReLUs holding the 105 numbers; forward gives the route through them. You never call forward yourself: model(x) does it.</p>
+    <p class="do">→ 1 highlights __init__, → 2 forward (the arrows). → 3: 32 random shots in, shape (32, 1) out, and 105 parameters, as counted by hand. → 4: the Kobe-task warning.</p>
     <p class="ask">The last line returns fc3(x) with no sigmoid. Is that a bug?</p>
-    <p class="ans">No. The model outputs a raw score (a "logit"); the loss, BCEWithLogitsLoss, applies the sigmoid itself, in a numerically safe way. For a chance, use torch.sigmoid(model(x)).</p>
-    <p>Kobe rules (repeated in the tasks section): at most 3 linear layers of at most 8 neurons, only allowed activations, built as attributes like this, and keep the baseline class name MyModel. nn.Sequential scores 0 because the checker cannot see inside it.</p>`,
+    <p class="ans">No. The model outputs a raw score (a "logit"); the loss, BCEWithLogitsLoss, applies the sigmoid itself, safely. For a chance, use torch.sigmoid(model(x)).</p>
+    <p>Kobe rules (repeated later): at most 3 linear layers of at most 8 neurons, built as attributes like this; nn.Sequential scores 0 because the checker cannot see inside it.</p>`,
   });
 
   /* =====================================================================

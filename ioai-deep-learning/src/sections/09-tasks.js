@@ -171,10 +171,9 @@ Deck.css(`
     },
     notes: `
     <p class="time">30 s</p>
-    <p class="say">Task one. Kobe Bryant played 20 seasons for the Lakers and took 30,697 shots that the NBA logged with their position on the court. You get 25,000 of them, each with "went in" or "missed". Your job: from the position alone, predict whether a shot goes in.</p>
-    <p class="do">Point at the court: every dot is one shot seen from above, the hoop at the bottom. Orange = made, blue = missed (800 of his shots shown). Let them notice the pile of shots right under the basket.</p>
-    <p>Where the task comes from: problem 1 of round 2 of China's national AI olympiad (NOAI 2024), reused as question 1 of the NOAI 2025 teaching test; the platform Bohrium labels that test "APOAI2025 Mock". The 25,000 rows are exactly the labelled shots of Kaggle's 2016 "Kobe Bryant Shot Selection" competition, shuffled and renumbered.</p>
-    <p>Be respectful: Kobe died in a helicopter crash in January 2020 with his daughter Gianna and seven others. Some students may feel strongly about him; mention it calmly if it comes up, and no jokes. A useful hook instead: he called his work ethic "Mamba mentality", obsessing over the boring details. For us that means seeds, scaling, baselines and validation.</p>`,
+    <p class="say">Task one. Kobe Bryant took 30,697 shots in 20 seasons, each logged with its position on the court, and you get 25,000 of them marked "went in" or "missed". From the position alone, predict whether a shot goes in.</p>
+    <p class="do">Point at the court: every dot is one shot seen from above, hoop at the bottom; orange = made, blue = missed (800 shown). Let them notice the pile right under the basket.</p>
+    <p>Source: China's national AI olympiad (NOAI 2024, round 2, problem 1), built on Kaggle's "Kobe Bryant Shot Selection" data. Kobe died in a helicopter crash in 2020; if it comes up, mention it calmly, no jokes.</p>`,
   });
 
   /* ================================================================
@@ -218,13 +217,11 @@ Deck.css(`
     </div>`,
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">The rules are strict on purpose. The network sees only two numbers per shot, loc_x and loc_y, and they arrive raw: tenths of a foot, with the hoop at zero. The statement claims they are "already normalized". That is false: x goes from −250 to 248 and y from −44 to 791.</p>
-    <p class="do">→ 1: the size limit. At most 3 linear layers with at most 8 neurons each, so 2-8-8-1 is the biggest legal network: 105 numbers.</p>
-    <p class="do">→ 2: activations only from this list, placed after linear layers. Build the layers as named attributes (self.fc1, self.fc2, self.fc3). nn.Sequential scores 0 because the checker cannot see inside it.</p>
-    <p class="do">→ 3: you upload a zip with two files, the model class and the trained weights. → 4: the score is plain accuracy on hidden test shots. Board A is shown live during the contest; board B, the other half, is the final score.</p>
-    <p class="ask">Can you feed the distance to the rim as a third input? The data file has a column shot_distance.</p>
-    <p class="ans">No. The input must be exactly loc_x and loc_y; the grader passes two columns, so a three-input model would crash. It would not help anyway: shot_distance is just the distance computed from x and y, rounded down to whole feet.</p>
-    <p>Background: the baseline notebook names the class MyModel with an empty constructor; keep that. Mixing activations (ELU then ReLU) is fine. A final nn.Sigmoid is what the baseline does, so the grader most likely thresholds the output at 0.5; keep it.</p>`,
+    <p class="say">The rules are strict on purpose. The network sees only loc_x and loc_y, and they arrive raw, in tenths of a foot. The statement says "already normalized", but x runs from −250 to 248 and y from −44 to 791.</p>
+    <p class="do">→ 1: 2-8-8-1 (105 numbers) is the biggest legal net. → 2: only these activations; name the layers (self.fc1, …), since nn.Sequential scores 0. → 3: a zip with the class and the weights. → 4: accuracy on hidden shots; board A is live, board B is final.</p>
+    <p class="ask">Can you add the column shot_distance as a third input?</p>
+    <p class="ans">No: the grader passes exactly two columns. It would not help anyway: it is computed from x and y.</p>
+    <p>Keep the baseline's class name MyModel and its final nn.Sigmoid.</p>`,
   });
 
   /* ================================================================
@@ -263,17 +260,17 @@ Deck.css(`
     <p class="lead" data-step="5">Shots right at the rim go in only <b>62.5%</b> of the time.</p>`,
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">Before anyone trains anything: what is the best accuracy possible on this task? Everybody write one number on paper. Do not look at your neighbour.</p>
-    <p class="do">Wait 20 seconds. Take two or three guesses aloud (students usually say 70–90%). Then reveal one step per press:</p>
+    <p class="say">Before anyone trains anything: what is the best accuracy possible here? Everybody write one number.</p>
+    <p class="do">Take two or three guesses (usually 70–90%), then one step per press:</p>
     <ul>
-      <li>→ 1: always say "miss": 55.3%. Free points, zero intelligence.</li>
-      <li>→ 2: the best possible straight-line boundary: 58.6%. That is all logistic regression can do, and also all the official baseline (a 2-1-1-1 chain) can do.</li>
-      <li>→ 3: a legal 2-8-8-1 trained properly gets about 60.5–61% on validation, and that is the ceiling: boosted trees and nearest-neighbours on the same two numbers also stop at about 61%.</li>
-      <li>→ 4: the best honest leaderboard scores were 62.1–62.5%. Each board has only about 2,500 shots, so scores wobble by about ±1 point just by luck.</li>
-      <li>→ 5: why so low? The labels are coin flips. 4,200 shots were taken at exactly the rim position, and even those went in only 62.5% of the time. No model can know which of them will go in.</li>
+      <li>→ 1: always "miss": free points.</li>
+      <li>→ 2: the best straight line. You may have seen logistic regression; if not: a model that can only cut the court with one straight line, so this is its limit.</li>
+      <li>→ 3: a legal 2-8-8-1 trained well: the ceiling.</li>
+      <li>→ 4: the best leaderboard; luck moves board scores by about ±1 point.</li>
+      <li>→ 5: even rim shots go in only 62.5%: the labels are partly luck.</li>
     </ul>
-    <p class="ask">Your friend gets 60.4% and you get 60.9% on the live board. Who has the better model?</p>
-    <p class="ans">You cannot tell. The board noise (about ±1 point) is bigger than the gap. Trust your own validation split, ideally with several seeds, and treat differences below about half a point as ties.</p>`,
+    <p class="ask">Your friend gets 60.4% and you 60.9% on the live board. Who has the better model?</p>
+    <p class="ans">You cannot tell: the board's luck is bigger than the gap. Trust your validation split.</p>`,
   });
 
   /* ================================================================
@@ -436,12 +433,11 @@ Deck.css(`
     <p class="lead" data-step="3">Check it: raw inputs in, the same outputs to 6 decimals.</p>`,
     notes: `
     <p class="time">1 min</p>
-    <p class="say">Here is the trap. You will train on scaled inputs, because that is the right thing to do. But the grader feeds raw coordinates into your network. So the scaling must live inside the weights. The good news: the scaling is itself a linear operation, so you can merge it into the first linear layer exactly.</p>
-    <p class="do">Top row: while training, x has 7 subtracted and is divided by 110 (y: minus 91, divided by 88; these are the means and spreads of the task data). → 1: what you submit has no separate scaling box: the first layer's weights are changed so it gives exactly the same outputs on raw numbers.</p>
-    <p class="do">→ 2: the recipe in words: divide each weight by the spread of the input it multiplies; then shift the bias by the new weights times the means. Do not give them code; let them derive it on paper (it is one line of algebra) and check it numerically. → 3: the check is the proof: feed raw coordinates to the folded model and scaled coordinates to the original one; the outputs must agree.</p>
-    <p>The algebra, for the coach: fc1 on scaled input is W·((x − μ)/σ) + b = (W/σ)·x + (b − (W/σ)·μ), where "/σ" divides column j of W by σ_j. In PyTorch, inside torch.no_grad(): weight ← weight / std (broadcast over columns), bias ← bias − new_weight @ mean. We checked it: the outputs match to 5 × 10⁻⁷; the reference pipeline gives the same accuracy on raw inputs after folding.</p>
-    <p class="ask">Why is folding the scaling into fc1 exact, and not just an approximation?</p>
-    <p class="ans">Subtracting a mean and dividing by a spread is a linear (affine) step, and a linear step followed by a linear layer is still one linear layer. Nothing is lost.</p>`,
+    <p class="say">The trap: you train on scaled inputs, but the grader feeds raw coordinates. So the scaling must live inside the weights. It is just "subtract, then divide", so it merges exactly into the first layer.</p>
+    <p class="do">Top: while training, x − 7, then ÷ 110 (y − 91, ÷ 88). → 1: you submit only fc1 with new weights. → 2: divide each weight by its input's spread, then shift the bias to match. → 3: raw inputs into the folded model must give the same outputs as scaled inputs into the original.</p>
+    <p class="ask">Is this exact, or an approximation?</p>
+    <p class="ans">Exact: subtract-and-divide followed by a linear layer is still one linear layer.</p>
+    <p>Code, inside torch.no_grad(): weight /= std (per input column), then bias −= weight @ mean; outputs match to 5 × 10⁻⁷.</p>`,
   });
 
   /* ================================================================
@@ -461,12 +457,11 @@ Deck.css(`
     </div>`,
     notes: `
     <p class="time">1 min</p>
-    <p class="say">Four mistakes that cost points on this exact task; three of them are in real public notebooks for it. None of them shows up in your training loss: you only find out when the grader runs your zip.</p>
-    <p class="do">→ 1: computing distance or angle inside forward() breaks the rule "only linear layers and activations", and it does not even help: we measured no gain over plain x, y. Scaling folded into fc1 (previous slide) is fine because it lives in the weights.</p>
-    <p class="ask">→ 2 first ask: your class must end with nn.Sigmoid, because the grader expects a probability. Which loss do you train with?</p>
-    <p class="ans">Either nn.BCELoss on the Sigmoid output, or BCEWithLogitsLoss on the raw score before the Sigmoid (for example a method logits() that stops after fc3, while forward() adds the Sigmoid). Never the Sigmoid output into BCEWithLogitsLoss: that is the cliffhanger bug from before the break. A Sigmoid has no weights, so the saved state_dict is the same either way.</p>
-    <p class="do">→ 3: one public notebook wrote a 2-1-1-1 class into submission_model.py but saved 2-8-4-1 weights, so loading failed. Write submission_model.py first and import that exact class in your training notebook. → 4: before uploading, open a fresh notebook, unzip, load the class and the weights, feed raw coordinates, and check that you get your validation accuracy back.</p>
-    <p>One more, if asked: do not chase the live board. With about 2,500 shots per board it wobbles by about ±1 point by pure luck; trust your own validation split.</p>`,
+    <p class="say">Four mistakes that cost points on this task, three of them from real public notebooks. None shows in the training loss: you only find out when the grader runs your zip.</p>
+    <p class="do">→ 1: distance or angle inside forward() breaks the rules and gave us no gain; folding the scaling into fc1 is fine.</p>
+    <p class="ask">→ 2: the class must end with nn.Sigmoid. Which loss do you train with?</p>
+    <p class="ans">nn.BCELoss on the Sigmoid output, or BCEWithLogitsLoss on the score before it. Never both: that is the cliffhanger bug (normal printed loss, real log loss about 4.5).</p>
+    <p class="do">→ 3: write submission_model.py first and import it (one public notebook saved weights for a different shape). → 4: load the zip fresh, feed raw x, y, and check you get your validation accuracy.</p>`,
   });
 
   /* ================================================================
@@ -524,14 +519,11 @@ Deck.css(`
     </svg>`,
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Task two, translated from the Georgian statement: "Operation Inversion: digital restoration of data". You get a trained network that is frozen, and a table of rows: the inputs and the network's output y for each row. But one input column was overwritten with zeros. Your job is to recover that column.</p>
-    <p class="say">Left is what you know: in training the data is fixed and the gradient moves the weights. → 1: in inversion we flip it. The weights are frozen; the missing input becomes the thing that learns. The gradient of the loss flows back through the same network, but we stop at the input. Same backprop, different target.</p>
-    <p class="do">Analogy for students who do not like maths: the model is a frozen lock, and we are turning the key until it opens.</p>
-    <p class="do">→ 2: the most famous example of moving inputs with gradients.</p>
-    <p class="ask">GoogLeNet says "panda" with 57.7% confidence. Add a noise pattern so small you cannot see it (0.007 times the sign of the input gradient). What does it say now?</p>
-    <p class="ans">→ 3: "gibbon", with 99.3% confidence (Goodfellow et al., 2014). The two pandas look identical to us. The noise is exactly what our task uses: the gradient with respect to the input.</p>
-    <p>More stories if there is time (one sentence each): DeepDream (Google, 2015) runs gradient ascent on a photo to amplify what a layer sees; style transfer (Gatys 2015) optimises the pixels to match a painting's style. Fredrikson et al. (USENIX Security 2014) took a model that recommends doses of the blood thinner warfarin, plus a patient's age, weight and dose, and recovered the patient's missing genetic marker. That is exactly our task: one hidden input, the other inputs and the output known. It is a privacy attack, and it is just backprop.</p>
-    <p>About the task data: our notes come from replicas we built (10 input columns, 1,000 rows, a 10-64-64-1 network saved as model.pt), because the original files were not available to us. Check the column count and file names on the real statement.</p>`,
+    <p class="say">Task two, "Operation Inversion". You get a frozen trained network and rows of inputs with its output y, but one input column was set to zeros. Recover that column.</p>
+    <p class="do">Left: in training the data is fixed and the weights move. → 1: in inversion the weights are frozen and the missing input moves downhill instead. Analogy: the model is a lock; we turn the key until it opens.</p>
+    <p class="ask">→ 2: a network says "panda" (57.7%). We add invisible noise built from the gradient with respect to the input. What now?</p>
+    <p class="ans">→ 3: "gibbon", 99.3% (Goodfellow et al., 2014): the same tool as our task.</p>
+    <p>Fredrikson et al. (2014) recovered a patient's missing genetic marker from a drug-dosing model this way. Our task numbers come from replicas we built; check the real statement.</p>`,
   });
 
   /* ================================================================
@@ -626,13 +618,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Two tiny versions of the task, small enough to see everything. The "frozen model" is a + 2b + c², and we know its output is 4.65. Each picture shows the loss, how wrong the output is, for every value of the unknown. The magenta dots are the optimiser's steps.</p>
-    <p class="ask">Before each run on the left, ask for a quick hand vote: "Will it land, crawl, bounce, or fly off?"</p>
-    <p class="do">Left (find b, starting from 0): press <b>Run</b> with lr 0.125: one jump and it lands exactly on 0.7. Choose lr 0.05: small careful steps. lr 0.25: it bounces between 0 and 1.4 forever. lr 0.3: each bounce is bigger and it flies off the chart. The step size must fit the steepness of the valley.</p>
-    <p class="do">Right (find c, Adam lr 0.1): start +0.1 → it rolls to +1.5. Start −0.1 → it rolls to −1.5. Both give exactly 4.65. Start exactly 0 → it never moves: 0 is the top of the hill, the slope there is exactly zero, so the gradient says nothing.</p>
-    <p class="ask">Starting at +0.1 we get +1.5; the true answer was +1.5. Did gradient descent "know" the answer?</p>
-    <p class="ans">No. It went to whichever valley was downhill from the start. If the truth had been −1.5 it would have been wrong, with a perfect fit. Two keys open the same lock; the fit cannot tell you which one is right.</p>
-    <p>Maths for the coach: left loss (2b − 1.4)², gradient 4(2b − 1.4); one SGD step is b ← b(1 − 8·lr) + 5.6·lr, which converges only if lr < 0.25 (2 divided by the curvature 8) and lands in one step at lr = 1/8. Right loss (c² − 2.25)², gradient 4c(c² − 2.25), zero at c = 0 (a local maximum). All checked in PyTorch: SGD and Adam both stay at exactly 0 from c = 0.</p>`,
+    <p class="say">Two tiny versions of the task: the frozen "model" is a + 2b + c², and its output is 4.65. Each curve shows how wrong the output is for every value of the unknown; the magenta dots are the optimiser's steps.</p>
+    <p class="do">Left: before each <b>Run</b> ask "land, crawl, bounce or fly off?". lr 0.125 lands on 0.7 in one jump; 0.05 crawls; 0.25 bounces; 0.3 flies off. Right (Adam): start +0.1 → +1.5, start −0.1 → −1.5, both perfect; start 0 never moves (a flat hilltop).</p>
+    <p class="ask">We got +1.5, the true answer. Did gradient descent "know" it?</p>
+    <p class="ans">No: it rolled into whichever valley was downhill from the start. Two keys open the same lock.</p>
+    <p>Left: plain SGD settles only for lr below 0.25.</p>`,
   });
 
   /* ================================================================
@@ -751,14 +741,11 @@ Deck.css(`
     </div>`,
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">Here is the shape of a first solution. It is not complete on purpose: the three dots are for you. Step through it with me.</p>
-    <p class="do">→ 1 (lines 1–3): load the model, put it in eval mode, freeze every weight. → 2 (lines 4–6): find the column that is all zeros; split the other columns off; the missing column z is the only tensor that requires a gradient.</p>
-    <p class="do">→ 3 (line 7): the learning rate. Adam moves every value by about lr per step, whatever the gradient. With lr 0.001, 500 steps can move a value by at most 0.5, and the answers are often 1 or 2 away: MSE 0.43. With lr 0.1: 0.024. "1e-3" is a default for weights, not for inputs.</p>
-    <p class="do">→ 4 (lines 9–10): glue the columns back together, run the frozen model, compare with y. The [:, 0] matters: the model returns shape (N, 1) and y is (N,). Subtracting them silently makes an N × N table and mixes all rows; our replica then scored MSE 2.44, worse than submitting zeros.</p>
-    <p class="do">→ 5 (line 12): after it runs, look at the residual of every row, try the grid from the previous slide, and decide what to do with rows that have two answers.</p>
+    <p class="say">The shape of a first solution, incomplete on purpose: the three dots are for you.</p>
+    <p class="do">→ 1: load and freeze the weights. → 2: find the zero column; only z learns. → 3: Adam moves each value about lr per step: lr 0.001 barely moves (MSE 0.43), lr 0.1 gives 0.024. → 4: without [:, 0], (N, 1) − (N,) silently becomes an N × N table (MSE 2.44, worse than zeros). → 5: check each row's leftover error; a grid of values (torch.linspace) shows rows with two answers.</p>
     <p class="ask">Why .sum() over rows and not .mean()?</p>
-    <p class="ans">The rows are independent problems, so each z only feels its own row's error. With Adam it makes no difference (Adam ignores the overall scale of the loss). With plain SGD, .mean() divides every row's gradient by 1,000 and z barely moves (MSE 0.71).</p>
-    <p>Checked: this code with k, lr = 0.1 and 500 steps filled in runs on our replica in under a second and gives MSE 0.0236. If the model was saved with TorchScript, torch.jit.load and .eval() work exactly as shown. Freezing with p.requires_grad_(False) matters in torch 2.15: without it, torch.no_grad() still builds a graph for scripted models.</p>`,
+    <p class="ans">Each row is its own problem; with plain SGD, .mean() shrinks each row's gradient 1,000-fold. Adam does not care.</p>
+    <p>Our replica: all zeros scores 0 (MSE 0.968); this skeleton reaches 0.024 in under a second.</p>`,
   });
 
   /* ================================================================
@@ -828,10 +815,10 @@ Deck.css(`
     init(el, api) { Widgets.timer(api, el.querySelector('#task-plan-timer'), 3); },
     notes: `
     <p class="time">3.5 min</p>
-    <p class="say">Last thing before you start: plan before you type. In pairs, write down the first three experiments you will run for each task, in order. Three minutes. One of you writes, the other checks: does the plan start with a baseline? Is there a validation split? What number will tell you it worked?</p>
-    <p class="do">Click <b>Start</b> on the timer. Walk around; look for plans that start with a big model and no baseline. At 0:00, ask two pairs to read one plan aloud. Then press → to show an example plan and compare.</p>
-    <p class="ask">Does your first experiment produce a number you can compare everything else to?</p>
-    <p class="ans">It should: for Kobe the "always miss" accuracy (55.3%) and a logistic regression; for inversion the all-zeros submission (MSE 0.968, score 0) and a check that the model reproduces y once the true column is in. Every later experiment is judged against that number.</p>
-    <p>Pair activity A9 from the teaching pack. If time is short, do it for one task only (Kobe). The example plan on → is one good order, not the only one: for Kobe, the full validation accuracy should land around 60.5–61%; for inversion, Adam lr 0.1 should leave most rows with a tiny residual.</p>`,
+    <p class="say">Plan before you type. In pairs, write the first three experiments for each task, in order, in three minutes. One writes, the other checks: is there a baseline, a validation split, a number that says it worked?</p>
+    <p class="do">Press <b>Start</b> and walk around; look for plans with a big model and no baseline. At 0:00 ask two pairs to read a plan, then press → for the example.</p>
+    <p class="ask">Does your first experiment give a number to compare everything else with?</p>
+    <p class="ans">It should: for Kobe, "always miss" (55.3%) and a straight-line model (about 59%); for inversion, all zeros (MSE 0.968). A good Kobe net then lands near 61%.</p>
+    <p>Short on time: do it for Kobe only.</p>`,
   });
 }

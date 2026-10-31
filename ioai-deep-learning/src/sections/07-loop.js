@@ -193,20 +193,18 @@ Deck.css(`
     },
     notes: `
     <p class="time">4 min</p>
-    <p class="say">Everything we did so far, the model, the loss, the gradients, the optimizer, is used in five lines of code. They run once for every batch of shots, thousands of times. Say them with me: clear, forward, loss, backward, step.</p>
-    <p class="do">Press → five times. Each press highlights one line and shows on the right what that line does to the real 2-8-8-1 Kobe network (64 real shots, scaled):</p>
+    <p class="say">Model, loss and optimizer come together in five lines that run once per batch, thousands of times. Say them with me: clear, forward, loss, backward, step.</p>
+    <p class="do">Press → five times; the right side shows each line acting on the real 2-8-8-1 Kobe network, 64 shots:</p>
     <ul>
-      <li><b>1 zero_grad</b>: every stored gradient is set back to zero (nothing visible changes in the network).</li>
-      <li><b>2 forward</b>: the batch flows left to right; dark hidden neurons are the ones that fire a lot on these 64 shots; blank ones are off (ReLU gave 0).</li>
-      <li><b>3 loss</b>: one number for the whole batch, about 0.7 for a fresh network (a coin flip is 0.69).</li>
-      <li><b>4 backward</b>: magenta dashed lines are gradients, thicker means "this weight is more to blame". Every one of the 105 weights gets one, in one call.</li>
-      <li><b>5 step</b>: every weight moves a little against its gradient. The thick magenta line is the one weight that moved most, with its old and new value underneath; all the others moved less, too little to see. It usually starts at one of the darkest hidden neurons: a neuron that fired a lot on this batch carries more of the blame, so its outgoing weight moves most. Point at the "after the step" readout: the loss on the same 64 shots went down (0.695 → 0.664).</li>
+      <li><b>1</b> wipe the old gradients.</li>
+      <li><b>2</b> shots flow left to right; dark neurons fire a lot.</li>
+      <li><b>3</b> one loss for the batch, about 0.7 (coin flip: 0.69).</li>
+      <li><b>4</b> magenta = gradients: for each of the 105 weights, which way to move to lower the loss; thicker = more to blame. (This is backpropagation; PyTorch does it for you.)</li>
+      <li><b>5</b> every weight moves a little (thick magenta: moved most); the batch loss drops, 0.695 → 0.664.</li>
     </ul>
-    <p class="do">Optional: "Next batch: run 5 beats" plays the same five beats on the next 64 shots, with the code lines lighting up in turn. Press it two or three times while saying the beats aloud. "Reset" goes back to the fresh network.</p>
     <p class="ask">Which line actually changes the weights?</p>
-    <p class="ans">Only opt.step(). backward() only computes gradients and stores them in each weight's .grad; it does not move anything. zero_grad() only clears .grad.</p>
-    <p>Honesty note: this picture uses plain SGD with learning rate 0.5 on one batch, so the biggest weight moves by about 0.1 and you can just see the change; the batch loss goes from 0.695 to 0.664. In real training with Adam (lr 0.001) each weight moves about 0.001 per step, invisible after one step; that is why we need about 9,000 steps.</p>
-    <p>Orange lines are positive weights, blue negative, thickness is size. Magenta always means gradients / learning.</p>`,
+    <p class="ans">Only opt.step(); backward() only computes gradients.</p>
+    <p>The demo uses plain SGD with a big learning rate so one step is visible; with Adam at 0.001 each step is tiny, hence about 9,000 steps.</p>`,
   });
 }
 
@@ -226,17 +224,12 @@ Deck.slide({
     <div class="lp-cell bug"><span class="n">8</span><code># no .unsqueeze(1): y is (N,)</code><span class="what">mistake 4</span></div>
   </div>`,
   notes: `
-  <p class="time">3 min (1 for the slide, 2 for Part 3 in the notebook)</p>
-  <p class="say">Now we run the real thing in PyTorch, one cell at a time. Before every run you predict what will happen. I will also make four mistakes on purpose; these are the mistakes that cost points in competitions.</p>
-  <p class="do">Switch to notebooks/01_live_coding.ipynb. The slide lists the notebook's parts in the order we use them. Run Part 0 (setup) and Part 1 (the MLP class) if you have not already; skip Part 2 (it belongs to the optimizer section). Then run Part 3: the file has 25,000 shots and 44.7% went in, so "always miss" is already 55.3% right. The table under it shows the raw coordinates in the hundreds: point at it, it is the next mistake. Make the font big (Ctrl/Cmd +) and use a light theme.</p>
-  <ul>
-    <li>The notebook is complete and its saved outputs are the numbers to expect (same seed, so you will get the same numbers). Run it with Shift+Enter, one cell at a time. If you feel confident, delete the loop in Part 5 and re-type it live while saying the five beats.</li>
-    <li>Say each line aloud before you run it, then point at the output and say it again.</li>
-    <li>At every PREDICT cell stop and take a vote (fingers or a number on paper) before running the next cell.</li>
-    <li>If the notebook breaks, every result is also on the next slides.</li>
-  </ul>
-  <p class="ask">Before running Part 3: what fraction of Kobe's shots went in? (Remember the opening.)</p>
-  <p class="ans">About 45% (44.7% in the task file). So "always miss" is right about 55% of the time; that is the floor every model must beat.</p>`,
+  <p class="time">3 min (1 for the slide, 2 for Part 3)</p>
+  <p class="say">Now we run it in PyTorch, one cell at a time, and you predict before every run. I will also make four mistakes on purpose, the ones that cost points in competitions.</p>
+  <p class="do">Open notebooks/01_live_coding.ipynb (big font, light theme); its saved outputs are the numbers to expect. Run Parts 0 and 1, skip 2, run 3. Point at the raw coordinates in the hundreds: mistake 1.</p>
+  <p class="ask">What fraction of Kobe's shots went in?</p>
+  <p class="ans">About 45%, so "always miss" is right about 55% of the time: the floor to beat.</p>
+  <p>Mistakes 2 and 4 have no slide; the next slides' notes say when to run them.</p>`,
 });
 
 /* ---------- 3. planned mistake 1: raw inputs ---------- */
@@ -311,14 +304,12 @@ Deck.slide({
     });
   },
   notes: `
-  <p class="time">2.5 min</p>
-  <p class="say">This is the same 2-8-8-1 network training live in the browser on 3,000 of Kobe's real shots. The colour on the court is the predicted chance of a make: orange means "likely in", blue means "likely miss". The optimizer is plain SGD with learning rate 0.1, and the inputs are raw coordinates.</p>
-  <p class="ask">Predict: after 100 epochs, will it beat "always miss" (54.6% on these shots)?</p>
-  <p class="do">1) Press Train with "raw inputs" and "SGD" selected (the default). Watch for about 6 seconds: the accuracy sits at 54.6%, exactly "always miss", and the court stays one pale colour (about 45% everywhere): it predicts "miss" for every shot. It stops by itself at epoch 120 (about 10 s).</p>
-  <p class="do">2) Click "scaled inputs" (this resets the net), press Train: within a few seconds the accuracy climbs to about 60% and an orange spot appears around the rim, which is exactly where Kobe made more than half his shots.</p>
-  <p class="do">3) Click "Adam", then try raw and scaled: both reach about 60% (raw is jumpier, it can dip back to 55% for a while). Adam hides the problem.</p>
-  <p class="ans">No for the first question: with raw inputs and SGD the huge numbers make the first steps enormous, the network is knocked into a state where every shot gets the same answer, and it never recovers: always miss. Scaled, the same optimizer works. Adam rescales every step by itself, so it survives raw inputs here, but scaling is free and makes every default (learning rate, initialisation) behave as designed.</p>
-  <p>Note: the loss readout at epoch 0 shows about 14.5 for raw inputs (this browser network starts with larger weights than PyTorch's default, which gives 2.3); either way it is far above 0.69. If a run looks stuck, press Reset and Train again. In our PyTorch runs the same thing happens: SGD + momentum lr 0.1 on raw inputs collapsed to "always miss" on all 3 seeds; scaled reached 60.3%.</p>`,
+  <p class="time">2.5 min (+2 for notebook Part 4)</p>
+  <p class="say">The same 2-8-8-1 network, training live on 3,000 of Kobe's shots: orange means "likely in", blue "likely miss". It uses plain SGD on the raw coordinates.</p>
+  <p class="ask">Will it beat "always miss" (54.6% on these shots)?</p>
+  <p class="do">1) Train: it stays at 54.6%, one pale colour: "miss" for every shot. 2) "scaled inputs", Train: about 60%, an orange spot at the rim. 3) "Adam": raw and scaled both reach about 60%; Adam hides the problem.</p>
+  <p class="ans">No: huge inputs make huge first steps and the network gets stuck on one answer. Scaling (minus the training mean, divided by the training std) fixes it.</p>
+  <p class="do">Notebook Part 4: ask "a fresh network says 50/50; what should its first loss be?" About 0.69. Raw coordinates print 2.36; scaled, 0.69.</p>`,
 });
 
 /* ---------- 5. setup code ---------- */
@@ -345,21 +336,20 @@ Deck.slide({
       <div data-only="0 1"><div class="lbl">shapes</div><div class="lp-num">X (25000, 2)</div><div class="lp-num">y (25000, 1)</div></div>
       <div data-only="2"><div class="lbl">split</div><div class="lp-num">20,000 <small>train</small></div><div class="lp-num">5,000 <small>validation</small></div></div>
       <div data-only="3"><div class="lbl">train mean / std</div><div class="lp-num">x 6.5 / 110</div><div class="lp-num">y 91.7 / 88</div></div>
-      <div data-only="4"><div class="lbl">model from part 2</div>${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 520, h: 420, r: 18 })}<div class="lp-num">105 <small>weights</small></div></div>
+      <div data-only="4"><div class="lbl">model: 2-8-8-1</div>${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 520, h: 420, r: 18 })}<div class="lp-num">105 <small>weights</small></div></div>
       <div data-only="5"><div class="lbl">loss takes logits</div><div class="lp-num">no sigmoid</div><div class="lbl" style="margin-top:24px">optimizer</div><div class="lp-num">Adam, lr 0.001</div></div>
     </div>
   </div>`,
   notes: `
-  <p class="time">1.5 min (then type it in the notebook)</p>
-  <p class="say">This is everything that happens before the loop: turn the table into tensors, split 80/20, scale with the training statistics, build the model, choose the loss and the optimizer. Twelve lines.</p>
-  <p class="do">Press → five times; each press highlights a group of lines and the right side shows the result: the shapes, the split sizes, the mean and std, the 105-weight model, the loss and optimizer. The notebook (Parts 3 to 5) uses these lines and names (X_tr, y_tr, X_va, y_va, .unsqueeze(1)) in a slightly different order: it splits first (Part 3), shows mistake 1 on the raw X_tr and then scales X_tr and X_va with the training mu and sd (Part 4); model, loss and optimizer come in Part 5. Same result.</p>
+  <p class="time">1.5 min</p>
+  <p class="say">Everything before the loop: tensors, an 80/20 split, scaling with the training statistics, the model, the loss and the optimizer. Twelve lines.</p>
+  <p class="do">Press → five times; the right side shows each result. In the notebook these lines are spread over Parts 3 to 5.</p>
   <ul>
-    <li><b>unsqueeze(1)</b> turns y from shape (25000,) into (25000, 1), the same shape as the model's output. We will break this on purpose later.</li>
-    <li>MLP is the class from the "From one neuron to an MLP" part: fc1 = Linear(2, 8), fc2 = Linear(8, 8), fc3 = Linear(8, 1), ReLU in between, and <b>no sigmoid at the end</b>. In the notebook it is defined in Part 1.</li>
-    <li><b>BCEWithLogitsLoss</b> applies the sigmoid itself, in a numerically safe way. That is why the model outputs raw scores (logits).</li>
+    <li><b>unsqueeze(1)</b> makes y shape (25000, 1), like the model's output (Part 8 breaks this on purpose).</li>
+    <li>The model ends <b>without a sigmoid</b>: BCEWithLogitsLoss applies it itself, safely.</li>
   </ul>
   <p class="ask">How many numbers will Adam be adjusting?</p>
-  <p class="ans">105: 24 in fc1 (2·8 + 8), 72 in fc2 (8·8 + 8), 9 in fc3 (8 + 1). Check it in code: sum(p.numel() for p in model.parameters()).</p>`,
+  <p class="ans">105: 24 + 72 + 9, as we counted for the 2-8-8-1.</p>`,
 });
 
 /* ---------- 6. the loop code ---------- */
@@ -388,16 +378,12 @@ Deck.slide({
     </div>
   </div>`,
   notes: `
-  <p class="time">3 min (including typing it in the notebook)</p>
-  <p class="say">Two loops. The outer loop runs over epochs: one epoch means the network has seen every training shot once. The inner loop cuts the shuffled shots into batches of 64; every batch gets the five beats we just saw.</p>
-  <p class="do">Press → four times: the outer loop; the shuffle and the batches; the five beats; the print. Then go to notebook Part 5: the loop cell is this code plus two lines (model.train() at the start of each epoch, and the train and validation loss stored after each epoch for the plot). Point at the five numbered comments, say the beats aloud again, and run it (about 10 seconds on a laptop). It prints the epoch and the last batch's loss: 30 lines that jump between 0.61 and 0.78, ending at 0.640. The next cell measures the model: validation loss 0.6655. Later parts reuse the same loop as a function, train(model, opt, X, y).</p>
-  <ul>
-    <li>20,000 / 64 = 312.5, so 313 batches per epoch; the last one has only 32 shots. 30 epochs × 313 = 9,390 updates. (The optimizer section used the Kaggle file with 20,558 training shots, which gives 322 steps per epoch; same idea.)</li>
-    <li>randperm reshuffles every epoch so the batches are different each time.</li>
-    <li>The printed loss is the loss of the last batch only (32 shots), so it jumps around (0.61 to 0.78 in the notebook run). Do not read too much into one value.</li>
-  </ul>
-  <p class="ask">If I double the batch size to 128 and keep 30 epochs, what happens to the number of steps?</p>
-  <p class="ans">It halves (157 per epoch, 4,710 in total). Fewer, less noisy steps; with a fixed number of epochs this often trains less. Count steps, not only epochs.</p>`,
+  <p class="time">3 min (including running it)</p>
+  <p class="say">Two loops. The outer one runs over epochs, every training shot once; the inner one cuts the shuffled shots into batches of 64, and every batch gets the five beats.</p>
+  <p class="do">Press → four times, then run the loop in notebook Part 5 (about 10 s). It prints the last batch's loss each epoch: noisy, between 0.61 and 0.78, ending at 0.640. The next cell: validation loss 0.6655.</p>
+  <p class="ask">Batch size 128 instead of 64, still 30 epochs: what happens to the number of steps?</p>
+  <p class="ans">It halves (4,710 instead of 9,390): less learning in the same epochs. Count steps.</p>
+  <p>20,000 / 64 = 312.5, so 313 batches; the last has 32 shots. (The batch slide used the full Kaggle file, hence 322.)</p>`,
 });
 
 /* ---------- 7. results ---------- */
@@ -417,18 +403,18 @@ Deck.slide({
     <h2>Will 105 weights beat “always miss”?</h2>
     <div class="lp-bars">
       <div class="lp-bar-head"><span>model</span><span>val loss</span><span class="lp-scale"><span>accuracy 50%</span><span>65%</span></span></div>
-      ${row('always “miss”', '0.687', 55, 1, 'base')}
-      ${row('logistic regression', '0.675', 58, 2)}
-      ${row('<b>2-8-8-1 MLP</b>', '<mark>0.662</mark>', 61, 3)}
+      ${row('always “miss”', '0.686', 56, 1, 'base')}
+      ${row('logistic regression', '0.673', 59, 2)}
+      ${row('<b>2-8-8-1 MLP</b>', '<mark>0.665</mark>', 60, 3)}
     </div>
     <p class="lead muted bottom" data-step="4">Small gap, real gain: basketball is noisy.</p>`,
     notes: `
-    <p class="time">2 min</p>
-    <p class="ask">Before the reveal: the constant guess (45% for every shot) has validation loss 0.687. Will our network beat it? By a lot or a little? Write a number.</p>
-    <p class="do">Press → three times to reveal the three rows from top to bottom, then once more for the takeaway.</p>
-    <p class="ans">Yes, but by a little: 0.662 against 0.687, and 61% accuracy against 55%. Logistic regression sits in between (0.675, 58%) because it can only draw a straight boundary, and Kobe's good zone is a small disc around the rim.</p>
-    <p class="say">Is 61% bad? No. Even at the rim Kobe only scored about 63% of the time, so no model that sees only the position can be right much more than 61% of the time. The labels are coin flips with a probability that depends on position. In the task you are fighting for about 5 points between 55% and 61%.</p>
-    <p>Numbers: mean of 3 seeds on the Kaggle labelled shots, 80/20 split, Adam lr 0.001, batch 64, 30 epochs. The notebook (Part 5, seed 0) prints constant 0.6860 (always miss 56.1%), logistic regression 0.6729 (58.8%), MLP 0.6655 (60.4%): the third digit differs from the slide, the order and the gaps do not.</p>`,
+    <p class="time">2 min (+2 for notebook Part 6)</p>
+    <p class="ask">Always guessing 45% gives validation loss 0.686. Will our network beat it, by a lot or a little?</p>
+    <p class="do">Run the baseline cell of notebook Part 5 (the same three rows), then press → four times.</p>
+    <p class="ans">By a little: 0.665 against 0.686, 60% against 56% accuracy ("always miss" is 56% on these validation shots). Logistic regression is in between; you may have seen it, if not: it is one neuron, so only a straight boundary.</p>
+    <p class="say">Is 60% bad? No: even at the rim Kobe made fewer than two in three, so position alone cannot do much better.</p>
+    <p class="do">Then notebook Part 6, mistake 2 (no slide): delete opt.zero_grad() and predict. No error, but accuracy about 44%: it calls every shot "made", worse than "always miss", because each new gradient is added to the old ones.</p>`,
   });
 }
 
@@ -513,20 +499,18 @@ Deck.slide({
       </div>
     </div>`,
     notes: `
-    <p class="time">3 min</p>
-    <p class="say">Before the break you voted: a sigmoid as the last layer of the model, and BCEWithLogitsLoss as the loss. Crash, normal, quietly worse, or NaN? Let's run it.</p>
-    <p class="do">Re-take the vote (1 crash, 2 normal, 3 quietly worse, 4 NaN). Run notebook Part 7: the class MLPSigmoid is a copy of MLP whose forward ends with return torch.sigmoid(self.fc3(x)), the first code line on the slide; it trains with the same loop (about 10 s). Then press → for each reveal, running the matching notebook cell:</p>
+    <p class="time">3 min (+2 for Part 8 if time)</p>
+    <p class="say">Before the break you voted: a sigmoid at the end of the model, plus BCEWithLogitsLoss. Crash, normal, quietly worse, or NaN? Let's run it.</p>
+    <p class="do">Re-vote, run notebook Part 7 (about 10 s), then press → once per result:</p>
     <ul>
-      <li>Step 1: the printed validation loss is 0.685 (second cell of Part 7). Looks like a normal, slightly weak run.</li>
-      <li>Step 2: accuracy (output above 0.5 = "made") is 61.7%, about the same as the correct model (60.4%).</li>
-      <li>Step 3: the histograms of the predicted chances (the notebook draws the same two). The correct model says between 0 and 0.64 for every shot. The buggy one says "less than 1%" for 76% of all shots, including mid-range jumpers that go in 40% of the time.</li>
-      <li>Step 4: score those outputs as probabilities (log loss, which is what Kaggle and many olympiad tasks use): the notebook prints 4.532 (it clips the probabilities at 1e-7 first, because −log 0 is infinite), against 0.665 for the correct model and 0.686 for a constant guess.</li>
+      <li>1: printed loss 0.68, looks normal.</li>
+      <li>2: accuracy 61.7%, like the correct model.</li>
+      <li>3: 76% of its outputs are under 1%; none above 99%.</li>
+      <li>4: true log loss (the competition metric) about 4.5, against 0.665.</li>
     </ul>
-    <p class="ans">"Quietly worse": no crash, no NaN, normal-looking loss and accuracy, but the probabilities are garbage. A bug can leave accuracy unchanged and still destroy the competition metric.</p>
-    <p class="say">Why: the loss applies its own sigmoid to whatever the model outputs. The model's output is already squeezed between 0 and 1, so the loss only ever sees chances between 50% and 73%. To push a "miss" as low as it can go, the network must push its own output all the way down to 0. So it learns extreme outputs.</p>
-    <p>The maths, if a student asks: the loss sees σ(σ(z)), and σ(s) for s in (0, 1) lies in (0.5, 0.731). So each made shot costs at least −ln 0.731 = 0.313 and each miss at least −ln 0.5 = 0.693: the printed loss is trapped and can never look very good or very bad. Where Kobe makes less than half his shots, the best the loss can see is 0.5, so the output is pushed to 0 (61% of the outputs are below 1e-7). Near the rim, where he makes about 65%, the loss is happiest when σ(output) equals the make rate, so the output settles at about 0.57: the small bump in the histogram. Nothing goes near 1 (largest output 0.62). Accuracy survives only because 65% is above σ(0.5) = 0.62; a zone with a 55% make rate would be called a miss. The two fixes: remove the sigmoid from the model (preferred; BCEWithLogitsLoss is numerically safer), or keep it and use nn.BCELoss.</p>
-    <p>Kobe task note: a final nn.Sigmoid in the submitted model is allowed (the official baseline has one). If you train with it, use nn.BCELoss; or train without it using BCEWithLogitsLoss and add the sigmoid only in the submitted class. Also: with this bug, "logits > 0" accuracy reads 44% (everything "made"), because the outputs are never negative.</p>
-    <p>Numbers: all from notebook Part 7 (seed 0). The exact true log loss depends on the clip: each made shot with an output below 1e-7 costs −ln(1e-7) ≈ 16. sklearn's log_loss on a float64 array clips at 2.2e-16 and reports about 7.5; with the 1e-7 clip other seeds and splits gave 4.5 to 4.7 (the 4.69 quoted in other sections' notes). A count that does not depend on the clip: 1,453 of the 2,196 made validation shots got less than 1%. Either way it is far worse than the 0.69 of a constant guess. Karpathy's mistake #4 is the multi-class cousin: "you passed softmaxed outputs to a loss that expects raw logits".</p>`,
+    <p class="ans">Quietly worse: normal-looking numbers, garbage probabilities.</p>
+    <p class="say">The loss adds its own sigmoid, so it only sees chances between 50% and 73%; to push a miss lower, the network drives its output to 0. Fix: drop the model's sigmoid, or keep it and use nn.BCELoss.</p>
+    <p class="do">If time, Part 8 (mistake 4, no slide): without .unsqueeze(1), BCEWithLogitsLoss crashes with a clear message, while MSELoss silently gives 1.33 for perfect predictions. Print both shapes once.</p>`,
   });
 }
 
@@ -618,21 +602,20 @@ Deck.slide({
         <div data-only="1"><div class="lbl">evaluation mode</div><div class="lp-num">dropout off</div><div class="lp-num"><small>(a habit: our net has none)</small></div></div>
         <div data-only="2"><div class="lbl">no graph, no .grad</div><div class="lp-num">faster, less memory</div></div>
         <div data-only="3"><div class="lbl">logit &gt; 0 means &gt; 50%</div>${sig}</div>
-        <div data-only="4"><div class="lbl">printed</div><div class="lp-num">0.662 <small>val loss</small></div><div class="lp-num">61% <small>accuracy</small></div><div class="lp-num">≈ 0.35 <small>predicted “made”</small></div></div>
+        <div data-only="4"><div class="lbl">printed</div><div class="lp-num">0.665 <small>val loss</small></div><div class="lp-num">60% <small>accuracy</small></div><div class="lp-num">≈ 0.35 <small>predicted “made”</small></div></div>
       </div>
     </div>`,
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">The last cell: measure the model on the validation shots it never trained on. Three habits: switch to evaluation mode, turn off gradient tracking, and turn logits into decisions correctly.</p>
-    <p class="do">Press → four times, one line group at a time. In the notebook the same lines are the function evaluate() at the start of Part 5, which you have already used; scroll back to it and point at model.eval(), torch.no_grad() and logits &gt; 0.</p>
+    <p class="say">Last piece: measure on validation shots the model never trained on. Three habits: evaluation mode, no gradient tracking, and turning scores into decisions.</p>
+    <p class="do">Press → four times; in the notebook these lines are evaluate() at the start of Part 5.</p>
     <ul>
-      <li><b>model.eval()</b> switches layers like dropout and batch-norm to their test behaviour. Our Linear + ReLU net has neither, so here it changes nothing, but forgetting it is Karpathy's mistake #2, so build the habit. Call model.train() before training again.</li>
-      <li><b>torch.no_grad()</b>: we only measure, so PyTorch does not need to remember the computation for backward. Faster and less memory.</li>
-      <li><b>logits &gt; 0</b>: a logit of 0 is exactly 50%, positive means "more likely made". No sigmoid needed to decide.</li>
-      <li>Print three numbers: loss, accuracy, and the fraction predicted "made". If that fraction is 0 or 1, the model is a constant: always check it.</li>
+      <li><b>model.eval()</b>: test mode for layers like dropout; our net has none, but build the habit.</li>
+      <li><b>torch.no_grad()</b>: no gradients needed: faster, less memory.</li>
+      <li><b>logits &gt; 0</b>: a score of 0 is exactly 50%, so no sigmoid is needed.</li>
+      <li>Share predicted "made" (0.35): if 0 or 1, the model is a constant.</li>
     </ul>
-    <p class="ask">Our model predicts "made" for only about a third of the shots, but Kobe made 45%. Is that a bug?</p>
-    <p class="ans">No. "Made" is predicted only where the chance is above 50%, which is basically within 3 feet of the rim. Everywhere else the best single guess is "miss", even though 40% of those shots go in.</p>
-    <p>Numbers: the notebook's model (Part 5, seed 0) gives val loss 0.6655, accuracy 60.4%, fraction "made" 0.348; other seeds and splits gave 0.23 to 0.31. The fraction depends on exactly where the 50% line ends up around the rim, so anything from 0.2 to 0.35 is normal.</p>`,
+    <p class="ask">It says "made" for only a third of the shots, but Kobe made 45%. Bug?</p>
+    <p class="ans">No: it says "made" only where the chance is above 50%, near the rim; elsewhere "miss" is the best guess.</p>`,
   });
 }

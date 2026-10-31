@@ -201,11 +201,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">The loss is one number that says how wrong the model is, and training means making it small. The dots are the share of Kobe's shots that went in from each distance, and the black line is our model. For each dot we draw a square on the miss, and the loss is the average square: the mean squared error.</p>
-    <p class="do">Start: the line is flat at 44%, ignoring distance. Point at the big square at 0–4 ft (he makes 62% there). Drag an end dot to show squares growing and shrinking, then press <b>Fit the line</b>: loss 64 → 18.</p>
+    <p class="say">The loss is one number that says how wrong the model is; training makes it small. Dots: the share of Kobe's shots made from each distance; the line is our model. Each miss becomes a square, and the loss is the average square: the mean squared error.</p>
+    <p class="do">Point at the big square at 0–4 ft. Drag an end dot to grow and shrink squares, then press <b>Fit the line</b>: loss 64 → 18.</p>
     <p class="ask">A miss of 10 points costs 100. What does a miss of 20 cost?</p>
-    <p class="ans">400, four times as much, not twice: squaring makes big misses very expensive, so the line works hardest to avoid them.</p>
-    <p>PyTorch: <code>nn.MSELoss()</code>, the loss for predicting numbers, as in the inversion task. "Fit" runs gradient descent on the loss; the units (percentage points squared) do not matter, only "smaller is better".</p>`,
+    <p class="ans">400, four times as much: big misses are very expensive, so the line works hardest to avoid them.</p>
+    <p>PyTorch: <code>nn.MSELoss()</code>, the loss for predicting numbers, as in the inversion task.</p>`,
   });
 
   /* =====================================================================
@@ -313,11 +313,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">2.5 min</p>
-    <p class="say">For yes/no questions the model gives a forecast, like a weather forecaster: "90% chance it goes in." The shot goes in, and four forecasters had said 90%, 50%, 10% and 0.1%. Rank them, and guess how much worse the last one is than the first.</p>
-    <p class="do">60 seconds with a neighbour. Then press → four times, one loss per press: 0.1% costs 6.91, 66 times the 90% forecaster. A fifth press shows a slider and a "went in / missed" switch: flip to "missed" and the curve mirrors.</p>
+    <p class="say">For yes/no the model gives a forecast, like a weather forecaster: "90% chance it goes in." The shot goes in; four forecasters had said 90%, 50%, 10% and 0.1%. Rank them, and guess how much worse the last is than the first.</p>
+    <p class="do">60 seconds with a neighbour. Press → four times, one loss each: 0.1% costs 6.91, 66 times the 90% forecaster. A fifth press adds a slider and a "went in / missed" switch.</p>
     <p class="ask">The shot missed and the forecast was 90%. What is the loss?</p>
-    <p class="ans">2.30, the same as 10% for a made shot: the loss only looks at the chance given to what really happened. Unsure (50%) costs 0.69; confident and wrong costs a lot, so the model learns to be honest.</p>
-    <p>This is binary cross-entropy (log loss), the official Kobe metric: think "surprise meter". You may have seen it in logistic regression; if not, that picture is all you need.</p>`,
+    <p class="ans">2.30, as for 10% on a made shot: only the chance given to what happened counts.</p>
+    <p>This is binary cross-entropy (log loss), the official Kobe metric. You may have seen it in logistic regression; if not, "surprise meter" is enough.</p>`,
   });
 
   /* =====================================================================
@@ -602,14 +602,14 @@ Deck.css(`
     <p class="lead" data-step="4">The last layer is plain <b>Linear</b>: the loss adds sigmoid or softmax.</p>`,
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Three kinds of questions cover almost every task, and each has its loss. Before each row appears, let the class guess it.</p>
-    <p class="do">→ Row 1, a number (a price, the inversion task): one output, mean squared error, the squares from the first loss slide.</p>
-    <p class="do">→ Row 2, yes/no (Kobe: in or out): one score, BCEWithLogitsLoss, the forecast loss; targets are 0. or 1. as floats.</p>
-    <p class="do">→ Row 3, one of K classes (jump shot, layup, dunk, other): K scores. Softmax turns 0.5, 2.0, 1.0, −1.0 into the shares 14%, 61%, 22%, 3%; the loss is again −ln of the right answer's share.</p>
-    <p class="do">→ The rule: the model ends with a plain Linear layer, and the loss does the squashing.</p>
-    <p class="ask">Which of 10 digits is in an image: how many outputs, which loss, and the first loss of an untrained network?</p>
-    <p class="ans">10 scores, nn.CrossEntropyLoss; untrained, each class gets 10%, so −ln 0.1 = 2.30 (for yes/no: 0.69).</p>
-    <p>CrossEntropyLoss wants raw scores of shape (N, K) and class numbers 0 … K−1 as integers, not one-hot.</p>`,
+    <p class="say">Three kinds of questions cover almost every task, each with its loss. Before each row, let the class guess.</p>
+    <p class="do">→ Row 1, a number (the inversion task): one output, mean squared error.</p>
+    <p class="do">→ Row 2, yes/no (Kobe): one score, BCEWithLogitsLoss, the forecast loss; targets 0. or 1. as floats.</p>
+    <p class="do">→ Row 3, one of K classes: K scores; softmax turns them into shares (the bars), and the loss punishes a low share for the right answer.</p>
+    <p class="do">→ The rule: the model ends with plain Linear; the loss does the squashing.</p>
+    <p class="ask">Which of 10 digits is in an image: how many outputs, which loss?</p>
+    <p class="ans">10 scores, nn.CrossEntropyLoss. Untrained, each class gets 10%, so the first loss is about 2.3.</p>
+    <p>CrossEntropyLoss wants raw scores and class numbers 0 … K−1 as integers, not one-hot.</p>`,
   });
 
   /* =====================================================================
@@ -641,10 +641,10 @@ Deck.css(`
     steps: 2,
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Last question before the break. A classmate wants the model to output a chance, so they put a sigmoid at the end and keep BCEWithLogitsLoss. What happens when they train?</p>
-    <p class="do">→ highlights the two lines that matter. 30 seconds of silent thinking, then everyone votes with fingers at once; write the counts on the board. → One minute with a neighbour who voted differently, then vote again next to the old counts. Do not reveal: "we run it live after the break." Hint if stuck: "look at the last line of the previous slide."</p>
-    <p class="ask">1 crash, 2 trains normally, 3 trains but quietly worse, 4 the loss becomes NaN?</p>
-    <p class="ans">For you only (revealed after the break on "Cliffhanger reveal: two sigmoids"): 3. The loss adds a second sigmoid, so the printed loss looks normal (about 0.68) and accuracy stays about 61%, but the outputs become extreme: their true log loss is about 8 in our notebook run (4.5–4.7 in other runs), against 0.67 for the correct model.</p>
-    <p>No crash (shapes are fine) and no NaN: the loss's own sigmoid turns any output, even 0, into at least 50%, so the log never sees 0.</p>`,
+    <p class="say">Last question before the break. A classmate wants the model to output a chance, so they add a sigmoid at the end and keep BCEWithLogitsLoss. What happens?</p>
+    <p class="do">→ highlights the two lines; 30 seconds of silence, then a finger vote (note the counts). → One minute with a neighbour, re-vote. Do not reveal: "we run it after the break."</p>
+    <p class="ask">1 crash, 2 trains normally, 3 quietly worse, 4 NaN?</p>
+    <p class="ans">For you only (revealed after the break): 3. The loss adds a second sigmoid: printed loss looks normal (about 0.68), accuracy about 61%, but the outputs become extreme; their true log loss is about 4.5, against 0.67 when correct (about 3 out of 4 outputs say "less than 1%").</p>
+    <p>No crash (shapes are fine) and no NaN: the loss's own sigmoid lifts any output to at least 50%.</p>`,
   });
 })();

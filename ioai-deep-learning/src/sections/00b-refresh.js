@@ -61,14 +61,14 @@ Deck.slide({
   <p class="lead" data-step="4">Today: a much bigger box, and how to train it well.</p>`,
   notes: `
   <p class="time">3 min</p>
-  <p class="say">Three ideas in plain words; everything today is built on them. If you know them from classical ML, this is a one-minute check.</p>
-  <p class="do">Press → for each card and ask a student to say it back in their own words.</p>
+  <p class="say">Three ideas in plain words; everything today is built on them. If the room already knows them, keep it to one minute.</p>
+  <p class="do">Press → for each card; ask a student to say it back in their own words.</p>
   <ul>
-    <li><b>Box with knobs:</b> a shot's position goes in, a chance comes out. The knobs (weights) decide the guess; today's Kobe network has 105 of them.</li>
-    <li><b>Loss:</b> compare the guess with what happened; one number, small is good. Saying 41% for a shot that went in costs more than saying 90%.</li>
-    <li><b>Downhill:</b> for every knob, find which way makes the loss smaller (the gradient; backpropagation computes it for all knobs at once), turn it a little, repeat. That is gradient descent.</li>
+    <li><b>Knobs:</b> a shot's position goes in, a chance comes out; the knobs (weights) decide the guess.</li>
+    <li><b>Loss:</b> one number for how wrong the guess was; small is good.</li>
+    <li><b>Downhill:</b> turn each knob a little in the direction that lowers the loss (the gradient; backpropagation computes it), repeat. That is gradient descent.</li>
   </ul>
   <p class="ask">If the loss goes up after a step, what went wrong?</p>
   <p class="ans">The step was too big: we jumped over the bottom of the valley. The step size is the learning rate; we play with it after the break.</p>
-  <p>If they look unsure, press W (blank whiteboard) and D (pen), draw a valley and roll a "ball" down it by hand.</p>`,
+  <p>If faces look unsure: W opens a whiteboard, D a pen; draw a valley and roll a ball down it.</p>`,
 });

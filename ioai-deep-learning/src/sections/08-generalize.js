@@ -101,11 +101,11 @@ Deck.css(`
     </div>`,
     notes: `
     <p class="time">1 min</p>
-    <p class="say">A model is only useful on shots it has never seen. So we split our data like a school year. The training shots are homework: the weights learn from them. The validation shots are a mock exam: we never train on them, we only use them to choose settings, like the learning rate or when to stop. The test set is the real exam: in the olympiad the grader keeps it hidden and scores you once.</p>
-    <p class="do">Press → three times: the validation block, then the hidden test block, then the warning line.</p>
-    <p class="ask">If you try 50 settings and keep the one with the best validation score, is that validation score still an honest estimate?</p>
-    <p class="ans">Slightly too optimistic: you picked the luckiest of 50. That is exactly why a separate test set exists, and why the hidden leaderboard (the final "board B") can differ from the live one.</p>
-    <p>Numbers: Kobe has 25,697 labelled shots; our 80/20 split gives 20,558 training and 5,139 validation shots (the same split behind every Kobe number in this deck). Common mistake: computing the normalisation mean and standard deviation on all data, or on the validation data. Use the training shots only; the bug hunt later has exactly this bug.</p>`,
+    <p class="say">A model is only useful on shots it has never seen, so we split the data like a school year. Training shots are homework; validation shots are a mock exam for choosing settings, like the learning rate or when to stop. The test set is the real exam: the grader keeps it hidden and scores it once.</p>
+    <p class="do">Press → three times.</p>
+    <p class="ask">You try 50 settings and keep the best validation score. Is that score still honest?</p>
+    <p class="ans">Slightly too optimistic: you picked the luckiest of 50. That is why the hidden test set exists.</p>
+    <p>Scale with the mean and spread of the training shots only. The slide's 20,558 / 5,139 come from Kaggle's labelled shots; the notebook's task file splits 20,000 / 5,000.</p>`,
   });
 
   /* ================= 2. live overfitting ================= */
@@ -228,11 +228,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Twelve noisy points from a smooth curve, the dashed line, and a big network with about a thousand weights. The small hollow dots are validation points: the network never trains on them. On the right, two loss curves: magenta is the training loss, black is the validation loss.</p>
-    <p class="ask">Before I press Train: if we train for a very long time, what happens to the training loss? And to the validation loss?</p>
-    <p class="do">Take two or three answers, then press <b>Train</b> (about 10 seconds). Narrate: first the black model curve becomes smooth and close to the dashed curve and both losses fall. Then the network starts bending its curve through every single black point: the training loss dives towards 0, while the validation loss turns back up. The dashed vertical line marks the step with the best validation loss so far. Press <b>Restore best</b>: the model jumps back to that smoother curve. Then click <b>80 points</b> and press Train again: the same big net now cannot thread a curve through every point, so the two loss curves stay close together.</p>
-    <p class="ans">Training loss keeps falling (to about 0: it memorises all 12 points, noise included). Validation loss falls, reaches its minimum early (around step 80, about 0.10), then climbs to about 0.27, more than twice as bad. With 80 points the two losses end close together (about 0.08 and 0.10) and the curve stays smooth. Memorising answers is not understanding.</p>
-    <p>Everyday picture: a student who memorises last year's exam answers scores 100% on that paper and badly on a new one. The gap between the two curves is the warning sign, not the training loss alone. The y-axis is logarithmic so that the training loss diving towards 0 stays visible. Loss here is mean squared error, because this is a curve-fitting demo. Do not demo a "smaller net" here: on only 12 points even a 7-weight net ends up chasing the noise if you train it long enough.</p>`,
+    <p class="say">Twelve noisy points from a smooth dashed curve, and a big network with about a thousand weights. The hollow dots are validation points it never trains on; magenta is the training loss, black the validation loss.</p>
+    <p class="ask">If we train for a very long time, what happens to each loss?</p>
+    <p class="do">Take two or three answers, then press <b>Train</b> (about 10 s): both losses fall, then the curve bends through every black point and validation turns up. Press <b>Restore best</b>. Then choose <b>80 points</b> and train again: the curves stay close.</p>
+    <p class="ans">Training loss goes to about 0: it memorises the noise. Validation is best early (about 0.10), then climbs to about 0.27.</p>
+    <p>Like memorising last year's exam: perfect on that paper, bad on a new one.</p>`,
   });
 
   /* ================= 3. Kobe: bigger net? ================= */
@@ -352,19 +352,16 @@ Deck.css(`
     },
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">Here is our patient again: the big net that memorised 500 shots and reached a validation loss of 1.23. Five standard cures, each with what it did on Kobe.</p>
-    <p class="do">Press → five times, one cure per click, about 15 seconds each; tell the bank story at cure 5. Spend the most time on 3 (stop early) and 5 (dropout).</p>
+    <p class="say">The patient: a net about 600 times bigger than the Kobe net, trained on only 500 shots. Its validation loss climbs to 1.23, worse than a constant guess (0.69). Five standard cures, with what each did on Kobe.</p>
+    <p class="do">Press → five times, about 15 s each; spend longest on 3 and 5.</p>
     <ul>
-      <li><b>More data</b>: the best cure when you can get it. With all 20,558 shots, a big net (2-64-64-64-1) reaches 0.660 instead of memorising.</li>
-      <li><b>Smaller model</b>: fewer weights means less room to memorise. Our legal 2-8-8-1 on the same 500 shots: best 0.677.</li>
-      <li><b>Stop early and keep the best weights</b>: after every epoch measure the validation loss; whenever it is the best so far, save a copy of the weights (the code on the slide); at the end, load that copy. This is exactly the "Restore best" button from the live demo. On the patient, the best validation loss came very early (step 20): 0.675 instead of 1.23 (notebook Part 10: step 10, 0.678 instead of 1.35). That score is slightly optimistic, because we picked the step by looking at the same validation set; report a held-out test set once, at the end.</li>
-      <li><b>Weight decay</b>: every step also shrinks each weight a little toward 0, so the net cannot build the huge, wild weights that memorising needs. In PyTorch: <code>torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1.0)</code>. On the patient after 2,000 steps: 0.76 instead of 1.23. Better, but it does not beat stopping early; cures are often combined.</li>
-      <li><b>Dropout</b>: during training, randomly switch off some neurons in every step (watch the crosses jump around), so no neuron can rely on one particular partner. <code>nn.Dropout(0.5)</code> between layers; it is switched off automatically by <code>model.eval()</code>, which is one reason to always call it before evaluating. On the patient (dropout 0.5 after both hidden layers), after 2,000 steps: 0.71 instead of 1.23.</li>
+      <li><b>Stop early</b>: save the weights whenever validation is the best so far (the "Restore best" button).</li>
+      <li><b>Weight decay</b>: every step shrinks each weight a little toward 0.</li>
+      <li><b>Dropout</b>: random neurons off at every step, like the rotating bank tellers from the break game.</li>
     </ul>
-    <p class="say">Story: Geoffrey Hinton said he got the idea for dropout at his bank. The tellers kept changing, and a teller told him they were moved around a lot. Hinton guessed the reason: cheating the bank needs several employees to cooperate, and rotating people breaks up such conspiracies. Randomly removing neurons breaks up "conspiracies" between neurons, which is what memorising is.</p>
-    <p class="ask">Which cure can you NOT use much in the Kobe task, and why?</p>
-    <p class="ans">"Smaller model" and "more data" are fixed by the rules (at most 2-8-8-1, the given shots). With only 105 parameters and 20,000 shots, the Kobe net barely overfits at all; early stopping with the best checkpoint is the cure worth keeping.</p>
-    <p>Source for the bank story: Hinton's answer in the Google Brain "Ask me anything" on Reddit, August 2016; dropout paper: Hinton et al. 2012 / Srivastava et al. 2014. All numbers are from our runs on the real Kobe data, same 80/20 split as everywhere in the deck (500-shot runs: full-batch Adam or AdamW, lr 1e-3, 2,000 steps, validation on the usual 5,139 shots, best checkpoint measured every 10 steps).</p>`,
+    <p class="ask">Which cures can you not use much on Kobe?</p>
+    <p class="ans">More data and a smaller model: the rules fix both. The 105-weight Kobe net barely overfits, so keep the best checkpoint.</p>
+    <p>Notebook Part 10, same story: 1.35 at the end, best 0.678 at step 10.</p>`,
   });
 
   /* ================= 5. loss-curve doctor ================= */
@@ -432,17 +429,17 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Reading the loss curve is the most useful debugging skill you will learn today. Six patients. Magenta is always the training loss, black the validation loss; the little 0.69 mark on each axis is the loss of a net that knows nothing. Write down a diagnosis for each card, then we check.</p>
-    <p class="do">Give 45 seconds of silent writing (just the numbers 1 to 6 and a word each), then press → six times, one diagnosis per click. Before each click ask one student for their answer; keep it quick.</p>
+    <p class="say">Reading a loss curve is the most useful debugging skill of today. Magenta is the training loss, black the validation loss; the 0.69 mark is a net that knows nothing. Write one word per card, then we check.</p>
+    <p class="do">45 s of silent writing, then press → six times; ask one student before each click.</p>
     <ol>
-      <li><b>Learning rate too high</b>: the loss jumps around, spikes, drifts up; in the worst case it becomes nan. Fix: divide the lr by 10. (Kobe: Adam with lr 1.0 ended at 0.701, worse than guessing.)</li>
-      <li><b>Overfitting</b>: training keeps falling, validation turns up. Fix: keep the best checkpoint, stop early, smaller model or more data.</li>
-      <li><b>Learning rate too low</b>: a slow, almost straight line that never flattens. Fix: lr ×10, or train longer. (Kobe: plain SGD with lr 0.001 only reached 0.683.)</li>
-      <li><b>Learned nothing</b>: flat at 0.69 from the start. Suspects: forgotten <code>optimizer.step()</code> or <code>zero_grad</code>, dead ReLUs, labels shuffled separately from inputs, unscaled inputs.</li>
-      <li><b>Very noisy</b>: each step sees a small random batch, so the loss wiggles. Some wiggle is normal; this much means a bigger batch, a smaller lr, or simply plotting a moving average.</li>
-      <li><b>Healthy</b>: fast drop, then flat, validation just a little above training. A small gap is normal and is not overfitting.</li>
+      <li><b>lr too high</b>: spikes, drifts up. Divide it by 10.</li>
+      <li><b>Overfitting</b>: keep the best checkpoint.</li>
+      <li><b>lr too low</b>: a slow straight line. ×10, or train longer.</li>
+      <li><b>Learned nothing</b>: flat at 0.69. Look for a missing <code>step()</code> or <code>zero_grad()</code>, unscaled inputs, shuffled labels.</li>
+      <li><b>Very noisy</b>: bigger batch or smaller lr.</li>
+      <li><b>Healthy</b>: validation a little above training is normal.</li>
     </ol>
-    <p>Common misconception: "training loss below validation loss means overfitting". No: a small, stable gap is normal. Overfitting means validation gets worse while training still gets better. These six curves are drawn by hand (schematic), not from real runs.</p>`,
+    <p>The six curves are hand-drawn sketches, not real runs.</p>`,
   });
 
   /* ================= 6. Karpathy's checks ================= */

@@ -476,17 +476,16 @@ Deck.css(`
     },
     notes: `
     <p class="time">2.5 min</p>
-    <p class="say">Same bowl, same ball, but now we let it run, and we change only one number: the learning rate. Below the bowl you see where the weight is after each step; the dashed line is the bottom.</p>
-    <p class="do">For each value, first ask "what will happen?", then click it and press <b>Run</b> (5 steps per second, at most 40 steps; <b>Reset</b> restarts). Order: <b>0.3</b> (the default when the slide opens), then <b>0.02</b>, then <b>0.9</b>, then <b>1.05</b>.</p>
+    <p class="say">Training means rolling downhill on the loss. This bowl is the loss of one weight w, lowest at 3; each step moves the ball against the slope, by learning rate × slope. We change only the learning rate.</p>
+    <p class="do">For each value ask "what will happen?", then click it and press <b>Run</b>. Order: 0.3, 0.02, 0.9, 1.05.</p>
     <ul>
-      <li><b>0.3</b>: big confident steps, at the bottom (within 0.01) after 7 steps.</li>
-      <li><b>0.02</b>: tiny steps; after 40 steps it is still 0.6 away (it needs 140 steps). Too small = slow, wasted time.</li>
-      <li><b>0.9</b>: the ball jumps over the bottom to the other wall every step (0 → 5.4 → 1.08 → 4.54 …) but each jump is smaller; it arrives after 26 steps. In the w-plot it zig-zags around the dashed line.</li>
-      <li><b>1.05</b>: every jump overshoots more than the last (0 → 6.3 → −0.63 → 6.99 …). It blows up. In real training this is the loss going to NaN.</li>
+      <li><b>0.3</b>: at the bottom in 7 steps.</li>
+      <li><b>0.02</b>: crawls; still 0.6 away after 40 steps.</li>
+      <li><b>0.9</b>: overshoots every step, but arrives (26 steps).</li>
+      <li><b>1.05</b>: every jump is bigger: it blows up (in real training the loss becomes NaN).</li>
     </ul>
-    <p class="ask">Which learning rate would be fastest of all here?</p>
-    <p class="ans">0.5: it lands exactly on the bottom in one step. Above 0.5 it starts to zig-zag; at 1 it bounces between 0 and 6 forever; above 1 it explodes. Steeper bowls lower all of these limits, which is why there is no universal "right" learning rate.</p>
-    <p>Background: the distance to the bottom is multiplied by (1 − 2·lr) at each step, so lr 0.9 (factor −0.8) is exactly as fast as lr 0.1 (factor +0.8). Goodfellow, Bengio and Courville's textbook: "If you have time to tune only one hyperparameter, tune the learning rate."</p>`,
+    <p class="ask">Which learning rate would be fastest here?</p>
+    <p class="ans">0.5: one step lands on the bottom. A steeper bowl lowers every limit, so there is no universal right value.</p>`,
   });
 
   /* ------------------------------------------------------------------ */
@@ -579,13 +578,12 @@ Deck.css(`
     </div>`,
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Three words people mix up. An <b>epoch</b> is one pass over all the training data: for Kobe, 20,558 shots. A <b>batch</b> is the small handful of shots we look at before taking one step: here 64. A <b>step</b> is one update of all the weights. So the network does not wait for the whole epoch: it takes a step after every batch.</p>
-    <p class="do">Step 0: the bar is all 20,558 training shots. → (1): cut into batches of 64: the zoom shows one batch (real Kobe shots, orange = made, blue = missed). Ask the class to compute the number of steps per epoch before you point at 322.</p>
-    <p class="ask">20,558 shots in batches of 64: how many steps per epoch, and how big is the last batch?</p>
-    <p class="ans">20,558 / 64 = 321.2, so 322 steps; 321 full batches use 20,544 shots, leaving 14 for the last batch. 30 epochs = 9,660 steps.</p>
-    <p class="do">→ (2): the prediction question; take a vote. → (3): the answer from our real Kobe runs. The magenta bars are the number of steps (weight updates) each one took in 30 epochs; the loss is on the right.</p>
-    <p class="say">Same 30 epochs, but batches of 64 make 9,660 steps and reach validation loss 0.662. Using all shots at once makes only 30 steps, and the loss 0.688 is no better than always guessing 44.6%. Count steps, not epochs.</p>
-    <p>Why batches work: the slope from 64 random shots is a noisy but honest estimate of the slope from all shots, and it is 300 times cheaper. The noise makes the path wobble but it still goes downhill. Yann LeCun tweeted in 2018: "Friends dont let friends use minibatches larger than 32" (a joke with a point). Typical batch sizes for small tables: 32 to 256.</p>`,
+    <p class="say">An <b>epoch</b> is one pass over all the training shots. A <b>batch</b> is a handful of them, here 64. After every batch we take one <b>step</b>: one update of all the weights.</p>
+    <p class="do">→ (1): the zoom shows one batch of real shots; let the class compute the steps per epoch first. → (2): take the vote. → (3): our Kobe runs.</p>
+    <p class="ask">20,558 shots in batches of 64: how many steps per epoch?</p>
+    <p class="ans">322 (the last batch has 14 shots), so 9,660 steps in 30 epochs.</p>
+    <p class="say">Batches of 64 learn (0.662); all shots at once takes only 30 steps and is no better than guessing (0.688). Count steps, not epochs.</p>
+    <p>A slope from 64 random shots is noisy but honest, and 300 times cheaper. (The notebook has 20,000 training shots: 313 steps per epoch.)</p>`,
   });
 
   /* ------------------------------------------------------------------ */
@@ -671,16 +669,15 @@ Deck.css(`
     },
     notes: `
     <p class="time">2.5 min</p>
-    <p class="say">Now a 2-D loss surface seen from above, like a map with height lines. It is a long, narrow valley: very steep across, almost flat along. The bottom is the cross. Three classic optimizers race from the same start, 100 steps each.</p>
-    <p class="do">Step 0: only plain gradient descent (SGD, dotted path). Ask "predict the path", then press <b>Run</b>. It bounces from wall to wall and then crawls along the floor: after 100 steps it is still far from the bottom (loss 0.27).</p>
-    <p class="do">→ (1) adds <b>momentum</b> (dashed) and starts the race again automatically; SGD is dimmed. → (2) adds <b>Adam</b> (solid). Use <b>Run</b>/<b>Reset</b> to replay.</p>
+    <p class="say">A loss surface seen from above, like a map: a long, narrow valley, steep across and almost flat along, with the bottom at the cross. Three optimizers race from the same start.</p>
+    <p class="do">Ask "predict the path", then press <b>Run</b>: plain gradient descent (SGD, dotted) bounces wall to wall, then crawls. → adds momentum (dashed), → adds Adam (solid); each press restarts the race.</p>
     <ul>
-      <li><b>Momentum</b> = a heavy ball. It keeps most of its previous velocity (90%), so the back-and-forth pushes cancel and the pushes along the valley add up. It overshoots past the bottom (to x ≈ +0.8), comes back, and ends far closer than SGD (loss 0.0003).</li>
-      <li><b>Adam</b> = every weight has its own cruise control. It measures how big each weight's slopes usually are and divides by that, so the steep direction is calmed down and the flat direction is sped up. It heads almost straight for the bottom (loss 0.003 after 100 steps).</li>
+      <li><b>Momentum</b> = a heavy ball: side-to-side pushes cancel, pushes along the floor add up. It overshoots, then ends closest.</li>
+      <li><b>Adam</b> = its own step size for each weight: small across the steep walls, big along the flat floor, so it goes almost straight.</li>
     </ul>
-    <p class="ask">Pair task (1 min, "optimizer charades"): one partner describes how each of the three would walk down a long narrow valley; the other names it.</p>
-    <p class="ans">SGD zig-zags across and crawls along; momentum builds up speed along the floor and overshoots a bit; Adam evens out the step sizes per direction and goes fairly straight.</p>
-    <p>Honesty notes. The learning rates here (0.019, 0.01, 0.1) are toy values for this toy surface, not the defaults for neural networks; for Adam the learning rate is roughly how far each coordinate moves per step, so 0.1 here means about 0.1 per step. Surface: 0.5(x² + 100y²), start (−5, 1.5), momentum β = 0.9, Adam β = (0.9, 0.999). These update rules match PyTorch's SGD, SGD(momentum=0.9) and Adam exactly. The idea of these races comes from Alec Radford's famous 2014 animations.</p>`,
+    <p class="ask">Pair task (1 min): describe one walk to your neighbour; they name the optimizer.</p>
+    <p class="ans">Zig-zag, then crawl: SGD. Speeds up and overshoots: momentum. Fairly straight: Adam.</p>
+    <p>The learning rates here are toy values for this surface, not defaults for real networks.</p>`,
   });
 
   /* ------------------------------------------------------------------ */
@@ -840,7 +837,7 @@ Deck.css(`
       ${Code.py(LOOP, { hl: '1:1-2 2:5-7 3:1-2' })}
       <div class="stack effect">
         <div data-only="1"><p>Then try</p><p class="bigv">0.003<br>0.0003</p><p class="muted small">keep the best on validation</p></div>
-        <div data-only="2"><p>The three lines from our paper step, for all 105 weights:</p>${Code.py(`
+        <div data-only="2"><p>What they do for each of the 105 weights:</p>${Code.py(`
           w.grad.zero_()
           loss.backward()
           w -= lr * w.grad`, { size: 's' })}</div>
@@ -852,17 +849,11 @@ Deck.css(`
     </div>`,
     notes: `
     <p class="time">1 min</p>
-    <p class="say">In practice you never write the update by hand. You make an optimizer once, give it the model's weights and a learning rate, and inside the loop you call three lines: zero_grad, backward, step. They do exactly what our hand-written lines did, for every weight at once.</p>
-    <p class="do">→ (1): the default. Adam with 0.001, then also try 0.003 and 0.0003 and keep whatever is best on validation. → (2): the three loop lines next to the manual version from the paper step (for plain SGD, step() is exactly w -= lr * w.grad; Adam does its smarter version). → (3): changing the optimizer is one line; the loop stays the same.</p>
-    <ul>
-      <li><b>Adam</b> (Kingma and Ba, 2014) is one of the most cited papers of the century: about 200,000 Google Scholar citations, 4th of all 21st-century papers in the data behind Nature's 2025 ranking.</li>
-      <li>Andrej Karpathy tweeted in 2016: "3e-4 is the best learning rate for Adam, hands down." It was half a joke; in his 2019 training recipe he really does start with Adam at 3e-4 because "Adam is much more forgiving to hyperparameters, including a bad learning rate".</li>
-      <li><b>AdamW</b> is Adam with weight decay done properly; use it when you want weight decay.</li>
-      <li><b>SGD with momentum 0.9</b> is still common for image networks (CNNs), where a well-tuned SGD often ends up slightly better, but its good learning-rate range is narrower.</li>
-    </ul>
-    <p class="ask">Which order do the three lines go in, and could zero_grad go after backward?</p>
-    <p class="ans">zero_grad, backward, step (zero_grad may also go right after step). Not between backward and step: it would wipe the fresh slopes, step would find no gradient and no weight would move.</p>
-    <p>The code is tested: it runs with any model, loss_fn and DataLoader. The full loop with the forward pass is built line by line in the next section.</p>`,
+    <p class="say">You never write the update by hand. You create an optimizer once, with the model's weights and a learning rate, and in the loop call three lines: zero_grad, backward, step.</p>
+    <p class="do">→ (1): start with Adam 0.001; also try 0.003 and 0.0003 and keep the best on validation. → (2): for every weight: clear the old slope, compute the new one, move against it. backward() is backpropagation; you may have seen it, if not: PyTorch finds every weight's slope for you. → (3): changing the optimizer is one line.</p>
+    <p class="ask">Could zero_grad go between backward and step?</p>
+    <p class="ans">No: it would wipe the fresh slopes, so step would move nothing.</p>
+    <p>AdamW is Adam with weight decay done properly.</p>`,
   });
 
   /* ------------------------------------------------------------------ */

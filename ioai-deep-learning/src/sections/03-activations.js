@@ -197,7 +197,7 @@ Deck.css(`
     <p class="do">Press → to show the magenta dashed <b>slope</b> curves. Sweep the pointer across the sigmoid plot and stop at the middle.</p>
     <p class="ask">What is the largest slope the sigmoid ever has?</p>
     <p class="ans">0.25, at input 0; far from 0 it is flat. ReLU's slope is 1 for every positive input. Training relies on these slopes and flat spots barely learn: one reason ReLU is the usual default.</p>
-    <p>Leaky ReLU is drawn with slope 0.1 so it is visible (PyTorch's default is 0.01). Avoid "the neuron fires": these are smooth bends, not on/off switches.</p>`,
+    <p>Avoid "the neuron fires": these are smooth bends, not on/off switches.</p>`,
   });
 
   /* ================================================================
@@ -428,7 +428,7 @@ with torch.no_grad():
     },
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">Now nobody places the hinges: this network starts from random weights and must find them by training. You may have seen gradient descent; if not: it nudges every weight a little in the direction that shrinks the error, thousands of times.</p>
+    <p class="say">Now the network starts from random weights and must find the hinges by training. You may have seen gradient descent; if not: it nudges every weight a little to shrink the error, thousands of times.</p>
     <p class="do">Press Train: 4 neurons, rough shape, error about 0.014. Click <b>2 neurons</b> (it restarts; press Train if needed): stuck at 0.06. <b>8</b>: about 0.005, worse than 8 hand-placed hinges (0.002). <b>32</b>: about 0.0001 after 5 to 7 seconds. Point at the corners: the hinges it found.</p>
     <p class="ask">With 2 neurons the error stays at 0.06 however long we train. Why?</p>
     <p class="ans">Two neurons give at most two bends; this curve needs more. More neurons make a good fit possible, but training starts at random and can settle a little worse, as with 8.</p>`,

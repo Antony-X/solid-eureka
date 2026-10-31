@@ -22,9 +22,9 @@ Deck.slide({
   <div class="fill-center">${Widgets.loopSVG({ w: 1560, h: 640, notes: true })}</div>`,
   notes: `
   <p class="time">2 min</p>
-  <p class="say">This is the picture from the very beginning, now with today's words on every box. Data: scaled, in batches, split into training and validation. Model: linear layers with activations in between, stacked. Loss: MSE for numbers, binary cross-entropy for yes/no, cross-entropy for classes. Gradients: one call, loss.backward(). Update: optimizer.step(), and Adam with learning rate 1e-3 is the default you start with.</p>
+  <p class="say">The whole lecture is one loop, with today's words on every box. Data is scaled, batched and split; the model is linear layers with activations between them; the loss is MSE for numbers and cross-entropy for yes/no or classes. Then loss.backward() finds the gradients and optimizer.step() moves the weights, with Adam at lr 1e-3 as the default start.</p>
   <p class="ask">Ask two or three students to explain one arrow each, in their own words.</p>
-  <p class="ans">Good answers mention: the model outputs a score (a logit) and the loss compares it with the label; backward works out, for every weight, which way to nudge it; the optimizer moves each weight a small step that way; we repeat for many epochs and watch the validation loss.</p>`,
+  <p class="ans">Good answers: the model makes a guess and the loss compares it with the label; backward works out which way to nudge every weight; the optimizer moves each weight a small step that way; we repeat and watch the validation loss.</p>`,
 });
 
 Deck.slide({
@@ -127,6 +127,6 @@ Deck.slide({
   },
   notes: `
   <p class="time">30 s</p>
-  <p class="say">Now you solve two olympiad tasks with exactly what we covered. Kobe: a tiny legal network that predicts whether a shot goes in, from its position only. Inversion: a frozen network and one input column that was set to zero; you recover it with gradients, changing the input instead of the weights. Tomorrow we continue with harder tasks, so note which parts of today felt shaky.</p>
-  <p class="do">Hand out the task files and the starter notebooks (notebooks/02_kobe_starter and notebooks/03_inversion_starter). Remind them: baseline first, a validation split, and save the best model. The magenta dashed arrow is the input we will learn, like a weight in normal training.</p>`,
+  <p class="say">Now you solve two olympiad tasks with exactly what we covered. Kobe: a tiny legal network that predicts from the position whether a shot goes in. Inversion: a frozen network and one zeroed input column, which you recover by changing the input instead of the weights.</p>
+  <p class="do">Hand out the task files and the starter notebooks (notebooks/02_kobe_starter, notebooks/03_inversion_starter). Remind them: baseline first, a validation split, save the best model. The magenta dashed arrow is the input that learns. Ask them to note what felt shaky; tomorrow's tasks are harder.</p>`,
 });

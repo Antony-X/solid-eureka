@@ -24,10 +24,10 @@ Deck.slide({
   notes: `
   <p class="time">1 min</p>
   <p class="say">Today we go from models that draw one straight line to neural networks, which can learn almost any shape. Everything on these slides is computed live in this browser.</p>
-  <p class="do">Let the spiral train while you talk. Point at it: two interleaved spirals, and a network with 105 numbers inside is learning to separate them right now.</p>
+  <p class="do">Let the spiral train while you talk: a network with 105 numbers inside is learning to separate two interleaved spirals right now.</p>
   <p class="ask">Could one straight line separate these two spirals?</p>
   <p class="ans">No. In the first hour you will see why a network can.</p>
-  <p>Keys: → / space next, ← back, P presenter window (notes, timer, next slide), N notes on this screen, T light/dark, F full screen, B black screen, O slide map, ? help.</p>`,
+  <p>Keys: → / space next, ← back, P presenter window, N notes here, T light/dark, F full screen, B black, O slide map, ? help.</p>`,
 });
 
 Deck.slide({
@@ -84,8 +84,8 @@ Deck.slide({
   notes: `
   <p class="time">1 min</p>
   <p class="say">Here is the plan. Every few minutes you will do something: predict before a demo, count on paper, or write code. There is one break, and the last part prepares the two tasks you start this afternoon.</p>
-  <p class="do">Point at the "live code" row (we write the training loop together) and the "tasks" row. Ask everyone to keep paper and a pen ready for predictions.</p>
-  <p>Pacing: the presenter window (P) shows the planned clock for each section and warns you when you are behind. If you are late, shorten pair work and optional questions, not the training loop or the task briefing.</p>`,
+  <p class="do">Point at the "live code" row (we write the training loop together) and the "tasks" row. Ask for paper and a pen.</p>
+  <p>Pacing: the presenter window (P) shows the planned clock and warns when you are behind. If late, shorten pair work and optional questions, not the training loop or the task briefing.</p>`,
 });
 
 Deck.slide({
@@ -178,9 +178,9 @@ Deck.slide({
   },
   notes: `
   <p class="time">2 min</p>
-  <p class="say">Our running example is real data: Kobe Bryant's shots from 20 NBA seasons, each with its position on the court. The basket is at the bottom; orange went in, blue missed. This is also the data of your first task this afternoon.</p>
-  <p class="do">Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → again the consequence.</p>
+  <p class="say">Our running example is real data: Kobe Bryant's shots from 20 NBA seasons, each with its position on the court. Basket at the bottom; orange went in, blue missed. It is also the data of your first task this afternoon.</p>
+  <p class="do">Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → the consequence.</p>
   <p class="ask">If 44.6% went in, how often is a "model" right that always says "miss"?</p>
-  <p class="ans">About 55% (100 − 44.6). A model that does not clearly beat 55% has learned nothing. Even the best models reach only about 61%: the same spot gives both makes and misses.</p>
-  <p>Data: Kaggle "Kobe Bryant Shot Selection", 25,697 labelled shots (1996–2016); the dots are a random 800, and your task file has 25,000 of them (44.7% made). Kobe died in a helicopter crash in January 2020; if it comes up, be respectful.</p>`,
+  <p class="ans">About 55%. A model that does not clearly beat 55% has learned nothing; even the best reach only about 61%, because the same spot gives both makes and misses.</p>
+  <p>Data: Kaggle "Kobe Bryant Shot Selection", 25,697 labelled shots (1996–2016); 800 are drawn. Kobe died in a helicopter crash in 2020; if it comes up, be respectful.</p>`,
 });

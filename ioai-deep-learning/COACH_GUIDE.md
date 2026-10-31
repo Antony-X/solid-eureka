@@ -180,7 +180,7 @@ Each topic: what to say, the one picture to draw, the key numbers, what students
 
 ### 4.1 Why linear models fail
 
-**Say.** Logistic regression's decision boundary *p* = 0.5 is where **w**·**x** + *b* = 0: a straight line. If the classes can't be separated by a line (a circle inside a ring, XOR, spirals), no amount of training helps; the model family only contains lines. Kobe's data is the same: his chance depends mainly on distance from the rim, so the lines of equal chance are arcs. Two fixes. Invent a feature: add *x*² + *y*², the circle lifts into a bowl, and a flat plane cuts the bowl in a circle. Or let the model learn the features, because nobody knows the right feature for a spiral or a court. That is a hidden layer.
+**Say.** Logistic regression's boundary *p* = 0.5 is where **w**·**x** + *b* = 0: a straight line. If the classes can't be separated by a line (a circle inside a ring, XOR, spirals), no amount of training helps. Kobe's data is the same: his chance depends mainly on distance from the rim, so lines of equal chance are arcs. Fix 1: invent a feature. Add *x*² + *y*², the circle lifts into a bowl, and a flat plane cuts it in a circle. Fix 2: let the model learn the features, because nobody knows the right one for a spiral or a court. That is a hidden layer.
 
 **Draw.** Circle data with one obviously failing line. Next to it, the bowl sliced by a horizontal plane.
 
@@ -192,7 +192,7 @@ Each topic: what to say, the one picture to draw, the key numbers, what students
 
 ### 4.2 The neuron and the MLP
 
-**Say.** One neuron is logistic regression without the final sigmoid: a weighted sum plus a bias, then an activation. Its line *z* = 0 cuts the plane, with the weight vector perpendicular to it. A hidden layer is several neurons side by side, each drawing its own line; the next layer combines their reports. Think of a committee of line-drawers and a manager who weighs their reports. In matrix form: **h** = φ(*W*₁**x** + **b**₁), ŷ = *W*₂**h** + *b*₂. Depth = number of layers; width = neurons per layer. Training is the backprop they know; autograd applies the chain rule. XOR needs just two hidden ReLUs: h₁ = ReLU(x₁ + x₂), h₂ = ReLU(x₁ + x₂ − 1), y = h₁ − 2h₂ gives 0, 1, 1, 0.
+**Say.** One neuron is logistic regression without the final sigmoid: a weighted sum plus a bias, then an activation. Its line *z* = 0 cuts the plane, with the weight vector perpendicular to it. A hidden layer is several neurons side by side, each drawing its own line; the next layer weighs their reports (a committee of line-drawers and a manager). In matrix form: **h** = φ(*W*₁**x** + **b**₁), ŷ = *W*₂**h** + *b*₂. Depth = layers; width = neurons per layer. Training is the backprop they know. XOR needs two hidden ReLUs: h₁ = ReLU(x₁ + x₂), h₂ = ReLU(x₁ + x₂ − 1), y = h₁ − 2h₂ gives 0, 1, 1, 0.
 
 **Draw.** The 2-8-8-1 network with the shapes written on the arrows: W₁ 8×2, W₂ 8×8, W₃ 1×8.
 
@@ -242,7 +242,7 @@ Each topic: what to say, the one picture to draw, the key numbers, what students
 
 ### 4.5 Universal approximation, and what it does NOT say
 
-**Say.** The honest version: a network with **one hidden layer** and a **non-polynomial** activation can approximate any continuous function on a bounded region **as closely as you like**, if the layer is **wide enough** (Cybenko 1989; Hornik 1991; Leshno et al. 1993). See it in 1-D: `ReLU(x) − 2·ReLU(x − 1) + ReLU(x − 2)` is a hat (0 until 0, up to 1 at *x* = 1, back to 0 at 2, flat after). Put hats at many points, scale them to the function's values, add them up: you get the "join the dots" curve through any function. Steep sigmoid pairs make "bumps" the same way (Nielsen's free online book, chapter 4, is a good link for students).
+**Say.** The honest version: a network with **one hidden layer** and a **non-polynomial** activation can approximate any continuous function on a bounded region **as closely as you like**, if the layer is **wide enough** (Cybenko 1989; Hornik 1991; Leshno et al. 1993). See it in 1-D: `ReLU(x) − 2·ReLU(x − 1) + ReLU(x − 2)` is a hat (0 until 0, up to 1 at *x* = 1, back to 0 at 2, flat after). Scale hats placed at many points to the function's values and add them: the "join the dots" curve through any function. Steep sigmoid pairs make bumps the same way (Nielsen's free online book, chapter 4).
 
 **What it does NOT say:**
 1. How wide the layer must be (it can grow exponentially with the number of inputs).
@@ -263,14 +263,15 @@ Analogy: with enough thin Lego bricks you can match any skyline. The theorem pro
 
 ### 4.6 Depth vs width
 
-**Say.** One wide layer suffices in principle, but depth can be exponentially more efficient. Each ReLU layer can *fold* the input space, and the next layer cuts through all the folds at once. The tent map composed *k* times has 2^*k* linear pieces using only 2*k* neurons (Telgarsky 2016). Fold paper *k* times and one cut makes many pieces. The price: deep nets are harder to train and have more to fit. Depth helps when the function is compositional *and* you have the data.
+**Say.** One wide layer suffices in principle, but depth can be exponentially more efficient. Each ReLU layer can *fold* the input space and the next layer cuts through all folds at once: the tent map composed *k* times has 2^*k* linear pieces using only 2*k* neurons (Telgarsky 2016). Fold paper *k* times and one cut makes many pieces. The price: deep nets are harder to train. Depth helps when the function is compositional *and* you have the data.
 
-On Kobe, *width* is the first fix. The official baseline is 2-1-1-1: each layer passes on one number, so the output depends only on **w**·**x** + *b* and the boundary is a straight line. It scores 57.7% ± 1.5% (our replica), like logistic regression. 2-8-8-1 reaches about 60.5–61%. An 80× bigger net (2-64-64-64-1) gives log loss 0.660 vs 0.662: the limit is basketball's noise, not capacity.
+On Kobe, *width* is the first fix. The official 2-1-1-1 baseline passes one number per layer, so its boundary is a straight line: 57.7% ± 1.5% (our replica), like logistic regression. 2-8-8-1 reaches about 60.5–61%. An 80× bigger net (2-64-64-64-1) gives log loss 0.660 vs 0.662: the limit is basketball's noise, not capacity.
 
-**Draw.** A sheet folded twice with one cut, or the sawtooth: one tent, two tents, four tents.
+**Draw.** A sheet folded twice with one cut, or the sawtooth: one tent, two, four.
 
 **They will ask.**
 - *"2-8-8-1 or 2-8-1?"* Both legal; 2-8-8-1 is the safe maximum; the difference is tiny.
+- *"Why exactly is 2-1-1-1 a straight line?"* Each layer passes on one number, and a chain of monotone functions of **w**·**x** + *b* is still monotone, so "output > 0.5" is a half-plane.
 
 ### 4.7 Vanishing gradients and dead ReLUs
 

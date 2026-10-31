@@ -5014,7 +5014,7 @@ Deck.css(`
     valley: {
       f: (x, y) => 0.5 * (x * x + 100 * y * y), g: (x, y) => [x, 100 * y],
       start: [-5, 1.5], levels: [500, 250].concat(halves(125, 15)), shade: f => Math.log1p(f) / Math.log1p(800),
-      marks: [{ x: 0, y: 0, label: 'bottom', dy: 44 }],
+      marks: [{ x: 0, y: 0, label: 'bottom', dx: 76, dy: 46 }],
     },
     tilted: {
       f: (x, y) => { const u = (x + y) / SQ2, v = (y - x) / SQ2; return 0.5 * (u * u + 100 * v * v); },
@@ -5030,7 +5030,7 @@ Deck.css(`
     bowl: {
       f: (x, y) => 0.5 * (x * x + y * y), g: (x, y) => [x, y],
       start: [-5, 1.5], levels: [500, 250].concat(halves(125, 15)), shade: f => Math.log1p(f) / Math.log1p(800),
-      marks: [{ x: 0, y: 0, label: 'bottom', dy: 44 }],
+      marks: [{ x: 0, y: 0, label: 'bottom', dx: 76, dy: 46 }],
     },
   };
   const STYLE = {
@@ -5329,7 +5329,7 @@ Deck.css(`
       const run = UI.button(row, 'Run', () => { if (S.path.length > MAX || blown()) reset(); S.playing = !S.playing; sync(); }, { kind: 'primary' });
       UI.button(row, '+1 step', () => { if (!blown() && S.path.length <= MAX) { stepOnce(); draw(); } });
       UI.button(row, 'Reset', () => reset());
-      const blown = () => Math.abs(S.path[S.path.length - 1] - 3) > 30;
+      const blown = () => Math.abs(S.path[S.path.length - 1] - 3) > 12;
       function stepOnce() { const w = S.path[S.path.length - 1]; S.path.push(w - S.lr * 2 * (w - 3)); }
       function sync() { run.textContent = S.playing ? 'Pause' : 'Run'; }
       function reset() { S.path = [0]; S.playing = false; S.acc = 0; sync(); draw(); }

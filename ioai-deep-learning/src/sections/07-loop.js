@@ -200,7 +200,7 @@ Deck.css(`
       <li><b>2 forward</b>: the batch flows left to right; dark hidden neurons are the ones that fire a lot on these 64 shots; blank ones are off (ReLU gave 0).</li>
       <li><b>3 loss</b>: one number for the whole batch, about 0.7 for a fresh network (a coin flip is 0.69).</li>
       <li><b>4 backward</b>: magenta dashed lines are gradients, thicker means "this weight is more to blame". Every one of the 105 weights gets one, in one call.</li>
-      <li><b>5 step</b>: every weight moves a little against its gradient. The thick magenta line is the one weight that moved most, with its old and new value underneath; all the others moved less, too little to see. Point at the "after the step" readout: the loss on the same 64 shots went down (0.695 → 0.664).</li>
+      <li><b>5 step</b>: every weight moves a little against its gradient. The thick magenta line is the one weight that moved most, with its old and new value underneath; all the others moved less, too little to see. It usually starts at one of the darkest hidden neurons: a neuron that fired a lot on this batch carries more of the blame, so its outgoing weight moves most. Point at the "after the step" readout: the loss on the same 64 shots went down (0.695 → 0.664).</li>
     </ul>
     <p class="do">Optional: "Next batch: run 5 beats" plays the same five beats on the next 64 shots, with the code lines lighting up in turn. Press it two or three times while saying the beats aloud. "Reset" goes back to the fresh network.</p>
     <p class="ask">Which line actually changes the weights?</p>

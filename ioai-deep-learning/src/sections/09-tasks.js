@@ -52,7 +52,7 @@ Deck.css(`
 .sec-task .courtnet-side { gap: 30px; }
 .sec-task .courtnet-side .pg-readouts { gap: 20px 36px; }
 .sec-task .rim-cap { font-size: 32px; display: flex; align-items: center; gap: 16px; }
-.sec-task .rim-disc { width: 34px; height: 34px; border-radius: 50%; border: 4px solid var(--ink); background: var(--c1-soft); box-sizing: border-box; }
+.sec-task .rim-disc { width: 34px; height: 34px; border-radius: 50%; border: 4px solid var(--ink); background: color-mix(in srgb, var(--c1) 40%, transparent); box-sizing: border-box; }
 .sec-task .rim-dash { width: 48px; border-top: 5px dashed var(--ink); }
 `);
 
@@ -217,7 +217,7 @@ Deck.css(`
         <span class="small muted">each ≈ 2,500 hidden shots</span></div>
     </div>`,
     notes: `
-    <p class="time">2 min</p>
+    <p class="time">1.5 min</p>
     <p class="say">The rules are strict on purpose. The network sees only two numbers per shot, loc_x and loc_y, and they arrive raw: tenths of a foot, with the hoop at zero. The statement claims they are "already normalized". That is false: x goes from −250 to 248 and y from −44 to 791.</p>
     <p class="do">→ 1: the size limit. At most 3 linear layers with at most 8 neurons each, so 2-8-8-1 is the biggest legal network: 105 numbers.</p>
     <p class="do">→ 2: activations only from this list, placed after linear layers. Build the layers as named attributes (self.fc1, self.fc2, self.fc3). nn.Sequential scores 0 because the checker cannot see inside it.</p>

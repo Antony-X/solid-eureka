@@ -337,7 +337,7 @@ Deck.css(`
       box.innerHTML = `<span class="tag tag-predict">predict</span>
         <div class="stack">
           <p class="lead" data-only="0">Four straight edges: what shape?</p>
-          <p class="lead" data-step="1">A four-sided fence around the orange.</p>
+          <p class="lead" data-step="1">Four straight edges fence in the orange.</p>
         </div>`;
       side.insertBefore(box, side.firstChild);
     },
@@ -345,8 +345,8 @@ Deck.css(`
     <p class="time">2.5 min</p>
     <p class="say">Second fix: instead of inventing the feature, let the network learn it. Take four logistic regressions side by side. That is the hidden layer: the four small squares on the left. Each one can only draw a straight line, orange on one side, blue on the other. Then one more logistic regression on top combines the four answers.</p>
     <p class="ask">Before training: each small square can only ever be split by one straight edge. What shape will the big picture make out of four of them?</p>
-    <p class="ans">Take guesses, do not confirm yet. (Answer after training: a four-sided, slightly rounded fence around the orange dots.)</p>
-    <p class="do">Press <b>Train</b>. The shape forms in about 4 seconds and is finished (100%) in about 5; it keeps polishing for a while after. Point first at the small squares: each is still a straight edge, but the edges move to different sides of the orange disc. Then point at the big picture: the four edges together fence in the disc, like a rounded square. Press → to show the answer. Press <b>Reset</b> and <b>Train</b> again if you want a second look.</p>
+    <p class="ans">Take guesses, do not confirm yet. (Answer after training: the four edges join into one closed fence around the orange dots. Here the sides come out unequal, so it looks like a rounded triangle with one corner cut off; that is fine, any closed shape works.)</p>
+    <p class="do">Press <b>Train</b>. The shape forms in about 4 seconds and is finished (100%) in about 5; it keeps polishing for a while after. Point first at the small squares: each is still a straight edge, but the edges move to different sides of the orange disc. Then point at the big picture: the four edges together fence in the disc, each small square supplying one side of the fence. Trace each side with your finger and point to the small square it comes from. Press → to show the answer. Press <b>Reset</b> and <b>Train</b> again if you want a second look.</p>
     <p class="ask">The small squares are straight edges. How does the big picture become round?</p>
     <p class="ans">The last neuron adds up the four answers and says "orange" only where all four agree that you are on the inside. Four straight walls around the centre make a closed shape. More neurons give more walls, so a smoother shape. This is the "how many lines would you need" answer from the Kobe slide.</p>
     <p>Behind the picture: the network is 2-4-1 with tanh in the hidden layer, trained with Adam (learning rate 0.01, one full-batch step per frame) on the full 300 points. The colours in the small squares show each neuron's output: orange where it is positive, blue where it is negative. The hidden layer has learned new features (four "which side of my line are you on" scores); the last layer is ordinary logistic regression on those features. Misconception to head off: hidden neurons are not little brains and need not mean anything; here they just happen to be readable.</p>`,

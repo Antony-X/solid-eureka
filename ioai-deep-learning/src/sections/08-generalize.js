@@ -129,7 +129,7 @@ Deck.css(`
       for (let i = 0; i < n; i++) { const x = -1 + 2 * (i + 0.5) / n + 0.6 / n * (r() - 0.5); XA.push([x]); YA.push(f(x) + noise * r.normal()); }
       for (let i = 0; i < 200; i++) { const x = -1 + 2 * r(); VX.push([x]); VY.push(f(x) + noise * r.normal()); }
       // 68 more shots of the same curve for the "more data" button (the first 12 stay the same)
-      const r2 = NN.rng(7);
+      const r2 = NN.rng(11);
       for (let i = n; i < 80; i++) { const x = -1 + 2 * r2(); XA.push([x]); YA.push(f(x) + noise * r2.normal()); }
       let X = XA.slice(0, n), Y = YA.slice(0, n);
       const S = { n: 12, net: null, opt: null, step: 0, hist: [], best: null, playing: false, train: 0, val: 0, restored: false };
@@ -231,7 +231,7 @@ Deck.css(`
     <p class="say">Twelve noisy points from a smooth curve, the dashed line, and a big network with about a thousand weights. The small hollow dots are validation points: the network never trains on them. On the right, two loss curves: magenta is the training loss, black is the validation loss.</p>
     <p class="ask">Before I press Train: if we train for a very long time, what happens to the training loss? And to the validation loss?</p>
     <p class="do">Take two or three answers, then press <b>Train</b> (about 10 seconds). Narrate: first the black model curve becomes smooth and close to the dashed curve and both losses fall. Then the network starts bending its curve through every single black point: the training loss dives towards 0, while the validation loss turns back up. The dashed vertical line marks the step with the best validation loss so far. Press <b>Restore best</b>: the model jumps back to that smoother curve. Then click <b>80 points</b> and press Train again: the same big net now cannot thread a curve through every point, so the two loss curves stay close together.</p>
-    <p class="ans">Training loss keeps falling (to about 0: it memorises all 12 points, noise included). Validation loss falls, reaches its minimum early (around step 80, about 0.10), then climbs to about 0.27, more than twice as bad. With 80 points the two losses end close together (about 0.08 and 0.10). Memorising answers is not understanding.</p>
+    <p class="ans">Training loss keeps falling (to about 0: it memorises all 12 points, noise included). Validation loss falls, reaches its minimum early (around step 80, about 0.10), then climbs to about 0.27, more than twice as bad. With 80 points the two losses end close together (about 0.09 and 0.11) and the curve stays smooth. Memorising answers is not understanding.</p>
     <p>Everyday picture: a student who memorises last year's exam answers scores 100% on that paper and badly on a new one. The gap between the two curves is the warning sign, not the training loss alone. The y-axis is logarithmic so that the training loss diving towards 0 stays visible. Loss here is mean squared error, because this is a curve-fitting demo. Do not demo a "smaller net" here: on only 12 points even a 7-weight net ends up chasing the noise if you train it long enough.</p>`,
   });
 

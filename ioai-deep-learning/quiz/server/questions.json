@@ -1,162 +1,602 @@
 [
- {"id": "q01", "text": "Which model does NOT need feature scaling?",
-  "options": ["k-nearest neighbours", "SVM with RBF kernel", "Random forest", "k-means clustering"],
-  "correct": 2, "topic": "Data & preprocessing", "difficulty": "easy", "time": 20,
-  "explain": "Trees split one feature at a threshold, so rescaling a feature does not change the splits."},
- {"id": "q02", "text": "A 'city' column has 30 unordered values. Best encoding for logistic regression?",
-  "options": ["Label encoding (0, 1, 2, …)", "Keep the raw strings", "Delete the column", "One-hot encoding"],
-  "correct": 3, "topic": "Data & preprocessing", "difficulty": "easy", "time": 20,
-  "explain": "Label codes invent a fake order (Paris < Rome); one-hot gives each city its own 0/1 column."},
- {"id": "q03", "text": "Only 2% of rows are positive. Good first fix for LogisticRegression?",
-  "options": ["Drop the rare class", "class_weight='balanced'", "Raise max_iter", "Pick models by accuracy"],
-  "correct": 1, "topic": "Data & preprocessing", "difficulty": "medium", "time": 25,
-  "explain": "Errors on the rare class get more weight, so the model can't just ignore it; then tune the threshold."},
- {"id": "q04", "text": "A sensor time series has gaps. Which fill uses NO future values?",
-  "options": ["Forward-fill (last known value)", "Backward-fill (next known value)", "Mean of the whole series", "Linear interpolation"],
-  "correct": 0, "topic": "Data & preprocessing", "difficulty": "medium", "time": 25,
-  "explain": "Forward-fill only looks back; the others peek at later values you won't have at prediction time."},
- {"id": "q05", "text": "Predicting pneumonia at hospital admission. Which feature is target leakage?",
-  "options": ["Age", "Smoker (yes/no)", "Got antibiotics for pneumonia", "Blood pressure at admission"],
-  "correct": 2, "topic": "Data & preprocessing", "difficulty": "hard", "time": 30,
-  "explain": "It is recorded after the diagnosis, so it encodes the answer and won't exist when you predict."},
- {"id": "q06", "text": "95% of samples are negative. A model always predicts 'negative'. Accuracy?",
-  "options": ["5%", "50%", "95%", "100%"],
-  "correct": 2, "topic": "Evaluation & validation", "difficulty": "easy", "time": 20,
-  "explain": "Accuracy equals the majority share (the baseline to beat), so on imbalanced data use F1 or ROC-AUC."},
- {"id": "q07", "text": "100 real positives. The model flags 120 items; 80 of them are real positives. Recall?",
-  "options": ["0.67", "0.80", "0.40", "0.20"],
-  "correct": 1, "topic": "Evaluation & validation", "difficulty": "medium", "time": 25,
-  "explain": "Recall = TP / all real positives = 80/100. Precision would be 80/120 ≈ 0.67."},
- {"id": "q08", "text": "You lower the decision threshold from 0.5 to 0.2. What usually happens?",
-  "options": ["Precision up, recall down", "Both precision and recall go up", "Nothing changes", "Recall up, precision down"],
-  "correct": 3, "topic": "Evaluation & validation", "difficulty": "medium", "time": 25,
-  "explain": "More items are flagged positive: you catch more real positives but also raise more false alarms."},
- {"id": "q09", "text": "Regression target has a few huge outliers. Which metric is least affected by them?",
-  "options": ["MAE", "MSE", "RMSE", "R²"],
-  "correct": 0, "topic": "Evaluation & validation", "difficulty": "medium", "time": 25,
-  "explain": "MAE grows linearly with the error; MSE, RMSE and R² square it, so outliers dominate."},
- {"id": "q10", "text": "ROC-AUC = 0.9 means…",
-  "options": ["90% accuracy at threshold 0.5", "A random positive outranks a random negative 90% of time", "90% of positives are detected", "90% of flagged items are positive"],
-  "correct": 1, "topic": "Evaluation & validation", "difficulty": "hard", "time": 30,
-  "explain": "ROC-AUC measures ranking quality over all thresholds, not accuracy, recall or precision at one."},
- {"id": "q11", "text": "You try 200 hyperparameter settings and keep the best 5-fold CV score. That score is…",
-  "options": ["An unbiased estimate of the test score", "Always below the test score", "Likely optimistic; check on held-out data", "Equal to the training score"],
-  "correct": 2, "topic": "Evaluation & validation", "difficulty": "hard", "time": 30,
-  "explain": "The max of many noisy scores overfits the validation data, like chasing Leaderboard A."},
- {"id": "q12", "text": "What does logistic regression output before thresholding?",
-  "options": ["A probability (via the sigmoid)", "A cluster number", "Distance to the nearest point", "A list of if-else rules"],
-  "correct": 0, "topic": "Linear models", "difficulty": "easy", "time": 20,
-  "explain": "It computes w·x + b and squashes it with the sigmoid into a probability between 0 and 1."},
- {"id": "q13", "text": "Why is logistic regression called a LINEAR classifier?",
-  "options": ["The sigmoid curve is a straight line", "It is trained with MSE loss", "It only works with one feature", "Its decision boundary w·x + b = 0 is linear"],
-  "correct": 3, "topic": "Linear models", "difficulty": "medium", "time": 25,
-  "explain": "p > 0.5 exactly when w·x + b > 0, so the boundary is a line (hyperplane)."},
- {"id": "q14", "text": "Class 1 = points inside a circle around (0, 0). How do you help logistic regression?",
-  "options": ["Train for more iterations", "Add features x² and y²", "Lower the learning rate", "Label-encode x and y"],
-  "correct": 1, "topic": "Linear models", "difficulty": "medium", "time": 25,
-  "explain": "x² + y² < r² is linear in the new features, so a linear model can now draw the circle."},
- {"id": "q15", "text": "Two features are near-copies of each other in linear regression. What happens?",
-  "options": ["The model can't be trained at all", "Predictions become random", "Coefficients get unstable and hard to read", "R² drops to zero"],
-  "correct": 2, "topic": "Linear models", "difficulty": "hard", "time": 30,
-  "explain": "Weight can shift between the twins (multicollinearity); predictions stay fine, and L2 (ridge) stabilises it."},
- {"id": "q16", "text": "Decision tree vs random forest: what is the key difference?",
-  "options": ["A forest averages many trees on resampled data", "A forest is one very deep tree", "A forest needs scaled features", "A forest can only do regression"],
-  "correct": 0, "topic": "Trees & ensembles", "difficulty": "easy", "time": 20,
-  "explain": "Random forest = many trees on bootstrap samples with random feature subsets; their votes are averaged."},
- {"id": "q17", "text": "A decision tree with no max_depth limit usually…",
-  "options": ["Underfits the training data", "Needs feature scaling", "Becomes a linear model", "Overfits (memorises the training set)"],
-  "correct": 3, "topic": "Trees & ensembles", "difficulty": "easy", "time": 20,
-  "explain": "It keeps splitting until leaves are pure: near 100% train accuracy, worse validation."},
- {"id": "q18", "text": "How does a decision tree choose a split?",
-  "options": ["Randomly, keeping the first one tried", "Makes child nodes as pure as possible", "Uses the feature with the largest values", "Makes both children the same size"],
-  "correct": 1, "topic": "Trees & ensembles", "difficulty": "medium", "time": 25,
-  "explain": "It picks the split that most reduces impurity (Gini or entropy) in the child nodes."},
- {"id": "q19", "text": "Bagging vs boosting?",
-  "options": ["Bagging is sequential, boosting is parallel", "Same thing, only the names differ", "Bagging: independent models; boosting: each fixes the last", "Boosting works only with linear models"],
-  "correct": 2, "topic": "Trees & ensembles", "difficulty": "medium", "time": 25,
-  "explain": "Bagging averages independent models (cuts variance); boosting adds models that fix earlier errors (cuts bias)."},
- {"id": "q20", "text": "Gradient boosting: validation loss is lowest at 300 trees, then rises. Best move?",
-  "options": ["Early stopping at about 300 trees", "Add more trees", "Raise the learning rate", "Drop the validation set"],
-  "correct": 0, "topic": "Trees & ensembles", "difficulty": "medium", "time": 25,
-  "explain": "Too many boosting rounds overfit; early stopping keeps the best iteration."},
- {"id": "q21", "text": "Why does a random forest try only a random subset of features at each split?",
-  "options": ["To make each single tree more accurate", "So no feature scaling is needed", "To make the trees deeper", "To decorrelate the trees"],
-  "correct": 3, "topic": "Trees & ensembles", "difficulty": "hard", "time": 30,
-  "explain": "Less similar trees make different errors, so averaging them cancels more variance."},
- {"id": "q22", "text": "Gradient boosting with MSE loss: what is each new tree trained to predict?",
-  "options": ["The original targets again", "The residuals of the current ensemble", "A bootstrap sample of the targets", "The most important feature"],
-  "correct": 1, "topic": "Trees & ensembles", "difficulty": "hard", "time": 30,
-  "explain": "Each tree fits what the model still gets wrong: the residuals (the negative gradient of MSE)."},
- {"id": "q23", "text": "k-NN with k = 1 tends to…",
-  "options": ["Underfit badly", "Ignore the training data", "Overfit (very jagged boundary)", "Draw a straight-line boundary"],
-  "correct": 2, "topic": "Neighbours, SVM & Bayes", "difficulty": "easy", "time": 20,
-  "explain": "Every single point decides its own neighbourhood, so noise is memorised; larger k smooths the boundary."},
- {"id": "q24", "text": "What is the 'naive' assumption in Naive Bayes?",
-  "options": ["Features are independent given the class", "All classes are equally likely", "The data is linearly separable", "Features have no missing values"],
-  "correct": 0, "topic": "Neighbours, SVM & Bayes", "difficulty": "medium", "time": 25,
-  "explain": "Given the class, features are treated as independent, so P(x|y) is a product of per-feature terms."},
- {"id": "q25", "text": "What does the kernel trick let an SVM do?",
-  "options": ["Skip choosing C", "Work without feature scaling", "Train on unlabelled data", "Use high-dim features without computing them"],
-  "correct": 3, "topic": "Neighbours, SVM & Bayes", "difficulty": "hard", "time": 30,
-  "explain": "A kernel gives dot products in a richer feature space directly, so the SVM gets non-linear boundaries cheaply."},
- {"id": "q26", "text": "In an SVM, a very large C means…",
-  "options": ["Wider margin, more training errors allowed", "Narrower margin, fewer training errors", "No effect on the margin", "The kernel becomes linear"],
-  "correct": 1, "topic": "Neighbours, SVM & Bayes", "difficulty": "hard", "time": 30,
-  "explain": "C is the penalty for margin violations; a large C fits the training data hard and can overfit."},
- {"id": "q27", "text": "What must you choose before running k-means?",
-  "options": ["A label for each point", "The number of clusters k", "The tree depth", "A loss for each class"],
-  "correct": 1, "topic": "Unsupervised", "difficulty": "easy", "time": 20,
-  "explain": "k-means needs k up front; pick it with an elbow plot or the silhouette score."},
- {"id": "q28", "text": "The first principal component in PCA is the direction of…",
-  "options": ["Maximum variance", "Minimum variance", "The target label", "The first column"],
-  "correct": 0, "topic": "Unsupervised", "difficulty": "easy", "time": 20,
-  "explain": "PCA finds orthogonal directions of maximum variance; standardise first so big units don't dominate."},
- {"id": "q29", "text": "k-means gives different clusters on two runs. Most likely cause?",
-  "options": ["k-means is supervised", "The features were one-hot encoded", "Random centroid initialisation", "Too much L2 regularisation"],
-  "correct": 2, "topic": "Unsupervised", "difficulty": "medium", "time": 25,
-  "explain": "The result depends on the start; use k-means++ and several restarts (n_init)."},
- {"id": "q30", "text": "Two moon-shaped clusters plus scattered noise points. Which method fits best?",
-  "options": ["k-means with k = 2", "DBSCAN", "PCA", "k-means with k = 3"],
-  "correct": 1, "topic": "Unsupervised", "difficulty": "hard", "time": 30,
-  "explain": "DBSCAN groups dense regions of any shape and labels outliers as noise; k-means assumes round blobs."},
- {"id": "q31", "text": "Train accuracy 99%, validation accuracy 70%. Diagnosis?",
-  "options": ["Underfitting", "A well-tuned model", "Overfitting", "Validation set is too large"],
-  "correct": 2, "topic": "Optimisation & regularisation", "difficulty": "easy", "time": 20,
-  "explain": "A big train-validation gap means high variance: regularise, simplify, or get more data."},
- {"id": "q32", "text": "Which regularisation tends to set some weights exactly to zero?",
-  "options": ["L1 (Lasso)", "L2 (Ridge)", "Neither", "Both equally"],
-  "correct": 0, "topic": "Optimisation & regularisation", "difficulty": "medium", "time": 25,
-  "explain": "L1 pushes small weights to exactly 0 (feature selection); L2 only shrinks them."},
- {"id": "q33", "text": "Train and validation scores are both low and close. What should you try?",
-  "options": ["Stronger regularisation", "Remove features", "A smaller max_depth", "A more flexible model or better features"],
-  "correct": 3, "topic": "Optimisation & regularisation", "difficulty": "medium", "time": 25,
-  "explain": "This is underfitting (high bias): add capacity or features, or reduce regularisation."},
- {"id": "q34", "text": "In sklearn LogisticRegression, making C smaller gives…",
-  "options": ["Weaker regularisation", "Stronger regularisation", "More iterations", "A non-linear boundary"],
-  "correct": 1, "topic": "Optimisation & regularisation", "difficulty": "hard", "time": 30,
-  "explain": "C is the INVERSE of regularisation strength: small C = strong penalty, simpler model."},
- {"id": "q35", "text": "You ran scaler.fit_transform(X_train). What do you call on X_test?",
-  "options": ["scaler.fit_transform(X_test)", "scaler.fit(X_test)", "Nothing, test data needs no scaling", "scaler.transform(X_test)"],
-  "correct": 3, "topic": "Practical sklearn / pandas", "difficulty": "easy", "time": 20,
-  "explain": "transform reuses the train statistics; fit_transform on test is a leakage bug."},
- {"id": "q36", "text": "pandas: how do you count missing values in each column?",
-  "options": ["df.dropna()", "df.fillna(0)", "df.count_nan()", "df.isna().sum()"],
-  "correct": 3, "topic": "Practical sklearn / pandas", "difficulty": "easy", "time": 20,
-  "explain": "isna() gives a True/False table and sum() counts the Trues per column."},
- {"id": "q37", "text": "Which call gives the scores you need for ROC-AUC (binary task)?",
-  "options": ["model.predict(X)", "model.score(X, y)", "model.predict_proba(X)[:, 1]", "model.transform(X)"],
-  "correct": 2, "topic": "Practical sklearn / pandas", "difficulty": "medium", "time": 25,
-  "explain": "ROC-AUC needs scores or probabilities for the positive class, not hard 0/1 labels."},
- {"id": "q38", "text": "What does stratify=y do in train_test_split?",
-  "options": ["Keeps class ratios the same in both splits", "Sorts the rows by y", "Removes rare classes", "Balances classes to 50/50"],
-  "correct": 0, "topic": "Practical sklearn / pandas", "difficulty": "medium", "time": 25,
-  "explain": "Each split gets the same class proportions, which matters for small or imbalanced data."},
- {"id": "q39", "text": "Why put the scaler inside a Pipeline when running cross_val_score?",
-  "options": ["It makes training faster", "Pipelines skip scaling on test folds", "Trees require it", "Scaler is refit per training fold: no leakage"],
-  "correct": 3, "topic": "Practical sklearn / pandas", "difficulty": "hard", "time": 30,
-  "explain": "Scaling all data before CV leaks the validation folds' stats; a Pipeline fits it inside each fold."},
- {"id": "q40", "text": "OneHotEncoder crashes on a city that appears only in the test set. Simple fix?",
-  "options": ["OneHotEncoder(handle_unknown='ignore')", "Refit the encoder on the test set", "Delete those test rows", "Label-encode the test set only"],
-  "correct": 0, "topic": "Practical sklearn / pandas", "difficulty": "hard", "time": 30,
-  "explain": "Unknown categories become all-zero columns; refitting on test would break the column mapping."}
+ {
+  "id": "q01",
+  "text": "Some models only work well if all features are on a similar scale (for example 0–1). Which model does NOT care about the scale of the features?",
+  "options": [
+   "k-nearest neighbours",
+   "SVM",
+   "Random forest",
+   "k-means clustering"
+  ],
+  "correct": 2,
+  "topic": "Data & preprocessing",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "A tree asks questions like “is age > 30?”. Changing the units does not change which side of the line each point is on."
+ },
+ {
+  "id": "q02",
+  "text": "You have a column “city” with 30 different cities, in no particular order. How should you turn it into numbers for logistic regression?",
+  "options": [
+   "Number them 0, 1, 2, …",
+   "Keep the city names as text",
+   "Delete the column",
+   "One column per city, with 1 or 0"
+  ],
+  "correct": 3,
+  "topic": "Data & preprocessing",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "Numbering cities 0, 1, 2 pretends that one city is “bigger” than another. One 0/1 column per city (one-hot) avoids that."
+ },
+ {
+  "id": "q03",
+  "text": "Only 2 out of every 100 examples are “yes”. Your logistic regression just predicts “no” all the time. What is a good first fix?",
+  "options": [
+   "Delete the “yes” examples",
+   "Give the rare class more weight (class_weight='balanced')",
+   "Train for more iterations",
+   "Judge the model by accuracy"
+  ],
+  "correct": 1,
+  "topic": "Data & preprocessing",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "With weights, mistakes on the rare class cost more, so the model can no longer ignore it."
+ },
+ {
+  "id": "q04",
+  "text": "A sensor recorded values over time, but some values are missing. Which way of filling the gaps uses only values from the PAST?",
+  "options": [
+   "Copy the last known value forward",
+   "Copy the next known value backward",
+   "Use the average of the whole series",
+   "Draw a line between the neighbours"
+  ],
+  "correct": 0,
+  "topic": "Data & preprocessing",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "At prediction time you don’t know the future, so only “copy the last value” is fair."
+ },
+ {
+  "id": "q05",
+  "text": "You predict whether a patient has pneumonia when they arrive at the hospital. Which feature secretly gives away the answer (it would not exist yet at arrival)?",
+  "options": [
+   "Age",
+   "Whether the patient smokes",
+   "Whether they were given pneumonia medicine",
+   "Blood pressure at arrival"
+  ],
+  "correct": 2,
+  "topic": "Data & preprocessing",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "Medicine is given AFTER the diagnosis. Using it is cheating (called target leakage): the model looks great in testing but fails in real use."
+ },
+ {
+  "id": "q06",
+  "text": "In a dataset, 95% of the examples are “no”. A lazy model always answers “no”. What is its accuracy?",
+  "options": [
+   "5%",
+   "50%",
+   "95%",
+   "100%"
+  ],
+  "correct": 2,
+  "topic": "Evaluation & validation",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "It is right on every “no”, so 95%. High accuracy can mean nothing: always compare with this lazy baseline."
+ },
+ {
+  "id": "q07",
+  "text": "There are 100 real fraud cases. Your model raises 120 alarms, and 80 of the alarms are real fraud. Recall = how many of the real fraud cases did it find?",
+  "options": [
+   "67%",
+   "80%",
+   "40%",
+   "20%"
+  ],
+  "correct": 1,
+  "topic": "Evaluation & validation",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "It found 80 of the 100 real cases: recall = 80%. (Precision would be 80 of 120 alarms ≈ 67%.)"
+ },
+ {
+  "id": "q08",
+  "text": "The model says “yes” when its probability is above 0.5. You lower this cut-off to 0.2. What usually happens?",
+  "options": [
+   "Fewer false alarms, but it misses more real cases",
+   "Everything gets better",
+   "Nothing changes",
+   "It catches more real cases, but raises more false alarms"
+  ],
+  "correct": 3,
+  "topic": "Evaluation & validation",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "With a lower cut-off the model says “yes” more often: more real cases found (recall up), more false alarms (precision down)."
+ },
+ {
+  "id": "q09",
+  "text": "You predict house prices, and a few houses have crazy high prices. Which error measure is hurt LEAST by these few extreme houses?",
+  "options": [
+   "Mean absolute error (MAE)",
+   "Mean squared error (MSE)",
+   "Root mean squared error (RMSE)",
+   "R²"
+  ],
+  "correct": 0,
+  "topic": "Evaluation & validation",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "MSE squares each error, so one huge miss dominates. MAE just adds the sizes of the errors."
+ },
+ {
+  "id": "q10",
+  "text": "A classifier has ROC-AUC = 0.9. What does that mean?",
+  "options": [
+   "It is 90% accurate",
+   "A random “yes” example gets a higher score than a random “no” example 90% of the time",
+   "It finds 90% of the “yes” cases",
+   "90% of its alarms are correct"
+  ],
+  "correct": 1,
+  "topic": "Evaluation & validation",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "ROC-AUC measures how well the model RANKS examples, over all possible cut-offs. It is not accuracy."
+ },
+ {
+  "id": "q11",
+  "text": "You try 200 different hyperparameter settings and keep the one with the best cross-validation score. How reliable is that best score?",
+  "options": [
+   "It is exactly the test score",
+   "It is always lower than the test score",
+   "It is probably too optimistic; check on data you never used",
+   "It equals the training score"
+  ],
+  "correct": 2,
+  "topic": "Evaluation & validation",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "Picking the best of many noisy scores means some luck is included. Confirm on a held-out test set."
+ },
+ {
+  "id": "q12",
+  "text": "What does logistic regression give you for each example, before you decide “yes” or “no”?",
+  "options": [
+   "A probability between 0 and 1",
+   "A cluster number",
+   "The distance to the nearest point",
+   "A list of if/else rules"
+  ],
+  "correct": 0,
+  "topic": "Linear models",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "It computes a weighted sum and squashes it with the sigmoid into a probability."
+ },
+ {
+  "id": "q13",
+  "text": "Logistic regression uses an S-shaped curve (the sigmoid). Why is it still called a LINEAR classifier?",
+  "options": [
+   "Because the sigmoid is a straight line",
+   "Because it is trained with squared error",
+   "Because it only works with one feature",
+   "Because the border between “yes” and “no” is a straight line"
+  ],
+  "correct": 3,
+  "topic": "Linear models",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "It says “yes” exactly when the weighted sum is above 0, and that border is a straight line (a flat plane in more dimensions)."
+ },
+ {
+  "id": "q14",
+  "text": "Class “yes” = all points inside a circle around (0, 0). A straight line can’t separate them. How can logistic regression still solve it?",
+  "options": [
+   "Train for more iterations",
+   "Add the new features x² and y²",
+   "Lower the learning rate",
+   "Number the x and y values 0, 1, 2…"
+  ],
+  "correct": 1,
+  "topic": "Linear models",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "Inside the circle means x² + y² is small. With x² and y² as features, a straight-line rule works."
+ },
+ {
+  "id": "q15",
+  "text": "In linear regression, two features are almost exact copies of each other (for example height in cm and height in inches). What goes wrong?",
+  "options": [
+   "The model can’t be trained at all",
+   "The predictions become random",
+   "The weights become unstable and hard to interpret",
+   "The model always predicts zero"
+  ],
+  "correct": 2,
+  "topic": "Linear models",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "The model can split the weight between the twins in many ways. Predictions stay fine, but the weights jump around."
+ },
+ {
+  "id": "q16",
+  "text": "What is the main difference between a decision tree and a random forest?",
+  "options": [
+   "A forest trains many trees on random parts of the data and combines their votes",
+   "A forest is one very deep tree",
+   "A forest needs scaled features",
+   "A forest can only predict numbers"
+  ],
+  "correct": 0,
+  "topic": "Trees & ensembles",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "Each tree sees a random sample of rows and features; averaging many different trees makes fewer mistakes than one tree."
+ },
+ {
+  "id": "q17",
+  "text": "You train a decision tree with no depth limit. What usually happens?",
+  "options": [
+   "It is too simple and misses patterns",
+   "It needs scaled features",
+   "It turns into a linear model",
+   "It memorises the training data and does worse on new data"
+  ],
+  "correct": 3,
+  "topic": "Trees & ensembles",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "It keeps splitting until every training example is perfect: almost 100% on training data, worse on validation (overfitting)."
+ },
+ {
+  "id": "q18",
+  "text": "When a decision tree splits the data into two groups, what is it trying to achieve?",
+  "options": [
+   "Pick a split at random",
+   "Make each group as “pure” as possible (mostly one class)",
+   "Use the feature with the largest numbers",
+   "Make the two groups the same size"
+  ],
+  "correct": 1,
+  "topic": "Trees & ensembles",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "It picks the question that best separates the classes (measured by Gini or entropy)."
+ },
+ {
+  "id": "q19",
+  "text": "What is the difference between bagging and boosting?",
+  "options": [
+   "Bagging trains models one after another; boosting trains them all at once",
+   "There is no difference",
+   "Bagging trains models independently; in boosting each new model fixes the previous ones’ mistakes",
+   "Boosting only works with linear models"
+  ],
+  "correct": 2,
+  "topic": "Trees & ensembles",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "Bagging (e.g. random forest) averages independent models. Boosting (e.g. XGBoost) builds models in a row, each correcting the last."
+ },
+ {
+  "id": "q20",
+  "text": "You train gradient boosting. The validation error is lowest at 300 trees and then starts to grow. What should you do?",
+  "options": [
+   "Stop at about 300 trees (early stopping)",
+   "Add more trees",
+   "Increase the learning rate",
+   "Stop using a validation set"
+  ],
+  "correct": 0,
+  "topic": "Trees & ensembles",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "After 300 trees the model starts memorising the training data. Early stopping keeps the best moment."
+ },
+ {
+  "id": "q21",
+  "text": "In a random forest, each split only looks at a random few of the features. Why?",
+  "options": [
+   "It makes each single tree more accurate",
+   "So the features don’t need scaling",
+   "To make the trees deeper",
+   "So the trees are different from each other and make different mistakes"
+  ],
+  "correct": 3,
+  "topic": "Trees & ensembles",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "If all trees were the same, averaging would not help. Different trees make different mistakes that cancel out."
+ },
+ {
+  "id": "q22",
+  "text": "In gradient boosting (for predicting numbers), what does each NEW tree learn to predict?",
+  "options": [
+   "The original targets again",
+   "The errors that the current model still makes (the residuals)",
+   "A random sample of the targets",
+   "The most important feature"
+  ],
+  "correct": 1,
+  "topic": "Trees & ensembles",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "Each new tree learns “how far off are we still?”, and adding it corrects part of that error."
+ },
+ {
+  "id": "q23",
+  "text": "k-nearest neighbours with k = 1 classifies a point by copying its single closest neighbour. What tends to happen?",
+  "options": [
+   "It is far too simple",
+   "It ignores the training data",
+   "It overfits: every noisy point gets its own little region",
+   "It always draws a straight line"
+  ],
+  "correct": 2,
+  "topic": "Neighbours, SVM & Bayes",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "One noisy neighbour decides everything. A larger k averages over more neighbours and smooths the border."
+ },
+ {
+  "id": "q24",
+  "text": "Naive Bayes is called “naive” because it assumes something simple. What?",
+  "options": [
+   "That the features are independent of each other (within each class)",
+   "That all classes are equally common",
+   "That a straight line separates the classes",
+   "That there are no missing values"
+  ],
+  "correct": 0,
+  "topic": "Neighbours, SVM & Bayes",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "It treats each feature as unrelated to the others, which is rarely true but often works well enough."
+ },
+ {
+  "id": "q25",
+  "text": "What does the “kernel trick” allow an SVM to do?",
+  "options": [
+   "Skip choosing any settings",
+   "Work without scaling the features",
+   "Learn from unlabelled data",
+   "Draw curved borders without building the curved features by hand"
+  ],
+  "correct": 3,
+  "topic": "Neighbours, SVM & Bayes",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "A kernel lets the SVM act as if it had many extra features (like x², xy…) without computing them, so the border can bend."
+ },
+ {
+  "id": "q26",
+  "text": "An SVM has a setting C (the penalty for mistakes on training data). What happens with a very LARGE C?",
+  "options": [
+   "Wide margin, many training mistakes allowed",
+   "Narrow margin, it tries hard to get every training point right",
+   "No effect",
+   "The border becomes a straight line"
+  ],
+  "correct": 1,
+  "topic": "Neighbours, SVM & Bayes",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "A big C punishes every training mistake heavily, so the model can overfit the training data."
+ },
+ {
+  "id": "q27",
+  "text": "What do you have to decide BEFORE you run k-means clustering?",
+  "options": [
+   "The correct label of each point",
+   "How many clusters you want (k)",
+   "The depth of the tree",
+   "A loss for each class"
+  ],
+  "correct": 1,
+  "topic": "Unsupervised",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "k-means needs the number of clusters in advance; you can try several and compare (for example with an elbow plot)."
+ },
+ {
+  "id": "q28",
+  "text": "PCA finds new directions to describe the data. What is special about the FIRST direction it finds?",
+  "options": [
+   "The data is most spread out along it",
+   "The data is least spread out along it",
+   "It points to the target label",
+   "It is always the first column"
+  ],
+  "correct": 0,
+  "topic": "Unsupervised",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "The first direction keeps as much of the variation (spread) of the data as possible."
+ },
+ {
+  "id": "q29",
+  "text": "You run k-means twice on the same data and get different clusters. What is the most likely reason?",
+  "options": [
+   "k-means needs labels",
+   "The features were one-hot encoded",
+   "The starting cluster centres are chosen randomly",
+   "Too much regularisation"
+  ],
+  "correct": 2,
+  "topic": "Unsupervised",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "The result depends on where the centres start. Run it several times (n_init) and keep the best."
+ },
+ {
+  "id": "q30",
+  "text": "Your data has two clusters shaped like bananas (moons), plus some random noise points. Which method fits it best?",
+  "options": [
+   "k-means with k = 2",
+   "DBSCAN",
+   "PCA",
+   "k-means with k = 3"
+  ],
+  "correct": 1,
+  "topic": "Unsupervised",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "DBSCAN groups dense areas of any shape and marks lonely points as noise. k-means expects round blobs."
+ },
+ {
+  "id": "q31",
+  "text": "Training accuracy is 99%, validation accuracy is 70%. What is the problem?",
+  "options": [
+   "The model is too simple (underfitting)",
+   "Nothing, the model is fine",
+   "The model memorised the training data (overfitting)",
+   "The validation set is too big"
+  ],
+  "correct": 2,
+  "topic": "Optimisation & regularisation",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "A big gap between training and validation means overfitting: simplify, regularise, or get more data."
+ },
+ {
+  "id": "q32",
+  "text": "Regularisation adds a penalty for big weights. Which kind tends to make some weights exactly ZERO?",
+  "options": [
+   "L1 (Lasso)",
+   "L2 (Ridge)",
+   "Neither",
+   "Both equally"
+  ],
+  "correct": 0,
+  "topic": "Optimisation & regularisation",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "L1 pushes unimportant weights all the way to 0, so it also selects features. L2 only makes weights smaller."
+ },
+ {
+  "id": "q33",
+  "text": "Training and validation scores are BOTH low and close to each other. What should you try?",
+  "options": [
+   "Stronger regularisation",
+   "Remove features",
+   "A smaller tree depth",
+   "A more powerful model or better features"
+  ],
+  "correct": 3,
+  "topic": "Optimisation & regularisation",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "Both low means the model is too simple (underfitting). Give it more capacity or better features."
+ },
+ {
+  "id": "q34",
+  "text": "In scikit-learn’s LogisticRegression, what happens when you make C SMALLER?",
+  "options": [
+   "Weaker regularisation",
+   "Stronger regularisation (a simpler model)",
+   "More training iterations",
+   "A curved border"
+  ],
+  "correct": 1,
+  "topic": "Optimisation & regularisation",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "Careful: C is the opposite of regularisation strength. Small C = strong penalty = simpler model."
+ },
+ {
+  "id": "q35",
+  "text": "You scaled the training data with scaler.fit_transform(X_train). What should you run on the test data?",
+  "options": [
+   "scaler.fit_transform(X_test)",
+   "scaler.fit(X_test)",
+   "Nothing, test data is not scaled",
+   "scaler.transform(X_test)"
+  ],
+  "correct": 3,
+  "topic": "Practical sklearn / pandas",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "transform reuses the training data’s mean and std. Fitting again on the test data lets test information leak in."
+ },
+ {
+  "id": "q36",
+  "text": "In pandas, how do you count how many values are missing in each column of df?",
+  "options": [
+   "df.dropna()",
+   "df.fillna(0)",
+   "df.count_nan()",
+   "df.isna().sum()"
+  ],
+  "correct": 3,
+  "topic": "Practical sklearn / pandas",
+  "difficulty": "easy",
+  "time": 25,
+  "explain": "isna() marks every missing value as True, and sum() counts the Trues in each column."
+ },
+ {
+  "id": "q37",
+  "text": "To compute ROC-AUC for a yes/no model, which scikit-learn call gives you what you need?",
+  "options": [
+   "model.predict(X)",
+   "model.score(X, y)",
+   "model.predict_proba(X)[:, 1]",
+   "model.transform(X)"
+  ],
+  "correct": 2,
+  "topic": "Practical sklearn / pandas",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "ROC-AUC needs the probability of “yes” for each example, not just the final 0/1 answers."
+ },
+ {
+  "id": "q38",
+  "text": "What does stratify=y do in train_test_split?",
+  "options": [
+   "Keeps the same share of each class in the training and test parts",
+   "Sorts the rows by the label",
+   "Removes rare classes",
+   "Makes all classes 50/50"
+  ],
+  "correct": 0,
+  "topic": "Practical sklearn / pandas",
+  "difficulty": "medium",
+  "time": 30,
+  "explain": "If 10% of the data is “yes”, both parts will also have about 10% “yes”. Important for small or unbalanced data."
+ },
+ {
+  "id": "q39",
+  "text": "Why put the scaler inside a Pipeline when you use cross-validation?",
+  "options": [
+   "It makes training faster",
+   "So the test folds are not scaled",
+   "Trees need it",
+   "So the scaler learns only from the training folds each time, with no peeking"
+  ],
+  "correct": 3,
+  "topic": "Practical sklearn / pandas",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "Scaling all the data first lets information from the validation folds leak in. In a Pipeline it is refit inside each fold."
+ },
+ {
+  "id": "q40",
+  "text": "Your one-hot encoder crashes because the test data contains a city it never saw in training. What is the simple fix?",
+  "options": [
+   "OneHotEncoder(handle_unknown='ignore')",
+   "Fit the encoder again on the test data",
+   "Delete those test rows",
+   "Number the cities in the test data only"
+  ],
+  "correct": 0,
+  "topic": "Practical sklearn / pandas",
+  "difficulty": "hard",
+  "time": 35,
+  "explain": "Unknown cities just get all zeros. Refitting on the test data would change which column means which city."
+ }
 ]

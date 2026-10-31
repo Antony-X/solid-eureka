@@ -74,7 +74,7 @@ Deck.slide({
     <li>zero_grad → forward + loss → backward → step. Most common mistake: zero_grad after backward (that wipes the gradients you just computed) or forgetting it (gradients pile up: 2, 4, 6…).</li>
     <li>"Always miss" is right 55% of the time (Kobe made 44.6%). The best constant guess (always say 44.6%) has log loss 0.687. Any real model must beat both; our legal 2-8-8-1 network reached about 0.662 and 61%.</li>
     <li>False as stated. Training loss is almost always a bit lower than validation loss, because the model has seen those examples. Overfitting is when validation loss starts going <i>up</i> while training loss keeps going down (or the gap keeps growing).</li>
-    <li>Logits, the raw scores. The loss applies the sigmoid itself. Adding nn.Sigmoid() at the end does not crash; it quietly ruins the probabilities: accuracy still looked fine (61%), but the true log loss was 4.69 (the cliffhanger from before the break).</li>
+    <li>Logits, the raw scores. The loss applies the sigmoid itself. Adding nn.Sigmoid() at the end does not crash; it quietly ruins the probabilities: accuracy still looked fine (61%), but the true log loss was about 4.5 (the cliffhanger from before the break).</li>
     <li>Only the missing input column (one number per row). The model's weights stay frozen: we change the input, not the network.</li>
     <li>Open question, no right answer. Typical answers: "why we need the activation", "what the gradient of the input means", "how to choose the learning rate".</li>
   </ol>`,

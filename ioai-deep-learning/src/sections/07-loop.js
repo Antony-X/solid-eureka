@@ -510,7 +510,7 @@ Deck.slide({
     </ul>
     <p class="ans">Quietly worse: normal-looking numbers, garbage probabilities.</p>
     <p class="say">The loss adds its own sigmoid, so it only sees chances between 50% and 73%; to push a miss lower, the network drives its output to 0. Fix: drop the model's sigmoid, or keep it and use nn.BCELoss.</p>
-    <p class="do">If time, Part 8 (mistake 4, no slide): without .unsqueeze(1), BCEWithLogitsLoss crashes with a clear message, while MSELoss silently gives 1.33 for perfect predictions. Print both shapes once.</p>`,
+    <p class="do">If time, Part 8 (mistake 4, no slide): without .unsqueeze(1), BCEWithLogitsLoss crashes clearly; MSELoss silently gives 1.33 for perfect predictions.</p>`,
   });
 }
 

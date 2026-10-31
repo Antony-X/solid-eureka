@@ -29,15 +29,15 @@ How to read it: **Say** is what to tell the class, **Do** is what to click or dr
 
 **Time:** 1 min
 
-**Say:** Today we go from the models you already know, which draw straight lines, to neural networks, which can learn almost any shape. Everything you see on these slides is computed live in this browser.
+**Say:** Today we go from models that draw one straight line to neural networks, which can learn almost any shape. Everything on these slides is computed live in this browser.
 
-**Do:** Let the spiral on the right train while you talk. Point at it: two interleaved spirals, orange and blue. A network with 105 numbers inside is learning to separate them right now.
+**Do:** Let the spiral train while you talk: a network with 105 numbers inside is learning to separate two interleaved spirals right now.
 
-**Ask:** Could logistic regression separate these two spirals?
+**Ask:** Could one straight line separate these two spirals?
 
-**Answer:** No. Logistic regression draws one straight line. By the end of the first hour you will know exactly why the network can and logistic regression cannot.
+**Answer:** No. In the first hour you will see why a network can.
 
-Keys: → / space next, ← back, P opens the presenter window (notes, timer, next slide), N shows notes on this screen, T toggles light/dark, F full screen, B black screen, O slide map, ? help.
+Keys: → / space next, ← back, P presenter window, N notes here, T light/dark, F full screen, B black, O slide map, ? help.
 
 ### Slide 2 · Today's map
 
@@ -45,11 +45,11 @@ Keys: → / space next, ← back, P opens the presenter window (notes, timer, ne
 
 **Time:** 1 min
 
-**Say:** Here is the plan. Roughly every ten minutes you will do something: predict what happens before I run a demo, compute something on paper, or write code. There is one break in the middle. The last part prepares you for the two tasks you will solve this afternoon.
+**Say:** Here is the plan. Every few minutes you will do something: predict before a demo, count on paper, or write code. There is one break, and the last part prepares the two tasks you start this afternoon.
 
-**Do:** Point at the two tagged rows: "live code" (we write the training loop together) and "tasks" (the two problems you start today). Tell them to keep paper and a pen ready: many slides ask them to write a prediction before the answer appears.
+**Do:** Point at the "live code" row (we write the training loop together) and the "tasks" row. Ask for paper and a pen.
 
-Pacing: the presenter window (key P) shows the planned clock for every section and warns you when you are behind. If you are late, the safest places to cut are the extra demos in "Activations" (sigmoid towers, space warping) and the optimizer schedules slide.
+Pacing: the presenter window (P) shows the planned clock and warns when you are behind. If late, shorten pair work and optional questions, not the training loop or the task briefing.
 
 ### Slide 3 · Three ideas you need today
 
@@ -57,19 +57,19 @@ Pacing: the presenter window (key P) shows the planned clock for every section a
 
 **Time:** 3 min
 
-**Say:** Before we start, three ideas in plain words. You may know them already from classical ML; if so, this is a one-minute check. Everything today is built on these three.
+**Say:** Three ideas in plain words; everything today is built on them. If the room already knows them, keep it to one minute.
 
-**Do:** Press → for each card. After each one, ask a student to say it back in their own words.
+**Do:** Press → for each card; ask a student to say it back in their own words.
 
-1. **A model is a box with knobs.** Numbers go in (for Kobe: where the shot was taken), a guess comes out (the chance it goes in). The knobs are the model's weights. Different knob settings give different guesses. Logistic regression is a small box with three knobs; today's networks have hundreds.
-2. **The loss says how wrong the guess was.** We compare the guess with what really happened and get one number. Small is good. Guessing 41% for a shot that went in costs more than guessing 90%.
-3. **Training rolls downhill.** For every knob we can compute which direction makes the loss smaller (that is what the gradient tells us; backpropagation is the method that computes it for every knob at once). We turn each knob a small step that way, and repeat thousands of times. That is gradient descent.
+- **Knobs:** a shot's position goes in, a chance comes out; the knobs (weights) decide the guess.
+- **Loss:** one number for how wrong the guess was; small is good.
+- **Downhill:** turn each knob a little in the direction that lowers the loss (the gradient; backpropagation computes it), repeat. That is gradient descent.
 
 **Ask:** If the loss goes up after a step, what went wrong?
 
-**Answer:** The step was too big: we jumped over the bottom of the valley. The size of the step is the learning rate; we will play with it after the break.
+**Answer:** The step was too big: we jumped over the bottom of the valley. The step size is the learning rate; we play with it after the break.
 
-If students already know all of this well, move on quickly. If they look unsure, draw the valley on the board (key W opens a blank whiteboard, D draws) and roll a "ball" down it by hand.
+If faces look unsure: W opens a whiteboard, D a pen; draw a valley and roll a ball down it.
 
 ### Slide 4 · Predict: Kobe's shooting
 
@@ -77,15 +77,15 @@ If students already know all of this well, move on quickly. If they look unsure,
 
 **Time:** 2 min
 
-**Say:** Today's running example is real data: the shots Kobe Bryant took in his 20 NBA seasons, each with its position on the court. The basket is at the bottom of this picture. Orange dots went in, blue dots missed. This is also the data of your first task this afternoon.
+**Say:** Our running example is real data: Kobe Bryant's shots from 20 NBA seasons, each with its position on the court. Basket at the bottom; orange went in, blue missed. It is also the data of your first task this afternoon.
 
-**Do:** Everyone writes a number on paper first (15 seconds). Ask two or three students to say theirs out loud. Then → reveals 44.6%, and → again reveals the consequence.
+**Do:** Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → the consequence.
 
 **Ask:** If 44.6% went in, how often is a "model" right that always says "miss"?
 
-**Answer:** 55.4% of the time (100 − 44.6), so about 55%. Remember this number: any model that does not clearly beat 55% has learned nothing. Later we will see that even the best possible model only reaches about 61%, because the same spot on the court produces both makes and misses.
+**Answer:** About 55%. A model that does not clearly beat 55% has learned nothing; even the best reach only about 61%, because the same spot gives both makes and misses.
 
-Facts for the coach: the data is the Kaggle "Kobe Bryant Shot Selection" set: all 30,697 field-goal attempts from 1996 to his last game on 13 April 2016; 5,000 have a hidden label, which leaves 25,697 labelled shots. The dots are a random 800 of them. His regular-season career field-goal percentage was .447. Your task file has 25,000 of these shots (44.7% made). Kobe died in a helicopter crash in January 2020; mention it respectfully if it comes up, and never joke about it.
+Data: Kaggle "Kobe Bryant Shot Selection", 25,697 labelled shots (1996–2016); 800 are drawn. Kobe died in a helicopter crash in 2020; if it comes up, be respectful.
 
 
 ---
@@ -98,15 +98,15 @@ Facts for the coach: the data is the Kaggle "Kobe Bryant Shot Selection" set: al
 
 **Time:** 1.5 min
 
-**Say:** Here is a toy dataset: orange dots in the middle, blue dots in a ring around them. You already know logistic regression. Its decision boundary is always one straight line. Question: can one straight line put all the orange dots on one side and all the blue dots on the other?
+**Say:** A toy dataset: orange dots in the middle, a blue ring around them. You may have seen logistic regression; if not, it is the simplest classifier, and its border between the colours is always one straight line. Can one straight line put all orange on one side and all blue on the other?
 
-**Do:** Ask for a show of hands: "yes" or "no". Then press **Train**. The black line swings round for about a second and then stops moving: it stays straight. Point at the readouts: the loss stays near 0.68 and the accuracy stops at 59% (it started at 58%, so training bought almost nothing). Press → to show the answer. Press **Reset** and **Train** again if someone wants to see it twice: same result.
+**Do:** Show of hands. Press **Train**: the line swings for about a second, then stays straight. Readouts: loss stays near 0.68, accuracy stops near 59% (it started at 58%). Press → for the answer.
 
 **Ask:** Why can't it do better, however long we train?
 
-**Answer:** Every straight line leaves orange and blue dots on both sides. The orange dots are surrounded. Training longer only polishes the best line; it cannot bend it.
+**Answer:** Every straight line leaves both colours on both sides: the orange is surrounded. Training longer only polishes the line; it cannot bend it.
 
-Maths, if a student asks: logistic regression computes p = σ(w₁x₁ + w₂x₂ + b). The 50% boundary is where w₁x₁ + w₂x₂ + b = 0, which is a straight line. Even the best possible hand-placed line only gets 71% here; logistic regression gets 59% because it minimises log loss, not accuracy, and on this nearly symmetric data the best it can do is shrug.
+Maths for you: p = σ(w₁x₁ + w₂x₂ + b); the 50% border w₁x₁ + w₂x₂ + b = 0 is a line.
 
 ### Slide 6 · Fix 1: invent a feature (lift to 3-D)
 
@@ -114,15 +114,15 @@ Maths, if a student asks: logistic regression computes p = σ(w₁x₁ + w₂x�
 
 **Time:** 2 min
 
-**Say:** First fix, and it is a trick you already know from classical ML: invent a new feature. Give every dot a height: the further it is from the centre, the higher we lift it. The orange dots in the middle stay low, the blue ring goes up high. Now a flat sheet slides between them, which is just a linear model in 3-D. Look at where the sheet cuts the bowl and drop that back onto the floor: it is a circle. A straight cut in the new space is a curved boundary in the old one.
+**Say:** Fix 1: invent a new feature, a trick you may have seen in classical ML. Lift each dot by its distance from the centre: the blue ring rises and a flat sheet slides between the colours. Dropped back to the floor, that flat cut is a circle.
 
-**Do:** Press → once: the dots rise and the camera tilts (about one second). Drag on the picture with the mouse to spin the bowl so everybody sees the gap. Press → for the sheet, → for the circle on the floor, → for the question.
+**Do:** → the dots rise; drag the picture to spin it. → the sheet, → the circle, → the question.
 
-**Ask:** Last step: which height would you invent for Kobe's court? For a spiral?
+**Ask:** Which height would you invent for Kobe's court? For a spiral?
 
-**Answer:** For Kobe, distance from the rim is a good guess, but you had to know basketball. For a spiral, nobody has a good guess. And in the Kobe olympiad task you are not even allowed to compute features yourself: the network gets only x and y, and may use only linear layers and activations. So the network must invent its features itself. That is the next slide.
+**Answer:** For Kobe, distance from the rim, but you had to know basketball. For a spiral, nobody knows. And the Kobe task gives the network only x and y, so it must invent features itself: next slide.
 
-Maths for the coach: the new feature is z = x² + y² (squared distance from the centre). Inner dots have z ≤ 0.25, outer dots z ≥ 0.50, so the sheet at z = 0.36 separates them perfectly, and x² + y² = 0.36 is a circle of radius 0.6. This is the idea behind kernel methods (SVMs) too.
+Maths for you: height z = x² + y²; the sheet z = 0.36 lands on the floor as a circle of radius 0.6 (the idea behind kernel SVMs).
 
 ### Slide 7 · Fix 2: a hidden layer learns the features
 
@@ -130,19 +130,15 @@ Maths for the coach: the new feature is z = x² + y² (squared distance from the
 
 **Time:** 2.5 min
 
-**Say:** Second fix: instead of inventing the feature, let the network learn it. Take four logistic regressions side by side. That is the hidden layer: the four small squares on the left. Each one can only draw a straight line, orange on one side, blue on the other. Then one more logistic regression on top combines the four answers.
+**Say:** Fix 2: let the network learn the features. The hidden layer is four one-line models side by side, the small squares; one more neuron on top combines their answers.
 
-**Ask:** Before training: each small square can only ever be split by one straight edge. What shape will the big picture make out of four of them?
+**Ask:** Each small square is cut by one straight edge. What shape will four of them make?
 
-**Answer:** Take guesses, do not confirm yet. (Answer after training: the four edges join into one closed fence around the orange dots. Here the sides come out unequal, so it looks like a rounded triangle with one corner cut off; that is fine, any closed shape works.)
+**Do:** Take guesses, then press **Train**: the shape forms in about 4 s. Point at each small square, then trace its side of the fence in the big picture. Press →.
 
-**Do:** Press **Train**. The shape forms in about 4 seconds and is finished (100%) in about 5; it keeps polishing for a while after. Point first at the small squares: each is still a straight edge, but the edges move to different sides of the orange disc. Then point at the big picture: the four edges together fence in the disc, each small square supplying one side of the fence. Trace each side with your finger and point to the small square it comes from. Press → to show the answer. Press **Reset** and **Train** again if you want a second look.
+**Answer:** A closed fence around the orange, often lopsided. The last neuron says "orange" only where all four agree you are inside; more neurons give more walls and a smoother shape.
 
-**Ask:** The small squares are straight edges. How does the big picture become round?
-
-**Answer:** The last neuron adds up the four answers and says "orange" only where all four agree that you are on the inside. Four straight walls around the centre make a closed shape. More neurons give more walls, so a smoother shape. This is the "how many lines would you need" answer from the Kobe slide.
-
-Behind the picture: the network is 2-4-1 with tanh in the hidden layer, trained with Adam (learning rate 0.01, one full-batch step per frame) on the full 300 points. The colours in the small squares show each neuron's output: orange where it is positive, blue where it is negative. The hidden layer has learned new features (four "which side of my line are you on" scores); the last layer is ordinary logistic regression on those features. Misconception to head off: hidden neurons are not little brains and need not mean anything; here they just happen to be readable.
+The net is 2-4-1 with tanh, trained with Adam. Hidden neurons need not mean anything; here they just happen to be readable.
 
 
 ---
@@ -155,17 +151,15 @@ Behind the picture: the network is 2-4-1 with tanh in the hidden layer, trained 
 
 **Time:** 2 min
 
-**Say:** You already know one neuron: it is logistic regression. It takes the inputs, multiplies each one by its own weight, adds them up together with a bias, and then bends the result with an activation function. With a sigmoid as the bend, this is exactly logistic regression. Inside a network we usually bend with ReLU instead: keep positive sums, turn negative sums into zero.
+**Say:** A neuron multiplies each input by its weight, adds them up with a bias, then bends the result. With a sigmoid as the bend it is exactly the one-line model from before (logistic regression, if you have seen it). Inside networks we usually bend with ReLU: keep positive sums, turn negative ones into 0.
 
-**Do:** The inputs are fixed at 1 and 2. Point at the three steps: weigh (the numbers on the arrows), add (the circle shows 0.5 + 2 − 1 = 1.5), bend (ReLU keeps 1.5). Then drag "weight 1" down to −2: the sum becomes −1 and the output snaps to 0. Say: "the neuron is off". Drag it back. Click "sigmoid": the output becomes a probability between 0 and 1. Orange arrow = positive weight, blue arrow = negative weight, thickness = size.
+**Do:** Inputs are 1 and 2: point at weigh, add (0.5 + 2 − 1 = 1.5), bend (ReLU keeps 1.5). Drag "weight 1" to −2: the sum is −1 and the output snaps to 0, "the neuron is off". Click "sigmoid": the output becomes a chance.
 
-**Ask:** With ReLU, what is the output if the sum is −3? And if the sum is +3?
+**Ask:** With ReLU, what comes out for a sum of −3? Of +3?
 
-**Answer:** 0 and 3. ReLU(z) = max(0, z). Negative sums are switched off, positive sums pass through unchanged.
+**Answer:** 0 and 3: negative sums are switched off, positive ones pass through.
 
-The maths, if a student asks: z = w₁x₁ + w₂x₂ + b, output = φ(z), where φ is ReLU or σ. The bias is just a weight on an input that is always 1, which is why it is drawn as a box with a 1 in it.
-
-History in one breath: McCulloch and Pitts (1943) described the first artificial neuron, a yes/no threshold unit computing logic. Rosenblatt's perceptron (1958) was one such neuron that learned its weights. Do not say "it works like a brain cell": a 2021 study needed a 5–8-layer network to imitate a single real cortical neuron.
+Maths for you: output = φ(w₁x₁ + w₂x₂ + b), φ = ReLU, max(0, z), or σ. Avoid "it works like a brain cell": real neurons are far more complex.
 
 ### Slide 9 · One neuron cuts the court with a line
 
@@ -173,15 +167,15 @@ History in one breath: McCulloch and Pitts (1943) described the first artificial
 
 **Time:** 2 min
 
-**Say:** Now feed the neuron every position on Kobe's court. The colour shows the neuron's answer: orange where it says "made", blue where it says "missed". Whatever weights you choose, the border between the two colours is always a straight line. The arrow shows which side is orange. One neuron can only ever cut the court in two with one straight cut.
+**Say:** Now feed the neuron every spot on Kobe's court: orange where it says "made", blue where it says "missed". Whatever the weights, the border is always a straight line; the arrow points to the orange side.
 
-**Do:** "turn" rotates the arrow (this changes the two weights), "shift" sets how far the line is from the rim (this changes the bias; a negative shift puts the rim on the blue side), "steepness" makes the colour change sharp or soft (all weights bigger or smaller). Start: the line is 10 ft out and the neuron says "made" for everything closer. Read the accuracy aloud: 54.5%, worse than "always miss" (55.4%)! Then let a student direct you: "turn it, shift it, beat 55%". The best they can find is about 59%: turn about −90°, shift about 1 ft, a line hugging the rim, i.e. "made only if almost under the basket" (about 4,200 of the 25,000 labelled shots are at the rim itself and Kobe made 62% of them). Switch to ReLU once: the far side becomes plain paper, the neuron is simply off there.
+**Do:** Start: the line is 10 ft out, accuracy 54.5%, worse than "always miss" (55.4%). Let students steer turn (the weights), shift (the bias) and steepness to beat 55%: the best is about 59%, a line hugging the rim. Switch to ReLU once: the far side goes plain, the neuron is off there.
 
-**Ask:** Kobe scores near the rim and misses far away, in all directions. Can one straight line separate "near" from "far"?
+**Ask:** Kobe scores near the rim and misses far away, in every direction. Can one line separate near from far?
 
-**Answer:** No. "Near the rim" is a half-disc, and its border is curved. The best single line gets about 59% on these shots, only a little above "always miss" (55%). The 2-8-8-1 network we build later gets about 61%. We need several lines combined: a hidden layer.
+**Answer:** No: "near the rim" has a curved border. One line gets about 59%; the full network, combining several lines, about 61%.
 
-Background: the line is where the sum is exactly 0 (w₁x + w₂y + b = 0). The arrow is the weight vector (w₁, w₂); it is always perpendicular to the line. The bias moves the line without turning it. Bigger weights do not move the line, they only make the transition sharper. Inputs here are court positions in units of 10 ft, the accuracy is measured on the 6,000 Kobe shots stored in the deck (500 are drawn).
+The arrow is the weight pair (w₁, w₂), at right angles to the line.
 
 ### Slide 10 · Count the parameters
 
@@ -189,15 +183,15 @@ Background: the line is where the sum is exactly 0 (w₁x + w₂y + b = 0). The 
 
 **Time:** 2 min
 
-**Say:** Every arrow is one weight, and every neuron after the inputs has one bias. Learning means finding good values for all of these numbers. Let's count them for the network you will build for the Kobe task: 2 inputs, two hidden layers of 8, one output.
+**Say:** Every arrow is one weight, and every neuron after the inputs has one bias. Learning means finding good values for all these numbers. Let's count them for the Kobe network.
 
-**Do:** Press → for each layer and let the room call out the number first. Step 1: 2×8 weights + 8 biases = **24**. Step 2: 8×8 + 8 = **72**. Step 3: 8×1 + 1 = **9**, total **105**. Then give pairs 1 minute for the two questions on the right, and reveal: step 4, 2-16-1 = 2×16 + 16 + 16×1 + 1 = **65**; step 5, 784-128-10 (an MLP for 28×28 digit images) = 784×128 + 128 + 128×10 + 10 = **101,770**.
+**Do:** Press → per layer and let the room call out first: 2×8 + 8 = **24**, 8×8 + 8 = **72**, 8×1 + 1 = **9**, total **105**. Pairs take a minute for the right side: 2-16-1 = **65**; 784-128-10 (digit images) = **101,770**.
 
-**Ask:** 2-16-1 has fewer parameters than 2-8-8-1 (65 vs 105). Is it allowed in the Kobe task?
+**Ask:** 2-16-1 has fewer numbers. Is it allowed in the Kobe task?
 
-**Answer:** No. The rule is "at most 3 linear layers, at most 8 neurons in each", not a parameter budget. 16 neurons in one layer breaks it, and a rule-breaking submission scores 0. 2-8-8-1 is the largest legal network.
+**Answer:** No. The rule is at most 3 linear layers of at most 8 neurons each, not a number budget; breaking it scores 0.
 
-Rule of thumb: nn.Linear(in, out) has in × out + out parameters. In PyTorch, check with sum(p.numel() for p in model.parameters()). All counts verified in PyTorch.
+Rule of thumb: nn.Linear(in, out) has in × out + out numbers.
 
 ### Slide 11 · Forward pass, animated
 
@@ -205,15 +199,15 @@ Rule of thumb: nn.Linear(in, out) has in × out + out parameters. In PyTorch, ch
 
 **Time:** 2 min
 
-**Say:** This is a real 2-8-8-1 network, the largest the Kobe task allows, already trained on 20,000 of Kobe's shots. The court colour is its answer everywhere: orange where it thinks he scores more often, blue where he misses more. Click a spot and watch the forward pass: the position goes in on the left, each layer does weigh-add-bend, and a chance comes out on the right.
+**Say:** A real 2-8-8-1 network, already trained on 20,000 of Kobe's shots; the court colour is its answer everywhere. Click a spot: the position goes in on the left, every layer does weigh-add-bend, and a chance comes out on the right.
 
-**Do:** It starts on a mid-range shot from the left elbow (about 41%). Click "Rim": about 60% (the inputs are 0 there, so the first arrows carry nothing and only the biases matter). Click "Corner 3": about 35%. Click "Half court": about 5%. Then click anywhere on the court. Point out: thick orange arrows push the next neuron up, thick blue ones push it down, dotted ones carry nothing because the neuron before them is off (0). Yellow fill = how strongly a neuron fires. The number in the output circle is the raw score (logit); the sigmoid turns it into the percentage. "Real shot" picks one of Kobe's real shots and shows what really happened. Optional: "lines on" draws each first-layer neuron's straight cut on the court; the curved orange zone near the rim is built from these straight cuts.
+**Do:** Click "Rim" (about 60%), "Corner 3" (about 35%), "Half court" (about 5%), then anywhere. Orange arrows push the next neuron up, blue push it down, dotted carry nothing (the neuron before is off). "Real shot" also shows what happened.
 
-**Ask:** Even at the rim the network only says about 60%. Is the network bad?
+**Ask:** Even at the rim it only says about 60%. Is the network bad?
 
-**Answer:** No, basketball is noisy. Kobe made only 62% of his shots at the rim, so no model can be sure. This network is right about 61% of the time, versus 55% for "always miss". That is close to the best anyone gets from position alone (the best real Kobe-task scores were about 62%).
+**Answer:** No, basketball is noisy: Kobe made about 62% at the rim. The network is right about 61% of the time, against 55% for "always miss", close to the best possible.
 
-Background: inputs are the court position in units of 10 ft (x across, y away from the rim), so the rim is (0, 0) and half court is y ≈ 4.1. (In the Kobe task the grader feeds the raw numbers, in tenths of a foot; the network must cope with that.) Some hidden neurons show 0 for every position you click: they are "dead" ReLUs (one in the first layer, two in the second), which is common and is discussed in the activations section. The weights were trained in PyTorch with Adam (lr 0.01, 25 epochs, batch 64) on 20,000 shots; on all 25,000 labelled shots it scores accuracy 60.9%, log loss 0.664 (validation about 61–62%, log loss 0.66).
+Inputs are in units of 10 ft; the output circle shows the raw score before the sigmoid. Neurons stuck at 0 everywhere are "dead" ReLUs: they never learn.
 
 ### Slide 12 · An MLP in PyTorch
 
@@ -221,15 +215,15 @@ Background: inputs are the court position in units of 10 ft (x across, y away fr
 
 **Time:** 2 min
 
-**Say:** Here is the Kobe network as PyTorch code. A model is a class with two parts. __init__ builds the parts: three linear layers and two ReLUs; this is where the 105 numbers live. forward says the route the data takes through the parts. You never call forward yourself: you write model(x) and PyTorch calls it for you.
+**Say:** The Kobe network as PyTorch code: a class with two parts. __init__ builds the parts, three linear layers and two ReLUs holding the 105 numbers; forward gives the route through them. You never call forward yourself: model(x) does it.
 
-**Do:** Step 1 highlights __init__ (the parts list on the right). Step 2 highlights forward (the arrows appear: the route). Step 3: create the model, feed 32 random shots: the output shape is (32, 1), one number per shot, and the parameter count is 105, the same as we counted by hand. Step 4: the Kobe-task warning.
+**Do:** → 1 highlights __init__, → 2 forward (the arrows). → 3: 32 random shots in, shape (32, 1) out, and 105 parameters, as counted by hand. → 4: the Kobe-task warning.
 
 **Ask:** The last line returns fc3(x) with no sigmoid. Is that a bug?
 
-**Answer:** No, it is deliberate. The model outputs a raw score, a "logit"; the loss function BCEWithLogitsLoss applies the sigmoid inside, in a numerically safe way. To get a probability for a report, use torch.sigmoid(model(x)). (The loss section explains this; the Kobe grader only measures accuracy, so a final nn.Sigmoid is also acceptable there.)
+**Answer:** No. The model outputs a raw score (a "logit"); the loss, BCEWithLogitsLoss, applies the sigmoid itself, safely. For a chance, use torch.sigmoid(model(x)).
 
-Kobe task rules to repeat now: only linear layers with allowed activations after them (ReLU, Sigmoid, Tanh, ELU, LeakyReLU, PReLU), at most 3 linear layers with at most 8 neurons each, and build the layers directly as attributes like this. A model wrapped in nn.Sequential gets a score of 0 because the checker cannot see inside it. The official baseline class is called MyModel with no constructor arguments; keep that name. The code on this slide was run in PyTorch: printing the model lists fc1, act1, fc2, act2, fc3, and the counts match.
+Kobe rules (repeated later): at most 3 linear layers of at most 8 neurons, built as attributes like this; nn.Sequential scores 0 because the checker cannot see inside it.
 
 
 ---
@@ -242,15 +236,15 @@ Kobe task rules to repeat now: only linear layers with allowed activations after
 
 **Time:** 2 min
 
-**Say:** Let us check the vote with a real network. This is a 2-8-8-1 network, 105 weights, with no activation between the layers. Watch what it does with the circle.
+**Say:** Two hidden layers of 8 neurons, 105 weights, and nothing between the layers: each neuron only adds up its weighted inputs. Can it separate the orange disk from the blue ring?
 
-**Do:** Press Train. The boundary stays one straight line and the accuracy gets stuck at 59% (the line can only slice off part of the blue ring): all 105 weights behave like one neuron. Press Pause. Now click **ReLU** under "between the layers" and press Train again: within about a second the boundary bends around the orange disk and the accuracy reaches 100%. Optionally try **tanh**: a smooth round boundary.
+**Do:** Press Train: one straight line, accuracy stuck at about 59%. Pause, click **ReLU** under "between the layers", Train: within a second the boundary bends around the disk, 100%. Optional: **tanh** gives a round boundary.
 
-**Ask:** What exactly did we change between the two runs?
+**Ask:** What did we change between the two runs?
 
-**Answer:** Only one thing: a bend (the activation) after each hidden neuron. Same data, same 105 weights, same optimizer. The bend is what lets depth add power.
+**Answer:** Only a bend (the activation) after each hidden neuron. Without it, all the layers together still act like one straight line.
 
-Why it works: with ReLU every hidden neuron becomes "a line, but flat on one side". Combining many such bent ramps gives polygons, which is why the ReLU boundary looks slightly angular.
+ReLU boundaries are made of straight pieces, which is why they look slightly angular.
 
 ### Slide 14 · The activation zoo
 
@@ -258,17 +252,15 @@ Why it works: with ReLU every hidden neuron becomes "a line, but flat on one sid
 
 **Time:** 1.5 min
 
-**Say:** So we need a bend after each neuron. Any bend works; these are the five you will meet. ReLU: zero for negative inputs, the input itself for positive ones. Leaky ReLU: the same, but with a small slope on the left. Sigmoid: squashes everything into 0 to 1. tanh: the same S-shape, but from −1 to 1. GELU: a smooth ReLU, used in transformers like ChatGPT.
+**Say:** Almost any bend works. ReLU: zero for negative inputs, the input itself for positive ones; Leaky ReLU keeps a small slope on the left. Sigmoid squashes into 0 to 1, tanh is the same S from −1 to 1, and GELU is a smooth ReLU used in models like GPT.
 
-**Do:** Press → to show the magenta dashed curves: the **slope** of each activation. Then sweep the pointer from left to right across the sigmoid plot and stop at the middle.
+**Do:** Press → to show the magenta dashed **slope** curves. Sweep the pointer across the sigmoid plot and stop at the middle.
 
-**Ask:** Look at the sigmoid's slope. What is the largest it ever gets?
+**Ask:** What is the largest slope the sigmoid ever has?
 
-**Answer:** 0.25, at input 0 (the readout says 0.25). Far from 0 the sigmoid is flat and its slope is almost 0. ReLU's slope is exactly 1 for every positive input. Keep this in mind: during backprop every layer multiplies the gradient by this slope, which will matter in five minutes.
+**Answer:** 0.25, at input 0; far from 0 it is flat. ReLU's slope is 1 for every positive input. Training relies on these slopes and flat spots barely learn: one reason ReLU is the usual default.
 
-Background: σ(z) = 1/(1+e^(−z)); tanh(z) = 2σ(2z) − 1; ReLU(z) = max(0, z); Leaky ReLU is drawn with slope 0.1 on the left so it is visible (PyTorch's default is 0.01); GELU(z) = z·Φ(z) has a small dip, minimum −0.17 near z = −0.75. Analogy that works: ReLU is a one-way valve (a diode, hence the name "rectifier"). Avoid saying "the activation decides whether the neuron fires": modern activations are continuous, not on/off switches.
-
-History in one sentence: ReLU-like units go back to Fukushima in 1969; the name "rectified linear unit" comes from Nair and Hinton in 2010; in 2012 AlexNet reported that ReLU reached its training target six times faster than tanh.
+Avoid "the neuron fires": these are smooth bends, not on/off switches.
 
 ### Slide 15 · Any curve from hinges
 
@@ -276,15 +268,15 @@ History in one sentence: ReLU-like units go back to Fukushima in 1969; the name 
 
 **Time:** 1.5 min
 
-**Say:** The hat was one building block. Now the dashed curve is any wiggly curve, and each dot is a hinge: one hidden ReLU neuron. With only three hinges the best we can do is a rough zig-zag. Watch the thick line as we add hinges.
+**Say:** One ReLU neuron draws a hinge: flat, then a straight ramp. The dashed curve is a wiggly target, each dot is one neuron's hinge, and the thick line adds them up. With three hinges we only get a rough zig-zag.
 
-**Do:** Press → for 8 hinges, → again for 32 (or click the numbers under "hinges"). The readout "error" (mean squared error) drops from 0.07 (3 hinges) to 0.002 (8) to 0.000005 (32): the dashed curve disappears under the thick line. With ≤ 8 hinges the faint lines show each neuron's own ramp.
+**Do:** Press → for 8 hinges, → again for 32. The "error" drops from 0.07 to 0.002 to 0.000005 and the dashed curve disappears under the thick line. The faint lines are each neuron's own ramp.
 
-**Ask:** If I want the error ten times smaller, what do I do?
+**Ask:** I want the error ten times smaller. What do I do?
 
-**Answer:** Add more hinges, that is, more neurons in the hidden layer. One hidden layer is a "connect-the-dots machine": every extra neuron is an extra dot where the line may bend.
+**Answer:** Add hinges, that is, more hidden neurons: each one is one more place where the line may bend.
 
-How the weights are chosen here: the hinge positions are evenly spaced, and the output weights are the best possible ones (least squares, solved exactly in the browser). On the next slides gradient descent will have to find them on its own. Analogy that works: Lego skyline. With enough thin bricks you can copy any skyline.
+Here the hinges are evenly spaced and the output weights computed exactly; on the next slide training must find them itself.
 
 ### Slide 16 · Gradient descent finds the hinges
 
@@ -292,13 +284,13 @@ How the weights are chosen here: the hinge positions are evenly spaced, and the 
 
 **Time:** 1.5 min
 
-**Say:** So far we placed the hinges by hand. A real network starts from random weights and must find them with gradient descent, the same training you know from logistic regression. Here is a 1-4-1 ReLU network learning the dots.
+**Say:** Now the network starts from random weights and must find the hinges by training. You may have seen gradient descent; if not: it nudges every weight a little to shrink the error, thousands of times.
 
-**Do:** Press Train: with 4 neurons the line gets the rough shape but cannot follow the wiggles; the error stops at about 0.014. Click **2 neurons** (it restarts by itself; press Train only if the button says Train): worse, it stops at about 0.06. Click **8 neurons**: about 0.005, still worse than the 8 hand-placed hinges on the previous slide (0.002). Click **32 neurons**: within a second it is close (0.001), it lingers there for a few seconds, then drops to about 0.0001 and stops after 5 to 7 seconds (9,000 epochs). Point at the corners in the thick line: those are the hinges the network found by itself.
+**Do:** Press Train: 4 neurons, rough shape, error about 0.014. Click **2 neurons** (it restarts; press Train if needed): stuck at 0.06. **8**: about 0.005, worse than 8 hand-placed hinges (0.002). **32**: about 0.0001 after 5 to 7 seconds. Point at the corners: the hinges it found.
 
 **Ask:** With 2 neurons the error stays at 0.06 however long we train. Why?
 
-**Answer:** Two ReLU neurons give at most two bends, and this curve needs more. Training can only find what the network is able to draw. And with 8 neurons it could have matched our hand-placed hinges but ended a bit worse: gradient descent walks downhill from where it starts and can settle in a slightly worse spot. Enough neurons make a good fit possible; they do not promise that training finds it. That is the theme of the next slide.
+**Answer:** Two neurons give at most two bends; this curve needs more. More neurons make a good fit possible, but training starts at random and can settle a little worse, as with 8.
 
 
 ---
@@ -309,17 +301,15 @@ How the weights are chosen here: the hinge positions are evenly spaced, and the 
 
 **Time:** 1.5 min
 
-**Say:** The loss is one number that says how wrong the model is. Training means making that number small, nothing more. Here is the simplest one. We predict a number: what share of Kobe's shots go in, from how far away he shoots. The dots are the real answers from 25,697 of his shots. The black line is our model.
+**Say:** The loss is one number that says how wrong the model is; training makes it small. Dots: the share of Kobe's shots made from each distance; the line is our model. Each miss becomes a square, and the loss is the average square: the mean squared error.
 
-**Say:** For every dot we take the miss, the vertical gap between the dot and the line, and draw a square on it. The loss is the average size of those squares. That is the mean squared error.
+**Do:** Point at the big square at 0–4 ft. Drag an end dot to grow and shrink squares, then press **Fit the line**: loss 64 → 18.
 
-**Do:** Start: the line is flat at 44%, a model that ignores distance. Point at the huge square at 0–4 ft (Kobe makes 62% there): one big miss dominates. Drag an end dot to tilt the line and show that squares grow and shrink. Then press **Fit the line**: the line tilts until the total area is smallest (loss 64 → 18). Reset if you want to replay.
+**Ask:** A miss of 10 points costs 100. What does a miss of 20 cost?
 
-**Ask:** A miss of 10 points costs 100. What does a miss of 20 points cost?
+**Answer:** 400, four times as much: big misses are very expensive, so the line works hardest to avoid them.
 
-**Answer:** 400, four times as much, not twice. Squaring makes big misses very expensive, so the line works hardest to avoid them.
-
-Background for you: MSE = average of (prediction − target)². PyTorch: `nn.MSELoss()`. It is the loss for predicting numbers (regression), which is what the inversion task's frozen model does. The "Fit" button runs gradient descent on the loss, the same thing every training run does. The numbers are percentage points squared, so don't worry about units: only "smaller is better" matters. If a student asks about outliers: because of the squaring, one crazy data point can pull the line a lot; other losses (absolute error, Huber) are gentler.
+PyTorch: `nn.MSELoss()`, the loss for predicting numbers, as in the inversion task.
 
 ### Slide 18 · Confident and wrong costs the most
 
@@ -327,19 +317,15 @@ Background for you: MSE = average of (prediction − target)². PyTorch: `nn.MSE
 
 **Time:** 2.5 min
 
-**Say:** For yes/no questions the model gives a forecast, like a weather forecaster: "90% chance it goes in." Kobe takes the shot and it goes in. How should we punish the forecast? Four forecasters said 90%, 50%, 10% and 0.1%. Rank them from best to worst, and guess how much worse the last one is than the first.
+**Say:** For yes/no the model gives a forecast, like a weather forecaster: "90% chance it goes in." The shot goes in; four forecasters had said 90%, 50%, 10% and 0.1%. Rank them, and guess how much worse the last is than the first.
 
-**Do:** Give 60 seconds: students rank the four forecasts with a neighbour and guess the loss numbers. Then press → four times: each press reveals one forecast's loss and grows the curve. The last press is the dramatic one: 0.1% costs 6.91, 66 times the loss of the 90% forecaster.
+**Do:** 60 seconds with a neighbour. Press → four times, one loss each: 0.1% costs 6.91, 66 times the 90% forecaster. A fifth press adds a slider and a "went in / missed" switch.
 
-**Say:** A hesitant wrong answer (50%) costs 0.69. A confident wrong answer (0.1%) costs almost 7, and saying exactly 0% would cost infinity. That is why a model trained with this loss learns to be honest about uncertainty: Kobe is a noisy shooter, so a good model rarely says more than about 60%.
+**Ask:** The shot missed and the forecast was 90%. What is the loss?
 
-**Do:** Fifth press: a slider and a "went in / missed" switch appear. Drag the forecast; flip to "missed" and the curve mirrors: now a high forecast is the expensive one.
+**Answer:** 2.30, as for 10% on a made shot: only the chance given to what happened counts.
 
-**Ask:** The shot is missed and the forecast was 90%. What is the loss?
-
-**Answer:** 2.30, the same as forecasting 10% for a made shot: the loss only looks at the chance you gave to what really happened.
-
-Background: this is binary cross-entropy, also called log loss: loss = −ln(chance you gave to what happened), averaged over all shots. Values: 90% → 0.105, 50% → 0.693, 10% → 2.303, 0.1% → 6.908 (natural log). It is the official metric of the Kaggle Kobe competition. "Surprise meter" is a good image: the loss is how surprised the model was. It is the same loss as in logistic regression, which they know.
+This is binary cross-entropy (log loss), the official Kobe metric. You may have seen it in logistic regression; if not, "surprise meter" is enough.
 
 ### Slide 19 · Pick the loss from what you predict
 
@@ -347,21 +333,21 @@ Background: this is binary cross-entropy, also called log loss: loss = −ln(cha
 
 **Time:** 2 min
 
-**Say:** Three kinds of questions cover almost every task you will meet, and each has its loss. Before each row appears, ask the class to name the loss.
+**Say:** Three kinds of questions cover almost every task, each with its loss. Before each row, let the class guess.
 
-**Do:** → Row 1: predicting a number (a price, a temperature, the inversion task's output). One output, mean squared error, the squares from the first slide.
+**Do:** → Row 1, a number (the inversion task): one output, mean squared error.
 
-**Do:** → Row 2: yes/no (Kobe: in or out). One score, BCEWithLogitsLoss, the log loss we just saw. The target is 0. or 1. as a float.
+**Do:** → Row 2, yes/no (Kobe): one score, BCEWithLogitsLoss, the forecast loss; targets 0. or 1. as floats.
 
-**Do:** → Row 3: one of K classes, for example what kind of shot Kobe took (jump shot, layup, dunk, other). The model gives K scores, one per class. Point at the bars: scores 0.5, 2.0, 1.0, −1.0 become 14%, 61%, 22%, 3%. That conversion is called softmax: the biggest score gets the biggest share and the shares add up to 100%. The loss is again "−log of the chance given to the right answer": if it was a layup, −ln 0.61 = 0.50.
+**Do:** → Row 3, one of K classes: K scores; softmax turns them into shares (the bars), and the loss punishes a low share for the right answer.
 
-**Do:** → The rule under all three: the model ends with a plain linear layer. No sigmoid, no softmax: the loss does that part.
+**Do:** → The rule: the model ends with plain Linear; the loss does the squashing.
 
-**Ask:** You predict which of 10 digits is in an image. How many outputs, and which loss? What is the first loss of an untrained network?
+**Ask:** Which of 10 digits is in an image: how many outputs, which loss?
 
-**Answer:** 10 scores, nn.CrossEntropyLoss. Untrained: 10% for each class, loss = −ln 0.1 = 2.30 (the same sanity check as 0.69 for yes/no).
+**Answer:** 10 scores, nn.CrossEntropyLoss. Untrained, each class gets 10%, so the first loss is about 2.3.
 
-Background: softmax(z)ᵢ = e^(zᵢ) / Σⱼ e^(zⱼ): make every score positive with exp, then divide by the total. CrossEntropyLoss takes the raw scores, shape (N, K), and the class numbers as integers (0 … K−1), shape (N,), not one-hot. BCEWithLogitsLoss wants targets with the same shape as the scores, (N, 1), as floats. A 2-class softmax is the same as one sigmoid, so for yes/no use one score.
+CrossEntropyLoss wants raw scores and class numbers 0 … K−1 as integers, not one-hot.
 
 ### Slide 20 · Cliffhanger: sigmoid + BCEWithLogitsLoss
 
@@ -369,17 +355,15 @@ Background: softmax(z)ᵢ = e^(zᵢ) / Σⱼ e^(zⱼ): make every score positive
 
 **Time:** 2 min
 
-**Say:** Last question before the break. A classmate thinks: "my model should output a chance, so I'll put a sigmoid at the end", and keeps BCEWithLogitsLoss. What happens when they train? 1 crash, 2 trains normally, 3 trains but is quietly worse, 4 the loss becomes NaN.
+**Say:** Last question before the break. A classmate wants the model to output a chance, so they add a sigmoid at the end and keep BCEWithLogitsLoss. What happens?
 
-**Do:** → highlights the two lines that matter (the sigmoid in the model and the loss). 30 seconds of silent thinking, then everyone votes with fingers at once. Note the rough counts on the board.
+**Do:** → highlights the two lines; 30 seconds of silence, then a finger vote (note the counts). → One minute with a neighbour, re-vote. Do not reveal: "we run it after the break."
 
-**Do:** → Discussion: one minute with a neighbour, ideally with someone who voted differently. Then vote again and write the new counts next to the old ones.
+**Ask:** 1 crash, 2 trains normally, 3 quietly worse, 4 NaN?
 
-**Say:** Don't tell them the answer, even if they ask. Say: "We'll run it live after the break and you'll see." Leave the vote counts on the board.
+**Answer:** For you only (revealed after the break): 3. The loss adds a second sigmoid: printed loss looks normal (about 0.68), accuracy about 61%, but the outputs become extreme; their true log loss is about 4.5, against 0.67 when correct (about 3 out of 4 outputs say "less than 1%").
 
-**Do:** Hint you may give if the room is stuck: "Remember the logits slide: what does BCEWithLogitsLoss do first with whatever it receives?"
-
-For you only (the reveal is in "The training loop, live"): the answer is 3. Nothing crashes and nothing is NaN. The loss applies a second sigmoid, so the chance it sees is σ(σ(z)), always between 50% and 73%. The printed loss looks normal and accuracy stays around 61%, but the real outputs become extreme (76% of them below 1% or above 99%), and the true log loss of what you would submit is 4.69 instead of 0.662. Good discussion arguments to listen for: "it double-squashes" (correct), "it crashes because of shapes" (no, shapes are fine), "NaN because log(0)" (no: whatever the model outputs, even exactly 0, the loss's own sigmoid turns it into at least 50%, so the log never sees 0).
+No crash (shapes are fine) and no NaN: the loss's own sigmoid lifts any output to at least 50%.
 
 
 ---
@@ -392,11 +376,11 @@ For you only (the reveal is in "The training loop, live"): the answer is 3. Noth
 
 **Time:** 10 min
 
-**Say:** Ten minutes of break. Stand up, drink water, look out of a window. When we come back we start with a game: ten claims about neural networks, and you decide for each one whether it is true or a bluff.
+**Say:** Ten minutes of break: stand up, drink water, look out of a window. When we come back we play a game: ten claims about neural networks, true or bluff?
 
-**Do:** The timer starts by itself when this slide appears (Pause or Reset if needed). Keep this slide on screen during the break: the timer only runs while the slide is visible. When it reaches 0:00 the numbers turn white on black.
+**Do:** The timer starts by itself (Pause or Reset if needed) and only runs while this slide is visible, so keep it on screen. At 0:00 the numbers turn white on black.
 
-The game is on the next two slides (5 claims each, about 3 minutes in total). It wakes everyone up after the break and repeats a few names they will hear again. If you are short on time, play only the first slide. If you are early at the end of the day, it also works as a filler.
+The game is on the next two slides, about 3 minutes in total; if you are short on time, play only the first.
 
 ### Slide 22 · True or bluff? (1–5)
 
@@ -404,13 +388,13 @@ The game is on the next two slides (5 claims each, about 3 minutes in total). It
 
 **Time:** 1.5 min
 
-**Do:** For each line: read the claim aloud, count "3, 2, 1, show!", students hold up a hand for **true** or a fist for **bluff**. Then press → to reveal the verdict and tell the one-line story below. Do not explain more than one sentence per claim.
+**Do:** For each line: read the claim, count "3, 2, 1, show!": hand up for **true**, fist for **bluff**. Press → to reveal the verdict and say the one line below, no more.
 
-1. **True.** New York Times, 8 July 1958: the US Navy showed "the embryo of an electronic computer that it expects will be able to walk, talk, see, write, reproduce itself and be conscious of its existence." The machine could only draw one straight line. Hype is old.
-2. **Bluff.** Minsky & Papert's 1969 book *Perceptrons* proved that a network *without* hidden layers can't compute XOR. They knew a hidden layer could represent it but doubted it could be trained. People read the book as "neural nets don't work" and funding dried up for years. In section 2 we solved XOR with two hidden neurons.
-3. **True.** Geoffrey Hinton (Reddit "ask me anything", 2016): the tellers at his bank kept changing; he guessed it was so that employees could not cooperate to cheat the bank. Randomly switching off different neurons on every example stops neurons from "conspiring", which reduces overfitting. That is dropout.
-4. **Bluff.** Hebb's 1949 book describes the idea, but the catchy sentence comes from the neuroscientist Carla Shatz, in *Scientific American*, 1992. Famous quotes are often not by the famous person.
-5. **True.** Krizhevsky, Sutskever and Hinton trained AlexNet for five to six days on two GTX 580 gaming cards and won the ImageNet competition in 2012 with 15.3% top-5 error against 26.2% for second place. That started the deep-learning boom.
+1. **True.** About a machine that could only draw one straight line: hype is old.
+2. **Bluff.** Only for networks *without* a hidden layer, but the book was read as "neural nets don't work" and funding dried up.
+3. **True.** Hinton's bank moved tellers so they could not team up to cheat; dropping random neurons stops them "conspiring".
+4. **Bluff.** Hebb (1949) had the idea; the catchy sentence is Carla Shatz's (1992).
+5. **True.** Two GTX 580 cards, five to six days; it won ImageNet 2012 and started the deep-learning boom.
 
 ### Slide 23 · True or bluff? (6–10)
 
@@ -418,15 +402,15 @@ The game is on the next two slides (5 claims each, about 3 minutes in total). It
 
 **Time:** 1.5 min
 
-**Do:** For each line: read the claim aloud, count "3, 2, 1, show!", students hold up a hand for **true** or a fist for **bluff**. Then press → to reveal the verdict and tell the one-line story below. Do not explain more than one sentence per claim.
+**Do:** For each line: read the claim, count "3, 2, 1, show!": hand up for **true**, fist for **bluff**. Press → to reveal the verdict and say the one line below, no more.
 
-1. **True** (as Quanta Magazine reports it). At OpenAI a team member went on vacation and forgot to stop a training run. Long after the network had memorised its training data, it suddenly started to generalise perfectly. "We got lucky… and by lucky, I mean forgetful." We meet grokking again in section 8.
-2. **Bluff.** The "10-minute attention span" is a myth: studies (Wilson & Korn 2007, Bradbury 2016) find no fixed limit. Attention drops and comes back in short cycles, and doing something (predicting, voting, writing) brings it back. That is why this lecture makes you do something every few minutes.
-3. **True.** Kingma & Ba's Adam paper (2014) had about 200,000 Google Scholar citations by March 2025, which made it number 4 of all 21st-century papers in the data behind a 2025 *Nature* ranking. It is the optimizer you will type this afternoon.
-4. **Bluff.** In 2021 Beniaguev, Segev and London needed a deep network with five to eight layers to imitate one realistic model of a single cortical neuron. Artificial "neurons" are a cartoon of real ones; do not take the brain analogy literally.
-5. **Bluff.** Augustin-Louis Cauchy described steepest descent in 1847, more than a century before neural networks. "Your optimizer's grandfather was born in 1847."
+1. **True** (as the researchers tell it). Someone left a run going over a holiday; long after memorising, the network suddenly generalised: "grokking".
+2. **Bluff.** No fixed limit exists; attention dips and comes back when you do something.
+3. **True.** About 200,000 by 2025; you will type Adam this afternoon.
+4. **Bluff.** Imitating one realistic brain neuron took a deep network of five to eight layers (2021).
+5. **Bluff.** Cauchy described it in 1847, a century before neural networks.
 
-**Say:** Ask: "Who got 8 or more right?" Then move on to the after-break quiz.
+**Say:** Ask: "Who got 8 or more right?" Then move on to how the network learns.
 
 
 ---
@@ -439,20 +423,18 @@ The game is on the next two slides (5 claims each, about 3 minutes in total). It
 
 **Time:** 2.5 min
 
-**Say:** Same bowl, same ball, but now we let it run, and we change only one number: the learning rate. Below the bowl you see where the weight is after each step; the dashed line is the bottom.
+**Say:** Training means rolling downhill on the loss. This bowl is the loss of one weight w, lowest at 3; each step moves the ball against the slope, by learning rate × slope. We change only the learning rate.
 
-**Do:** For each value, first ask "what will happen?", then click it and press **Run** (5 steps per second, at most 40 steps; **Reset** restarts). Order: **0.3** (the default when the slide opens), then **0.02**, then **0.9**, then **1.05**.
+**Do:** For each value ask "what will happen?", then click it and press **Run**. Order: 0.3, 0.02, 0.9, 1.05.
 
-- **0.3**: big confident steps, at the bottom (within 0.01) after 7 steps.
-- **0.02**: tiny steps; after 40 steps it is still 0.6 away (it needs 140 steps). Too small = slow, wasted time.
-- **0.9**: the ball jumps over the bottom to the other wall every step (0 → 5.4 → 1.08 → 4.54 …) but each jump is smaller; it arrives after 26 steps. In the w-plot it zig-zags around the dashed line.
-- **1.05**: every jump overshoots more than the last (0 → 6.3 → −0.63 → 6.99 …). It blows up. In real training this is the loss going to NaN.
+- **0.3**: at the bottom in 7 steps.
+- **0.02**: crawls; still 0.6 away after 40 steps.
+- **0.9**: overshoots every step, but arrives (26 steps).
+- **1.05**: every jump is bigger: it blows up (in real training the loss becomes NaN).
 
-**Ask:** Which learning rate would be fastest of all here?
+**Ask:** Which learning rate would be fastest here?
 
-**Answer:** 0.5: it lands exactly on the bottom in one step. Above 0.5 it starts to zig-zag; at 1 it bounces between 0 and 6 forever; above 1 it explodes. Steeper bowls lower all of these limits, which is why there is no universal "right" learning rate.
-
-Background: the distance to the bottom is multiplied by (1 − 2·lr) at each step, so lr 0.9 (factor −0.8) is exactly as fast as lr 0.1 (factor +0.8). Goodfellow, Bengio and Courville's textbook: "If you have time to tune only one hyperparameter, tune the learning rate."
+**Answer:** 0.5: one step lands on the bottom. A steeper bowl lowers every limit, so there is no universal right value.
 
 ### Slide 25 · Epoch, batch, step
 
@@ -460,19 +442,17 @@ Background: the distance to the bottom is multiplied by (1 − 2·lr) at each st
 
 **Time:** 2 min
 
-**Say:** Three words people mix up. An **epoch** is one pass over all the training data: for Kobe, 20,558 shots. A **batch** is the small handful of shots we look at before taking one step: here 64. A **step** is one update of all the weights. So the network does not wait for the whole epoch: it takes a step after every batch.
+**Say:** An **epoch** is one pass over all the training shots. A **batch** is a handful of them, here 64. After every batch we take one **step**: one update of all the weights.
 
-**Do:** Step 0: the bar is all 20,558 training shots. → (1): cut into batches of 64: the zoom shows one batch (real Kobe shots, orange = made, blue = missed). Ask the class to compute the number of steps per epoch before you point at 322.
+**Do:** → (1): the zoom shows one batch of real shots; let the class compute the steps per epoch first. → (2): take the vote. → (3): our Kobe runs.
 
-**Ask:** 20,558 shots in batches of 64: how many steps per epoch, and how big is the last batch?
+**Ask:** 20,558 shots in batches of 64: how many steps per epoch?
 
-**Answer:** 20,558 / 64 = 321.2, so 322 steps; 321 full batches use 20,544 shots, leaving 14 for the last batch. 30 epochs = 9,660 steps.
+**Answer:** 322 (the last batch has 14 shots), so 9,660 steps in 30 epochs.
 
-**Do:** → (2): the prediction question; take a vote. → (3): the answer from our real Kobe runs. The magenta bars are the number of steps (weight updates) each one took in 30 epochs; the loss is on the right.
+**Say:** Batches of 64 learn (0.662); all shots at once takes only 30 steps and is no better than guessing (0.688). Count steps, not epochs.
 
-**Say:** Same 30 epochs, but batches of 64 make 9,660 steps and reach validation loss 0.662. Using all shots at once makes only 30 steps, and the loss 0.688 is no better than always guessing 44.6%. Count steps, not epochs.
-
-Why batches work: the slope from 64 random shots is a noisy but honest estimate of the slope from all shots, and it is 300 times cheaper. The noise makes the path wobble but it still goes downhill. Yann LeCun tweeted in 2018: "Friends dont let friends use minibatches larger than 32" (a joke with a point). Typical batch sizes for small tables: 32 to 256.
+A slope from 64 random shots is noisy but honest, and 300 times cheaper. (The notebook has 20,000 training shots: 313 steps per epoch.)
 
 ### Slide 26 · Race in a narrow valley
 
@@ -480,20 +460,18 @@ Why batches work: the slope from 64 random shots is a noisy but honest estimate 
 
 **Time:** 2.5 min
 
-**Say:** Now a 2-D loss surface seen from above, like a map with height lines. It is a long, narrow valley: very steep across, almost flat along. The bottom is the cross. Three classic optimizers race from the same start, 100 steps each.
+**Say:** A loss surface seen from above, like a map: a long, narrow valley, steep across and almost flat along, with the bottom at the cross. Three optimizers race from the same start.
 
-**Do:** Step 0: only plain gradient descent (SGD, dotted path). Ask "predict the path", then press **Run**. It bounces from wall to wall and then crawls along the floor: after 100 steps it is still far from the bottom (loss 0.27).
+**Do:** Ask "predict the path", then press **Run**: plain gradient descent (SGD, dotted) zig-zags, then crawls. Each → adds a racer (momentum dashed, then Adam solid) and restarts the race.
 
-**Do:** → (1) adds **momentum** (dashed) and starts the race again automatically; SGD is dimmed. → (2) adds **Adam** (solid). Use **Run**/**Reset** to replay.
+- **Momentum** = a heavy ball: side-to-side pushes cancel, pushes along the floor add up. It overshoots, then ends closest.
+- **Adam** = its own step size for each weight: small across the steep walls, big along the flat floor, so it goes almost straight.
 
-- **Momentum** = a heavy ball. It keeps most of its previous velocity (90%), so the back-and-forth pushes cancel and the pushes along the valley add up. It overshoots past the bottom (to x ≈ +0.8), comes back, and ends far closer than SGD (loss 0.0003).
-- **Adam** = every weight has its own cruise control. It measures how big each weight's slopes usually are and divides by that, so the steep direction is calmed down and the flat direction is sped up. It heads almost straight for the bottom (loss 0.003 after 100 steps).
+**Ask:** Pair task (1 min): describe one walk to your neighbour; they name the optimizer.
 
-**Ask:** Pair task (1 min, "optimizer charades"): one partner describes how each of the three would walk down a long narrow valley; the other names it.
+**Answer:** Zig-zag, then crawl: SGD. Speeds up and overshoots: momentum. Fairly straight: Adam.
 
-**Answer:** SGD zig-zags across and crawls along; momentum builds up speed along the floor and overshoots a bit; Adam evens out the step sizes per direction and goes fairly straight.
-
-Honesty notes. The learning rates here (0.019, 0.01, 0.1) are toy values for this toy surface, not the defaults for neural networks; for Adam the learning rate is roughly how far each coordinate moves per step, so 0.1 here means about 0.1 per step. Surface: 0.5(x² + 100y²), start (−5, 1.5), momentum β = 0.9, Adam β = (0.9, 0.999). These update rules match PyTorch's SGD, SGD(momentum=0.9) and Adam exactly. The idea of these races comes from Alec Radford's famous 2014 animations.
+The learning rates are toy values for this surface, not real-network defaults.
 
 ### Slide 27 · What to use: Adam, then tune lr
 
@@ -501,20 +479,15 @@ Honesty notes. The learning rates here (0.019, 0.01, 0.1) are toy values for thi
 
 **Time:** 1 min
 
-**Say:** In practice you never write the update by hand. You make an optimizer once, give it the model's weights and a learning rate, and inside the loop you call three lines: zero_grad, backward, step. They do exactly what our hand-written lines did, for every weight at once.
+**Say:** You never write the update by hand. You create an optimizer once, with the model's weights and a learning rate, and in the loop call three lines: zero_grad, backward, step.
 
-**Do:** → (1): the default. Adam with 0.001, then also try 0.003 and 0.0003 and keep whatever is best on validation. → (2): the three loop lines next to the manual version from the paper step (for plain SGD, step() is exactly w -= lr * w.grad; Adam does its smarter version). → (3): changing the optimizer is one line; the loop stays the same.
+**Do:** → (1): start with Adam 0.001; also try 0.003 and 0.0003 and keep the best on validation. → (2): for every weight: clear the old slope, compute the new one, move against it. backward() is backpropagation; you may have seen it, if not: PyTorch finds every weight's slope for you. → (3): changing the optimizer is one line.
 
-- **Adam** (Kingma and Ba, 2014) is one of the most cited papers of the century: about 200,000 Google Scholar citations, 4th of all 21st-century papers in the data behind Nature's 2025 ranking.
-- Andrej Karpathy tweeted in 2016: "3e-4 is the best learning rate for Adam, hands down." It was half a joke; in his 2019 training recipe he really does start with Adam at 3e-4 because "Adam is much more forgiving to hyperparameters, including a bad learning rate".
-- **AdamW** is Adam with weight decay done properly; use it when you want weight decay.
-- **SGD with momentum 0.9** is still common for image networks (CNNs), where a well-tuned SGD often ends up slightly better, but its good learning-rate range is narrower.
+**Ask:** Could zero_grad go between backward and step?
 
-**Ask:** Which order do the three lines go in, and could zero_grad go after backward?
+**Answer:** No: it would wipe the fresh slopes, so step would move nothing.
 
-**Answer:** zero_grad, backward, step (zero_grad may also go right after step). Not between backward and step: it would wipe the fresh slopes, step would find no gradient and no weight would move.
-
-The code is tested: it runs with any model, loss_fn and DataLoader. The full loop with the forward pass is built line by line in the next section.
+AdamW is Adam with weight decay done properly.
 
 
 ---
@@ -527,141 +500,123 @@ The code is tested: it runs with any model, loss_fn and DataLoader. The full loo
 
 **Time:** 4 min
 
-**Say:** Everything we did so far, the model, the loss, the gradients, the optimizer, is used in five lines of code. They run once for every batch of shots, thousands of times. Say them with me: clear, forward, loss, backward, step.
+**Say:** Model, loss and optimizer come together in five lines that run once per batch, thousands of times. Say them with me: clear, forward, loss, backward, step.
 
-**Do:** Press → five times. Each press highlights one line and shows on the right what that line does to the real 2-8-8-1 Kobe network (64 real shots, scaled):
+**Do:** Press → five times; the right side shows each line acting on the real 2-8-8-1 Kobe network, 64 shots:
 
-- **1 zero_grad**: every stored gradient is set back to zero (nothing visible changes in the network).
-- **2 forward**: the batch flows left to right; dark hidden neurons are the ones that fire a lot on these 64 shots; blank ones are off (ReLU gave 0).
-- **3 loss**: one number for the whole batch, about 0.7 for a fresh network (a coin flip is 0.69).
-- **4 backward**: magenta dashed lines are gradients, thicker means "this weight is more to blame". Every one of the 105 weights gets one, in one call.
-- **5 step**: every weight moves a little against its gradient. The thick magenta line is the one weight that moved most, with its old and new value underneath; all the others moved less, too little to see. It usually starts at one of the darkest hidden neurons: a neuron that fired a lot on this batch carries more of the blame, so its outgoing weight moves most. Point at the "after the step" readout: the loss on the same 64 shots went down (0.695 → 0.664).
-
-**Do:** Optional: "Next batch: run 5 beats" plays the same five beats on the next 64 shots, with the code lines lighting up in turn. Press it two or three times while saying the beats aloud. "Reset" goes back to the fresh network.
+- **1** wipe the old gradients.
+- **2** shots flow left to right; dark neurons fire a lot.
+- **3** one loss for the batch, about 0.7 (coin flip: 0.69).
+- **4** magenta = gradients: which way each of the 105 weights should move to lower the loss; thicker = more to blame (backpropagation, done by PyTorch).
+- **5** every weight moves a little (thick magenta: moved most); the batch loss drops, 0.695 → 0.664.
 
 **Ask:** Which line actually changes the weights?
 
-**Answer:** Only opt.step(). backward() only computes gradients and stores them in each weight's .grad; it does not move anything. zero_grad() only clears .grad.
+**Answer:** Only opt.step(); backward() only computes gradients.
 
-Honesty note: this picture uses plain SGD with learning rate 0.5 on one batch, so the biggest weight moves by about 0.1 and you can just see the change; the batch loss goes from 0.695 to 0.664. In real training with Adam (lr 0.001) each weight moves about 0.001 per step, invisible after one step; that is why we need about 9,000 steps.
-
-Orange lines are positive weights, blue negative, thickness is size. Magenta always means gradients / learning.
+The demo uses plain SGD with a big learning rate so one step is visible; real Adam steps are tiny, hence about 9,000 of them.
 
 ### Slide 29 · Live coding: the notebook
 
 *On screen:* Now we build it, cell by cell
 
-**Time:** 3 min (1 for the slide, 2 for Part 3 in the notebook)
+**Time:** 3 min (1 for the slide, 2 for Part 3)
 
-**Say:** Now we run the real thing in PyTorch, one cell at a time. Before every run you predict what will happen. I will also make four mistakes on purpose; these are the mistakes that cost points in competitions.
+**Say:** Now we run it in PyTorch, one cell at a time, and you predict before every run. I will also make four mistakes on purpose, the ones that cost points in competitions.
 
-**Do:** Switch to notebooks/01_live_coding.ipynb. The slide lists the notebook's parts in the order we use them. Run Part 0 (setup) and Part 1 (the MLP class) if you have not already; skip Part 2 (it belongs to the optimizer section). Then run Part 3: the file has 25,000 shots and 44.7% went in, so "always miss" is already 55.3% right. The table under it shows the raw coordinates in the hundreds: point at it, it is the next mistake. Make the font big (Ctrl/Cmd +) and use a light theme.
+**Do:** Open notebooks/01_live_coding.ipynb (big font, light theme); its saved outputs are the numbers to expect. Run Parts 0 and 1, skip 2, run 3. Point at the raw coordinates in the hundreds: mistake 1.
 
-- The notebook is complete and its saved outputs are the numbers to expect (same seed, so you will get the same numbers). Run it with Shift+Enter, one cell at a time. If you feel confident, delete the loop in Part 5 and re-type it live while saying the five beats.
-- Say each line aloud before you run it, then point at the output and say it again.
-- At every PREDICT cell stop and take a vote (fingers or a number on paper) before running the next cell.
-- If the notebook breaks, every result is also on the next slides.
+**Ask:** What fraction of Kobe's shots went in?
 
-**Ask:** Before running Part 3: what fraction of Kobe's shots went in? (Remember the opening.)
+**Answer:** About 45%, so "always miss" is right about 55% of the time: the floor to beat.
 
-**Answer:** About 45% (44.7% in the task file). So "always miss" is right about 55% of the time; that is the floor every model must beat.
+Mistakes 2 and 4 have no slide; the next slides' notes say when to run them.
 
 ### Slide 30 · Live demo: scale your inputs
 
 *On screen:* Does plain SGD care about raw inputs?
 
-**Time:** 2.5 min
+**Time:** 2.5 min (+2 for notebook Part 4)
 
-**Say:** This is the same 2-8-8-1 network training live in the browser on 3,000 of Kobe's real shots. The colour on the court is the predicted chance of a make: orange means "likely in", blue means "likely miss". The optimizer is plain SGD with learning rate 0.1, and the inputs are raw coordinates.
+**Say:** The same 2-8-8-1 network, training live on 3,000 of Kobe's shots: orange means "likely in", blue "likely miss". It uses plain SGD on the raw coordinates.
 
-**Ask:** Predict: after 100 epochs, will it beat "always miss" (54.6% on these shots)?
+**Ask:** Will it beat "always miss" (54.6% on these shots)?
 
-**Do:** 1) Press Train with "raw inputs" and "SGD" selected (the default). Watch for about 6 seconds: the accuracy sits at 54.6%, exactly "always miss", and the court stays one pale colour (about 45% everywhere): it predicts "miss" for every shot. It stops by itself at epoch 120 (about 10 s).
+**Do:** 1) Train: it stays at 54.6%, one pale colour: "miss" for every shot. 2) "scaled inputs", Train: about 60%, an orange spot at the rim. 3) "Adam": raw and scaled both reach about 60%; Adam hides the problem.
 
-**Do:** 2) Click "scaled inputs" (this resets the net), press Train: within a few seconds the accuracy climbs to about 60% and an orange spot appears around the rim, which is exactly where Kobe made more than half his shots.
+**Answer:** No: huge inputs make huge first steps and the network gets stuck on one answer. Scaling (minus the training mean, divided by the training std) fixes it.
 
-**Do:** 3) Click "Adam", then try raw and scaled: both reach about 60% (raw is jumpier, it can dip back to 55% for a while). Adam hides the problem.
-
-**Answer:** No for the first question: with raw inputs and SGD the huge numbers make the first steps enormous, the network is knocked into a state where every shot gets the same answer, and it never recovers: always miss. Scaled, the same optimizer works. Adam rescales every step by itself, so it survives raw inputs here, but scaling is free and makes every default (learning rate, initialisation) behave as designed.
-
-Note: the loss readout at epoch 0 shows about 14.5 for raw inputs (this browser network starts with larger weights than PyTorch's default, which gives 2.3); either way it is far above 0.69. If a run looks stuck, press Reset and Train again. In our PyTorch runs the same thing happens: SGD + momentum lr 0.1 on raw inputs collapsed to "always miss" on all 3 seeds; scaled reached 60.3%.
+**Do:** Notebook Part 4: ask "a fresh network says 50/50; what should its first loss be?" About 0.69. Raw coordinates print 2.36; scaled, 0.69.
 
 ### Slide 31 · The script, part 1: setup
 
 *On screen:* Before the loop: data, model, loss, optimizer *(5 build steps)*
 
-**Time:** 1.5 min (then type it in the notebook)
+**Time:** 1.5 min
 
-**Say:** This is everything that happens before the loop: turn the table into tensors, split 80/20, scale with the training statistics, build the model, choose the loss and the optimizer. Twelve lines.
+**Say:** Everything before the loop: tensors, an 80/20 split, scaling with the training statistics, the model, the loss and the optimizer. Twelve lines.
 
-**Do:** Press → five times; each press highlights a group of lines and the right side shows the result: the shapes, the split sizes, the mean and std, the 105-weight model, the loss and optimizer. The notebook (Parts 3 to 5) uses these lines and names (X_tr, y_tr, X_va, y_va, .unsqueeze(1)) in a slightly different order: it splits first (Part 3), shows mistake 1 on the raw X_tr and then scales X_tr and X_va with the training mu and sd (Part 4); model, loss and optimizer come in Part 5. Same result.
+**Do:** Press → five times; the right side shows each result. In the notebook these lines are spread over Parts 3 to 5.
 
-- **unsqueeze(1)** turns y from shape (25000,) into (25000, 1), the same shape as the model's output. We will break this on purpose later.
-- MLP is the class from the "From one neuron to an MLP" part: fc1 = Linear(2, 8), fc2 = Linear(8, 8), fc3 = Linear(8, 1), ReLU in between, and **no sigmoid at the end**. In the notebook it is defined in Part 1.
-- **BCEWithLogitsLoss** applies the sigmoid itself, in a numerically safe way. That is why the model outputs raw scores (logits).
+- **unsqueeze(1)** makes y shape (25000, 1), like the model's output (Part 8 breaks this on purpose).
+- The model ends **without a sigmoid**: BCEWithLogitsLoss applies it itself, safely.
 
 **Ask:** How many numbers will Adam be adjusting?
 
-**Answer:** 105: 24 in fc1 (2·8 + 8), 72 in fc2 (8·8 + 8), 9 in fc3 (8 + 1). Check it in code: sum(p.numel() for p in model.parameters()).
+**Answer:** 105: 24 + 72 + 9, as we counted for the 2-8-8-1.
 
 ### Slide 32 · The script, part 2: the loop
 
 *On screen:* The loop: epochs, batches, five beats *(4 build steps)*
 
-**Time:** 3 min (including typing it in the notebook)
+**Time:** 3 min (including running it)
 
-**Say:** Two loops. The outer loop runs over epochs: one epoch means the network has seen every training shot once. The inner loop cuts the shuffled shots into batches of 64; every batch gets the five beats we just saw.
+**Say:** Two loops. The outer one runs over epochs, every training shot once; the inner one cuts the shuffled shots into batches of 64, and every batch gets the five beats.
 
-**Do:** Press → four times: the outer loop; the shuffle and the batches; the five beats; the print. Then go to notebook Part 5: the loop cell is this code plus two lines (model.train() at the start of each epoch, and the train and validation loss stored after each epoch for the plot). Point at the five numbered comments, say the beats aloud again, and run it (about 10 seconds on a laptop). It prints the epoch and the last batch's loss: 30 lines that jump between 0.61 and 0.78, ending at 0.640. The next cell measures the model: validation loss 0.6655. Later parts reuse the same loop as a function, train(model, opt, X, y).
+**Do:** Press → four times, then run the loop in notebook Part 5 (about 10 s). It prints the last batch's loss each epoch: noisy, between 0.61 and 0.78, ending at 0.640. The next cell: validation loss 0.6655.
 
-- 20,000 / 64 = 312.5, so 313 batches per epoch; the last one has only 32 shots. 30 epochs × 313 = 9,390 updates. (The optimizer section used the Kaggle file with 20,558 training shots, which gives 322 steps per epoch; same idea.)
-- randperm reshuffles every epoch so the batches are different each time.
-- The printed loss is the loss of the last batch only (32 shots), so it jumps around (0.61 to 0.78 in the notebook run). Do not read too much into one value.
+**Ask:** Batch size 128 instead of 64, still 30 epochs: what happens to the number of steps?
 
-**Ask:** If I double the batch size to 128 and keep 30 epochs, what happens to the number of steps?
+**Answer:** It halves (4,710 instead of 9,390): less learning in the same epochs. Count steps.
 
-**Answer:** It halves (157 per epoch, 4,710 in total). Fewer, less noisy steps; with a fixed number of epochs this often trains less. Count steps, not only epochs.
+20,000 / 64 = 312.5, so 313 batches; the last has 32 shots. (The batch slide used the full Kaggle file, hence 322.)
 
 ### Slide 33 · Kobe results: baselines vs MLP
 
 *On screen:* Will 105 weights beat “always miss”? *(4 build steps)*
 
-**Time:** 2 min
+**Time:** 2 min (+2 for notebook Part 6)
 
-**Ask:** Before the reveal: the constant guess (45% for every shot) has validation loss 0.687. Will our network beat it? By a lot or a little? Write a number.
+**Ask:** Always guessing 45% gives validation loss 0.686. Will our network beat it, by a lot or a little?
 
-**Do:** Press → three times to reveal the three rows from top to bottom, then once more for the takeaway.
+**Do:** Run the baseline cell of notebook Part 5 (the same three rows), then press → four times.
 
-**Answer:** Yes, but by a little: 0.662 against 0.687, and 61% accuracy against 55%. Logistic regression sits in between (0.675, 58%) because it can only draw a straight boundary, and Kobe's good zone is a small disc around the rim.
+**Answer:** By a little: 0.665 against 0.686, 60% against 56% accuracy ("always miss" is 56% on these validation shots). Logistic regression is in between; you may have seen it, if not: it is one neuron, so only a straight boundary.
 
-**Say:** Is 61% bad? No. Even at the rim Kobe only scored about 63% of the time, so no model that sees only the position can be right much more than 61% of the time. The labels are coin flips with a probability that depends on position. In the task you are fighting for about 5 points between 55% and 61%.
+**Say:** Is 60% bad? No: even at the rim Kobe made fewer than two in three, so position alone cannot do much better.
 
-Numbers: mean of 3 seeds on the Kaggle labelled shots, 80/20 split, Adam lr 0.001, batch 64, 30 epochs. The notebook (Part 5, seed 0) prints constant 0.6860 (always miss 56.1%), logistic regression 0.6729 (58.8%), MLP 0.6655 (60.4%): the third digit differs from the slide, the order and the gaps do not.
+**Do:** Then notebook Part 6, mistake 2 (no slide): delete opt.zero_grad() and predict. No error, but accuracy about 44%: it calls every shot "made", worse than "always miss", because each new gradient is added to the old ones.
 
 ### Slide 34 · Cliffhanger reveal: two sigmoids
 
 *On screen:* Two sigmoids: normal loss, broken model *(4 build steps)*
 
-**Time:** 3 min
+**Time:** 3 min (+2 for Part 8 if time)
 
-**Say:** Before the break you voted: a sigmoid as the last layer of the model, and BCEWithLogitsLoss as the loss. Crash, normal, quietly worse, or NaN? Let's run it.
+**Say:** Before the break you voted: a sigmoid at the end of the model, plus BCEWithLogitsLoss. Crash, normal, quietly worse, or NaN? Let's run it.
 
-**Do:** Re-take the vote (1 crash, 2 normal, 3 quietly worse, 4 NaN). Run notebook Part 7: the class MLPSigmoid is a copy of MLP whose forward ends with return torch.sigmoid(self.fc3(x)), the first code line on the slide; it trains with the same loop (about 10 s). Then press → for each reveal, running the matching notebook cell:
+**Do:** Re-vote, run notebook Part 7 (about 10 s), then press → once per result:
 
-- Step 1: the printed validation loss is 0.685 (second cell of Part 7). Looks like a normal, slightly weak run.
-- Step 2: accuracy (output above 0.5 = "made") is 61.7%, about the same as the correct model (60.4%).
-- Step 3: the histograms of the predicted chances (the notebook draws the same two). The correct model says between 0 and 0.64 for every shot. The buggy one says "less than 1%" for 76% of all shots, including mid-range jumpers that go in 40% of the time.
-- Step 4: score those outputs as probabilities (log loss, which is what Kaggle and many olympiad tasks use): the notebook prints 4.532 (it clips the probabilities at 1e-7 first, because −log 0 is infinite), against 0.665 for the correct model and 0.686 for a constant guess.
+- 1: printed loss 0.68, looks normal.
+- 2: accuracy 61.7%, like the correct model.
+- 3: 76% of its outputs are under 1%; none above 99%.
+- 4: true log loss (the competition metric) about 4.5, against 0.665.
 
-**Answer:** "Quietly worse": no crash, no NaN, normal-looking loss and accuracy, but the probabilities are garbage. A bug can leave accuracy unchanged and still destroy the competition metric.
+**Answer:** Quietly worse: normal-looking numbers, garbage probabilities.
 
-**Say:** Why: the loss applies its own sigmoid to whatever the model outputs. The model's output is already squeezed between 0 and 1, so the loss only ever sees chances between 50% and 73%. To push a "miss" as low as it can go, the network must push its own output all the way down to 0. So it learns extreme outputs.
+**Say:** The loss adds its own sigmoid, so it only sees chances between 50% and 73%; to push a miss lower, the network drives its output to 0. Fix: drop the model's sigmoid, or keep it and use nn.BCELoss.
 
-The maths, if a student asks: the loss sees σ(σ(z)), and σ(s) for s in (0, 1) lies in (0.5, 0.731). So each made shot costs at least −ln 0.731 = 0.313 and each miss at least −ln 0.5 = 0.693: the printed loss is trapped and can never look very good or very bad. Where Kobe makes less than half his shots, the best the loss can see is 0.5, so the output is pushed to 0 (61% of the outputs are below 1e-7). Near the rim, where he makes about 65%, the loss is happiest when σ(output) equals the make rate, so the output settles at about 0.57: the small bump in the histogram. Nothing goes near 1 (largest output 0.62). Accuracy survives only because 65% is above σ(0.5) = 0.62; a zone with a 55% make rate would be called a miss. The two fixes: remove the sigmoid from the model (preferred; BCEWithLogitsLoss is numerically safer), or keep it and use nn.BCELoss.
-
-Kobe task note: a final nn.Sigmoid in the submitted model is allowed (the official baseline has one). If you train with it, use nn.BCELoss; or train without it using BCEWithLogitsLoss and add the sigmoid only in the submitted class. Also: with this bug, "logits > 0" accuracy reads 44% (everything "made"), because the outputs are never negative.
-
-Numbers: all from notebook Part 7 (seed 0). The exact true log loss depends on the clip: each made shot with an output below 1e-7 costs −ln(1e-7) ≈ 16. sklearn's log_loss on a float64 array clips at 2.2e-16 and reports about 7.5; with the 1e-7 clip other seeds and splits gave 4.5 to 4.7 (the 4.69 quoted in other sections' notes). A count that does not depend on the clip: 1,453 of the 2,196 made validation shots got less than 1%. Either way it is far worse than the 0.69 of a constant guess. Karpathy's mistake #4 is the multi-class cousin: "you passed softmaxed outputs to a loss that expects raw logits".
+**Do:** If time, Part 8 (mistake 4, no slide): without .unsqueeze(1), BCEWithLogitsLoss crashes clearly; MSELoss silently gives 1.33 for perfect predictions.
 
 ### Slide 35 · Evaluate correctly
 
@@ -669,20 +624,18 @@ Numbers: all from notebook Part 7 (seed 0). The exact true log loss depends on t
 
 **Time:** 1.5 min
 
-**Say:** The last cell: measure the model on the validation shots it never trained on. Three habits: switch to evaluation mode, turn off gradient tracking, and turn logits into decisions correctly.
+**Say:** Last piece: measure on validation shots the model never trained on. Three habits: evaluation mode, no gradient tracking, and turning scores into decisions.
 
-**Do:** Press → four times, one line group at a time. In the notebook the same lines are the function evaluate() at the start of Part 5, which you have already used; scroll back to it and point at model.eval(), torch.no_grad() and logits > 0.
+**Do:** Press → four times; in the notebook these lines are evaluate() at the start of Part 5.
 
-- **model.eval()** switches layers like dropout and batch-norm to their test behaviour. Our Linear + ReLU net has neither, so here it changes nothing, but forgetting it is Karpathy's mistake #2, so build the habit. Call model.train() before training again.
-- **torch.no_grad()**: we only measure, so PyTorch does not need to remember the computation for backward. Faster and less memory.
-- **logits > 0**: a logit of 0 is exactly 50%, positive means "more likely made". No sigmoid needed to decide.
-- Print three numbers: loss, accuracy, and the fraction predicted "made". If that fraction is 0 or 1, the model is a constant: always check it.
+- **model.eval()**: test mode for layers like dropout; our net has none, but build the habit.
+- **torch.no_grad()**: no gradients needed: faster, less memory.
+- **logits > 0**: a score of 0 is exactly 50%, so no sigmoid is needed.
+- Share predicted "made" (0.35): if 0 or 1, the model is a constant.
 
-**Ask:** Our model predicts "made" for only about a third of the shots, but Kobe made 45%. Is that a bug?
+**Ask:** It says "made" for only a third of the shots, but Kobe made 45%. Bug?
 
-**Answer:** No. "Made" is predicted only where the chance is above 50%, which is basically within 3 feet of the rim. Everywhere else the best single guess is "miss", even though 40% of those shots go in.
-
-Numbers: the notebook's model (Part 5, seed 0) gives val loss 0.6655, accuracy 60.4%, fraction "made" 0.348; other seeds and splits gave 0.23 to 0.31. The fraction depends on exactly where the 50% line ends up around the rim, so anything from 0.2 to 0.35 is normal.
+**Answer:** No: it says "made" only where the chance is above 50%, near the rim; elsewhere "miss" is the best guess.
 
 
 ---
@@ -695,15 +648,15 @@ Numbers: the notebook's model (Part 5, seed 0) gives val loss 0.6655, accuracy 6
 
 **Time:** 1 min
 
-**Say:** A model is only useful on shots it has never seen. So we split our data like a school year. The training shots are homework: the weights learn from them. The validation shots are a mock exam: we never train on them, we only use them to choose settings, like the learning rate or when to stop. The test set is the real exam: in the olympiad the grader keeps it hidden and scores you once.
+**Say:** A model is only useful on shots it has never seen, so we split the data like a school year. Training shots are homework; validation shots are a mock exam for choosing settings, like the learning rate or when to stop. The test set is the real exam: the grader keeps it hidden and scores it once.
 
-**Do:** Press → three times: the validation block, then the hidden test block, then the warning line.
+**Do:** Press → three times.
 
-**Ask:** If you try 50 settings and keep the one with the best validation score, is that validation score still an honest estimate?
+**Ask:** You try 50 settings and keep the best validation score. Is that score still honest?
 
-**Answer:** Slightly too optimistic: you picked the luckiest of 50. That is exactly why a separate test set exists, and why the hidden leaderboard (the final "board B") can differ from the live one.
+**Answer:** Slightly too optimistic: you picked the luckiest of 50. That is why the hidden test set exists.
 
-Numbers: Kobe has 25,697 labelled shots; our 80/20 split gives 20,558 training and 5,139 validation shots (the same split behind every Kobe number in this deck). Common mistake: computing the normalisation mean and standard deviation on all data, or on the validation data. Use the training shots only; the bug hunt later has exactly this bug.
+Scale with the mean and spread of the training shots only. The slide's 20,558 / 5,139 come from Kaggle's labelled shots; the notebook's task file splits 20,000 / 5,000.
 
 ### Slide 37 · Overfitting, live
 
@@ -711,15 +664,15 @@ Numbers: Kobe has 25,697 labelled shots; our 80/20 split gives 20,558 training a
 
 **Time:** 2 min
 
-**Say:** Twelve noisy points from a smooth curve, the dashed line, and a big network with about a thousand weights. The small hollow dots are validation points: the network never trains on them. On the right, two loss curves: magenta is the training loss, black is the validation loss.
+**Say:** Twelve noisy points from a smooth dashed curve, and a big network with about a thousand weights. The hollow dots are validation points it never trains on; magenta is the training loss, black the validation loss.
 
-**Ask:** Before I press Train: if we train for a very long time, what happens to the training loss? And to the validation loss?
+**Ask:** If we train for a very long time, what happens to each loss?
 
-**Do:** Take two or three answers, then press **Train** (about 10 seconds). Narrate: first the black model curve becomes smooth and close to the dashed curve and both losses fall. Then the network starts bending its curve through every single black point: the training loss dives towards 0, while the validation loss turns back up. The dashed vertical line marks the step with the best validation loss so far. Press **Restore best**: the model jumps back to that smoother curve. Then click **80 points** and press Train again: the same big net now cannot thread a curve through every point, so the two loss curves stay close together.
+**Do:** Take two or three answers, then press **Train** (about 10 s): both losses fall, then the curve bends through every black point and validation turns up. Press **Restore best**. Then choose **80 points** and train again: the curves stay close.
 
-**Answer:** Training loss keeps falling (to about 0: it memorises all 12 points, noise included). Validation loss falls, reaches its minimum early (around step 80, about 0.10), then climbs to about 0.27, more than twice as bad. With 80 points the two losses end close together (about 0.08 and 0.10) and the curve stays smooth. Memorising answers is not understanding.
+**Answer:** Training loss goes to about 0: it memorises the noise. Validation is best early (about 0.10), then climbs to about 0.27.
 
-Everyday picture: a student who memorises last year's exam answers scores 100% on that paper and badly on a new one. The gap between the two curves is the warning sign, not the training loss alone. The y-axis is logarithmic so that the training loss diving towards 0 stays visible. Loss here is mean squared error, because this is a curve-fitting demo. Do not demo a "smaller net" here: on only 12 points even a 7-weight net ends up chasing the noise if you train it long enough.
+Like memorising last year's exam: perfect on that paper, bad on a new one.
 
 ### Slide 38 · Five cures for memorising
 
@@ -727,23 +680,19 @@ Everyday picture: a student who memorises last year's exam answers scores 100% o
 
 **Time:** 1.5 min
 
-**Say:** Here is our patient again: the big net that memorised 500 shots and reached a validation loss of 1.23. Five standard cures, each with what it did on Kobe.
+**Say:** The patient: a net about 600 times bigger than the Kobe net, trained on only 500 shots. Its validation loss climbs to 1.23, worse than a constant guess (0.69). Five standard cures, with what each did on Kobe.
 
-**Do:** Press → five times, one cure per click, about 15 seconds each; tell the bank story at cure 5. Spend the most time on 3 (stop early) and 5 (dropout).
+**Do:** Press → five times, about 15 s each; spend longest on 3 and 5.
 
-- **More data**: the best cure when you can get it. With all 20,558 shots, a big net (2-64-64-64-1) reaches 0.660 instead of memorising.
-- **Smaller model**: fewer weights means less room to memorise. Our legal 2-8-8-1 on the same 500 shots: best 0.677.
-- **Stop early and keep the best weights**: after every epoch measure the validation loss; whenever it is the best so far, save a copy of the weights (the code on the slide); at the end, load that copy. This is exactly the "Restore best" button from the live demo. On the patient, the best validation loss came very early (step 20): 0.675 instead of 1.23 (notebook Part 10: step 10, 0.678 instead of 1.35). That score is slightly optimistic, because we picked the step by looking at the same validation set; report a held-out test set once, at the end.
-- **Weight decay**: every step also shrinks each weight a little toward 0, so the net cannot build the huge, wild weights that memorising needs. In PyTorch: `torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1.0)`. On the patient after 2,000 steps: 0.76 instead of 1.23. Better, but it does not beat stopping early; cures are often combined.
-- **Dropout**: during training, randomly switch off some neurons in every step (watch the crosses jump around), so no neuron can rely on one particular partner. `nn.Dropout(0.5)` between layers; it is switched off automatically by `model.eval()`, which is one reason to always call it before evaluating. On the patient (dropout 0.5 after both hidden layers), after 2,000 steps: 0.71 instead of 1.23.
+- **Stop early**: save the weights whenever validation is the best so far (the "Restore best" button).
+- **Weight decay**: every step shrinks each weight a little toward 0.
+- **Dropout**: random neurons off at every step, like the rotating bank tellers from the break game.
 
-**Say:** Story: Geoffrey Hinton said he got the idea for dropout at his bank. The tellers kept changing, and a teller told him they were moved around a lot. Hinton guessed the reason: cheating the bank needs several employees to cooperate, and rotating people breaks up such conspiracies. Randomly removing neurons breaks up "conspiracies" between neurons, which is what memorising is.
+**Ask:** Which cures can you not use much on Kobe?
 
-**Ask:** Which cure can you NOT use much in the Kobe task, and why?
+**Answer:** More data and a smaller model: the rules fix both. The 105-weight Kobe net barely overfits, so keep the best checkpoint.
 
-**Answer:** "Smaller model" and "more data" are fixed by the rules (at most 2-8-8-1, the given shots). With only 105 parameters and 20,000 shots, the Kobe net barely overfits at all; early stopping with the best checkpoint is the cure worth keeping.
-
-Source for the bank story: Hinton's answer in the Google Brain "Ask me anything" on Reddit, August 2016; dropout paper: Hinton et al. 2012 / Srivastava et al. 2014. All numbers are from our runs on the real Kobe data, same 80/20 split as everywhere in the deck (500-shot runs: full-batch Adam or AdamW, lr 1e-3, 2,000 steps, validation on the usual 5,139 shots, best checkpoint measured every 10 steps).
+Notebook Part 10, same story: 1.35 at the end, best 0.678 at step 10.
 
 ### Slide 39 · Loss-curve doctor
 
@@ -751,18 +700,18 @@ Source for the bank story: Hinton's answer in the Google Brain "Ask me anything"
 
 **Time:** 2 min
 
-**Say:** Reading the loss curve is the most useful debugging skill you will learn today. Six patients. Magenta is always the training loss, black the validation loss; the little 0.69 mark on each axis is the loss of a net that knows nothing. Write down a diagnosis for each card, then we check.
+**Say:** Reading a loss curve is the most useful debugging skill of today. Magenta is the training loss, black the validation loss; the 0.69 mark is a net that knows nothing. Write one word per card, then we check.
 
-**Do:** Give 45 seconds of silent writing (just the numbers 1 to 6 and a word each), then press → six times, one diagnosis per click. Before each click ask one student for their answer; keep it quick.
+**Do:** 45 s of silent writing, then press → six times; ask one student before each click.
 
-1. **Learning rate too high**: the loss jumps around, spikes, drifts up; in the worst case it becomes nan. Fix: divide the lr by 10. (Kobe: Adam with lr 1.0 ended at 0.701, worse than guessing.)
-2. **Overfitting**: training keeps falling, validation turns up. Fix: keep the best checkpoint, stop early, smaller model or more data.
-3. **Learning rate too low**: a slow, almost straight line that never flattens. Fix: lr ×10, or train longer. (Kobe: plain SGD with lr 0.001 only reached 0.683.)
-4. **Learned nothing**: flat at 0.69 from the start. Suspects: forgotten `optimizer.step()` or `zero_grad`, dead ReLUs, labels shuffled separately from inputs, unscaled inputs.
-5. **Very noisy**: each step sees a small random batch, so the loss wiggles. Some wiggle is normal; this much means a bigger batch, a smaller lr, or simply plotting a moving average.
-6. **Healthy**: fast drop, then flat, validation just a little above training. A small gap is normal and is not overfitting.
+1. **lr too high**: spikes, drifts up. Divide it by 10.
+2. **Overfitting**: keep the best checkpoint.
+3. **lr too low**: a slow straight line. ×10, or train longer.
+4. **Learned nothing**: flat at 0.69. Look for a missing `step()` or `zero_grad()`, unscaled inputs, shuffled labels.
+5. **Very noisy**: bigger batch or smaller lr.
+6. **Healthy**: validation a little above training is normal.
 
-Common misconception: "training loss below validation loss means overfitting". No: a small, stable gap is normal. Overfitting means validation gets worse while training still gets better. These six curves are drawn by hand (schematic), not from real runs.
+The six curves are hand-drawn sketches, not real runs.
 
 
 ---
@@ -775,13 +724,11 @@ Common misconception: "training loss below validation loss means overfitting". N
 
 **Time:** 30 s
 
-**Say:** Task one. Kobe Bryant played 20 seasons for the Lakers and took 30,697 shots that the NBA logged with their position on the court. You get 25,000 of them, each with "went in" or "missed". Your job: from the position alone, predict whether a shot goes in.
+**Say:** Task one. Kobe Bryant took 30,697 shots in 20 seasons, each logged with its position on the court, and you get 25,000 of them marked "went in" or "missed". From the position alone, predict whether a shot goes in.
 
-**Do:** Point at the court: every dot is one shot seen from above, the hoop at the bottom. Orange = made, blue = missed (800 of his shots shown). Let them notice the pile of shots right under the basket.
+**Do:** Point at the court: every dot is one shot seen from above, hoop at the bottom; orange = made, blue = missed (800 shown). Let them notice the pile right under the basket.
 
-Where the task comes from: problem 1 of round 2 of China's national AI olympiad (NOAI 2024), reused as question 1 of the NOAI 2025 teaching test; the platform Bohrium labels that test "APOAI2025 Mock". The 25,000 rows are exactly the labelled shots of Kaggle's 2016 "Kobe Bryant Shot Selection" competition, shuffled and renumbered.
-
-Be respectful: Kobe died in a helicopter crash in January 2020 with his daughter Gianna and seven others. Some students may feel strongly about him; mention it calmly if it comes up, and no jokes. A useful hook instead: he called his work ethic "Mamba mentality", obsessing over the boring details. For us that means seeds, scaling, baselines and validation.
+Source: China's national AI olympiad (NOAI 2024, round 2, problem 1), built on Kaggle's "Kobe Bryant Shot Selection" data. Kobe died in a helicopter crash in 2020; if it comes up, mention it calmly, no jokes.
 
 ### Slide 41 · The rules
 
@@ -789,19 +736,15 @@ Be respectful: Kobe died in a helicopter crash in January 2020 with his daughter
 
 **Time:** 1.5 min
 
-**Say:** The rules are strict on purpose. The network sees only two numbers per shot, loc_x and loc_y, and they arrive raw: tenths of a foot, with the hoop at zero. The statement claims they are "already normalized". That is false: x goes from −250 to 248 and y from −44 to 791.
+**Say:** The rules are strict on purpose. The network sees only loc_x and loc_y, and they arrive raw, in tenths of a foot. The statement says "already normalized", but x runs from −250 to 248 and y from −44 to 791.
 
-**Do:** → 1: the size limit. At most 3 linear layers with at most 8 neurons each, so 2-8-8-1 is the biggest legal network: 105 numbers.
+**Do:** → 1: 2-8-8-1 (105 numbers) is the biggest legal net. → 2: only these activations; name the layers (self.fc1, …), since nn.Sequential scores 0. → 3: a zip with the class and the weights. → 4: accuracy on hidden shots; board A is live, board B is final.
 
-**Do:** → 2: activations only from this list, placed after linear layers. Build the layers as named attributes (self.fc1, self.fc2, self.fc3). nn.Sequential scores 0 because the checker cannot see inside it.
+**Ask:** Can you add the column shot_distance as a third input?
 
-**Do:** → 3: you upload a zip with two files, the model class and the trained weights. → 4: the score is plain accuracy on hidden test shots. Board A is shown live during the contest; board B, the other half, is the final score.
+**Answer:** No: the grader passes exactly two columns. It would not help anyway: it is computed from x and y.
 
-**Ask:** Can you feed the distance to the rim as a third input? The data file has a column shot_distance.
-
-**Answer:** No. The input must be exactly loc_x and loc_y; the grader passes two columns, so a three-input model would crash. It would not help anyway: shot_distance is just the distance computed from x and y, rounded down to whole feet.
-
-Background: the baseline notebook names the class MyModel with an empty constructor; keep that. Mixing activations (ELU then ReLU) is fine. A final nn.Sigmoid is what the baseline does, so the grader most likely thresholds the output at 0.5; keep it.
+Keep the baseline's class name MyModel and its final nn.Sigmoid.
 
 ### Slide 42 · Predict the best possible score
 
@@ -809,19 +752,19 @@ Background: the baseline notebook names the class MyModel with an empty construc
 
 **Time:** 1.5 min
 
-**Say:** Before anyone trains anything: what is the best accuracy possible on this task? Everybody write one number on paper. Do not look at your neighbour.
+**Say:** Before anyone trains anything: what is the best accuracy possible here? Everybody write one number.
 
-**Do:** Wait 20 seconds. Take two or three guesses aloud (students usually say 70–90%). Then reveal one step per press:
+**Do:** Take two or three guesses (usually 70–90%), then one step per press:
 
-- → 1: always say "miss": 55.3%. Free points, zero intelligence.
-- → 2: the best possible straight-line boundary: 58.6%. That is all logistic regression can do, and also all the official baseline (a 2-1-1-1 chain) can do.
-- → 3: a legal 2-8-8-1 trained properly gets about 60.5–61% on validation, and that is the ceiling: boosted trees and nearest-neighbours on the same two numbers also stop at about 61%.
-- → 4: the best honest leaderboard scores were 62.1–62.5%. Each board has only about 2,500 shots, so scores wobble by about ±1 point just by luck.
-- → 5: why so low? The labels are coin flips. 4,200 shots were taken at exactly the rim position, and even those went in only 62.5% of the time. No model can know which of them will go in.
+- → 1: always "miss": free points.
+- → 2: the best straight line. You may have seen logistic regression; if not: a model that can only cut the court with one straight line, so this is its limit.
+- → 3: a legal 2-8-8-1 trained well: the ceiling.
+- → 4: the best leaderboard; luck moves board scores by about ±1 point.
+- → 5: even rim shots go in only 62.5%: the labels are partly luck.
 
-**Ask:** Your friend gets 60.4% and you get 60.9% on the live board. Who has the better model?
+**Ask:** Your friend gets 60.4% and you 60.9% on the live board. Who has the better model?
 
-**Answer:** You cannot tell. The board noise (about ±1 point) is bigger than the gap. Trust your own validation split, ideally with several seeds, and treat differences below about half a point as ties.
+**Answer:** You cannot tell: the board's luck is bigger than the gap. Trust your validation split.
 
 ### Slide 43 · Hint: fold the scaling into fc1
 
@@ -829,17 +772,15 @@ Background: the baseline notebook names the class MyModel with an empty construc
 
 **Time:** 1 min
 
-**Say:** Here is the trap. You will train on scaled inputs, because that is the right thing to do. But the grader feeds raw coordinates into your network. So the scaling must live inside the weights. The good news: the scaling is itself a linear operation, so you can merge it into the first linear layer exactly.
+**Say:** The trap: you train on scaled inputs, but the grader feeds raw coordinates. So the scaling must live inside the weights. It is just "subtract, then divide", so it merges exactly into the first layer.
 
-**Do:** Top row: while training, x has 7 subtracted and is divided by 110 (y: minus 91, divided by 88; these are the means and spreads of the task data). → 1: what you submit has no separate scaling box: the first layer's weights are changed so it gives exactly the same outputs on raw numbers.
+**Do:** Top: while training, x − 7, then ÷ 110 (y − 91, ÷ 88). → 1: you submit only fc1 with new weights. → 2: divide each weight by its input's spread, then shift the bias to match. → 3: raw inputs into the folded model must give the same outputs as scaled inputs into the original.
 
-**Do:** → 2: the recipe in words: divide each weight by the spread of the input it multiplies; then shift the bias by the new weights times the means. Do not give them code; let them derive it on paper (it is one line of algebra) and check it numerically. → 3: the check is the proof: feed raw coordinates to the folded model and scaled coordinates to the original one; the outputs must agree.
+**Ask:** Is this exact, or an approximation?
 
-The algebra, for the coach: fc1 on scaled input is W·((x − μ)/σ) + b = (W/σ)·x + (b − (W/σ)·μ), where "/σ" divides column j of W by σ_j. In PyTorch, inside torch.no_grad(): weight ← weight / std (broadcast over columns), bias ← bias − new_weight @ mean. We checked it: the outputs match to 5 × 10⁻⁷; the reference pipeline gives the same accuracy on raw inputs after folding.
+**Answer:** Exact: subtract-and-divide followed by a linear layer is still one linear layer.
 
-**Ask:** Why is folding the scaling into fc1 exact, and not just an approximation?
-
-**Answer:** Subtracting a mean and dividing by a spread is a linear (affine) step, and a linear step followed by a linear layer is still one linear layer. Nothing is lost.
+Code, inside torch.no_grad(): weight /= std (per input column), then bias −= weight @ mean; outputs match to 5 × 10⁻⁷.
 
 ### Slide 44 · Four ways to lose points on Kobe
 
@@ -847,17 +788,15 @@ The algebra, for the coach: fc1 on scaled input is W·((x − μ)/σ) + b = (W/�
 
 **Time:** 1 min
 
-**Say:** Four mistakes that cost points on this exact task; three of them are in real public notebooks for it. None of them shows up in your training loss: you only find out when the grader runs your zip.
+**Say:** Four mistakes that cost points on this task, three of them from real public notebooks. None shows in the training loss: you only find out when the grader runs your zip.
 
-**Do:** → 1: computing distance or angle inside forward() breaks the rule "only linear layers and activations", and it does not even help: we measured no gain over plain x, y. Scaling folded into fc1 (previous slide) is fine because it lives in the weights.
+**Do:** → 1: distance or angle inside forward() breaks the rules and gave us no gain; folding the scaling into fc1 is fine.
 
-**Ask:** → 2 first ask: your class must end with nn.Sigmoid, because the grader expects a probability. Which loss do you train with?
+**Ask:** → 2: the class must end with nn.Sigmoid. Which loss do you train with?
 
-**Answer:** Either nn.BCELoss on the Sigmoid output, or BCEWithLogitsLoss on the raw score before the Sigmoid (for example a method logits() that stops after fc3, while forward() adds the Sigmoid). Never the Sigmoid output into BCEWithLogitsLoss: that is the cliffhanger bug from before the break. A Sigmoid has no weights, so the saved state_dict is the same either way.
+**Answer:** nn.BCELoss on the Sigmoid output, or BCEWithLogitsLoss on the score before it. Never both: that is the cliffhanger bug (normal printed loss, real log loss about 4.5).
 
-**Do:** → 3: one public notebook wrote a 2-1-1-1 class into submission_model.py but saved 2-8-4-1 weights, so loading failed. Write submission_model.py first and import that exact class in your training notebook. → 4: before uploading, open a fresh notebook, unzip, load the class and the weights, feed raw coordinates, and check that you get your validation accuracy back.
-
-One more, if asked: do not chase the live board. With about 2,500 shots per board it wobbles by about ±1 point by pure luck; trust your own validation split.
+**Do:** → 3: write submission_model.py first and import it (one public notebook saved weights for a different shape). → 4: load the zip fresh, feed raw x, y, and check you get your validation accuracy.
 
 ### Slide 45 · Task 2: optimise the input, not the weights
 
@@ -865,21 +804,15 @@ One more, if asked: do not chase the live board. With about 2,500 shots per boar
 
 **Time:** 2 min
 
-**Say:** Task two, translated from the Georgian statement: "Operation Inversion: digital restoration of data". You get a trained network that is frozen, and a table of rows: the inputs and the network's output y for each row. But one input column was overwritten with zeros. Your job is to recover that column.
+**Say:** Task two, "Operation Inversion". You get a frozen trained network and rows of inputs with its output y, but one input column was set to zeros. Recover that column.
 
-**Say:** Left is what you know: in training the data is fixed and the gradient moves the weights. → 1: in inversion we flip it. The weights are frozen; the missing input becomes the thing that learns. The gradient of the loss flows back through the same network, but we stop at the input. Same backprop, different target.
+**Do:** Left: in training the data is fixed and the weights move. → 1: in inversion the weights are frozen and the missing input moves downhill instead. Analogy: the model is a lock; we turn the key until it opens.
 
-**Do:** Analogy for students who do not like maths: the model is a frozen lock, and we are turning the key until it opens.
+**Ask:** → 2: a network says "panda" (57.7%). We add invisible noise built from the gradient with respect to the input. What now?
 
-**Do:** → 2: the most famous example of moving inputs with gradients.
+**Answer:** → 3: "gibbon", 99.3% (Goodfellow et al., 2014): the same tool as our task.
 
-**Ask:** GoogLeNet says "panda" with 57.7% confidence. Add a noise pattern so small you cannot see it (0.007 times the sign of the input gradient). What does it say now?
-
-**Answer:** → 3: "gibbon", with 99.3% confidence (Goodfellow et al., 2014). The two pandas look identical to us. The noise is exactly what our task uses: the gradient with respect to the input.
-
-More stories if there is time (one sentence each): DeepDream (Google, 2015) runs gradient ascent on a photo to amplify what a layer sees; style transfer (Gatys 2015) optimises the pixels to match a painting's style. Fredrikson et al. (USENIX Security 2014) took a model that recommends doses of the blood thinner warfarin, plus a patient's age, weight and dose, and recovered the patient's missing genetic marker. That is exactly our task: one hidden input, the other inputs and the output known. It is a privacy attack, and it is just backprop.
-
-About the task data: our notes come from replicas we built (10 input columns, 1,000 rows, a 10-64-64-1 network saved as model.pt), because the original files were not available to us. Check the column count and file names on the real statement.
+Fredrikson et al. (2014) recovered a patient's missing genetic marker from a drug-dosing model this way. Our task numbers come from replicas we built; check the real statement.
 
 ### Slide 46 · Two toy inversions
 
@@ -887,19 +820,15 @@ About the task data: our notes come from replicas we built (10 input columns, 1,
 
 **Time:** 2 min
 
-**Say:** Two tiny versions of the task, small enough to see everything. The "frozen model" is a + 2b + c², and we know its output is 4.65. Each picture shows the loss, how wrong the output is, for every value of the unknown. The magenta dots are the optimiser's steps.
+**Say:** Two tiny versions of the task: the frozen "model" is a + 2b + c², and its output is 4.65. Each curve shows how wrong the output is for every value of the unknown; the magenta dots are the optimiser's steps.
 
-**Ask:** Before each run on the left, ask for a quick hand vote: "Will it land, crawl, bounce, or fly off?"
+**Do:** Left: before each **Run** ask "land, crawl, bounce or fly off?". lr 0.125 lands on 0.7 in one jump; 0.05 crawls; 0.25 bounces; 0.3 flies off. Right (Adam): start +0.1 → +1.5, start −0.1 → −1.5, both perfect; start 0 never moves (a flat hilltop).
 
-**Do:** Left (find b, starting from 0): press **Run** with lr 0.125: one jump and it lands exactly on 0.7. Choose lr 0.05: small careful steps. lr 0.25: it bounces between 0 and 1.4 forever. lr 0.3: each bounce is bigger and it flies off the chart. The step size must fit the steepness of the valley.
+**Ask:** We got +1.5, the true answer. Did gradient descent "know" it?
 
-**Do:** Right (find c, Adam lr 0.1): start +0.1 → it rolls to +1.5. Start −0.1 → it rolls to −1.5. Both give exactly 4.65. Start exactly 0 → it never moves: 0 is the top of the hill, the slope there is exactly zero, so the gradient says nothing.
+**Answer:** No: it rolled into whichever valley was downhill from the start. Two keys open the same lock.
 
-**Ask:** Starting at +0.1 we get +1.5; the true answer was +1.5. Did gradient descent "know" the answer?
-
-**Answer:** No. It went to whichever valley was downhill from the start. If the truth had been −1.5 it would have been wrong, with a perfect fit. Two keys open the same lock; the fit cannot tell you which one is right.
-
-Maths for the coach: left loss (2b − 1.4)², gradient 4(2b − 1.4); one SGD step is b ← b(1 − 8·lr) + 5.6·lr, which converges only if lr < 0.25 (2 divided by the curvature 8) and lands in one step at lr = 1/8. Right loss (c² − 2.25)², gradient 4c(c² − 2.25), zero at c = 0 (a local maximum). All checked in PyTorch: SGD and Adam both stay at exactly 0 from c = 0.
+Left: plain SGD settles only for lr below 0.25.
 
 ### Slide 47 · Skeleton code with TODOs
 
@@ -907,21 +836,15 @@ Maths for the coach: left loss (2b − 1.4)², gradient 4(2b − 1.4); one SGD s
 
 **Time:** 1.5 min
 
-**Say:** Here is the shape of a first solution. It is not complete on purpose: the three dots are for you. Step through it with me.
+**Say:** The shape of a first solution, incomplete on purpose: the three dots are for you.
 
-**Do:** → 1 (lines 1–3): load the model, put it in eval mode, freeze every weight. → 2 (lines 4–6): find the column that is all zeros; split the other columns off; the missing column z is the only tensor that requires a gradient.
-
-**Do:** → 3 (line 7): the learning rate. Adam moves every value by about lr per step, whatever the gradient. With lr 0.001, 500 steps can move a value by at most 0.5, and the answers are often 1 or 2 away: MSE 0.43. With lr 0.1: 0.024. "1e-3" is a default for weights, not for inputs.
-
-**Do:** → 4 (lines 9–10): glue the columns back together, run the frozen model, compare with y. The [:, 0] matters: the model returns shape (N, 1) and y is (N,). Subtracting them silently makes an N × N table and mixes all rows; our replica then scored MSE 2.44, worse than submitting zeros.
-
-**Do:** → 5 (line 12): after it runs, look at the residual of every row, try the grid from the previous slide, and decide what to do with rows that have two answers.
+**Do:** → 1: load and freeze the weights. → 2: find the zero column; only z learns. → 3: Adam moves each value about lr per step: lr 0.001 barely moves (MSE 0.43), lr 0.1 gives 0.024. → 4: without [:, 0], (N, 1) − (N,) silently becomes an N × N table (MSE 2.44, worse than zeros). → 5: check each row's leftover error; a grid of values (torch.linspace) shows rows with two answers.
 
 **Ask:** Why .sum() over rows and not .mean()?
 
-**Answer:** The rows are independent problems, so each z only feels its own row's error. With Adam it makes no difference (Adam ignores the overall scale of the loss). With plain SGD, .mean() divides every row's gradient by 1,000 and z barely moves (MSE 0.71).
+**Answer:** Each row is its own problem; with plain SGD, .mean() shrinks each row's gradient 1,000-fold. Adam does not care.
 
-Checked: this code with k, lr = 0.1 and 500 steps filled in runs on our replica in under a second and gives MSE 0.0236. If the model was saved with TorchScript, torch.jit.load and .eval() work exactly as shown. Freezing with p.requires_grad_(False) matters in torch 2.15: without it, torch.no_grad() still builds a graph for scripted models.
+Our replica: all zeros scores 0 (MSE 0.968); this skeleton reaches 0.024 in under a second.
 
 ### Slide 48 · Plan before typing
 
@@ -929,15 +852,15 @@ Checked: this code with k, lr = 0.1 and 500 steps filled in runs on our replica 
 
 **Time:** 3.5 min
 
-**Say:** Last thing before you start: plan before you type. In pairs, write down the first three experiments you will run for each task, in order. Three minutes. One of you writes, the other checks: does the plan start with a baseline? Is there a validation split? What number will tell you it worked?
+**Say:** Plan before you type. In pairs, write the first three experiments for each task, in order, in three minutes. One writes, the other checks: is there a baseline, a validation split, a number that says it worked?
 
-**Do:** Click **Start** on the timer. Walk around; look for plans that start with a big model and no baseline. At 0:00, ask two pairs to read one plan aloud. Then press → to show an example plan and compare.
+**Do:** Press **Start** and walk around; look for plans with a big model and no baseline. At 0:00 ask two pairs to read a plan, then press → for the example.
 
-**Ask:** Does your first experiment produce a number you can compare everything else to?
+**Ask:** Does your first experiment give a number to compare everything else with?
 
-**Answer:** It should: for Kobe the "always miss" accuracy (55.3%) and a logistic regression; for inversion the all-zeros submission (MSE 0.968, score 0) and a check that the model reproduces y once the true column is in. Every later experiment is judged against that number.
+**Answer:** It should: for Kobe, "always miss" (55.3%) and a straight-line model (about 59%); for inversion, all zeros (MSE 0.968). A good Kobe net then lands near 61%.
 
-Pair activity A9 from the teaching pack. If time is short, do it for one task only (Kobe). The example plan on → is one good order, not the only one: for Kobe, the full validation accuracy should land around 60.5–61%; for inversion, Adam lr 0.1 should leave most rows with a tiny residual.
+Short on time: do it for Kobe only.
 
 
 ---
@@ -948,11 +871,11 @@ Pair activity A9 from the teaching pack. If time is short, do it for one task on
 
 **Time:** 2 min
 
-**Say:** This is the picture from the very beginning, now with today's words on every box. Data: scaled, in batches, split into training and validation. Model: linear layers with activations in between, stacked. Loss: MSE for numbers, binary cross-entropy for yes/no, cross-entropy for classes. Gradients: one call, loss.backward(). Update: optimizer.step(), and Adam with learning rate 1e-3 is the default you start with.
+**Say:** The whole lecture is one loop, with today's words on every box. Data is scaled, batched and split; the model is linear layers with activations between them; the loss is MSE for numbers and cross-entropy for yes/no or classes. Then loss.backward() finds the gradients and optimizer.step() moves the weights, with Adam at lr 1e-3 as the default start.
 
 **Ask:** Ask two or three students to explain one arrow each, in their own words.
 
-**Answer:** Good answers mention: the model outputs a score (a logit) and the loss compares it with the label; backward works out, for every weight, which way to nudge it; the optimizer moves each weight a small step that way; we repeat for many epochs and watch the validation loss.
+**Answer:** Good answers: the model makes a guess and the loss compares it with the label; backward works out which way to nudge every weight; the optimizer moves each weight a small step that way; we repeat and watch the validation loss.
 
 ### Slide 50 · Now: two tasks
 
@@ -960,7 +883,7 @@ Pair activity A9 from the teaching pack. If time is short, do it for one task on
 
 **Time:** 30 s
 
-**Say:** Now you solve two olympiad tasks with exactly what we covered. Kobe: a tiny legal network that predicts whether a shot goes in, from its position only. Inversion: a frozen network and one input column that was set to zero; you recover it with gradients, changing the input instead of the weights. Tomorrow we continue with harder tasks, so note which parts of today felt shaky.
+**Say:** Now you solve two olympiad tasks with exactly what we covered. Kobe: a tiny legal network that predicts from the position whether a shot goes in. Inversion: a frozen network and one zeroed input column, which you recover by changing the input instead of the weights.
 
-**Do:** Hand out the task files and the starter notebooks (notebooks/02_kobe_starter and notebooks/03_inversion_starter). Remind them: baseline first, a validation split, and save the best model. The magenta dashed arrow is the input we will learn, like a weight in normal training.
+**Do:** Hand out the task files and the starter notebooks (notebooks/02_kobe_starter, notebooks/03_inversion_starter). Remind them: baseline first, a validation split, save the best model. The magenta dashed arrow is the input that learns. Ask them to note what felt shaky; tomorrow's tasks are harder.
 

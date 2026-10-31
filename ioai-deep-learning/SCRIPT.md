@@ -1,6 +1,6 @@
 # Teacher's script — Neural networks, hands-on
 
-Slide-by-slide script for the 180-minute lecture (44 slides). It is generated from the speaker notes in the deck (`tools/export_script.js`), so it always matches `lecture.html`. For background on every topic, the task hint ladders and the Q&A cheat-sheet, read `COACH_GUIDE.md` first.
+Slide-by-slide script for the 180-minute lecture (49 slides). It is generated from the speaker notes in the deck (`tools/export_script.js`), so it always matches `lecture.html`. For background on every topic, the task hint ladders and the Q&A cheat-sheet, read `COACH_GUIDE.md` first.
 
 How to read it: **Say** is what to tell the class, **Do** is what to click or draw, **Ask** is a question for the class and **Answer** its answer. "Press →" means advance one build step. In the deck, P opens the presenter window with these notes, a timer and the next slide.
 
@@ -12,11 +12,12 @@ How to read it: **Say** is what to tell the class, **Do** is what to click or dr
 | 3 | Activations: any function | 18 | 0:38–0:56 | 12–15 |
 | 4 | Loss: how wrong are we? | 12 | 0:56–1:08 | 16–19 |
 | 5 | Break | 10 | 1:08–1:18 | 20–20 |
-| 6 | Gradient descent and optimizers | 15 | 1:18–1:33 | 21–24 |
-| 7 | The training loop, live | 35 | 1:33–2:08 | 25–31 |
-| 8 | Generalization and debugging | 15 | 2:08–2:23 | 32–35 |
-| 9 | Olympiad playbook and the two tasks | 30 | 2:23–2:53 | 36–43 |
-| 10 | Wrap-up | 7 | 2:53–3:00 | 44–44 |
+| 6 | Gradient descent and optimizers | 15 | 1:18–1:33 | 21–25 |
+| 7 | The training loop, live | 29 | 1:33–2:02 | 26–32 |
+| 8 | Generalization and debugging | 15 | 2:02–2:17 | 33–36 |
+| 9 | Training toolbox | 12 | 2:17–2:29 | 37–40 |
+| 10 | Olympiad playbook and the two tasks | 24 | 2:29–2:53 | 41–48 |
+| 11 | Wrap-up | 7 | 2:53–3:00 | 49–49 |
 
 
 ---
@@ -447,12 +448,31 @@ The learning rates (SGD 0.019, momentum 0.01, Adam 0.1) are toy values for this 
 
 AdamW is Adam with weight decay done properly.
 
+### Slide 25 · Learning-rate schedules
+
+*On screen:* Big steps early, small steps late
+
+**Time:** 1 min
+
+**Say:** One more knob, briefly. Many people change the learning rate during training: big steps at the start to travel fast, small steps at the end to settle into the bottom instead of bouncing around it. Think of parking a car: fast on the road, slow in the parking space.
+
+- **Constant**: simplest; fine for small tasks like Kobe if you keep the best checkpoint.
+- **Step down**: divide lr by 10 at fixed points (the classic image-network recipe).
+- **Warm-up + cosine**: start tiny, ramp up, then glide smoothly down to almost 0. The default for transformers and large models.
+- **Drop when stuck** (ReduceLROnPlateau): halve the lr whenever the validation loss stops improving for a few epochs. The easiest good choice for small olympiad tasks.
+
+**Ask:** Why would a smaller learning rate at the end give a better result?
+
+**Answer:** With mini-batches every step is a bit noisy, so with a constant lr the weights keep jiggling around the bottom. Smaller steps shrink the jiggle so the weights settle closer to the bottom.
+
+If you are running late, skip this slide. On a small tabular test (our run), cosine or ReduceLROnPlateau improved the final validation loss from 0.42 to about 0.37, but keeping the best epoch mattered about as much. PyTorch: torch.optim.lr_scheduler. OneCycleLR does warm-up then cosine decay in one object (call sched.step() after every batch); ReduceLROnPlateau is called as sched.step(val_loss) once per epoch.
+
 
 ---
 
-## 7 · The training loop, live — 35 min (1:33–2:08)
+## 7 · The training loop, live — 29 min (1:33–2:02)
 
-### Slide 25 · The five beats of one training step
+### Slide 26 · The five beats of one training step
 
 *On screen:* Every step: the same five lines *(5 build steps)*
 
@@ -474,7 +494,7 @@ AdamW is Adam with weight decay done properly.
 
 The demo uses plain SGD with a big learning rate so one step is visible; real Adam steps are tiny, hence about 9,000 of them.
 
-### Slide 26 · Live demo: scale your inputs
+### Slide 27 · Live demo: scale your inputs
 
 *On screen:* Does plain SGD care about raw inputs?
 
@@ -490,7 +510,7 @@ The demo uses plain SGD with a big learning rate so one step is visible; real Ad
 
 **Do:** Notebook Part 4: ask "a fresh network says 50/50; what should its first loss be?" About 0.69. Raw coordinates print 2.36; scaled, 0.69.
 
-### Slide 27 · The script, part 1: setup
+### Slide 28 · The script, part 1: setup
 
 *On screen:* Setup: data, model, loss, optimizer *(5 build steps)*
 
@@ -507,7 +527,7 @@ The demo uses plain SGD with a big learning rate so one step is visible; real Ad
 
 **Answer:** 105: 24 + 72 + 9, as we counted for the 2-8-8-1.
 
-### Slide 28 · The script, part 2: the loop
+### Slide 29 · The script, part 2: the loop
 
 *On screen:* The loop: epochs, batches, five beats *(4 build steps)*
 
@@ -523,7 +543,7 @@ The demo uses plain SGD with a big learning rate so one step is visible; real Ad
 
 20,000 / 64 = 312.5, so 313 batches; the last has 32 shots. (The batch slide used the full Kaggle file, hence 322.)
 
-### Slide 29 · Kobe results: baselines vs MLP
+### Slide 30 · Kobe results: baselines vs MLP
 
 *On screen:* Will 105 weights beat “always miss”? *(3 build steps)*
 
@@ -539,7 +559,7 @@ The demo uses plain SGD with a big learning rate so one step is visible; real Ad
 
 **Do:** Then notebook Part 6, mistake 2 (no slide): delete opt.zero_grad() and predict. No error, but accuracy about 44%: it calls every shot "made", worse than "always miss", because each new gradient is added to the old ones.
 
-### Slide 30 · Cliffhanger reveal: two sigmoids
+### Slide 31 · Cliffhanger reveal: two sigmoids
 
 *On screen:* Two sigmoids: normal loss, broken model *(4 build steps)*
 
@@ -560,7 +580,7 @@ The demo uses plain SGD with a big learning rate so one step is visible; real Ad
 
 **Do:** If time, Part 8 (mistake 4, no slide): without .unsqueeze(1), BCEWithLogitsLoss crashes clearly; MSELoss silently gives 1.33 for perfect predictions.
 
-### Slide 31 · Evaluate correctly
+### Slide 32 · Evaluate correctly
 
 *On screen:* Measure on validation, without gradients *(4 build steps)*
 
@@ -582,9 +602,9 @@ The demo uses plain SGD with a big learning rate so one step is visible; real Ad
 
 ---
 
-## 8 · Generalization and debugging — 15 min (2:08–2:23)
+## 8 · Generalization and debugging — 15 min (2:02–2:17)
 
-### Slide 32 · Train, validation, test
+### Slide 33 · Train, validation, test
 
 *On screen:* Grade on shots it never saw *(2 build steps)*
 
@@ -602,7 +622,7 @@ The demo uses plain SGD with a big learning rate so one step is visible; real Ad
 
 Scale with the mean and spread of the training shots only. The slide's 20,558 / 5,139 come from Kaggle's labelled shots; the notebook's task file splits 20,000 / 5,000.
 
-### Slide 33 · Overfitting, live
+### Slide 34 · Overfitting, live
 
 *On screen:* A big net memorises 12 noisy points
 
@@ -618,7 +638,7 @@ Scale with the mean and spread of the training shots only. The slide's 20,558 / 
 
 Like memorising last year's exam: perfect on that paper, bad on a new one.
 
-### Slide 34 · Five cures for memorising
+### Slide 35 · Five cures for memorising
 
 *(5 build steps)*
 
@@ -640,7 +660,7 @@ The numbers on the slide are validation losses: the big net on all 20,558 shots 
 
 Notebook Part 10, same story: 1.35 at the end, best 0.678 at step 10.
 
-### Slide 35 · Loss-curve doctor
+### Slide 36 · Loss-curve doctor
 
 *On screen:* Loss-curve doctor: what went wrong? *(6 build steps)*
 
@@ -662,9 +682,82 @@ The six curves are hand-drawn sketches, not real runs.
 
 ---
 
-## 9 · Olympiad playbook and the two tasks — 30 min (2:23–2:53)
+## 9 · Training toolbox — 12 min (2:17–2:29)
 
-### Slide 36 · The rules
+### Slide 37 · Dropout
+
+*On screen:* Dropout: switch off random neurons while training *(3 build steps)*
+
+**Time:** 2 min
+
+**Say:** Dropout is the bank-teller idea: during training, every step switches off a random 20% of the neurons. No neuron can rely on one particular partner, so the network learns several backup ways to get the answer, and it memorises less.
+
+**Do:** Let the picture flicker: each flash is one training step with different neurons off. Click **model.eval()**: all neurons come back for predictions. Then → three times through the code.
+
+**Ask:** What happens if you forget model.eval() when you measure validation accuracy?
+
+**Answer:** Dropout stays on, so predictions are random and worse, and the score jumps around between runs.
+
+Practical: p = 0.1–0.5 between hidden layers, never on the output. It only helps when the model is overfitting; on a tiny network (like 2-8-8-1) it usually hurts.
+
+### Slide 38 · Batch norm
+
+*On screen:* Batch norm: re-centre every layer’s numbers *(3 build steps)*
+
+**Time:** 2 min
+
+**Say:** As weights change, the numbers coming out of a layer drift: bigger, smaller, shifted. The next layer has to keep re-adjusting. Batch norm takes each neuron’s values over the current batch and re-centres them to mean 0 and spread 1 (then lets the network learn its own shift and scale).
+
+**Do:** Drag **shift** and **spread**: the grey "before" histogram moves around, the blue "after" one stays put. Then → twice through the code.
+
+**Ask:** Why does it need at least 2 examples in a batch?
+
+**Answer:** With one example there is no "average over the batch" to subtract; PyTorch raises an error in training mode. In eval mode it uses running averages saved during training, so remember model.eval().
+
+Practical: put it after a Linear (or Conv) layer and before the activation. It lets you use larger learning rates. It is standard in CNNs; for tiny MLPs and tabular data it is optional. Transformers use LayerNorm instead (same idea, per example).
+
+### Slide 39 · LR schedulers in PyTorch
+
+*On screen:* Learning-rate scheduler: two extra lines *(3 build steps)*
+
+**Time:** 2 min
+
+**Say:** Big steps at the start to get near the bottom quickly, small steps at the end to settle into it. A scheduler changes the learning rate for you as training goes on.
+
+**Do:** → 1: create it next to the optimizer. → 2: call **sched.step()** once per epoch, after the batch loop. → 3: the other common choice, ReduceLROnPlateau, which watches the validation loss.
+
+**Ask:** Where does sched.step() go: inside the batch loop or after it?
+
+**Answer:** For epoch-based schedulers like CosineAnnealingLR and StepLR: once per epoch, after the batches. (OneCycleLR is the exception: once per batch.) Calling it in the wrong place makes the learning rate drop far too fast.
+
+Olympiad default: Adam or AdamW plus cosine, or ReduceLROnPlateau when you don't know how many epochs you need. A schedule usually gives a small extra gain, not a miracle.
+
+### Slide 40 · The full recipe
+
+*On screen:* Everything together *(5 build steps)*
+
+**Time:** 3 min
+
+**Say:** This is a complete, competition-ready training loop: the five beats plus four safety features. You will not need all of them every time, but you should know where each line goes.
+
+**Do:** Press → five times; each step highlights one feature:
+
+1. **AdamW with weight_decay**: gently pulls every weight towards 0, so the model stays simpler (less overfitting).
+2. **clip_grad_norm_**: if one batch produces a huge gradient, it is scaled down, so one bad step can't wreck training. Goes between backward() and step().
+3. **Scheduler**: created next to the optimizer, stepped once per epoch.
+4. **model.train() / model.eval()**: switches dropout and batch norm between training and prediction behaviour.
+5. **Early stopping**: remember the weights with the best validation loss (deepcopy, otherwise the "copy" keeps changing), stop when it hasn't improved for 10 epochs, and load the best weights at the end.
+
+**Ask:** Why copy.deepcopy and not just best_w = model.state_dict()?
+
+**Answer:** state_dict() returns references to the live weights, which keep changing as training continues. deepcopy freezes a real snapshot.
+
+
+---
+
+## 10 · Olympiad playbook and the two tasks — 24 min (2:29–2:53)
+
+### Slide 41 · The rules
 
 *On screen:* The rules: a tiny net, raw inputs *(4 build steps)*
 
@@ -680,7 +773,7 @@ The six curves are hand-drawn sketches, not real runs.
 
 Keep the baseline's class name MyModel and its final nn.Sigmoid.
 
-### Slide 37 · Predict the best possible score
+### Slide 42 · Predict the best possible score
 
 *On screen:* What accuracy can the best model reach? *(5 build steps)*
 
@@ -700,7 +793,7 @@ Keep the baseline's class name MyModel and its final nn.Sigmoid.
 
 **Answer:** You cannot tell: the board's luck is bigger than the gap. Trust your validation split.
 
-### Slide 38 · Hint: fold the scaling into fc1
+### Slide 43 · Hint: fold the scaling into fc1
 
 *On screen:* Hide the scaling inside the first layer *(2 build steps)*
 
@@ -718,7 +811,7 @@ Keep the baseline's class name MyModel and its final nn.Sigmoid.
 
 Code, inside torch.no_grad(): weight /= std (per input column), then bias −= weight @ mean; outputs match to 5 × 10⁻⁷.
 
-### Slide 39 · Four ways to lose points on Kobe
+### Slide 44 · Four ways to lose points on Kobe
 
 *(4 build steps)*
 
@@ -734,7 +827,7 @@ Code, inside torch.no_grad(): weight /= std (per input column), then bias −= w
 
 **Do:** → 3: write submission_model.py first and import it (one public notebook saved weights for a different shape). → 4: load the zip fresh, feed raw x, y, and check you get your validation accuracy.
 
-### Slide 40 · Task 2: optimise the input, not the weights
+### Slide 45 · Task 2: optimise the input, not the weights
 
 *On screen:* Optimise the input, not the weights *(3 build steps)*
 
@@ -750,7 +843,7 @@ Code, inside torch.no_grad(): weight /= std (per input column), then bias −= w
 
 Fredrikson et al. (2014) recovered a patient's missing genetic marker from a drug-dosing model and the dose this way: exactly this task. Our task numbers come from replicas we built; check the real statement.
 
-### Slide 41 · Two toy inversions
+### Slide 46 · Two toy inversions
 
 *On screen:* One unknown: one answer, or two
 
@@ -766,7 +859,7 @@ Fredrikson et al. (2014) recovered a patient's missing genetic marker from a dru
 
 Left: plain SGD settles only for lr below 0.25.
 
-### Slide 42 · Skeleton code with TODOs
+### Slide 47 · Skeleton code with TODOs
 
 *On screen:* Your starting point: fill the TODOs *(5 build steps)*
 
@@ -782,7 +875,7 @@ Left: plain SGD settles only for lr below 0.25.
 
 Our replica: all zeros scores 0 (MSE 0.968); this skeleton reaches 0.024 in under a second.
 
-### Slide 43 · Plan before typing
+### Slide 48 · Plan before typing
 
 *On screen:* Write your first three experiments *(1 build step)*
 
@@ -801,9 +894,9 @@ Short on time: do it for Kobe only.
 
 ---
 
-## 10 · Wrap-up — 7 min (2:53–3:00)
+## 11 · Wrap-up — 7 min (2:53–3:00)
 
-### Slide 44 · The whole lecture in one picture
+### Slide 49 · The whole lecture in one picture
 
 **Time:** 2 min
 

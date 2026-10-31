@@ -7,10 +7,11 @@
   "loss": 12,
   "brk": 10,
   "opt": 15,
-  "loop": 35,
+  "loop": 29,
   "gen": 15,
-  "task": 30,
-  "wrap": 7
+  "task": 24,
+  "wrap": 7,
+  "tool": 12
  },
  "slides": [
   "open-title",
@@ -37,6 +38,7 @@
   "opt-batch",
   "opt-race",
   "opt-default",
+  "opt-sched",
   "loop-beats",
   "loop-court",
   "loop-setup",
@@ -48,6 +50,10 @@
   "gen-overfit",
   "gen-cures",
   "gen-doctor",
+  "tool-dropout",
+  "tool-bn",
+  "tool-sched",
+  "tool-recipe",
   "task-rules",
   "task-predict",
   "task-fold",

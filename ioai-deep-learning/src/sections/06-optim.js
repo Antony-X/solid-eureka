@@ -30,7 +30,7 @@ Deck.css(`
 .sec-opt .t-code { display: grid; grid-template-columns: 1056px 1fr; gap: 96px; flex: 1; min-height: 0; align-items: start; }
 .sec-opt .effect { font-size: 40px; line-height: 1.25; }
 .sec-opt .effect .bigv { font-family: var(--font-mono); font-size: 64px; font-weight: 600; line-height: 1.25; }
-.sec-opt .cmp { display: grid; grid-template-columns: 330px 1fr 420px; gap: 14px 32px; align-items: center; font-size: 40px; }
+.sec-opt .cmp { display: grid; grid-template-columns: 300px 1fr 600px; gap: 14px 32px; align-items: center; font-size: 40px; }
 .sec-opt .cmp .bar { height: 44px; background: var(--grad); }
 .sec-opt .cmp .bar.sliver { width: 6px; }
 .sec-opt .cmp .tiny { font-size: 30px; }
@@ -63,7 +63,7 @@ Deck.css(`
     const pad = { l: 84, r: 24, t: 48, b: 64 };
     const sx = Plot.scale(view.w0, view.w1, pad.l, cv.w - pad.r);
     const sy = Plot.scale(0, view.L1, cv.h - pad.b, pad.t);
-    Plot.axes(ctx, sx, sy, { font: 28, nx: view.nx || 6, ny: 4, xlabel: 'w (a weight)', ylabel: 'loss' });
+    Plot.axes(ctx, sx, sy, { font: 28, nx: view.nx || 6, ny: 4, xlabel: 'w', ylabel: 'loss' });
     Plot.fn(ctx, sx, sy, L1, { color: C.ink, width: 5 });
     Plot.text(ctx, 'bottom', sx(3), sy(0) - 14, { size: 28, color: C.muted, align: 'center' });
     ctx.save();
@@ -537,7 +537,7 @@ Deck.css(`
         const W = 1728, n = 322, sw = W * 64 / 20558, lastW = W * 14 / 20558;
         let s = `<svg class="dg" viewBox="0 0 ${W} 440" width="${W}" height="440" role="img" aria-label="20,558 shots cut into 322 batches of 64">`;
         s += `<path d="M2,62 V36 H${W - 2} V62" style="fill:none;stroke:var(--ink);stroke-width:3"/>`;
-        s += `<rect x="${W / 2 - 360}" y="10" width="720" height="44" style="fill:var(--paper)"/>`;
+        s += `<rect x="${W / 2 - 440}" y="8" width="880" height="48" style="fill:var(--paper)"/>`;
         s += `<text class="lbl" x="${W / 2}" y="32" style="font-size:36px">1 epoch = all 20,558 training shots</text>`;
         s += `<rect class="t-data" x="1.5" y="80" width="${W - 3}" height="64"/>`;
         let sl = '';
@@ -596,13 +596,13 @@ Deck.css(`
     <div class="ui-row opt-sc-ctl" style="position:absolute;right:96px;bottom:72px"></div>`,
     init(el, api) {
       const view = { cx: 0, cy: 0, ppu: 64 };
-      const A = Race(api, el.querySelector('.opt-sc-a'), 816, 520);
-      const B = Race(api, el.querySelector('.opt-sc-b'), 816, 520);
-      A.set({ surf: 'valley', view, steps: 300, sps: 40, racers: [{ kind: 'sgd', lr: 0.019, name: 'lr 0.019', tol: 1e-3, stopAtTol: true }] });
-      B.set({ surf: 'bowl', view, steps: 300, sps: 40, racers: [{ kind: 'sgd', lr: 0.5, name: 'lr 0.5', tol: 1e-3, stopAtTol: true }] });
+      const A = Race(api, el.querySelector('.opt-sc-a'), 816, 576);
+      const B = Race(api, el.querySelector('.opt-sc-b'), 816, 576);
+      A.set({ surf: 'valley', view, steps: 300, sps: 40, racers: [{ kind: 'sgd', lr: 0.019, name: 'lr 0.019', label: false, tol: 1e-3, stopAtTol: true }] });
+      B.set({ surf: 'bowl', view, steps: 300, sps: 40, racers: [{ kind: 'sgd', lr: 0.5, name: 'lr 0.5', label: false, tol: 1e-3, stopAtTol: true }] });
       const out = (R, node) => R.onTick(() => {
         const r = R.racers[0];
-        node.innerHTML = r.doneAt != null ? `<span class="ok">✓</span> bottom after ${r.doneAt} steps` : (R.k ? `step ${R.k}…` : '');
+        node.innerHTML = `<span class="muted">${r.name} ·</span> ` + (r.doneAt != null ? `<span class="ok">✓</span> bottom after ${r.doneAt} steps` : (R.k ? `step ${R.k}…` : 'ready'));
       });
       out(A, el.querySelector('.opt-sc-ra'));
       out(B, el.querySelector('.opt-sc-rb'));
@@ -697,7 +697,7 @@ Deck.css(`
       const config = k => {
         if (k === last) return;
         last = k;
-        if (k === 0) R.set({ surf: 'tilted', view: VALLEY_VIEW, steps: 100, sps: 16, racers: RACERS.map(r => Object.assign({}, r)) });
+        if (k === 0) R.set({ surf: 'tilted', view: { cx: -0.8, cy: -0.6, ppu: 92 }, steps: 100, sps: 16, racers: RACERS.map(r => Object.assign({}, r)) });
         else {
           R.set({ surf: 'saddle', view: { cx: 0, cy: 0, ppu: 158 }, steps: 150, sps: 25, racers: RACERS.map(r => Object.assign({}, r, { lr: 0.05 })) });
           R.play();
@@ -722,7 +722,7 @@ Deck.css(`
     id: 'opt-adam-step',
     title: "Predict: Adam's first step",
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>Three slopes. How far does each weight move?</h2></div>
+    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>How far does each weight move?</h2></div>
     ${(() => {
       const P = [{ x: 250, t: 'slope 1000' }, { x: 776, t: 'slope 1' }, { x: 1302, t: 'slope 0.001' }];
       const unit = 70; // 0.001 of movement is drawn this long
@@ -863,7 +863,7 @@ Deck.css(`
     <div class="fill-center">
       <div class="sched">
         ${(() => {
-          const W = 384, H = 300, pl = 10, pb = 20;
+          const W = 384, H = 420, pl = 10, pb = 20;
           const curves = [
             ['constant', '', t => 1],
             ['step down', 'MultiStepLR', t => (t < 0.5 ? 1 : t < 0.75 ? 0.1 : 0.01)],
@@ -873,14 +873,14 @@ Deck.css(`
           return curves.map(([name, cls, f]) => {
             let d = '';
             for (let i = 0; i <= 200; i++) {
-              const t = i / 200, x = pl + t * (W - pl - 6), y = 24 + (1 - f(t)) * (H - pb - 40);
+              const t = i / 200, x = pl + t * (W - pl - 6), y = 48 + (1 - f(t)) * (H - pb - 64);
               d += (i ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1);
             }
             return `<div><h3>${name}</h3>
               <svg class="dg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${name} learning-rate schedule">
                 <path d="M${pl},10 V${H - pb} H${W}" style="fill:none;stroke:var(--muted);stroke-width:2.5"/>
                 <path d="${d}" style="fill:none;stroke:var(--grad);stroke-width:5;stroke-linejoin:round"/>
-                <text class="lbl-s" x="${pl + 12}" y="${H - pb - 22}" style="text-anchor:start">lr</text>
+                <text class="lbl-s" x="${pl + 14}" y="12" style="text-anchor:start">lr</text>
                 <text class="lbl-s" x="${W}" y="${H}" style="text-anchor:end">training →</text>
               </svg>
               <span class="mono">${cls || '&nbsp;'}</span></div>`;

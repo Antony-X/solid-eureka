@@ -68,12 +68,13 @@ Deck.slide({
     const secs = Deck.sections;
     const total = secs.reduce((s, x) => s + (x.minutes || 0), 0) || 180;
     let t = 0;
+    const most = Math.max(...secs.map(x => x.minutes || 0)) || 25;
     const rows = secs.map((sec, i) => {
       const start = t; t += sec.minutes || 0;
       const kind = /break/i.test(sec.title) ? 'brk' : /task/i.test(sec.title) ? 'task' : /live|loop/i.test(sec.title) ? 'code' : '';
       const clock = Math.floor(start / 60) + ':' + String(start % 60).padStart(2, '0');
       return `<div class="map-row ${kind}"><span class="map-clock">${clock}</span>
-        <span class="map-bar"><span style="width:${100 * (sec.minutes || 0) / 25}%"></span></span>
+        <span class="map-bar"><span style="width:${100 * (sec.minutes || 0) / most}%"></span></span>
         <span class="map-title">${sec.title}</span><span class="map-min">${sec.minutes} min</span></div>`;
     });
     host.innerHTML = `<div class="map">${rows.join('')}</div>`;

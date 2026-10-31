@@ -394,7 +394,7 @@ Deck.css(`
     <p class="do">2) Click <b>scaled inputs</b>, then <b>Train</b>. Same network, same learning rate, inputs divided by their spread: within a second the orange blob appears around the hoop and accuracy climbs to about 60%.</p>
     <p class="do">3) Click <b>Adam</b> and <b>raw inputs</b>, then <b>Train</b>. Adam also gets to about 60% (after a wobbly start). Adam takes steps of about the same size whatever the gradient size, so it hides the scaling problem. Scale anyway: it makes every learning rate and default behave as designed.</p>
     <p class="ans">Plain SGD on raw coordinates collapses to "always miss"; scaling fixes it; Adam hides the problem.</p>
-    <p>Our PyTorch runs agree: SGD + momentum, lr 0.1, raw ReLU inputs collapsed to "always miss" (55.3% on validation) in 3 of 3 seeds, while scaled inputs reached 60.3%; with Adam, raw and scaled were equal. Use the Reset button to restart; the shuffle order changes on each run, so numbers vary by a few tenths. If SGD on raw inputs escapes on some run, say so honestly: it is a lottery, which is exactly the problem.</p>`,
+    <p>Our PyTorch runs agree: SGD + momentum, lr 0.1, raw ReLU inputs collapsed to "always miss" (55.3% on validation) in 3 of 3 seeds, while scaled inputs reached 60.3%; with Adam, raw and scaled were equal. Reset and every toggle restart from the same seed and shuffle order, so the demo repeats exactly: SGD + raw ends at 54.6% with no shot called "made", SGD + scaled at 60.0%, Adam + raw at 60.3% (it dips below 50% around epoch 20 before recovering). With other shuffle orders SGD + raw escaped in about half of our runs, to about 59.7% without the rim zone: it is a lottery, which is exactly the problem.</p>`,
   });
 
   /* ================================================================
@@ -426,7 +426,7 @@ Deck.css(`
       <div class="col" data-step="2" style="gap:16px;padding-top:56px">
         <div class="kicker">new fc1</div>
         <div class="eqs"><i>W</i>′ = <i>W</i> ÷ std</div>
-        <div class="eqs"><i>b</i>′ = <i>b</i> − <i>W</i>′· mean</div>
+        <div class="lead muted">then shift the bias to match</div>
       </div>
     </div>
     <div class="hint" data-step="3">

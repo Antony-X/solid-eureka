@@ -1,20 +1,22 @@
 Deck.section({ id: 'loop', title: 'The training loop, live', minutes: 28 });
 
 Deck.css(`
-.sec-loop .lp-two { display: grid; grid-template-columns: 960px 720px; gap: 48px; flex: 1; min-height: 0; align-items: start; }
+.sec-loop .lp-two { display: grid; grid-template-columns: 860px 820px; gap: 48px; flex: 1; min-height: 0; align-items: start; }
 .sec-loop .lp-left { gap: 40px; }
 .sec-loop .lp-read { gap: 56px; }
 .sec-loop .lp-t6 { display: grid; grid-template-columns: 1056px 576px; gap: 96px; flex: 1; min-height: 0; align-items: start; }
 .sec-loop pre.lp-c30 { font-size: 30px; padding: 24px 30px; }
 .sec-loop .lp-eff { display: flex; flex-direction: column; gap: 36px; }
+.sec-loop .stack.lp-eff { display: grid; }
+.sec-loop .stack.lp-eff > div { display: flex; flex-direction: column; gap: 20px; }
 .sec-loop .lp-eff .lbl { font-family: var(--font-mono); font-size: 28px; color: var(--muted); letter-spacing: .06em; }
 .sec-loop .lp-num { font-family: var(--font-mono); font-size: 48px; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .sec-loop .lp-num small { font-size: 30px; color: var(--muted); font-weight: 500; }
-.sec-loop .lp-cells { display: flex; flex-direction: column; gap: 22px; }
+.sec-loop .lp-cells { display: flex; flex-direction: column; gap: 30px; margin-top: 16px; }
 .sec-loop .lp-cell { display: grid; grid-template-columns: 96px 980px 1fr; align-items: center; gap: 24px; }
 .sec-loop .lp-cell .n { font-family: var(--font-mono); font-size: 30px; color: var(--muted); }
-.sec-loop .lp-cell code { font-family: var(--font-mono); font-size: 34px; background: var(--code-bg); border-left: 6px solid var(--ink); padding: 14px 24px; white-space: pre; }
-.sec-loop .lp-cell .what { font-size: 32px; color: var(--muted); }
+.sec-loop .lp-cell code { font-family: var(--font-mono); font-size: 40px; background: var(--code-bg); border-left: 6px solid var(--ink); padding: 16px 28px; white-space: pre; }
+.sec-loop .lp-cell .what { font-size: 36px; color: var(--muted); }
 .sec-loop .lp-cell.bug code { border-left-color: var(--bad); }
 .sec-loop .lp-ranges { display: grid; grid-template-columns: auto auto; gap: 14px 40px; align-items: baseline; font-size: 40px; }
 .sec-loop .lp-ranges .k { font-family: var(--font-mono); font-size: 34px; }
@@ -23,17 +25,17 @@ Deck.css(`
 .sec-loop .lp-opt { position: relative; border: 3px solid var(--ink); padding: 22px 28px; font-size: 44px; line-height: 1.15; min-height: 72px; display: flex; gap: 22px; align-items: center; }
 .sec-loop .lp-opt .n { font-family: var(--font-mono); font-size: 48px; font-weight: 600; }
 .sec-loop .lp-opt .ok-frame { position: absolute; inset: -9px; border: 6px solid var(--ok); pointer-events: none; }
-.sec-loop .lp-opt .ok-tag { position: absolute; right: 18px; top: 12px; font-family: var(--font-mono); font-size: 34px; font-weight: 700; color: var(--ok); }
+.sec-loop .lp-opt .ok-tag { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 52px; font-weight: 700; color: var(--ok); }
 .sec-loop .lp-opt .dim { position: absolute; inset: -3px; background: color-mix(in srgb, var(--paper) 68%, transparent); pointer-events: none; }
-.sec-loop .lp-bars { display: flex; flex-direction: column; gap: 34px; }
-.sec-loop .lp-bar-row { display: grid; grid-template-columns: 470px 210px 1fr; gap: 32px; align-items: center; }
-.sec-loop .lp-bar-row .name { font-size: 40px; line-height: 1.1; }
-.sec-loop .lp-bar-row .ll { font-family: var(--font-mono); font-size: 52px; font-weight: 600; }
-.sec-loop .lp-track { position: relative; height: 72px; border-left: 3px solid var(--muted); }
+.sec-loop .lp-bars { display: flex; flex-direction: column; gap: 64px; margin-top: 24px; }
+.sec-loop .lp-bar-row { display: grid; grid-template-columns: 540px 240px 1fr; gap: 32px; align-items: center; }
+.sec-loop .lp-bar-row .name { font-size: 48px; line-height: 1.1; }
+.sec-loop .lp-bar-row .ll { font-family: var(--font-mono); font-size: 64px; font-weight: 600; }
+.sec-loop .lp-track { position: relative; height: 104px; border-left: 3px solid var(--muted); }
 .sec-loop .lp-track i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ink); }
-.sec-loop .lp-track b { position: absolute; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 44px; font-weight: 600; padding-left: 18px; }
+.sec-loop .lp-track b { position: absolute; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 56px; font-weight: 600; padding-left: 20px; }
 .sec-loop .lp-bar-row.base .lp-track i { background: var(--muted); }
-.sec-loop .lp-bar-head { display: grid; grid-template-columns: 470px 210px 1fr; gap: 32px; font-family: var(--font-mono); font-size: 28px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.sec-loop .lp-bar-head { display: grid; grid-template-columns: 540px 240px 1fr; gap: 32px; font-family: var(--font-mono); font-size: 28px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 .sec-loop .lp-scale { display: flex; justify-content: space-between; }
 .sec-loop .lp-err { font-family: var(--font-mono); font-size: 30px; line-height: 1.45; background: var(--code-bg); border-left: 6px solid var(--bad); padding: 22px 28px; white-space: pre-wrap; }
 .sec-loop .lp-err .e { color: var(--bad); font-weight: 700; }
@@ -46,12 +48,12 @@ Deck.css(`
 
 /* ---------- 1. the five beats, with one real step on a 2-8-8-1 net ---------- */
 {
-  const LR = 3;           // deliberately large so the change in thickness is visible
+  const LR = 0.5;         // plain SGD on one batch; big enough to see, small enough that the loss falls
   const BATCH = 64;
-  const W = 720, H = 720;
-  const xs = [64, 232, 400, 560];
+  const W = 820, H = 740;
+  const xs = [80, 320, 560, 740];
   const sizes = [2, 8, 8, 1];
-  const ys = sizes.map(n => Array.from({ length: n }, (_, i) => n === 1 ? 360 : n === 2 ? 300 + 120 * i : 115 + 70 * i));
+  const ys = sizes.map(n => Array.from({ length: n }, (_, i) => n === 1 ? 331 : n === 2 ? 271 + 120 * i : 100 + 66 * i));
 
   Deck.slide({
     id: 'loop-beats',
@@ -65,7 +67,7 @@ Deck.css(`
           logits = model(x)          # 2 forward
           loss = loss_fn(logits, y)  # 3 how wrong?
           loss.backward()            # 4 gradients
-          opt.step()                 # 5 nudge weights`, { hl: '1:1 2:2 3:3 4:4 5:5', cls: 'lp-beats-code' })}
+          opt.step()                 # 5 nudge weights`, { hl: '1:1 2:2 3:3 4:4 5:5', cls: 'lp-beats-code lp-c30' })}
         <div class="ui-row lp-read"></div>
         <div class="ui-row lp-ctl"></div>
       </div>
@@ -103,31 +105,31 @@ Deck.css(`
         S = { idx, W0, b0, W1, b1, G, gmax, act, loss0, loss1 };
       }
 
-      const wWidth = v => 2 + 10 * Math.min(1, Math.abs(v) / 1.2);
+      const wWidth = v => 2 + 12 * Math.min(1, Math.abs(v) / 1.2);
       function svg(k) {
         const Wt = k >= 5 ? S.W1 : S.W0;
         let s = `<svg class="dg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="2-8-8-1 network during one training step">`;
         // lanes: forward on top, backward at the bottom, never on the same line
-        s += `<g style="opacity:${k === 2 || k === 3 ? 1 : 0.12}"><text class="lbl" x="20" y="36" style="text-anchor:start">forward</text><line class="flow" x1="176" y1="36" x2="690" y2="36"/></g>`;
-        s += `<g style="opacity:${k === 4 ? 1 : 0.12}"><text class="lbl-g" x="20" y="688" style="text-anchor:start;font:600 30px var(--font-mono)">backward</text><line class="back" x1="700" y1="688" x2="196" y2="688"/></g>`;
-        // edges
+        s += `<g style="opacity:${k === 2 || k === 3 ? 1 : 0.15}"><text class="lbl" x="0" y="36" style="text-anchor:start">forward</text><line class="flow" x1="160" y1="36" x2="800" y2="36"/></g>`;
+        s += `<g style="opacity:${k === 4 ? 1 : 0.15}"><text class="lbl-g" x="0" y="706" style="text-anchor:start;font:600 30px var(--font-mono)">backward</text><line class="back" x1="800" y1="706" x2="180" y2="706"/></g>`;
+        // edges (weights: orange +, blue -, thickness = size; gradients: magenta dashed)
         for (let l = 0; l < 3; l++) for (let j = 0; j < sizes[l + 1]; j++) for (let i = 0; i < sizes[l]; i++) {
           const x1 = xs[l], y1 = ys[l][i], x2 = xs[l + 1], y2 = ys[l + 1][j];
           const w = Wt[l][j * sizes[l] + i];
           if (k === 4) {
             const g = Math.abs(S.G[l][j * sizes[l] + i]) / (S.gmax || 1);
             s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:var(--rule);stroke-width:2"/>`;
-            if (g > 0.002) s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:var(--grad);stroke-width:${(2 + 9 * Math.sqrt(g)).toFixed(1)};stroke-dasharray:10 7;stroke-linecap:butt;opacity:.9"/>`;
+            if (g > 0.002) s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:var(--grad);stroke-width:${(3 + 9 * Math.sqrt(g)).toFixed(1)};stroke-dasharray:12 8;stroke-linecap:butt"/>`;
           } else {
             s += `<line class="w ${w >= 0 ? 'pos' : 'neg'}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke-width:${wWidth(w).toFixed(1)}"/>`;
           }
         }
-        // output -> loss
-        s += `<line class="flow" x1="596" y1="360" x2="${k >= 3 ? 604 : 604}" y2="360" style="stroke-width:4;opacity:${k >= 3 ? 1 : 0.3}"/>`;
-        // nodes
+        // output -> loss (straight down)
+        s += `<line class="flow" x1="${xs[3]}" y1="368" x2="${xs[3]}" y2="452" style="stroke-width:4;opacity:${k >= 3 ? 1 : 0.3}"/>`;
+        // nodes; in the forward beat, fill = how strongly each hidden unit fires on this batch
         let amax = 0; for (let l = 1; l < 3; l++) S.act[l].forEach(v => { amax = Math.max(amax, v); });
         sizes.forEach((m, l) => ys[l].forEach((y, i) => {
-          const r = l === 0 ? 28 : l === 3 ? 32 : 26;
+          const r = l === 0 ? 28 : l === 3 ? 34 : 26;
           const cls = l === 0 ? 'nrn in' : l === 3 ? 'nrn out' : 'nrn';
           s += `<circle class="${cls}" cx="${xs[l]}" cy="${y}" r="${r}"/>`;
           if (k >= 2 && l > 0 && l < 3) {
@@ -135,15 +137,14 @@ Deck.css(`
             if (a > 0.01) s += `<circle cx="${xs[l]}" cy="${y}" r="${r - 5}" style="fill:var(--ink);opacity:${(0.12 + 0.8 * a).toFixed(2)}"/>`;
           }
         }));
-        s += `<text class="lbl-s" x="${xs[0]}" y="252">loc_x</text><text class="lbl-s" x="${xs[0]}" y="468">loc_y</text>`;
-        s += `<text class="lbl-m" x="${xs[3]}" y="362" style="font-size:34px">z</text>`;
-        // loss box
-        s += `<rect class="box" x="608" y="318" width="112" height="84" style="stroke-width:${k === 3 ? 5 : 3}"/>`;
-        s += `<text class="lbl-s" x="664" y="296">loss</text>`;
-        s += `<text class="lbl" x="664" y="360">${k >= 5 ? S.loss1.toFixed(2) : k >= 3 ? S.loss0.toFixed(2) : '?'}</text>`;
-        if (k === 1) s += `<text class="lbl-g" x="400" y="638" style="font:600 30px var(--font-mono)">every .grad = 0</text>`;
-        if (k === 4) s += `<text class="lbl-g" x="400" y="638" style="font:600 30px var(--font-mono)">a gradient for all 105</text>`;
-        if (k === 5) s += `<text class="lbl" x="400" y="638">weights moved</text>`;
+        s += `<text class="lbl-s" x="${xs[0]}" y="${ys[0][0] - 52}">loc_x</text><text class="lbl-s" x="${xs[0]}" y="${ys[0][1] + 52}">loc_y</text>`;
+        s += `<text class="lbl-m" x="${xs[3]}" y="${ys[3][0] + 2}">z</text>`;
+        // loss box under the output
+        s += `<rect class="box" x="672" y="460" width="136" height="112" style="stroke-width:${k === 3 || k === 5 ? 5 : 3}"/>`;
+        s += `<text class="lbl-s" x="740" y="490">loss</text>`;
+        s += `<text class="lbl" x="740" y="538" style="font-size:34px">${k >= 5 ? S.loss1.toFixed(2) : k >= 3 ? S.loss0.toFixed(2) : '?'}</text>`;
+        const say = { 1: ['every .grad = 0', 'g'], 4: ['a gradient for all 105', 'g'], 5: ['weights moved, loss fell', 'i'] }[k];
+        if (say) s += `<text class="${say[1] === 'g' ? 'lbl-g' : 'lbl'}" x="320" y="644" style="font:600 32px var(--font-mono)">${say[0]}</text>`;
         return s + '</svg>';
       }
 
@@ -189,12 +190,12 @@ Deck.css(`
       <li><b>2 forward</b>: the batch flows left to right; dark hidden neurons are the ones that fire a lot on these 64 shots; blank ones are off (ReLU gave 0).</li>
       <li><b>3 loss</b>: one number for the whole batch, about 0.7 for a fresh network (a coin flip is 0.69).</li>
       <li><b>4 backward</b>: magenta dashed lines are gradients, thicker means "this weight is more to blame". Every one of the 105 weights gets one, in one call.</li>
-      <li><b>5 step</b>: the weights change thickness and the loss on the same batch goes down. Point at the "after the step" readout.</li>
+      <li><b>5 step</b>: the weights change a little and the loss on the same batch goes down (0.695 → 0.664). Point at the "after the step" readout.</li>
     </ul>
     <p class="do">Optional: "Next batch: run 5 beats" plays the same five beats on the next 64 shots, with the code lines lighting up in turn. Press it two or three times while saying the beats aloud. "Reset" goes back to the fresh network.</p>
     <p class="ask">Which line actually changes the weights?</p>
     <p class="ans">Only opt.step(). backward() only computes gradients and stores them in each weight's .grad; it does not move anything. zero_grad() only clears .grad.</p>
-    <p>Honesty note: the picture uses a very big learning rate (3) so you can see the lines change. In real training with Adam (lr 0.001) each weight moves about 0.001 per step, invisible on one step; that is why we need about 9,000 steps.</p>
+    <p>Honesty note: this picture uses plain SGD with learning rate 0.5 on one batch, so the biggest weight moves by about 0.1 and you can just see the change; the batch loss goes from 0.695 to 0.664. In real training with Adam (lr 0.001) each weight moves about 0.001 per step, invisible after one step; that is why we need about 9,000 steps.</p>
     <p>Orange lines are positive weights, blue negative, thickness is size. Magenta always means gradients / learning.</p>`,
   });
 }
@@ -231,6 +232,7 @@ Deck.slide({
 Deck.slide({
   id: 'loop-raw',
   title: 'Planned mistake 1: raw coordinates',
+  steps: 3,
   html: `
   <div class="row"><span class="tag tag-predict">predict</span><span class="tag tag-warn">planned mistake 1</span></div>
   <h2>First loss on raw coordinates?</h2>
@@ -251,23 +253,24 @@ Deck.slide({
   <div class="lp-meter grow"></div>`,
   init(el, api) {
     const host = el.querySelector('.lp-meter');
-    const w = 1728, h = 300;
+    const w = 1728, h = 330;
+    const ax = 190;
     const sx = Plot.scale(0, 4, 40, w - 60);
-    const ticks = [0, 1, 2, 3, 4].map(v => `<line x1="${sx(v)}" y1="150" x2="${sx(v)}" y2="168" style="stroke:var(--muted);stroke-width:2.5"/><text class="lbl-s" x="${sx(v)}" y="196">${v}</text>`).join('');
+    const ticks = [0, 1, 2, 3, 4].map(v => `<line x1="${sx(v)}" y1="${ax}" x2="${sx(v)}" y2="${ax + 18}" style="stroke:var(--muted);stroke-width:2.5"/><text class="lbl" x="${sx(v)}" y="${ax + 44}" style="fill:var(--muted)">${v}</text>`).join('');
     host.innerHTML = `
       <svg class="dg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="loss at the first step: 0.69 expected, 2.36 with raw inputs">
-        <text class="lbl-s" x="40" y="40" style="text-anchor:start">loss printed at the very first step</text>
-        <line x1="${sx(0)}" y1="150" x2="${sx(4)}" y2="150" style="stroke:var(--muted);stroke-width:2.5"/>
+        <text class="lbl-s" x="1000" y="24" style="text-anchor:start">loss printed at the very first step</text>
+        <line x1="${sx(0)}" y1="${ax}" x2="${sx(4)}" y2="${ax}" style="stroke:var(--muted);stroke-width:3"/>
         ${ticks}
-        <line x1="${sx(0.69)}" y1="86" x2="${sx(0.69)}" y2="150" style="stroke:var(--muted);stroke-width:3;stroke-dasharray:12 10"/>
-        <text class="lbl-s" x="${sx(0.69)}" y="70">coin flip 0.69</text>
+        <line x1="${sx(0.69)}" y1="${ax - 76}" x2="${sx(0.69)}" y2="${ax}" style="stroke:var(--muted);stroke-width:3;stroke-dasharray:12 10"/>
+        <text class="lbl" x="${sx(0.69)}" y="${ax - 100}" style="fill:var(--muted)">coin flip 0.69</text>
         <g data-step="1">
-          <circle cx="${sx(2.36)}" cy="150" r="16" style="fill:var(--bad)"/>
-          <text class="lbl" x="${sx(2.36)}" y="104" style="fill:var(--bad);font-size:40px">✗ raw: 2.36</text>
+          <circle cx="${sx(2.36)}" cy="${ax}" r="18" style="fill:var(--bad)"/>
+          <text class="lbl" x="${sx(2.36)}" y="${ax - 56}" style="fill:var(--bad);font-size:48px">✗ raw: 2.36</text>
         </g>
         <g data-step="3">
-          <circle cx="${sx(0.69)}" cy="150" r="16" style="fill:var(--ok)"/>
-          <text class="lbl" x="${sx(0.69)}" y="246" style="fill:var(--ok);font-size:40px">✓ scaled: 0.69</text>
+          <circle cx="${sx(0.69)}" cy="${ax}" r="18" style="fill:var(--ok)"/>
+          <text class="lbl" x="${sx(0.69)}" y="${ax + 104}" style="fill:var(--ok);font-size:48px">✓ scaled: 0.69</text>
         </g>
       </svg>`;
   },
@@ -464,7 +467,7 @@ Deck.slide({
   const HIST_OK = [12, 7, 5, 6, 11, 137, 565, 956, 1258, 516, 310, 321, 896, 0, 0, 0, 0, 0, 0, 0];
   const HIST_BUG = [3882, 29, 27, 24, 20, 16, 12, 12, 18, 16, 16, 928, 0, 0, 0, 0, 0, 0, 0, 0];
   const hist = (H, title, note) => {
-    const w = 520, h = 300, x0 = 40, y0 = 250, bw = (w - 2 * x0) / 20, k = 200 / 3882;
+    const w = 480, h = 420, x0 = 30, y0 = 360, bw = (w - 2 * x0) / 20, k = 290 / 3882;
     let s = `<svg class="dg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${title}">`;
     s += `<text class="lbl" x="${x0}" y="22" style="text-anchor:start">${title}</text>`;
     H.forEach((c, i) => { if (c) s += `<rect x="${x0 + i * bw + 1}" y="${y0 - Math.max(3, c * k)}" width="${bw - 2}" height="${Math.max(3, c * k)}" style="fill:var(--ink)"/>`; });
@@ -492,7 +495,7 @@ Deck.slide({
       <div class="col" style="gap:28px">
         <div data-step="3" class="row" style="gap:40px;align-items:start">
           <div>${hist(HIST_OK, 'correct model')}</div>
-          <div>${hist(HIST_BUG, 'two sigmoids', `<text class="lbl" x="150" y="96" style="text-anchor:start;fill:var(--bad)">76% say “&lt; 1%”</text>`)}</div>
+          <div>${hist(HIST_BUG, 'two sigmoids', `<text class="lbl" x="80" y="86" style="text-anchor:start;fill:var(--bad)">← 76% say “&lt; 1%”</text>`)}</div>
         </div>
         <div class="lbl-s tiny" data-step="3" style="margin-top:-12px">predicted chance of a make, 5,000 validation shots</div>
         <div data-step="4" class="lp-verdict"><span class="big-n bad">4.69</span><span>✗ true log loss <span class="muted">(correct: 0.662)</span></span></div>
@@ -518,22 +521,22 @@ Deck.slide({
 
 /* ---------- 10. planned mistake 4: target shape ---------- */
 {
-  const cell = 104;
+  const cell = 116;
   const grid = () => {
-    const x0 = 150, y0 = 90;
-    let s = `<svg class="dg" viewBox="0 0 520 470" width="520" height="470" role="img" aria-label="predictions (3,1) minus targets (3,) broadcast to a 3 by 3 grid">`;
+    const x0 = 196, y0 = 90;
+    let s = `<svg class="dg" viewBox="0 0 576 530" width="576" height="530" role="img" aria-label="predictions (3,1) minus targets (3,) broadcast to a 3 by 3 grid">`;
     s += `<text class="lbl-s" x="${x0 + 1.5 * cell}" y="30">target  (3,)</text>`;
-    s += `<text class="lbl-s" x="60" y="${y0 + 1.5 * cell}">pred</text><text class="lbl-s" x="60" y="${y0 + 1.5 * cell + 34}">(3, 1)</text>`;
+    s += `<text class="lbl-s" x="64" y="${y0 + 1.5 * cell - 18}">pred</text><text class="lbl-s" x="64" y="${y0 + 1.5 * cell + 18}">(3, 1)</text>`;
     [1, 2, 3].forEach((t, j) => { s += `<text class="lbl" x="${x0 + j * cell + cell / 2}" y="70">${t}</text>`; });
     [1, 2, 3].forEach((p, i) => {
-      s += `<text class="lbl" x="${x0 - 22}" y="${y0 + i * cell + cell / 2}">${p}</text>`;
+      s += `<text class="lbl" x="${x0 - 26}" y="${y0 + i * cell + cell / 2}">${p}</text>`;
       [1, 2, 3].forEach((t, j) => {
         const d = (p - t) ** 2, diag = i === j;
         s += `<rect x="${x0 + j * cell}" y="${y0 + i * cell}" width="${cell}" height="${cell}" style="fill:${diag ? 'var(--paper)' : 'var(--code-bg)'};stroke:var(--ink);stroke-width:3"/>`;
         s += `<text class="lbl" x="${x0 + j * cell + cell / 2}" y="${y0 + i * cell + cell / 2}" style="font-size:40px;fill:${diag ? 'var(--ink)' : 'var(--bad)'}">${d}</text>`;
       });
     });
-    s += `<text class="lbl" x="${x0 + 1.5 * cell}" y="${y0 + 3 * cell + 40}" style="fill:var(--bad)">MSE = 12 / 9 = 1.33</text>`;
+    s += `<text class="lbl" x="${x0 + 1.5 * cell}" y="${y0 + 3 * cell + 44}" style="fill:var(--bad);font-size:34px">average of 9 = 1.33</text>`;
     return s + '</svg>';
   };
   Deck.slide({
@@ -578,10 +581,10 @@ Deck.slide({
       <line x1="${x0}" y1="${sy(0.5)}" x2="${x1}" y2="${sy(0.5)}" style="stroke:var(--muted);stroke-width:3;stroke-dasharray:12 10"/>
       <path d="${d}" style="fill:none;stroke:var(--ink);stroke-width:5"/>
       <circle cx="${sx(0)}" cy="${sy(0.5)}" r="10" style="fill:var(--ink)"/>
-      <text class="lbl-s" x="${sx(0) + 70}" y="${sy(0.5) + 30}">50%</text>
+      <text class="lbl-s" x="${sx(0) - 64}" y="${sy(0.5) - 28}">50%</text>
       <text class="lbl-s" x="${sx(0)}" y="${y0 + 32}">logit 0</text>
-      <text class="lbl" x="${x1 - 20}" y="${sy(0.5) - 120}" style="text-anchor:end">made</text>
-      <text class="lbl" x="${x0 + 20}" y="${sy(0.5) + 110}" style="text-anchor:start">miss</text>
+      <text class="lbl" x="${sx(3)}" y="${sy(0.5) + 56}">made</text>
+      <text class="lbl" x="${sx(-4)}" y="${sy(0.5) - 96}">miss</text>
     </svg>`;
   })();
   Deck.slide({

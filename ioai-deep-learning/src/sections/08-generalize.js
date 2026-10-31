@@ -13,7 +13,7 @@ Deck.css(`
 .sec-gen .gen-score { font-family: var(--font-display); font-weight: 800; font-size: 80px; line-height: 1; font-stretch: 110%; }
 .sec-gen .gen-score small { display: block; font-family: var(--font-mono); font-size: 28px; font-weight: 500; color: var(--muted); font-stretch: 100%; margin-top: 8px; text-align: center; }
 .sec-gen .gen-cures { display: flex; flex-direction: column; gap: 14px; }
-.sec-gen .gen-cure { display: grid; grid-template-columns: 64px 176px 600px 1fr; gap: 32px; align-items: center; min-height: 112px; border-bottom: 2px solid var(--rule); padding-bottom: 10px; }
+.sec-gen .gen-cure { display: grid; grid-template-columns: 64px 176px 560px 1fr; gap: 32px; align-items: center; min-height: 112px; border-bottom: 2px solid var(--rule); padding-bottom: 10px; }
 .sec-gen .gen-cure:last-child { border-bottom: 0; }
 .sec-gen .gen-cure .n { font-family: var(--font-mono); font-size: 40px; color: var(--muted); }
 .sec-gen .gen-cure .name { font-family: var(--font-display); font-weight: 750; font-size: 46px; line-height: 1.05; }
@@ -124,7 +124,7 @@ Deck.css(`
       const cv = Plot.canvas(fitHost, W, H);
       const sx = Plot.scale(-1.05, 1.05, 24, W - 24), sy = Plot.scale(-2.1, 2.1, H - 24, 70);
       const f = x => Math.sin(3 * x);
-      const r = NN.rng(1), n = 12, noise = 0.3;
+      const r = NN.rng(3), n = 12, noise = 0.3;
       const X = [], Y = [], VX = [], VY = [];
       for (let i = 0; i < n; i++) { const x = -1 + 2 * (i + 0.5) / n + 0.6 / n * (r() - 0.5); X.push([x]); Y.push(f(x) + noise * r.normal()); }
       for (let i = 0; i < 200; i++) { const x = -1 + 2 * r(); VX.push([x]); VY.push(f(x) + noise * r.normal()); }
@@ -191,7 +191,7 @@ Deck.css(`
       function drawCurve() {
         const C = Plot.colors(), ctx = lc.ctx;
         lc.clear();
-        logAxes(ctx, lx, ly, [1, 10, 100, 1000], [0.001, 0.01, 0.1, 1], { ylabel: 'loss (log scale)', xlabel: 'step' });
+        logAxes(ctx, lx, ly, [1, 10, 100, 1000], [0.001, 0.01, 0.1, 1], { ylabel: 'loss (log scale)' });
         const P = (s, v) => [lx(L10(Math.max(1, s))), ly(L10(Math.max(0.0008, Math.min(1.5, v))))];
         if (S.best && S.best.step > 0) {
           const bx = lx(L10(S.best.step));
@@ -225,7 +225,7 @@ Deck.css(`
     <p class="say">Twelve noisy points from a smooth curve, the dashed line, and a big network with about a thousand weights. The small hollow dots are validation points: the network never trains on them. Watch both loss curves: magenta is the training loss, black is the validation loss.</p>
     <p class="ask">Before I press Train: if we train for a very long time, what happens to the training loss? And to the validation loss?</p>
     <p class="do">Take a few answers, then press <b>Train</b> (about 10 seconds). Narrate: first the black curve becomes smooth and close to the dashed curve and both losses fall. Then the network starts bending its curve through every single black point: the training loss dives towards 0, while the validation loss turns back up. The dashed vertical line marks the step with the best validation loss so far. Press <b>Restore best</b>: the model jumps back to that smoother curve. Then click <b>small net 1-3-1</b> and Train: it cannot bend enough to memorise, so its two curves stay close.</p>
-    <p class="ans">Training loss keeps falling (to about 0: it memorises all 12 points, noise included). Validation loss falls, reaches a minimum early (around step 300), then rises. Memorising answers is not understanding.</p>
+    <p class="ans">Training loss keeps falling (to about 0: it memorises all 12 points, noise included). Validation loss falls, reaches its minimum very early (around step 75), then climbs to more than twice that value. Memorising answers is not understanding.</p>
     <p>Everyday picture: a student who memorises last year's exam answers scores 100% on that paper and badly on a new one. The gap between the two curves is the warning sign, not the training loss alone. The y-axis is logarithmic so that the training loss diving towards 0 stays visible. Loss here is mean squared error, because this is a curve-fitting demo.</p>`,
   });
 
@@ -267,7 +267,7 @@ Deck.css(`
         Plot.text(ctx, 'loss', sx.range[0] + 10, 46, { size: 28, color: C.ink });
         Plot.text(ctx, 'steps →', sx.range[1] + 150, sy.range[0] + 34, { size: 26, color: C.ink, align: 'right' });
         polyline(ctx, [[sx.range[0], sy(0.688)], [sx.range[1], sy(0.688)]], C.muted, 3, [12, 10]);
-        Plot.text(ctx, 'guess 44.6% always: 0.688', sx.range[1], sy(0.688) - 14, { size: 26, color: C.muted, align: 'right' });
+        Plot.text(ctx, 'constant guess 0.688', sx.range[0] + 12, sy(0.688) + 64, { size: 26, color: C.muted });
         const pts = a => st.map((s, i) => [sx(L10(s)), sy(a[i])]);
         polyline(ctx, pts(tr), C.grad, 4); polyline(ctx, pts(va), C.ink, 5);
         pts(tr).forEach(p => Plot.dot(ctx, p[0], p[1], 7, C.grad, null));
@@ -308,7 +308,7 @@ Deck.css(`
           <path d="M8,14 C40,92 70,92 100,60 S150,20 170,8" style="fill:none;stroke:var(--ink);stroke-width:5"/>
           <line x1="66" y1="6" x2="66" y2="96" style="stroke:var(--muted);stroke-width:3;stroke-dasharray:8 6"/>
           <circle cx="66" cy="78" r="9" style="fill:var(--ink)"/></svg>
-        <span class="name">Stop early, keep the best</span><span class="ev"><b>0.675</b> · ${Code.i('best = copy.deepcopy(model.state_dict())')}</span></div>
+        <span class="name">Stop early, keep the best</span><span class="ev">best <b>0.675</b>, at step 20<br>${Code.i('best = copy.deepcopy(model.state_dict())')}</span></div>
       <div class="gen-cure" data-step="4"><span class="n">4</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">
           <line x1="4" y1="96" x2="172" y2="96" style="stroke:var(--muted);stroke-width:3"/>
@@ -317,7 +317,7 @@ Deck.css(`
         <span class="name">Weight decay</span><span class="ev">pull every weight toward 0: <b>0.76</b> at the end</span></div>
       <div class="gen-cure" data-step="5"><span class="n">5</span>
         <span id="gen-drop"></span>
-        <span class="name">Dropout</span><span class="ev">switch off random neurons while training: <b>0.71</b> at the end</span></div>
+        <span class="name">Dropout</span><span class="ev">random neurons off while training: <b>0.71</b> at the end</span></div>
     </div>`,
     init(el, api) {
       // dropout picture: a new random half of the hidden neurons is crossed out every 0.8 s
@@ -416,7 +416,8 @@ Deck.css(`
           ctx.restore();
           if (va.length) {
             Plot.text(ctx, 'val', x1 - 4, va[N][1] - 14, { size: 26, color: C.ink, align: 'right', weight: 700 });
-            Plot.text(ctx, 'train', x1 - 4, tr[N][1] + 32, { size: 26, color: C.grad, align: 'right', weight: 700 });
+            if (tr[N][1] + 32 > y1 - 6) { const m = Math.round(N * 0.7); Plot.text(ctx, 'train', tr[m][0], tr[m][1] - 14, { size: 26, color: C.grad, align: 'center', weight: 700 }); }
+            else Plot.text(ctx, 'train', x1 - 4, tr[N][1] + 32, { size: 26, color: C.grad, align: 'right', weight: 700 });
           } else Plot.text(ctx, 'train', x1 - 4, tr[N][1] < (y0 + y1) / 2 ? tr[N][1] + 40 : tr[N][1] - 18, { size: 26, color: C.grad, align: 'right', weight: 700 });
         });
       };

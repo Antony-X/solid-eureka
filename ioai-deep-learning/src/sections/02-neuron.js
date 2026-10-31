@@ -521,7 +521,7 @@ Deck.css(`
     }));
     s += `<text class="lbl-m" x="24" y="220">x</text><text class="lbl-m" x="24" y="390">y</text><text class="lbl-s" x="96" y="462">×10 ft</text>`;
     s += `<text class="lbl-b fwd-p" x="818" y="290" style="font-size:60px;text-anchor:start"></text><text class="lbl-s" x="822" y="346" style="text-anchor:start">goes in</text>`;
-    s += `<text class="lbl fwd-real" x="818" y="430" style="font-size:32px;text-anchor:start"></text>`;
+    s += `<text class="lbl-s fwd-real-l" x="822" y="410" style="text-anchor:start">Kobe:</text><text class="lbl fwd-real" x="818" y="452" style="font-size:34px;text-anchor:start"></text>`;
     ['input', 'hidden 1', 'hidden 2'].forEach((t, l) => { s += `<text class="lbl-s" x="${FW.xs[l]}" y="${FW.h - 22}">${t}</text>`; });
     return s + '</svg>';
   })();
@@ -544,7 +544,7 @@ Deck.css(`
       el.querySelectorAll('[data-n]').forEach(n => (fills[n.dataset.n] = n));
       el.querySelectorAll('[data-t]').forEach(n => (texts[n.dataset.t] = n));
       const groups = [0, 1, 2].map(l => el.querySelector('.fwd-L' + l));
-      const pEl = el.querySelector('.fwd-p'), realEl = el.querySelector('.fwd-real');
+      const pEl = el.querySelector('.fwd-p'), realEl = el.querySelector('.fwd-real'), realL = el.querySelector('.fwd-real-l');
       const Wt = (l, i, j) => l === 0 ? KN.W1[2 * j + i] : l === 1 ? KN.W2[8 * j + i] : KN.W3[i];
       const vals = l => { const R = S.res; return l === 0 ? R.x : l === 1 ? R.h1 : l === 2 ? R.h2 : [R.z]; };
       function setNet() {
@@ -560,7 +560,8 @@ Deck.css(`
           fills[k].style.opacity = l === 0 || l === 3 ? 0 : Math.min(1, v / 1.5).toFixed(2);
         }));
         pEl.textContent = Math.round(100 * S.res.p) + '%';
-        realEl.textContent = S.real == null ? '' : S.real ? 'Kobe: made' : 'Kobe: missed';
+        realEl.textContent = S.real == null ? '' : S.real ? 'made' : 'missed';
+        realL.style.display = S.real == null ? 'none' : '';
         realEl.style.fill = S.real == null ? '' : S.real ? 'var(--c1)' : 'var(--c0)';
       }
       function setPhase() {
@@ -571,9 +572,8 @@ Deck.css(`
           texts[k].style.opacity = o.toFixed(2);
           if (o < 1) fills[k].style.opacity = 0;
         }));
-        pEl.style.opacity = realEl.style.opacity = clamp((t - 3) / 0.4, 0, 1).toFixed(2);
+        pEl.style.opacity = realEl.style.opacity = realL.style.opacity = clamp((t - 3) / 0.4, 0, 1).toFixed(2);
       }
-      const heatCache = { key: null };
       function drawCourt() {
         const C = Plot.colors(), ctx = cv.ctx;
         cv.clear(C.paper);

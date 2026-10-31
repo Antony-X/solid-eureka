@@ -229,9 +229,9 @@ Deck.css(`
     notes: `
     <p class="time">2 min</p>
     <p class="say">Now feed the neuron every position on Kobe's court. The colour shows the neuron's answer: orange where it says "made", blue where it says "missed". Whatever weights you choose, the border between the two colours is always a straight line. The arrow shows which side is orange. One neuron can only ever cut the court in two with one straight cut.</p>
-    <p class="do">"turn" rotates the arrow (this changes the two weights), "shift" slides the line (this changes the bias), "steepness" makes the colour change sharp or soft (all weights bigger or smaller). Start: the line is 10 ft from the baseline and the neuron says "made" close to the rim. Read the "this line" accuracy aloud. Then let a student direct you: "turn it, shift it, try to beat 55%". Switch to ReLU once: the far side becomes plain paper, the neuron is simply off there.</p>
+    <p class="do">"turn" rotates the arrow (this changes the two weights), "shift" slides the line (this changes the bias), "steepness" makes the colour change sharp or soft (all weights bigger or smaller). Start: the line is 10 ft out and the neuron says "made" for everything closer. Read the accuracy aloud: 54.5%, worse than "always miss" (55.4%)! Then let a student direct you: "turn it, shift it, beat 55%". The best they can find is about 59%: a line hugging the rim (shift about −1 ft), i.e. "made only if almost under the basket". Switch to ReLU once: the far side becomes plain paper, the neuron is simply off there.</p>
     <p class="ask">Kobe scores near the rim and misses far away, in all directions. Can one straight line separate "near" from "far"?</p>
-    <p class="ans">No. "Near the rim" is a half-disc, and its border is curved. The best single line gets about 58–59% accuracy, only a little above "always miss" (55%). The 2-8-8-1 network we build later gets about 61%. We need several lines combined: a hidden layer.</p>
+    <p class="ans">No. "Near the rim" is a half-disc, and its border is curved. The best single line gets about 59% on these shots, only a little above "always miss" (55%). The 2-8-8-1 network we build later gets about 61%. We need several lines combined: a hidden layer.</p>
     <p>Background: the line is where the sum is exactly 0 (w₁x + w₂y + b = 0). The arrow is the weight vector (w₁, w₂); it is always perpendicular to the line. The bias moves the line without turning it. Bigger weights do not move the line, they only make the transition sharper. Inputs here are court positions in units of 10 ft, the accuracy is measured on the 6,000 Kobe shots stored in the deck (500 are drawn).</p>`,
   });
 
@@ -712,14 +712,14 @@ Deck.css(`
       </div>
     </div>`,
     init(el, api) {
-      const S = 768, P = 24, side0 = S - 2 * P - 24;
+      const S = 768, P = 24, side0 = S - 72;
       const cv = Plot.canvas(el.querySelector('.scale-cv'), S, S);
       const target = k => Math.log10(MODELS[Math.min(k, 3)].n) + 2 * Math.log10(1 / 0.82);
       let u = target(0), goal = u;
       function draw() {
         const C = Plot.colors(), ctx = cv.ctx;
         cv.clear();
-        const x0 = P, y1 = S - P;
+        const x0 = P, y1 = S - 48;
         ctx.save();
         for (let i = MODELS.length - 1; i >= 0; i--) {
           const m = MODELS[i], sd = side0 * Math.sqrt(m.n / Math.pow(10, u));

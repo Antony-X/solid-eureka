@@ -199,12 +199,12 @@ Deck.css(`
       <li><b>1</b> wipe the old gradients.</li>
       <li><b>2</b> shots flow left to right; dark neurons fire a lot.</li>
       <li><b>3</b> one loss for the batch, about 0.7 (coin flip: 0.69).</li>
-      <li><b>4</b> magenta = gradients: for each of the 105 weights, which way to move to lower the loss; thicker = more to blame. (This is backpropagation; PyTorch does it for you.)</li>
+      <li><b>4</b> magenta = gradients: which way each of the 105 weights should move to lower the loss; thicker = more to blame (backpropagation, done by PyTorch).</li>
       <li><b>5</b> every weight moves a little (thick magenta: moved most); the batch loss drops, 0.695 → 0.664.</li>
     </ul>
     <p class="ask">Which line actually changes the weights?</p>
     <p class="ans">Only opt.step(); backward() only computes gradients.</p>
-    <p>The demo uses plain SGD with a big learning rate so one step is visible; with Adam at 0.001 each step is tiny, hence about 9,000 steps.</p>`,
+    <p>The demo uses plain SGD with a big learning rate so one step is visible; real Adam steps are tiny, hence about 9,000 of them.</p>`,
   });
 }
 

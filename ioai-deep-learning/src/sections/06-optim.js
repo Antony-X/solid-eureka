@@ -670,14 +670,14 @@ Deck.css(`
     notes: `
     <p class="time">2.5 min</p>
     <p class="say">A loss surface seen from above, like a map: a long, narrow valley, steep across and almost flat along, with the bottom at the cross. Three optimizers race from the same start.</p>
-    <p class="do">Ask "predict the path", then press <b>Run</b>: plain gradient descent (SGD, dotted) bounces wall to wall, then crawls. → adds momentum (dashed), → adds Adam (solid); each press restarts the race.</p>
+    <p class="do">Ask "predict the path", then press <b>Run</b>: plain gradient descent (SGD, dotted) zig-zags, then crawls. Each → adds a racer (momentum dashed, then Adam solid) and restarts the race.</p>
     <ul>
       <li><b>Momentum</b> = a heavy ball: side-to-side pushes cancel, pushes along the floor add up. It overshoots, then ends closest.</li>
       <li><b>Adam</b> = its own step size for each weight: small across the steep walls, big along the flat floor, so it goes almost straight.</li>
     </ul>
     <p class="ask">Pair task (1 min): describe one walk to your neighbour; they name the optimizer.</p>
     <p class="ans">Zig-zag, then crawl: SGD. Speeds up and overshoots: momentum. Fairly straight: Adam.</p>
-    <p>The learning rates here are toy values for this surface, not defaults for real networks.</p>`,
+    <p>The learning rates are toy values for this surface, not real-network defaults.</p>`,
   });
 
   /* ------------------------------------------------------------------ */

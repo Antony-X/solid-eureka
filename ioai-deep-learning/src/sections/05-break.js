@@ -46,13 +46,13 @@ Deck.css(`
     },
     notes: `
     <p class="time">10 min</p>
-    <p class="say">Ten minutes of break. Stand up, drink water, look out of a window. When we come back we start with a game: ten claims about neural networks, and you decide for each one whether it is true or a bluff.</p>
-    <p class="do">The timer starts by itself when this slide appears (Pause or Reset if needed). Keep this slide on screen during the break: the timer only runs while the slide is visible. When it reaches 0:00 the numbers turn white on black.</p>
-    <p>The game is on the next two slides (5 claims each, about 3 minutes in total). It wakes everyone up after the break and repeats a few names they will hear again. If you are short on time, play only the first slide. If you are early at the end of the day, it also works as a filler.</p>`,
+    <p class="say">Ten minutes of break: stand up, drink water, look out of a window. When we come back we play a game: ten claims about neural networks, true or bluff?</p>
+    <p class="do">The timer starts by itself (Pause or Reset if needed) and only runs while this slide is visible, so keep it on screen. At 0:00 the numbers turn white on black.</p>
+    <p>The game is on the next two slides, about 3 minutes in total; if you are short on time, play only the first.</p>`,
   });
 
   const playNotes = `
-    <p class="do">For each line: read the claim aloud, count "3, 2, 1, show!", students hold up a hand for <b>true</b> or a fist for <b>bluff</b>. Then press → to reveal the verdict and tell the one-line story below. Do not explain more than one sentence per claim.</p>`;
+    <p class="do">For each line: read the claim, count "3, 2, 1, show!": hand up for <b>true</b>, fist for <b>bluff</b>. Press → to reveal the verdict and say the one line below, no more.</p>`;
 
   Deck.slide({
     id: 'brk-tb1',
@@ -64,11 +64,11 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>${playNotes}
     <ol>
-      <li><b>True.</b> New York Times, 8 July 1958: the US Navy showed "the embryo of an electronic computer that it expects will be able to walk, talk, see, write, reproduce itself and be conscious of its existence." The machine could only draw one straight line. Hype is old.</li>
-      <li><b>Bluff.</b> Minsky &amp; Papert's 1969 book <i>Perceptrons</i> proved that a network <i>without</i> hidden layers can't compute XOR. They knew a hidden layer could represent it but doubted it could be trained. People read the book as "neural nets don't work" and funding dried up for years. In section 2 we solved XOR with two hidden neurons.</li>
-      <li><b>True.</b> Geoffrey Hinton (Reddit "ask me anything", 2016): the tellers at his bank kept changing; he guessed it was so that employees could not cooperate to cheat the bank. Randomly switching off different neurons on every example stops neurons from "conspiring", which reduces overfitting. That is dropout.</li>
-      <li><b>Bluff.</b> Hebb's 1949 book describes the idea, but the catchy sentence comes from the neuroscientist Carla Shatz, in <i>Scientific American</i>, 1992. Famous quotes are often not by the famous person.</li>
-      <li><b>True.</b> Krizhevsky, Sutskever and Hinton trained AlexNet for five to six days on two GTX 580 gaming cards and won the ImageNet competition in 2012 with 15.3% top-5 error against 26.2% for second place. That started the deep-learning boom.</li>
+      <li><b>True.</b> 1958, about a machine that could only draw one straight line: hype is old.</li>
+      <li><b>Bluff.</b> They proved it only for networks <i>without</i> a hidden layer; the book was misread as "neural nets don't work" and funding dried up for years.</li>
+      <li><b>True.</b> Hinton's bank kept moving tellers so they could not team up to cheat; switching off random neurons during training stops them "conspiring". That is dropout.</li>
+      <li><b>Bluff.</b> Hebb (1949) had the idea; the catchy sentence is Carla Shatz's, from 1992.</li>
+      <li><b>True.</b> Two GTX 580 gaming cards, five to six days; it won ImageNet 2012 by a huge margin and started the deep-learning boom.</li>
     </ol>`,
   });
 
@@ -82,12 +82,12 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>${playNotes}
     <ol start="6">
-      <li><b>True</b> (as Quanta Magazine reports it). At OpenAI a team member went on vacation and forgot to stop a training run. Long after the network had memorised its training data, it suddenly started to generalise perfectly. "We got lucky… and by lucky, I mean forgetful." We meet grokking again in section 8.</li>
-      <li><b>Bluff.</b> The "10-minute attention span" is a myth: studies (Wilson &amp; Korn 2007, Bradbury 2016) find no fixed limit. Attention drops and comes back in short cycles, and doing something (predicting, voting, writing) brings it back. That is why this lecture makes you do something every few minutes.</li>
-      <li><b>True.</b> Kingma &amp; Ba's Adam paper (2014) had about 200,000 Google Scholar citations by March 2025, which made it number 4 of all 21st-century papers in the data behind a 2025 <i>Nature</i> ranking. It is the optimizer you will type this afternoon.</li>
-      <li><b>Bluff.</b> In 2021 Beniaguev, Segev and London needed a deep network with five to eight layers to imitate one realistic model of a single cortical neuron. Artificial "neurons" are a cartoon of real ones; do not take the brain analogy literally.</li>
-      <li><b>Bluff.</b> Augustin-Louis Cauchy described steepest descent in 1847, more than a century before neural networks. "Your optimizer's grandfather was born in 1847."</li>
+      <li><b>True</b> (as the researchers tell it). Someone at OpenAI went on holiday and left a run going; long after memorising its training data, the network suddenly generalised. That is "grokking".</li>
+      <li><b>Bluff.</b> No fixed limit has been found; attention dips and comes back, and doing something brings it back, which is why this lecture keeps you busy.</li>
+      <li><b>True.</b> Kingma and Ba's 2014 paper had about 200,000 citations by 2025, and Adam is the optimizer you will type this afternoon.</li>
+      <li><b>Bluff.</b> Imitating one realistic model of a single brain neuron took a deep network of five to eight layers (2021): artificial neurons are a cartoon.</li>
+      <li><b>Bluff.</b> Cauchy described it in 1847, a century before neural networks.</li>
     </ol>
-    <p class="say">Ask: "Who got 8 or more right?" Then move on to the after-break quiz.</p>`,
+    <p class="say">Ask: "Who got 8 or more right?" Then move on to how the network actually learns.</p>`,
   });
 }

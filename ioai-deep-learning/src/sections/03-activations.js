@@ -130,11 +130,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">This network has two hidden layers of 8 neurons, 105 weights, and nothing between the layers: each neuron only adds up its weighted inputs. Can it separate the orange disk from the blue ring?</p>
-    <p class="do">Press Train: the boundary stays one straight line and accuracy is stuck at about 59%. Press Pause, click <b>ReLU</b> under "between the layers", press Train: within a second the boundary bends around the disk and reaches 100%. Optional: <b>tanh</b> gives a smooth round boundary.</p>
+    <p class="say">Two hidden layers of 8 neurons, 105 weights, and nothing between the layers: each neuron only adds up its weighted inputs. Can it separate the orange disk from the blue ring?</p>
+    <p class="do">Press Train: one straight line, accuracy stuck at about 59%. Pause, click <b>ReLU</b> under "between the layers", Train: within a second the boundary bends around the disk, 100%. Optional: <b>tanh</b> gives a round boundary.</p>
     <p class="ask">What did we change between the two runs?</p>
-    <p class="ans">Only a bend (the activation) after each hidden neuron: same data, same 105 weights. Without the bend, all the layers together still act like one straight line.</p>
-    <p>With ReLU each hidden neuron is "a line, but flat on one side"; many of them together give polygons, which is why the boundary looks slightly angular.</p>`,
+    <p class="ans">Only a bend (the activation) after each hidden neuron. Without it, all the layers together still act like one straight line.</p>
+    <p>ReLU boundaries are made of straight pieces, which is why they look slightly angular.</p>`,
   });
 
   /* ================================================================
@@ -193,11 +193,11 @@ Deck.css(`
     },
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">So we need a bend after each neuron, and almost any bend works. ReLU gives zero for negative inputs and the input itself for positive ones; Leaky ReLU keeps a small slope on the left. Sigmoid squashes everything into 0 to 1, tanh is the same S from −1 to 1, and GELU is a smooth ReLU used in language models like GPT.</p>
-    <p class="do">Press → to show the magenta dashed curves: the <b>slope</b> of each one. Sweep the pointer across the sigmoid plot and stop at the middle.</p>
+    <p class="say">Almost any bend works. ReLU: zero for negative inputs, the input itself for positive ones; Leaky ReLU keeps a small slope on the left. Sigmoid squashes into 0 to 1, tanh is the same S from −1 to 1, and GELU is a smooth ReLU used in models like GPT.</p>
+    <p class="do">Press → to show the magenta dashed <b>slope</b> curves. Sweep the pointer across the sigmoid plot and stop at the middle.</p>
     <p class="ask">What is the largest slope the sigmoid ever has?</p>
-    <p class="ans">0.25, at input 0; far from 0 it is flat, slope almost 0. ReLU's slope is 1 for every positive input. Training relies on these slopes and a flat spot barely learns, one reason ReLU is the usual default.</p>
-    <p>Leaky ReLU is drawn with slope 0.1 on the left so it is visible (PyTorch's default is 0.01). Avoid "the activation decides whether the neuron fires": these are smooth bends, not on/off switches.</p>`,
+    <p class="ans">0.25, at input 0; far from 0 it is flat. ReLU's slope is 1 for every positive input. Training relies on these slopes and flat spots barely learn: one reason ReLU is the usual default.</p>
+    <p>Leaky ReLU is drawn with slope 0.1 so it is visible (PyTorch's default is 0.01). Avoid "the neuron fires": these are smooth bends, not on/off switches.</p>`,
   });
 
   /* ================================================================
@@ -344,11 +344,11 @@ with torch.no_grad():
     steps: 2,
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">One ReLU neuron draws a hinge: flat, then a straight ramp from one point. The dashed curve is a wiggly target, each dot is one hidden neuron's hinge, and the thick line adds them up. With three hinges we only get a rough zig-zag.</p>
-    <p class="do">Press → for 8 hinges, → again for 32 (or click the numbers). The "error" readout drops from 0.07 to 0.002 to 0.000005 and the dashed curve disappears under the thick line. Up to 8 hinges, the faint lines show each neuron's own ramp.</p>
+    <p class="say">One ReLU neuron draws a hinge: flat, then a straight ramp. The dashed curve is a wiggly target, each dot is one neuron's hinge, and the thick line adds them up. With three hinges we only get a rough zig-zag.</p>
+    <p class="do">Press → for 8 hinges, → again for 32. The "error" drops from 0.07 to 0.002 to 0.000005 and the dashed curve disappears under the thick line. The faint lines are each neuron's own ramp.</p>
     <p class="ask">I want the error ten times smaller. What do I do?</p>
-    <p class="ans">Add hinges, that is, more neurons in the hidden layer: every extra neuron is one more place where the line may bend.</p>
-    <p>Here the hinges are evenly spaced and the output weights are computed exactly (least squares); on the next slide training has to find them by itself.</p>`,
+    <p class="ans">Add hinges, that is, more hidden neurons: each one is one more place where the line may bend.</p>
+    <p>Here the hinges are evenly spaced and the output weights computed exactly; on the next slide training must find them itself.</p>`,
   });
 
   /* ================================================================
@@ -428,10 +428,10 @@ with torch.no_grad():
     },
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">Now nobody places the hinges: this 1-4-1 ReLU network starts from random weights and must find them by training. You may have seen gradient descent in classical ML; if not: it nudges every weight a little in the direction that makes the error smaller, thousands of times.</p>
-    <p class="do">Press Train: 4 neurons get the rough shape, error about 0.014. Click <b>2 neurons</b> (it restarts by itself; press Train if needed): stuck at about 0.06. <b>8 neurons</b>: about 0.005, worse than the 8 hand-placed hinges (0.002). <b>32 neurons</b>: close within a second, about 0.0001 after 5 to 7 seconds. Point at the corners: the hinges it found.</p>
+    <p class="say">Now nobody places the hinges: this network starts from random weights and must find them by training. You may have seen gradient descent; if not: it nudges every weight a little in the direction that shrinks the error, thousands of times.</p>
+    <p class="do">Press Train: 4 neurons, rough shape, error about 0.014. Click <b>2 neurons</b> (it restarts; press Train if needed): stuck at 0.06. <b>8</b>: about 0.005, worse than 8 hand-placed hinges (0.002). <b>32</b>: about 0.0001 after 5 to 7 seconds. Point at the corners: the hinges it found.</p>
     <p class="ask">With 2 neurons the error stays at 0.06 however long we train. Why?</p>
-    <p class="ans">Two neurons give at most two bends, and this curve needs more. More neurons make a good fit possible, but training walks downhill from a random start and can settle a little worse, as with 8.</p>`,
+    <p class="ans">Two neurons give at most two bends; this curve needs more. More neurons make a good fit possible, but training starts at random and can settle a little worse, as with 8.</p>`,
   });
 
   /* ================================================================

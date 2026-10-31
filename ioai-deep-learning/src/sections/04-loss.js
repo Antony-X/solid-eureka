@@ -641,11 +641,10 @@ Deck.css(`
     steps: 2,
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Last question before the break. A classmate thinks: "my model should output a chance, so I'll put a sigmoid at the end", and keeps BCEWithLogitsLoss. What happens when they train? 1 crash, 2 trains normally, 3 trains but is quietly worse, 4 the loss becomes NaN.</p>
-    <p class="do">→ highlights the two lines that matter (the sigmoid in the model and the loss). 30 seconds of silent thinking, then everyone votes with fingers at once. Note the rough counts on the board.</p>
-    <p class="do">→ Discussion: one minute with a neighbour, ideally with someone who voted differently. Then vote again and write the new counts next to the old ones.</p>
-    <p class="say">Don't tell them the answer, even if they ask. Say: "We'll run it live after the break and you'll see." Leave the vote counts on the board.</p>
-    <p class="do">Hint you may give if the room is stuck: "Remember the logits slide: what does BCEWithLogitsLoss do first with whatever it receives?"</p>
-    <p>For you only (the reveal is in "The training loop, live"): the answer is 3. Nothing crashes and nothing is NaN. The loss applies a second sigmoid, so the chance it sees is σ(σ(z)), always between 50% and 73%. The printed loss looks normal and accuracy stays around 61%, but the real outputs become extreme (76% of them below 1% or above 99%), and the true log loss of what you would submit is 4.69 instead of 0.662. Good discussion arguments to listen for: "it double-squashes" (correct), "it crashes because of shapes" (no, shapes are fine), "NaN because log(0)" (no: whatever the model outputs, even exactly 0, the loss's own sigmoid turns it into at least 50%, so the log never sees 0).</p>`,
+    <p class="say">Last question before the break. A classmate wants the model to output a chance, so they put a sigmoid at the end and keep BCEWithLogitsLoss. What happens when they train?</p>
+    <p class="do">→ highlights the two lines that matter. 30 seconds of silent thinking, then everyone votes with fingers at once; write the counts on the board. → One minute with a neighbour who voted differently, then vote again next to the old counts. Do not reveal: "we run it live after the break." Hint if stuck: "look at the last line of the previous slide."</p>
+    <p class="ask">1 crash, 2 trains normally, 3 trains but quietly worse, 4 the loss becomes NaN?</p>
+    <p class="ans">For you only (revealed after the break on "Cliffhanger reveal: two sigmoids"): 3. The loss adds a second sigmoid, so the printed loss looks normal (about 0.68) and accuracy stays about 61%, but the outputs become extreme: their true log loss is about 8 in our notebook run (4.5–4.7 in other runs), against 0.67 for the correct model.</p>
+    <p>No crash (shapes are fine) and no NaN: the loss's own sigmoid turns any output, even 0, into at least 50%, so the log never sees 0.</p>`,
   });
 })();

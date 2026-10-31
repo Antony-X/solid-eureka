@@ -23,11 +23,11 @@ Deck.slide({
   },
   notes: `
   <p class="time">1 min</p>
-  <p class="say">Today we go from the models you already know, which draw straight lines, to neural networks, which can learn almost any shape. Everything you see on these slides is computed live in this browser.</p>
-  <p class="do">Let the spiral on the right train while you talk. Point at it: two interleaved spirals, orange and blue. A network with 105 numbers inside is learning to separate them right now.</p>
-  <p class="ask">Could logistic regression separate these two spirals?</p>
-  <p class="ans">No. Logistic regression draws one straight line. By the end of the first hour you will know exactly why the network can and logistic regression cannot.</p>
-  <p>Keys: → / space next, ← back, P opens the presenter window (notes, timer, next slide), N shows notes on this screen, T toggles light/dark, F full screen, B black screen, O slide map, ? help.</p>`,
+  <p class="say">Today we go from models that draw one straight line to neural networks, which can learn almost any shape. Everything on these slides is computed live in this browser.</p>
+  <p class="do">Let the spiral train while you talk. Point at it: two interleaved spirals, and a network with 105 numbers inside is learning to separate them right now.</p>
+  <p class="ask">Could one straight line separate these two spirals?</p>
+  <p class="ans">No. In the first hour you will see why a network can.</p>
+  <p>Keys: → / space next, ← back, P presenter window (notes, timer, next slide), N notes on this screen, T light/dark, F full screen, B black screen, O slide map, ? help.</p>`,
 });
 
 Deck.slide({
@@ -83,9 +83,9 @@ Deck.slide({
   },
   notes: `
   <p class="time">1 min</p>
-  <p class="say">Here is the plan. Roughly every ten minutes you will do something: predict what happens before I run a demo, compute something on paper, or write code. There is one break in the middle. The last part prepares you for the two tasks you will solve this afternoon.</p>
-  <p class="do">Point at the two tagged rows: "live code" (we write the training loop together) and "tasks" (the two problems you start today). Tell them to keep paper and a pen ready: many slides ask them to write a prediction before the answer appears.</p>
-  <p>Pacing: the presenter window (key P) shows the planned clock for every section and warns you when you are behind. If you are late, the safest places to cut are the extra demos in "Activations" (sigmoid towers, space warping) and the optimizer schedules slide.</p>`,
+  <p class="say">Here is the plan. Every few minutes you will do something: predict before a demo, count on paper, or write code. There is one break, and the last part prepares the two tasks you start this afternoon.</p>
+  <p class="do">Point at the "live code" row (we write the training loop together) and the "tasks" row. Ask everyone to keep paper and a pen ready for predictions.</p>
+  <p>Pacing: the presenter window (P) shows the planned clock for each section and warns you when you are behind. If you are late, shorten pair work and optional questions, not the training loop or the task briefing.</p>`,
 });
 
 Deck.slide({
@@ -178,9 +178,9 @@ Deck.slide({
   },
   notes: `
   <p class="time">2 min</p>
-  <p class="say">Today's running example is real data: the shots Kobe Bryant took in his 20 NBA seasons, each with its position on the court. The basket is at the bottom of this picture. Orange dots went in, blue dots missed. This is also the data of your first task this afternoon.</p>
-  <p class="do">Everyone writes a number on paper first (15 seconds). Ask two or three students to say theirs out loud. Then → reveals 44.6%, and → again reveals the consequence.</p>
+  <p class="say">Our running example is real data: Kobe Bryant's shots from 20 NBA seasons, each with its position on the court. The basket is at the bottom; orange went in, blue missed. This is also the data of your first task this afternoon.</p>
+  <p class="do">Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → again the consequence.</p>
   <p class="ask">If 44.6% went in, how often is a "model" right that always says "miss"?</p>
-  <p class="ans">55.4% of the time (100 − 44.6), so about 55%. Remember this number: any model that does not clearly beat 55% has learned nothing. Later we will see that even the best possible model only reaches about 61%, because the same spot on the court produces both makes and misses.</p>
-  <p>Facts for the coach: the data is the Kaggle "Kobe Bryant Shot Selection" set: all 30,697 field-goal attempts from 1996 to his last game on 13 April 2016; 5,000 have a hidden label, which leaves 25,697 labelled shots. The dots are a random 800 of them. His regular-season career field-goal percentage was .447. Your task file has 25,000 of these shots (44.7% made). Kobe died in a helicopter crash in January 2020; mention it respectfully if it comes up, and never joke about it.</p>`,
+  <p class="ans">About 55% (100 − 44.6). A model that does not clearly beat 55% has learned nothing. Even the best models reach only about 61%: the same spot gives both makes and misses.</p>
+  <p>Data: Kaggle "Kobe Bryant Shot Selection", 25,697 labelled shots (1996–2016); the dots are a random 800, and your task file has 25,000 of them (44.7% made). Kobe died in a helicopter crash in January 2020; if it comes up, be respectful.</p>`,
 });

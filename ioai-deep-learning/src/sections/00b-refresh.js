@@ -61,14 +61,14 @@ Deck.slide({
   <p class="lead" data-step="4">Today: a much bigger box, and how to train it well.</p>`,
   notes: `
   <p class="time">3 min</p>
-  <p class="say">Before we start, three ideas in plain words. You may know them already from classical ML; if so, this is a one-minute check. Everything today is built on these three.</p>
-  <p class="do">Press → for each card. After each one, ask a student to say it back in their own words.</p>
-  <ol>
-    <li><b>A model is a box with knobs.</b> Numbers go in (for Kobe: where the shot was taken), a guess comes out (the chance it goes in). The knobs are the model's weights. Different knob settings give different guesses. Logistic regression is a small box with three knobs; today's networks have hundreds.</li>
-    <li><b>The loss says how wrong the guess was.</b> We compare the guess with what really happened and get one number. Small is good. Guessing 41% for a shot that went in costs more than guessing 90%.</li>
-    <li><b>Training rolls downhill.</b> For every knob we can compute which direction makes the loss smaller (that is what the gradient tells us; backpropagation is the method that computes it for every knob at once). We turn each knob a small step that way, and repeat thousands of times. That is gradient descent.</li>
-  </ol>
+  <p class="say">Three ideas in plain words; everything today is built on them. If you know them from classical ML, this is a one-minute check.</p>
+  <p class="do">Press → for each card and ask a student to say it back in their own words.</p>
+  <ul>
+    <li><b>Box with knobs:</b> a shot's position goes in, a chance comes out. The knobs (weights) decide the guess; today's Kobe network has 105 of them.</li>
+    <li><b>Loss:</b> compare the guess with what happened; one number, small is good. Saying 41% for a shot that went in costs more than saying 90%.</li>
+    <li><b>Downhill:</b> for every knob, find which way makes the loss smaller (the gradient; backpropagation computes it for all knobs at once), turn it a little, repeat. That is gradient descent.</li>
+  </ul>
   <p class="ask">If the loss goes up after a step, what went wrong?</p>
-  <p class="ans">The step was too big: we jumped over the bottom of the valley. The size of the step is the learning rate; we will play with it after the break.</p>
-  <p>If students already know all of this well, move on quickly. If they look unsure, draw the valley on the board (key W opens a blank whiteboard, D draws) and roll a "ball" down it by hand.</p>`,
+  <p class="ans">The step was too big: we jumped over the bottom of the valley. The step size is the learning rate; we play with it after the break.</p>
+  <p>If they look unsure, press W (blank whiteboard) and D (pen), draw a valley and roll a "ball" down it by hand.</p>`,
 });

@@ -6,7 +6,7 @@ Deck.css(`
 .sec-loop .lp-read { gap: 56px; }
 .sec-loop .lp-t6 { display: grid; grid-template-columns: 1056px 576px; gap: 96px; flex: 1; min-height: 0; align-items: start; }
 .sec-loop pre.lp-c30 { font-size: 30px; padding: 24px 30px; }
-.sec-loop pre.lp-beats-code { font-size: 32px; line-height: 1.75; }
+.sec-loop pre.lp-beats-code { line-height: 1.8; }
 .sec-loop pre.lp-tall { line-height: 1.65; }
 .sec-loop pre.lp-c36 { font-size: 36px; line-height: 1.7; }
 .sec-loop .lp-t6.lp-wide { grid-template-columns: 1120px 1fr; gap: 72px; }

@@ -739,7 +739,7 @@ Deck.css(`
           <div><div class="barlab">lr 0.1 · 500 steps → MSE 0.024</div><div class="bar" style="width:${0.0236 / 0.433 * 520}px"></div></div></div>
         <div data-only="4"><span class="big2">[:, 0]</span>
           <span><span class="xx">✗</span> without it: (N, N), MSE 2.44</span></div>
-        <div data-only="5"><span class="big2">then check</span></div>
+        <div data-only="5"><span class="big2">check each row</span><span>leftover error · two answers?</span></div>
       </div>
     </div>`,
     notes: `

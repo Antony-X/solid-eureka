@@ -2172,16 +2172,12 @@ Deck.slide({
   cls: 'plain',
   html: `
   <div class="split split-46">
-    <div class="col gap-l">
-      <div class="kicker">IOAI training · deep learning</div>
-      <h1>Neural<br>networks,<br>hands&#8209;on</h1>
-      <p class="lead muted">From straight lines to any function.</p>
-    </div>
+    <h1>Neural<br>networks,<br>hands&#8209;on</h1>
     <div class="fill-center" id="open-spiral"></div>
   </div>`,
   init(el, api) {
     const pg = Widgets.playground(api, el.querySelector('#open-spiral'), {
-      size: 820, data: 'spiral', n: 400, hidden: [8, 8], act: 'tanh', opt: 'adam', lr: 0.02,
+      size: 860, data: 'spiral', n: 400, hidden: [8, 8], act: 'tanh', opt: 'adam', lr: 0.02,
       steps: 6, autoplay: true, controls: [], readouts: false, res: 64, maxEpochs: 6000, dot: 6,
     });
     // restart the show every time we come back to the title
@@ -2189,7 +2185,7 @@ Deck.slide({
   },
   notes: `
   <p class="time">1 min</p>
-  <p class="say">Today we go from models that draw one straight line to neural networks, which can learn almost any shape. Everything on these slides is computed live in this browser.</p>
+  <p class="say">Welcome to the IOAI deep-learning training. Today we go from models that draw one straight line to neural networks, which can learn almost any shape: from straight lines to any function. Everything on these slides is computed live in this browser.</p>
   <p class="do">Let the spiral train while you talk: a network with 105 numbers inside is learning to separate two interleaved spirals right now.</p>
   <p class="ask">Could one straight line separate these two spirals?</p>
   <p class="ans">No. In the first hour you will see why a network can.</p>
@@ -2279,7 +2275,7 @@ Deck.css(`
 .sec-open .recall-row .n { font-family: var(--font-mono); font-size: 40px; color: var(--muted); }
 .sec-open .recall-row .q { font-size: 48px; line-height: 1.2; }
 .sec-open .recall-row .a { font-size: 48px; line-height: 1.2; border-left: 8px solid var(--ok); padding-left: 28px; }
-.sec-open .kobe-grid { display: grid; grid-template-columns: 720px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
+.sec-open .kobe-grid { display: grid; grid-template-columns: 780px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
 .sec-open .kobe-pct { font-family: var(--font-display); font-weight: 800; font-size: 200px; line-height: .9; font-stretch: 110%; }
 .sec-open .kobe-key { font-size: 40px; }
 .sec-open .kobe-key b { font-weight: 700; }
@@ -2317,17 +2313,17 @@ Deck.slide({
     <div class="col gap-l">
       <div class="col">
         <span class="tag tag-predict">predict</span>
-        <h2>25,697 Kobe Bryant shots. What % went in?</h2>
-        <p class="kobe-key"><b class="c1">● orange: in</b> &nbsp; <b class="c0">● blue: missed</b></p>
+        <h2>Kobe's 25,697 shots: what % went in?</h2>
+        <p class="kobe-key"><b class="c1">● in</b> &nbsp; <b class="c0">● missed</b></p>
       </div>
       <div data-step="1"><div class="kobe-pct">44.6%</div></div>
-      <p class="lead" data-step="2">So always guessing <b class="c0">“miss”</b> is right <b>55%</b> of the time.</p>
+      <p class="lead" data-step="2">Always <b class="c0">“miss”</b>: right <b>55%</b></p>
     </div>
   </div>`,
   init(el, api) {
     const host = el.querySelector('#open-kobe-court');
-    const fr = Widgets.courtFrame(0, 0, 720);
-    const cv = Plot.canvas(host, 720, Math.ceil(fr.h));
+    const fr = Widgets.courtFrame(0, 0, 780);
+    const cv = Plot.canvas(host, 780, Math.ceil(fr.h));
     const draw = () => {
       const C = Plot.colors(), ctx = cv.ctx;
       cv.clear(C.paper);
@@ -2345,7 +2341,7 @@ Deck.slide({
   notes: `
   <p class="time">2 min</p>
   <p class="say">Our running example is real data: Kobe Bryant's shots from 20 NBA seasons, each with its position on the court. Basket at the bottom; orange went in, blue missed. It is also the data of your first task this afternoon.</p>
-  <p class="do">Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → the consequence.</p>
+  <p class="do">Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → the consequence: always guessing "miss" is right 55% of the time.</p>
   <p class="ask">If 44.6% went in, how often is a "model" right that always says "miss"?</p>
   <p class="ans">About 55%. A model that does not clearly beat 55% has learned nothing; even the best reach only about 61%, because the same spot gives both makes and misses.</p>
   <p>Data: Kaggle "Kobe Bryant Shot Selection", 25,697 labelled shots (1996–2016); 800 are drawn. Kobe died in a helicopter crash in 2020; if it comes up, be respectful.</p>`,
@@ -2358,11 +2354,9 @@ try {
 // A plain-words refresher that assumes nothing: model = knobs, loss = how wrong,
 // training = turn the knobs a little, downhill. Joins the Opening section.
 Deck.css(`
-.sec-open .rf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; flex: 1; min-height: 0; align-items: start; margin-top: 12px; }
-.sec-open .rf-card { display: flex; flex-direction: column; gap: 22px; }
-.sec-open .rf-card h3 { font-size: 46px; }
-.sec-open .rf-card p { font-size: 34px; color: var(--muted); max-width: 15em; }
-.sec-open .rf-n { font-family: var(--font-mono); font-size: 30px; color: var(--muted); }
+.sec-open .rf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; flex: 1; min-height: 0; align-items: start; align-content: center; padding-bottom: 64px; }
+.sec-open .rf-card { display: flex; flex-direction: column; gap: 40px; }
+.sec-open .rf-card h3 { font-size: 52px; line-height: 1.1; }
 `);
 
 Deck.slide({
@@ -2372,8 +2366,7 @@ Deck.slide({
   <h2>Three ideas you need today</h2>
   <div class="rf">
     <div class="rf-card" data-step="1">
-      <span class="rf-n">1</span>
-      <svg class="dg" viewBox="0 0 540 300" width="520" height="289" role="img" aria-label="a model is a box with knobs">
+      <svg class="dg" viewBox="0 0 540 300" width="520" height="312" role="img" aria-label="a model is a box with knobs">
         <line class="flow" x1="10" y1="150" x2="118" y2="150"/>
         <text class="lbl-s" x="4" y="110" style="text-anchor:start">shot</text>
         <rect class="box" x="126" y="60" width="228" height="180" rx="8" style="stroke-width:5"/>
@@ -2385,10 +2378,8 @@ Deck.slide({
         <text class="lbl-b" x="486" y="150">41%</text>
       </svg>
       <h3>A model is a box with knobs</h3>
-      <p>Numbers go in, a guess comes out. The knobs decide the guess.</p>
     </div>
     <div class="rf-card" data-step="2">
-      <span class="rf-n">2</span>
       <svg class="dg" viewBox="0 0 500 300" width="520" height="312" role="img" aria-label="the loss measures how wrong the guess was">
         <text class="lbl" x="120" y="60">guess 41%</text>
         <text class="lbl" x="370" y="60">it went in</text>
@@ -2396,13 +2387,10 @@ Deck.slide({
         <rect x="40" y="130" width="250" height="44" rx="6" fill="var(--grad-soft)" stroke="var(--grad)" stroke-width="3"/>
         <text class="lbl-s" x="40" y="214" style="text-anchor:start">right</text>
         <text class="lbl-s" x="460" y="214" style="text-anchor:end">very wrong</text>
-        <text class="lbl" x="250" y="262">loss = how wrong</text>
       </svg>
       <h3>The loss says how wrong</h3>
-      <p>One number. Small is good. We compare the guess with the truth.</p>
     </div>
     <div class="rf-card" data-step="3">
-      <span class="rf-n">3</span>
       <svg class="dg" viewBox="0 0 500 300" width="520" height="312" role="img" aria-label="training rolls downhill on the loss">
         <path d="M30,40 C120,260 380,260 470,40" fill="none" stroke="var(--ink)" stroke-width="5"/>
         <circle cx="96" cy="150" r="20" fill="var(--grad)"/>
@@ -2412,19 +2400,18 @@ Deck.slide({
         <text class="lbl-s" x="80" y="40">loss</text>
       </svg>
       <h3>Training rolls downhill</h3>
-      <p>Turn every knob a little in the direction that makes the loss smaller. Repeat.</p>
     </div>
-  </div>
-  <p class="lead" data-step="4">Today: a much bigger box, and how to train it well.</p>`,
+  </div>`,
   notes: `
   <p class="time">3 min</p>
   <p class="say">Three ideas in plain words; everything today is built on them. If the room already knows them, keep it to one minute.</p>
   <p class="do">Press → for each card; ask a student to say it back in their own words.</p>
   <ul>
-    <li><b>Knobs:</b> a shot's position goes in, a chance comes out; the knobs (weights) decide the guess.</li>
-    <li><b>Loss:</b> one number for how wrong the guess was; small is good.</li>
+    <li><b>Knobs:</b> numbers (a shot's position) go in, a guess (a chance) comes out; the knobs (weights) decide the guess.</li>
+    <li><b>Loss:</b> one number for how wrong the guess was, comparing the guess with the truth; small is good.</li>
     <li><b>Downhill:</b> turn each knob a little in the direction that lowers the loss (the gradient; backpropagation computes it), repeat. That is gradient descent.</li>
   </ul>
+  <p class="say">Today: a much bigger box, and how to train it well.</p>
   <p class="ask">If the loss goes up after a step, what went wrong?</p>
   <p class="ans">The step was too big: we jumped over the bottom of the valley. The step size is the learning rate; we play with it after the break.</p>
   <p>If faces look unsure: W opens a whiteboard, D a pen; draw a valley and roll a ball down it.</p>`,
@@ -2440,7 +2427,7 @@ Deck.css(`
 .sec-why .why-side { display: flex; flex-direction: column; gap: 28px; }
 .sec-why .why-side .lead { max-width: 16em; }
 .sec-why .why-lay { display: grid; grid-template-columns: 768px 1fr; gap: 96px; flex: 1; min-height: 0; align-items: start; }
-.sec-why .why-lay3 { display: grid; grid-template-columns: 960px 1fr; gap: 72px; flex: 1; min-height: 0; align-items: start; }
+.sec-why .why-lay3 { display: grid; grid-template-columns: 1240px 1fr; gap: 64px; flex: 1; min-height: 0; align-items: center; }
 .sec-why .why-lay3 canvas { cursor: grab; }
 .sec-why .why-task { font-size: 40px; line-height: 1.35; }
 .sec-why .why-task b { font-family: var(--font-mono); color: var(--muted); margin-right: 14px; }
@@ -2492,13 +2479,13 @@ Deck.css(`
       const box = document.createElement('div');
       box.className = 'why-side';
       box.innerHTML = `<span class="tag tag-predict">predict</span>
-        <p class="lead" data-step="1">No. Logistic regression = one line. It gets stuck near <b>60%</b>.</p>`;
+        <p class="lead" data-step="1">No: one line stalls near <b>60%</b>.</p>`;
       side.insertBefore(box, side.firstChild);
     },
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">A toy dataset: orange dots in the middle, a blue ring around them. You may have seen logistic regression; if not, it is the simplest classifier, and its border between the colours is always one straight line. Can one straight line put all orange on one side and all blue on the other?</p>
-    <p class="do">Show of hands. Press <b>Train</b>: the line swings for about a second, then stays straight. Readouts: loss stays near 0.68, accuracy stops near 59% (it started at 58%). Press → for the answer.</p>
+    <p class="do">Show of hands. Press <b>Train</b>: the line swings for about a second, then stays straight. Readouts: loss stays near 0.68, accuracy stops near 59% (it started at 58%). Press → for the answer: no, logistic regression is one line and gets stuck near 60%.</p>
     <p class="ask">Why can't it do better, however long we train?</p>
     <p class="ans">Every straight line leaves both colours on both sides: the orange is surrounded. Training longer only polishes the line; it cannot bend it.</p>
     <p>Maths for you: p = σ(w₁x₁ + w₂x₂ + b); the 50% border w₁x₁ + w₂x₂ + b = 0 is a line.</p>`,
@@ -2640,24 +2627,16 @@ Deck.css(`
   Deck.slide({
     id: 'why-lift',
     title: 'Fix 1: invent a feature (lift to 3-D)',
+    steps: 4,
     html: `
-    <h2>Fix 1: lift the dots, then one flat cut works</h2>
+    <h2>Fix 1: lift the dots, then cut flat</h2>
     <div class="why-lay3">
       <div id="why-lift"></div>
-      <div class="why-side">
-        <div class="stack">
-          <p class="lead" data-only="0">Seen from above: the same circle data.</p>
-          <p class="lead dim-after" data-step="1">Lift each dot: further out = higher.</p>
-        </div>
-        <p class="lead dim-after" data-step="2">One flat sheet now separates them.</p>
-        <p class="lead dim-after" data-step="3">Dropped to the floor, the cut is a circle.</p>
-        <p class="lead" data-step="4"><b>But which lift for Kobe's court?</b></p>
-        <p class="tiny" data-step="1">drag to rotate</p>
-      </div>
+      <p class="lead" data-step="4"><b>Which lift for Kobe's court?</b></p>
     </div>`,
     init(el, api) {
       const D = NN.data.circle(300, 101, 0);
-      const W = 960, H = 768, S = 285, ZS = 1.3, CUT = 0.36;   // inner r² ≤ 0.25, outer r² ≥ 0.50
+      const W = 1240, H = 784, S = 295, ZS = 1.3, CUT = 0.36;   // inner r² ≤ 0.25, outer r² ≥ 0.50
       const cv = Plot.canvas(el.querySelector('#why-lift'), W, H);
       const st = { t: 0, pitch: 90, yaw: 0, plane: 0, ring: 0 };
       const goal = { t: 0, pitch: 90, yaw: 0, plane: 0, ring: 0 };
@@ -2747,8 +2726,8 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Fix 1: invent a new feature, a trick you may have seen in classical ML. Lift each dot by its distance from the centre: the blue ring rises and a flat sheet slides between the colours. Dropped back to the floor, that flat cut is a circle.</p>
-    <p class="do">→ the dots rise; drag the picture to spin it. → the sheet, → the circle, → the question.</p>
+    <p class="say">Fix 1: invent a new feature, a trick you may have seen in classical ML. We start seen from above: the same circle data. Lift each dot by its distance from the centre (further out = higher): the blue ring rises and one flat sheet slides between the colours. Dropped back to the floor, that flat cut is a circle.</p>
+    <p class="do">→ the dots rise; drag the picture to spin it. → the sheet, → the circle, → the question. (4 presses.)</p>
     <p class="ask">Which height would you invent for Kobe's court? For a spiral?</p>
     <p class="ans">For Kobe, distance from the rim, but you had to know basketball. For a spiral, nobody knows. And the Kobe task gives the network only x and y, so it must invent features itself: next slide.</p>
     <p>Maths for you: height z = x² + y²; the sheet z = 0.36 lands on the floor as a circle of radius 0.6 (the idea behind kernel SVMs).</p>`,
@@ -2772,8 +2751,8 @@ Deck.css(`
       box.className = 'why-side';
       box.innerHTML = `<span class="tag tag-predict">predict</span>
         <div class="stack">
-          <p class="lead" data-only="0">Four straight edges: what shape?</p>
-          <p class="lead" data-step="1">Four straight edges fence in the orange.</p>
+          <p class="lead" data-only="0">Four edges: what shape?</p>
+          <p class="lead" data-step="1">A fence around the orange.</p>
         </div>`;
       side.insertBefore(box, side.firstChild);
     },
@@ -2896,7 +2875,6 @@ Deck.css(`
         <text class="lbl-b" id="n1-o" x="874" y="330" style="font-size:56px;text-anchor:start">0</text>
       </svg>
       <div class="neu-side">
-        <p class="n1-cap" style="font-size:34px;font-weight:600;margin:0"></p>
         <div class="n1-plot"></div>
         <div class="neu-ctl"></div>
       </div>
@@ -2939,7 +2917,6 @@ Deck.css(`
         Plot.dot(ctx, sx(zc), sy(f(zc)), 12, C.ink, C.paper);
         Plot.text(ctx, 'output', sx(0) + 14, 30, { size: 28, color: C.ink, base: 'top' });
         Plot.text(ctx, 'sum', 660, sy(0) - 12, { size: 28, color: C.ink, align: 'right' });
-        $('.n1-cap').textContent = S.act === 'relu' ? 'ReLU: a negative sum becomes 0' : 'sigmoid: this neuron is logistic regression';
       }
       const sl = [
         UI.slider(ctl, { label: 'weight 1', min: -2, max: 2, step: 0.1, value: S.w[0], fmt: v => fnum(v, 1), oninput: v => { S.w[0] = v; draw(); } }),
@@ -2968,12 +2945,11 @@ Deck.css(`
     id: 'neu-line',
     title: 'One neuron cuts the court with a line',
     html: `
-    <h2>One neuron cuts the court with a straight line</h2>
+    <h2>One neuron draws one straight line</h2>
     <div class="neu-demo">
       <div class="n2-court"></div>
       <div class="neu-side" style="align-self:stretch">
         <div class="neu-readouts"></div>
-        <p class="neu-cap" style="margin-top:8px">Arrow: the orange side, where this neuron says "made".</p>
         <div class="neu-ctl" style="margin-top:auto"></div>
       </div>
     </div>`,
@@ -3280,9 +3256,9 @@ Deck.css(`
         <g data-step="1"><text class="lbl-s" x="202" y="690">weights + biases</text></g>
         <g data-step="3"><text class="lbl-b" x="1060" y="640" style="font-size:56px">= 105</text></g>
       </svg>
-      <div class="qa">
+      <div class="qa" style="align-self:center">
         <div><p class="q">2-16-1?</p><p class="a" data-step="4">65 · illegal for Kobe</p></div>
-        <div><p class="q">784-128-10?<br><span class="neu-cap">(digit images)</span></p><p class="a" data-step="5">101,770</p></div>
+        <div><p class="q">784-128-10?</p><p class="a" data-step="5">101,770</p></div>
       </div>
     </div>`,
     notes: `
@@ -3734,7 +3710,7 @@ Deck.css(`
     id: 'act-zoo',
     title: 'The activation zoo',
     html: `
-    <h2>Any bend will do: the activation zoo</h2>
+    <h2>Activations: any bend will do</h2>
     <div class="zoo">${ZOO.map(k => `
       <div class="zoo-cell" data-k="${k}">
         <h3>${NN.act[k].name}</h3>
@@ -3743,9 +3719,9 @@ Deck.css(`
         <div class="zoo-ro grad" data-step="1"><span>slope</span><b class="vd">0</b></div>
       </div>`).join('')}
     </div>
-    <p class="small muted">input <b class="mono" id="act-z">0.0</b> · point at any plot</p>`,
+    <div class="zoo-ro"><span>input</span><b id="act-z">0.0</b></div>`,
     init(el, api) {
-      const W = 336, H = 500;
+      const W = 336, H = 560;
       let z0 = 0;
       const cells = ZOO.map(k => {
         const c = el.querySelector(`.zoo-cell[data-k="${k}"]`);
@@ -3783,7 +3759,7 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">Almost any bend works. ReLU: zero for negative inputs, the input itself for positive ones; Leaky ReLU keeps a small slope on the left. Sigmoid squashes into 0 to 1, tanh is the same S from −1 to 1, and GELU is a smooth ReLU used in models like GPT.</p>
-    <p class="do">Press → to show the magenta dashed <b>slope</b> curves. Sweep the pointer across the sigmoid plot and stop at the middle.</p>
+    <p class="do">Press → to show the magenta dashed <b>slope</b> curves. Point at any plot: all five follow the same input. Sweep the pointer across the sigmoid plot and stop at the middle.</p>
     <p class="ask">What is the largest slope the sigmoid ever has?</p>
     <p class="ans">0.25, at input 0; far from 0 it is flat. ReLU's slope is 1 for every positive input. Training relies on these slopes and flat spots barely learn: one reason ReLU is the usual default.</p>
     <p>Avoid "the neuron fires": these are smooth bends, not on/off switches.</p>`,
@@ -3906,11 +3882,11 @@ with torch.no_grad():
       <div class="side" id="act-hg-side"><div class="ro-row" id="act-hg-ro"></div></div>
     </div>`,
     init(el, api) {
-      const W = 1056, H = 680;
+      const W = 1056, H = 760;
       const cv = Plot.canvas(el.querySelector('#act-hg-cv'), W, H);
       const B = box(W, H, [-1, 1], [-1.6, 1.4], { l: 70, b: 52 });
       const ro = el.querySelector('#act-hg-ro');
-      const rN = UI.readout(ro, 'hinges'), rE = UI.readout(ro, 'error');
+      const rE = UI.readout(ro, 'error');
       let N = 3, fit = hingeFit(N);
       const side = el.querySelector('#act-hg-side');
       const ch = UI.choice(side, [1, 2, 3, 5, 8, 16, 32].map(v => ({ value: v, label: String(v) })), N, v => { N = v; fit = hingeFit(N); draw(); }, { label: 'hinges' });
@@ -3923,7 +3899,6 @@ with torch.no_grad():
         curve(ctx, B, target, C.muted, 3, [12, 10]);
         curve(ctx, B, fit.f, C.ink, 6, null, 800);
         fit.knots.forEach(t => Plot.dot(ctx, B.sx(t), B.sy(fit.f(t)), N > 16 ? 6 : 9, C.ink, C.paper));
-        rN.set(N);
         rE.set(fit.mse < 0.0001 ? fit.mse.toFixed(6) : fit.mse.toFixed(4));
       }
       draw();
@@ -4372,11 +4347,10 @@ Deck.section({ id: 'loss', title: 'Loss: how wrong are we?', minutes: 13 });
 
 Deck.css(`
 .sec-loss .lx-grid { display: grid; grid-template-columns: 960px 1fr; gap: 72px; flex: 1; min-height: 0; align-items: start; }
-.sec-loss .lx-grid.wide { grid-template-columns: 1104px 1fr; }
+.sec-loss .lx-grid.wide { grid-template-columns: 1200px 1fr; }
 .sec-loss .lx-side { display: flex; flex-direction: column; gap: 32px; min-width: 0; height: 100%; }
 .sec-loss .lx-side .ui-row { gap: 20px; }
 .sec-loss .lx-side .ui-readout-label { font-size: 28px; }
-.sec-loss .lx-note { font-size: 34px; color: var(--muted); }
 .sec-loss .lx-ctl { margin-top: auto; display: flex; flex-direction: column; gap: 24px; }
 .sec-loss canvas.lx-drag { cursor: grab; }
 .sec-loss .lx-made { font-family: var(--font-display); font-weight: 800; font-size: 48px; color: var(--c1); }
@@ -4399,11 +4373,11 @@ Deck.css(`
 .sec-loss .lx-pick .hd { font-family: var(--font-mono); font-size: 28px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 12px; border-bottom: 2px solid var(--rule); align-self: end; }
 .sec-loss .lx-pick .cell { padding: 14px 0; border-bottom: 2px solid var(--rule); min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
 .sec-loss .lx-pick .what { font-family: var(--font-display); font-weight: 750; font-size: 56px; line-height: 1.05; }
-.sec-loss .lx-pick .eg { font-size: 32px; color: var(--muted); }
 .sec-loss .lx-pick .last { font-size: 44px; }
 .sec-loss .lx-pick .fn { font-family: var(--font-mono); font-size: 40px; font-weight: 600; }
 .sec-loss .lx-pick [data-step] { transition: opacity .35s ease, transform .35s ease; }
-.sec-loss .lx-vote { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; align-items: start; }
+.sec-loss .lx-vote { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; align-items: center; flex: 1; min-height: 0; }
+.sec-loss .lx-opts .tag { align-self: flex-start; }
 .sec-loss .lx-opts { display: flex; flex-direction: column; gap: 44px; padding-top: 12px; }
 .sec-loss .lx-opt { display: flex; gap: 28px; align-items: center; font-size: 52px; line-height: 1.1; }
 .sec-loss .lx-opt b { font-family: var(--font-mono); font-size: 40px; font-weight: 600; min-width: 64px; height: 64px; display: grid; place-items: center; border: 3px solid var(--ink); }
@@ -4474,12 +4448,11 @@ Deck.css(`
       <div class="lx-mse-cv"></div>
       <div class="lx-side">
         <div class="lx-mse-ro"></div>
-        <p class="lx-note">Each dot: % of Kobe's shots made from that distance.<br>Each miss becomes a square.</p>
-        <div class="lx-ctl"><p class="small muted">Drag the line's end dots.</p><div class="ui-row lx-mse-btn"></div></div>
+        <div class="lx-ctl"><div class="ui-row lx-mse-btn"></div></div>
       </div>
     </div>`,
     init(el, api) {
-      const W = 1104, H = 720, L = 120, R = 36, T = 64, B = 96;
+      const W = 1200, H = 760, L = 120, R = 36, T = 64, B = 96;
       const cv = Plot.canvas(el.querySelector('.lx-mse-cv'), W, H, 'lx-drag');
       const Y0 = 25, Y1 = 70, XM = 31;
       // wide x axis so a 10-point miss (one square) fits between two neighbouring dots
@@ -4572,7 +4545,7 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">The loss is one number that says how wrong the model is; training makes it small. Dots: the share of Kobe's shots made from each distance; the line is our model. Each miss becomes a square, and the loss is the average square: the mean squared error.</p>
-    <p class="do">Point at the big square at 0–4 ft. Drag an end dot to grow and shrink squares, then press <b>Fit the line</b>: loss 64 → 18.</p>
+    <p class="do">Point at the big square at 0–4 ft. Drag one of the line's two black end dots to grow and shrink squares, then press <b>Fit the line</b>: loss 64 → 18.</p>
     <p class="ask">A miss of 10 points costs 100. What does a miss of 20 cost?</p>
     <p class="ans">400, four times as much: big misses are very expensive, so the line works hardest to avoid them.</p>
     <p>PyTorch: <code>nn.MSELoss()</code>, the loss for predicting numbers, as in the inversion task.</p>`,
@@ -4957,26 +4930,26 @@ Deck.css(`
     <div class="lx-pick">
       <span class="hd"></span><span class="hd">you predict</span><span class="hd">last layer</span><span class="hd">PyTorch loss</span>
       <div class="cell" data-step="1">${glyphNum}</div>
-      <div class="cell" data-step="1"><span class="what">a number</span><span class="eg">inversion task's output</span></div>
+      <div class="cell" data-step="1"><span class="what">a number</span></div>
       <div class="cell" data-step="1"><span class="last">1 output</span></div>
       <div class="cell" data-step="1"><span class="fn">nn.MSELoss()</span></div>
       <div class="cell" data-step="2">${glyphYes}</div>
-      <div class="cell" data-step="2"><span class="what">yes / no</span><span class="eg">Kobe: in or out?</span></div>
+      <div class="cell" data-step="2"><span class="what">yes / no</span></div>
       <div class="cell" data-step="2"><span class="last">1 score</span></div>
       <div class="cell" data-step="2"><span class="fn">nn.BCEWithLogitsLoss()</span></div>
       <div class="cell" data-step="3">${glyphK}</div>
-      <div class="cell" data-step="3"><span class="what">one of K</span><span class="eg">shot type: jump, layup, dunk…</span></div>
+      <div class="cell" data-step="3"><span class="what">one of K</span></div>
       <div class="cell" data-step="3"><span class="last">K scores</span></div>
       <div class="cell" data-step="3"><span class="fn">nn.CrossEntropyLoss()</span></div>
     </div>
-    <p class="lead" data-step="4">The last layer is plain <b>Linear</b>: the loss adds sigmoid or softmax.</p>`,
+    <p class="lead" data-step="4">No sigmoid or softmax in the model: the loss adds it.</p>`,
     notes: `
     <p class="time">2 min</p>
     <p class="say">Three kinds of questions cover almost every task, each with its loss. Before each row, let the class guess.</p>
     <p class="do">→ Row 1, a number (the inversion task): one output, mean squared error.</p>
     <p class="do">→ Row 2, yes/no (Kobe): one score, BCEWithLogitsLoss, the forecast loss; targets 0. or 1. as floats.</p>
-    <p class="do">→ Row 3, one of K classes: K scores; softmax turns them into shares (the bars), and the loss punishes a low share for the right answer.</p>
-    <p class="do">→ The rule: the model ends with plain Linear; the loss does the squashing.</p>
+    <p class="do">→ Row 3, one of K classes (for example Kobe's shot type: jump shot, layup, dunk, other): K scores; softmax turns them into shares (the bars), and the loss punishes a low share for the right answer.</p>
+    <p class="do">→ The rule: the model ends with a plain Linear layer, no sigmoid or softmax; the loss does the squashing itself.</p>
     <p class="ask">Which of 10 digits is in an image: how many outputs, which loss?</p>
     <p class="ans">10 scores, nn.CrossEntropyLoss. Untrained, each class gets 10%, so the first loss is about 2.3.</p>
     <p>CrossEntropyLoss wants raw scores and class numbers 0 … K−1 as integers, not one-hot.</p>`,
@@ -4989,7 +4962,7 @@ Deck.css(`
     id: 'loss-vote',
     title: 'Cliffhanger: sigmoid + BCEWithLogitsLoss',
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>A sigmoid at the end. What happens?</h2></div>
+    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>Sigmoid at the end: what happens?</h2></div>
     <div class="lx-vote">
       ${Code.py(`
         class MLP(nn.Module):
@@ -5005,9 +4978,9 @@ Deck.css(`
         <div class="lx-opt"><b>2</b>it trains normally</div>
         <div class="lx-opt"><b>3</b>it trains, but is quietly worse</div>
         <div class="lx-opt"><b>4</b>the loss becomes NaN</div>
+        <span class="tag tag-pair" data-step="2">pairs · 1 min</span>
       </div>
-    </div>
-    <p class="lead" data-step="2">Talk 1 minute with a neighbour, then vote again.</p>`,
+    </div>`,
     steps: 2,
     notes: `
     <p class="time">2 min</p>
@@ -5028,6 +5001,7 @@ Deck.section({ id: 'brk', title: 'Break', minutes: 10 });
 Deck.css(`
 .sec-brk .brk-grid { display: grid; grid-template-columns: 720px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
 .sec-brk .brk-grid .timer-face { font-size: 240px; }
+.sec-brk .brk-big .timer-face { font-size: 360px; }
 .sec-brk .brk-next { display: flex; flex-direction: column; gap: 40px; }
 .sec-brk .tb { display: flex; flex-direction: column; gap: 44px; margin-top: 8px; }
 .sec-brk .tb-row { display: grid; grid-template-columns: 56px 1fr 230px; gap: 32px; align-items: baseline; font-size: 44px; line-height: 1.2; }
@@ -5074,6 +5048,22 @@ Deck.css(`
     <p class="say">Ten minutes of break: stand up, drink water, look out of a window. When we come back we play a game: ten claims about neural networks, true or bluff?</p>
     <p class="do">The timer starts by itself (Pause or Reset if needed) and only runs while this slide is visible, so keep it on screen. At 0:00 the numbers turn white on black.</p>
     <p>The game is on the next two slides, about 3 minutes in total; if you are short on time, play only the first.</p>`,
+  });
+
+  // plain break used by the main (lean) deck: just the clock
+  Deck.slide({
+    id: 'brk-plain',
+    title: 'Break: 10 minutes',
+    html: `
+    <h2>Break</h2>
+    <div class="fill-center brk-big"><div id="brk-plain-timer"></div></div>`,
+    init(el, api) {
+      Widgets.timer(api, el.querySelector('#brk-plain-timer'), 10, { auto: true });
+    },
+    notes: `
+    <p class="time">10 min</p>
+    <p class="say">Ten minutes: stand up, drink water. After the break we make the network learn.</p>
+    <p class="do">The timer starts by itself and only runs while this slide is on screen (Pause or Reset if needed).</p>`,
   });
 
   const playNotes = `
@@ -5151,6 +5141,7 @@ Deck.css(`
 .sec-opt .pair > div { display: flex; flex-direction: column; gap: 14px; }
 .sec-opt .pair .res { font-size: 40px; font-weight: 700; min-height: 1.3em; }
 .sec-opt .t-code { display: grid; grid-template-columns: 1056px 1fr; gap: 96px; flex: 1; min-height: 0; align-items: start; }
+.sec-opt pre.opt-c38 { font-size: 38px; line-height: 1.65; }
 .sec-opt .effect { font-size: 40px; line-height: 1.25; }
 .sec-opt .effect .bigv { font-family: var(--font-mono); font-size: 64px; font-weight: 600; line-height: 1.25; }
 .sec-opt .cmp { display: grid; grid-template-columns: 300px 1fr 420px; gap: 10px 32px; align-items: center; font-size: 40px; }
@@ -5410,7 +5401,8 @@ Deck.css(`
   }
 
   // side column with one readout row per racer + Run/Reset
-  function raceSide(side, R, kinds) {
+  function raceSide(side, R, kinds, opts) {
+    const showLr = !(opts && opts.lr === false);
     const head = document.createElement('div');
     head.className = 'rhead';
     head.innerHTML = '<span>step</span><span class="rh-v">loss</span>';
@@ -5442,7 +5434,7 @@ Deck.css(`
         el.classList.toggle('off', !r || !!r.off);
         el.classList.toggle('dim', !!(r && r.dim));
         if (!r) return;
-        el.querySelector('.nm').innerHTML = `${r.name}<small>lr ${r.lr}</small>`;
+        el.querySelector('.nm').innerHTML = showLr ? `${r.name}<small>lr ${r.lr}</small>` : r.name;
         el.querySelector('.v').textContent = r.dead ? 'blew up'
           : R.mode === 'arrive' ? (r.doneAt != null ? String(r.doneAt) : '–') : fmtLoss(r.loss);
       });
@@ -5692,7 +5684,7 @@ Deck.css(`
         s += `</g></svg>`;
         return s;
       })()}
-      <div class="row" data-step="2" style="gap:28px"><span class="tag tag-predict">predict</span><span class="lead">30 epochs. Batches of 64, or all 20,558 at once?</span></div>
+      <div class="row" data-step="2" style="gap:28px"><span class="tag tag-predict">predict</span><span class="lead">30 epochs: batches of 64, or all at once?</span></div>
       <div class="cmp" data-step="3">
         <span></span><span class="hd">steps taken</span><span class="hd">validation loss</span>
         <span>batches of 64</span><div class="bw"><div class="bar" style="width:640px"></div><span>9,660</span></div><span><b>0.662</b> <span class="ok">✓ learned</span></span>
@@ -5768,7 +5760,7 @@ Deck.css(`
     <div class="stack">
       <h2 data-only="0">Plain descent zig-zags in a narrow valley</h2>
       <h2 data-only="1">Momentum: a heavy ball keeps rolling</h2>
-      <h2 data-only="2">Adam: each weight gets its own step size</h2>
+      <h2 data-only="2">Adam: a step size for each weight</h2>
     </div>
     <div class="demo wide">
       <div class="opt-race-cv"></div>
@@ -5776,7 +5768,7 @@ Deck.css(`
     </div>`,
     init(el, api) {
       const R = Race(api, el.querySelector('.opt-race-cv'), 1104, 720);
-      raceSide(el.querySelector('.opt-race-side'), R, ['sgd', 'momentum', 'adam']);
+      raceSide(el.querySelector('.opt-race-side'), R, ['sgd', 'momentum', 'adam'], { lr: false });
       let last = -1;
       const config = k => {
         if (k === last) return;
@@ -5800,7 +5792,7 @@ Deck.css(`
     </ul>
     <p class="ask">Pair task (1 min): describe one walk to your neighbour; they name the optimizer.</p>
     <p class="ans">Zig-zag, then crawl: SGD. Speeds up and overshoots: momentum. Fairly straight: Adam.</p>
-    <p>The learning rates are toy values for this surface, not real-network defaults.</p>`,
+    <p>The learning rates (SGD 0.019, momentum 0.01, Adam 0.1) are toy values for this surface, not real-network defaults.</p>`,
   });
 
   /* ------------------------------------------------------------------ */
@@ -5957,14 +5949,14 @@ Deck.css(`
     html: `
     <h2>Start with Adam, lr 0.001</h2>
     <div class="t-code">
-      ${Code.py(LOOP, { hl: '1:1-2 2:5-7 3:1-2' })}
+      ${Code.py(LOOP, { hl: '1:1-2 2:5-7 3:1-2', cls: 'opt-c38' })}
       <div class="stack effect">
-        <div data-only="1"><p>Then try</p><p class="bigv">0.003<br>0.0003</p><p class="muted small">keep the best on validation</p></div>
-        <div data-only="2"><p>What they do for each of the 105 weights:</p>${Code.py(`
+        <div data-only="1"><p>Then try</p><p class="bigv">0.003<br>0.0003</p></div>
+        <div data-only="2"><p>For every weight:</p>${Code.py(`
           w.grad.zero_()
           loss.backward()
           w -= lr * w.grad`, { size: 's' })}</div>
-        <div data-only="3"><p>Swap one line, keep the loop:</p>${Code.py(`
+        <div data-only="3"><p>One-line swap:</p>${Code.py(`
           opt = torch.optim.SGD(
               model.parameters(),
               lr=0.1, momentum=0.9)`, { size: 's' })}</div>
@@ -6036,10 +6028,14 @@ Deck.section({ id: 'loop', title: 'The training loop, live', minutes: 28 });
 
 Deck.css(`
 .sec-loop .lp-two { display: grid; grid-template-columns: 860px 820px; gap: 48px; flex: 1; min-height: 0; align-items: start; }
-.sec-loop .lp-left { gap: 40px; }
+.sec-loop .lp-left { gap: 56px; }
 .sec-loop .lp-read { gap: 56px; }
 .sec-loop .lp-t6 { display: grid; grid-template-columns: 1056px 576px; gap: 96px; flex: 1; min-height: 0; align-items: start; }
 .sec-loop pre.lp-c30 { font-size: 30px; padding: 24px 30px; }
+.sec-loop pre.lp-beats-code { line-height: 1.8; }
+.sec-loop pre.lp-tall { line-height: 1.65; }
+.sec-loop pre.lp-c36 { font-size: 36px; line-height: 1.7; }
+.sec-loop .lp-t6.lp-wide { grid-template-columns: 1120px 1fr; gap: 72px; }
 .sec-loop .lp-eff { display: flex; flex-direction: column; gap: 36px; }
 .sec-loop .stack.lp-eff { display: grid; }
 .sec-loop .stack.lp-eff > div { display: flex; flex-direction: column; gap: 20px; }
@@ -6062,7 +6058,7 @@ Deck.css(`
 .sec-loop .lp-opt .ok-frame { position: absolute; inset: -9px; border: 6px solid var(--ok); pointer-events: none; }
 .sec-loop .lp-opt .ok-tag { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 52px; font-weight: 700; color: var(--ok); }
 .sec-loop .lp-opt .dim { position: absolute; inset: -3px; background: color-mix(in srgb, var(--paper) 68%, transparent); pointer-events: none; }
-.sec-loop .lp-bars { display: flex; flex-direction: column; gap: 64px; margin-top: 24px; }
+.sec-loop .lp-bars { display: flex; flex-direction: column; gap: 88px; margin-top: 40px; }
 .sec-loop .lp-bar-row { display: grid; grid-template-columns: 540px 240px 1fr; gap: 32px; align-items: center; }
 .sec-loop .lp-bar-row .name { font-size: 48px; line-height: 1.1; }
 .sec-loop .lp-bar-row .ll { font-family: var(--font-mono); font-size: 64px; font-weight: 600; }
@@ -6070,7 +6066,7 @@ Deck.css(`
 .sec-loop .lp-track i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ink); }
 .sec-loop .lp-track b { position: absolute; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 56px; font-weight: 600; padding-left: 20px; }
 .sec-loop .lp-bar-row.base .lp-track i { background: var(--muted); }
-.sec-loop .lp-bar-head { display: grid; grid-template-columns: 540px 240px 1fr; gap: 32px; font-family: var(--font-mono); font-size: 28px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.sec-loop .lp-bar-head { margin-bottom: -56px; display: grid; grid-template-columns: 540px 240px 1fr; gap: 32px; font-family: var(--font-mono); font-size: 28px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 .sec-loop .lp-scale { display: flex; justify-content: space-between; }
 .sec-loop .lp-err { font-family: var(--font-mono); font-size: 30px; line-height: 1.45; background: var(--code-bg); border-left: 6px solid var(--bad); padding: 22px 28px; white-space: pre-wrap; }
 .sec-loop .lp-err .e { color: var(--bad); font-weight: 700; }
@@ -6094,7 +6090,7 @@ Deck.css(`
     id: 'loop-beats',
     title: 'The five beats of one training step',
     html: `
-    <h2>Every training step is the same five lines</h2>
+    <h2>Every step: the same five lines</h2>
     <div class="lp-two">
       <div class="col lp-left">
         ${Code.py(`
@@ -6328,12 +6324,11 @@ Deck.slide({
   id: 'loop-court',
   title: 'Live demo: scale your inputs',
   html: `
-  <div class="row"><span class="tag tag-try">try it live</span></div>
-  <h2>Does plain SGD care about raw inputs?</h2>
+  <div class="row" style="gap:32px"><span class="tag tag-try">try it live</span><h2>Does plain SGD care about raw inputs?</h2></div>
   <div class="lp-court grow"></div>`,
   init(el, api) {
     Widgets.courtNet(api, el.querySelector('.lp-court'), {
-      w: 720, hidden: [8, 8], act: 'relu', opt: 'sgd', lr: 0.1, sgdLr: 0.1, adamLr: 0.01,
+      w: 780, hidden: [8, 8], act: 'relu', opt: 'sgd', lr: 0.1, sgdLr: 0.1, adamLr: 0.01,
       normalize: false, controls: ['play', 'reset', 'norm', 'opt'], n: 3000, maxEpochs: 120, showDots: 700,
     });
   },
@@ -6351,7 +6346,7 @@ Deck.slide({
   id: 'loop-setup',
   title: 'The script, part 1: setup',
   html: `
-  <h2>Before the loop: data, model, loss, optimizer</h2>
+  <h2>Setup: data, model, loss, optimizer</h2>
   <div class="lp-t6">
     ${Code.py(`
       X = torch.tensor(df[["loc_x", "loc_y"]].values,
@@ -6365,13 +6360,13 @@ Deck.slide({
       X_tr, y_tr, X_va, y_va = X[tr], y[tr], X[va], y[va]
       model = MLP()                      # 2-8-8-1
       loss_fn = nn.BCEWithLogitsLoss()
-      opt = torch.optim.Adam(model.parameters(), lr=1e-3)`, { hl: '1:1-4 2:5-6,9 3:7-8 4:10 5:11-12', cls: 'lp-c30' })}
+      opt = torch.optim.Adam(model.parameters(), lr=1e-3)`, { hl: '1:1-4 2:5-6,9 3:7-8 4:10 5:11-12', cls: 'lp-c30 lp-tall' })}
     <div class="stack lp-eff">
       <div data-only="0 1"><div class="lbl">shapes</div><div class="lp-num">X (25000, 2)</div><div class="lp-num">y (25000, 1)</div></div>
       <div data-only="2"><div class="lbl">split</div><div class="lp-num">20,000 <small>train</small></div><div class="lp-num">5,000 <small>validation</small></div></div>
       <div data-only="3"><div class="lbl">train mean / std</div><div class="lp-num">x 6.5 / 110</div><div class="lp-num">y 91.7 / 88</div></div>
-      <div data-only="4"><div class="lbl">model: 2-8-8-1</div>${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 520, h: 420, r: 18 })}<div class="lp-num">105 <small>weights</small></div></div>
-      <div data-only="5"><div class="lbl">loss takes logits</div><div class="lp-num">no sigmoid</div><div class="lbl" style="margin-top:24px">optimizer</div><div class="lp-num">Adam, lr 0.001</div></div>
+      <div data-only="4">${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 520, h: 420, r: 18 })}<div class="lp-num">105 <small>weights</small></div></div>
+      <div data-only="5"><div class="lbl">loss takes logits</div><div class="lp-num">no sigmoid</div></div>
     </div>
   </div>`,
   notes: `
@@ -6403,12 +6398,12 @@ Deck.slide({
               loss = loss_fn(logits, y_tr[idx])
               loss.backward()
               opt.step()
-          print(epoch, loss.item())`, { hl: '1:1 2:2-4 3:5-9 4:10' })}
+          print(epoch, loss.item())`, { hl: '1:1 2:2-4 3:5-9 4:10', cls: 'lp-c36' })}
     <div class="lp-eff">
-      <div data-step="1"><div class="lbl">epoch = every shot once</div><div class="lp-num">30 <small>epochs</small></div></div>
-      <div data-step="2"><div class="lbl">20,000 shots ÷ 64</div><div class="lp-num">313 <small>batches per epoch</small></div></div>
-      <div data-step="3"><div class="lbl">one batch = one step</div><div class="lp-num">9,390 <small>steps</small></div></div>
-      <div data-step="4"><div class="lbl">printed at the end</div><div class="lp-num">≈ 0.64 <small>last batch</small></div></div>
+      <div data-step="1"><div class="lp-num">30 <small>epochs</small></div></div>
+      <div data-step="2"><div class="lbl">20,000 ÷ 64</div><div class="lp-num">313 <small>batches per epoch</small></div></div>
+      <div data-step="3"><div class="lbl">30 × 313</div><div class="lp-num">9,390 <small>steps</small></div></div>
+      <div data-step="4"><div class="lbl">printed</div><div class="lp-num">≈ 0.64 <small>last batch</small></div></div>
     </div>
   </div>`,
   notes: `
@@ -6433,21 +6428,19 @@ Deck.slide({
     id: 'loop-results',
     title: 'Kobe results: baselines vs MLP',
     html: `
-    <div class="row"><span class="tag tag-predict">predict</span></div>
-    <h2>Will 105 weights beat “always miss”?</h2>
+    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>Will 105 weights beat “always miss”?</h2></div>
     <div class="lp-bars">
-      <div class="lp-bar-head"><span>model</span><span>val loss</span><span class="lp-scale"><span>accuracy 50%</span><span>65%</span></span></div>
+      <div class="lp-bar-head"><span></span><span>val loss</span><span class="lp-scale"><span>accuracy 50%</span><span>65%</span></span></div>
       ${row('always “miss”', '0.686', 56, 1, 'base')}
       ${row('logistic regression', '0.673', 59, 2)}
       ${row('<b>2-8-8-1 MLP</b>', '<mark>0.665</mark>', 60, 3)}
-    </div>
-    <p class="lead muted bottom" data-step="4">Small gap, real gain: basketball is noisy.</p>`,
+    </div>`,
     notes: `
     <p class="time">2 min (+2 for notebook Part 6)</p>
     <p class="ask">Always guessing 45% gives validation loss 0.686. Will our network beat it, by a lot or a little?</p>
-    <p class="do">Run the baseline cell of notebook Part 5 (the same three rows), then press → four times.</p>
+    <p class="do">Run the baseline cell of notebook Part 5 (the same three rows), then press → three times.</p>
     <p class="ans">By a little: 0.665 against 0.686, 60% against 56% accuracy ("always miss" is 56% on these validation shots). Logistic regression is in between; you may have seen it, if not: it is one neuron, so only a straight boundary.</p>
-    <p class="say">Is 60% bad? No: even at the rim Kobe made fewer than two in three, so position alone cannot do much better.</p>
+    <p class="say">Small gap, real gain. Is 60% bad? No: basketball is noisy; even at the rim Kobe made fewer than two in three, so position alone cannot do much better.</p>
     <p class="do">Then notebook Part 6, mistake 2 (no slide): delete opt.zero_grad() and predict. No error, but accuracy about 44%: it calls every shot "made", worse than "always miss", because each new gradient is added to the old ones.</p>`,
   });
 }
@@ -6511,7 +6504,7 @@ Deck.slide({
     id: 'loop-sigmoid',
     title: 'Cliffhanger reveal: two sigmoids',
     html: `
-    <div class="row"><span class="tag tag-warn">planned mistake 3</span><span class="kicker">the vote from before the break</span></div>
+    <div class="row"><span class="tag tag-warn">planned mistake 3</span></div>
     <h2>Two sigmoids: normal loss, broken model</h2>
     <div class="lp-sig-grid">
       <div class="col" style="gap:36px">
@@ -6519,8 +6512,8 @@ Deck.slide({
           return torch.sigmoid(self.fc3(x))
           loss_fn = nn.BCEWithLogitsLoss()`, { cls: 'lp-c30' })}
         <div class="lp-seen">
-          <div data-step="1" class="ui-readout"><span class="ui-readout-label">printed loss</span><span class="ui-readout-value">0.68 <span class="small muted">looks normal</span></span></div>
-          <div data-step="2" class="ui-readout"><span class="ui-readout-label">accuracy</span><span class="ui-readout-value">62% <span class="small muted">looks normal</span></span></div>
+          <div data-step="1" class="ui-readout"><span class="ui-readout-label">printed loss</span><span class="ui-readout-value">0.68</span></div>
+          <div data-step="2" class="ui-readout"><span class="ui-readout-label">accuracy</span><span class="ui-readout-value">62%</span></div>
         </div>
       </div>
       <div class="col" style="gap:28px">
@@ -6528,8 +6521,8 @@ Deck.slide({
           <div>${hist(HIST_OK, 'correct model')}</div>
           <div>${hist(HIST_BUG, 'two sigmoids', `<text class="lbl" x="80" y="86" style="text-anchor:start;fill:var(--bad)">← 76% say “&lt; 1%”</text>`)}</div>
         </div>
-        <div class="small muted" data-step="3" style="margin-top:-12px">predicted chance of a make, 5,000 validation shots</div>
-        <div data-step="4" class="lp-verdict"><span class="big-n bad">4.53</span><span>✗ true log loss <span class="muted">(correct model: 0.665)</span></span></div>
+        <div class="small muted" data-step="3" style="margin-top:-12px">predicted chance of a make</div>
+        <div data-step="4" class="lp-verdict"><span class="big-n bad">4.53</span><span>✗ true log loss <span class="muted">(correct: 0.665)</span></span></div>
       </div>
     </div>`,
     notes: `
@@ -6539,7 +6532,7 @@ Deck.slide({
     <ul>
       <li>1: printed loss 0.68, looks normal.</li>
       <li>2: accuracy 61.7%, like the correct model.</li>
-      <li>3: 76% of its outputs are under 1%; none above 99%.</li>
+      <li>3: histograms of the predicted chance on the 5,000 validation shots: 76% of its outputs are under 1%; none above 99%.</li>
       <li>4: true log loss (the competition metric) about 4.5, against 0.665.</li>
     </ul>
     <p class="ans">Quietly worse: normal-looking numbers, garbage probabilities.</p>
@@ -6623,7 +6616,7 @@ Deck.slide({
     title: 'Evaluate correctly',
     html: `
     <h2>Measure on validation, without gradients</h2>
-    <div class="lp-t6">
+    <div class="lp-t6 lp-wide">
       ${Code.py(`
         model.eval()
         with torch.no_grad():
@@ -6631,9 +6624,9 @@ Deck.slide({
             val_loss = loss_fn(logits, y_va).item()
             pred = (logits > 0).float()
             acc = (pred == y_va).float().mean().item()
-            print(val_loss, acc, pred.mean().item())`, { hl: '1:1 2:2-3 3:5 4:7' })}
+            print(val_loss, acc, pred.mean().item())`, { hl: '1:1 2:2-3 3:5 4:7', cls: 'lp-c36' })}
       <div class="stack lp-eff">
-        <div data-only="1"><div class="lbl">evaluation mode</div><div class="lp-num">dropout off</div><div class="lp-num"><small>(a habit: our net has none)</small></div></div>
+        <div data-only="1"><div class="lbl">evaluation mode</div><div class="lp-num">dropout off</div></div>
         <div data-only="2"><div class="lbl">no graph, no .grad</div><div class="lp-num">faster, less memory</div></div>
         <div data-only="3"><div class="lbl">logit &gt; 0 means &gt; 50%</div>${sig}</div>
         <div data-only="4"><div class="lbl">printed</div><div class="lp-num">0.665 <small>val loss</small></div><div class="lp-num">60% <small>accuracy</small></div><div class="lp-num">≈ 0.35 <small>predicted “made”</small></div></div>
@@ -6677,7 +6670,7 @@ Deck.css(`
 .sec-gen .gen-cure:last-child { border-bottom: 0; }
 .sec-gen .gen-cure .n { font-family: var(--font-mono); font-size: 40px; color: var(--muted); }
 .sec-gen .gen-cure .name { font-family: var(--font-display); font-weight: 750; font-size: 46px; line-height: 1.05; }
-.sec-gen .gen-cure .ev { font-size: 32px; line-height: 1.25; }
+.sec-gen .gen-cure .ev { font-size: 36px; line-height: 1.25; }
 .sec-gen .gen-cure .ev b { font-family: var(--font-mono); }
 .sec-gen .gen-patient { font-size: 34px; max-width: none; }
 .sec-gen .gen-patient b { font-family: var(--font-mono); }
@@ -6727,42 +6720,35 @@ Deck.css(`
     id: 'gen-split',
     title: 'Train, validation, test',
     html: `
-    <h2>Grade the model on shots it never saw</h2>
+    <h2>Grade on shots it never saw</h2>
     <div class="fill-center gen-split-fig">
-      <svg class="dg" viewBox="0 0 1728 600" width="1728" height="600" role="img" aria-label="Kobe's labelled shots split into training and validation; the test set is hidden by the grader">
+      <svg class="dg" viewBox="0 0 1728 430" width="1728" height="430" role="img" aria-label="Kobe's labelled shots split into training and validation; the test set is hidden by the grader">
         <g>
-          <text class="lbl-b" x="539" y="60" style="font-size:48px">train</text>
-          <rect x="0" y="120" width="1078" height="150" style="fill:var(--ink)"/>
-          <text class="lbl" x="539" y="195" style="fill:var(--paper);font-size:40px">20,558 shots</text>
-          <text class="lbl" x="539" y="330" style="font-size:36px;font-weight:700">homework</text>
-          <text class="lbl-s" x="539" y="380" style="font-size:32px">the weights learn from these</text>
+          <text class="lbl-b" x="539" y="50" style="font-size:52px">train</text>
+          <rect x="0" y="100" width="1078" height="200" style="fill:var(--ink)"/>
+          <text class="lbl" x="539" y="200" style="fill:var(--paper);font-size:44px">20,558 shots</text>
+          <text class="lbl" x="539" y="390" style="font-size:40px;font-weight:700">homework</text>
         </g>
         <g data-step="1">
-          <text class="lbl-b" x="1213" y="60" style="font-size:48px">validation</text>
-          <rect x="1078" y="120" width="270" height="150" style="fill:var(--muted)"/>
-          <line x1="1078" y1="112" x2="1078" y2="278" style="stroke:var(--paper);stroke-width:6"/>
-          <text class="lbl" x="1213" y="195" style="fill:var(--paper);font-size:36px">5,139</text>
-          <text class="lbl" x="1213" y="330" style="font-size:36px;font-weight:700">mock exam</text>
-          <text class="lbl-s" x="1213" y="380" style="font-size:30px">choose settings,</text>
-          <text class="lbl-s" x="1213" y="418" style="font-size:30px">when to stop</text>
+          <text class="lbl-b" x="1213" y="50" style="font-size:52px">validation</text>
+          <rect x="1078" y="100" width="270" height="200" style="fill:var(--muted)"/>
+          <line x1="1078" y1="92" x2="1078" y2="308" style="stroke:var(--paper);stroke-width:6"/>
+          <text class="lbl" x="1213" y="200" style="fill:var(--paper);font-size:40px">5,139</text>
+          <text class="lbl" x="1213" y="390" style="font-size:40px;font-weight:700">mock exam</text>
         </g>
         <g data-step="2">
-          <text class="lbl-b" x="1568" y="60" style="font-size:48px">test</text>
-          <rect x="1412" y="122" width="312" height="146" style="fill:none;stroke:var(--ink);stroke-width:4;stroke-dasharray:14 10"/>
-          <text class="lbl" x="1568" y="195" style="font-size:40px">hidden</text>
-          <text class="lbl" x="1568" y="330" style="font-size:36px;font-weight:700">the real exam</text>
-          <text class="lbl-s" x="1568" y="380" style="font-size:30px">the grader keeps it;</text>
-          <text class="lbl-s" x="1568" y="418" style="font-size:30px">scored once</text>
-        </g>
-        <g data-step="3">
-          <text x="0" y="540" style="font-family:var(--font-display);font-weight:800;font-size:56px;fill:var(--ink)">Tune on the exam, and you only fool yourself.</text>
+          <text class="lbl-b" x="1568" y="50" style="font-size:52px">test</text>
+          <rect x="1412" y="102" width="312" height="196" style="fill:none;stroke:var(--ink);stroke-width:4;stroke-dasharray:14 10"/>
+          <text class="lbl" x="1568" y="200" style="font-size:44px">hidden</text>
+          <text class="lbl" x="1568" y="390" style="font-size:40px;font-weight:700">the real exam</text>
         </g>
       </svg>
     </div>`,
     notes: `
     <p class="time">1 min</p>
     <p class="say">A model is only useful on shots it has never seen, so we split the data like a school year. Training shots are homework; validation shots are a mock exam for choosing settings, like the learning rate or when to stop. The test set is the real exam: the grader keeps it hidden and scores it once.</p>
-    <p class="do">Press → three times.</p>
+    <p class="do">Press → twice (validation, then test).</p>
+    <p class="say">The weights learn from the training shots; the validation shots choose settings and when to stop. Tune on the exam, and you only fool yourself.</p>
     <p class="ask">You try 50 settings and keep the best validation score. Is that score still honest?</p>
     <p class="ans">Slightly too optimistic: you picked the luckiest of 50. That is why the hidden test set exists.</p>
     <p>Scale with the mean and spread of the training shots only. The slide's 20,558 / 5,139 come from Kaggle's labelled shots; the notebook's task file splits 20,000 / 5,000.</p>`,
@@ -6773,7 +6759,7 @@ Deck.css(`
     id: 'gen-overfit',
     title: 'Overfitting, live',
     html: `
-    <h2>A big net on 12 points memorises the noise</h2>
+    <h2>A big net memorises 12 noisy points</h2>
     <div class="gen-demo">
       <div id="gen-fit"></div>
       <div class="gen-side" id="gen-fit-side"></div>
@@ -6960,30 +6946,30 @@ Deck.css(`
     title: 'Five cures for memorising',
     html: `
     <h2>Five cures for memorising</h2>
-    <p class="gen-patient">The patient: 2-256-256-1 on 500 Kobe shots, validation loss <b>1.23</b></p>
+    <p class="gen-patient">patient: 2-256-256-1 on 500 shots · val loss <b>1.23</b></p>
     <div class="gen-cures">
       <div class="gen-cure" data-step="1"><span class="n">1</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">${
           Array.from({ length: 36 }, (_, i) => `<circle cx="${14 + (i % 9) * 19}" cy="${14 + Math.floor(i / 9) * 24}" r="6" style="fill:var(--ink)"/>`).join('')}</svg>
-        <span class="name">More data</span><span class="ev">big net, all 20,558 shots: <b>0.660</b></span></div>
+        <span class="name">More data</span><span class="ev">all 20,558 shots: <b>0.660</b></span></div>
       <div class="gen-cure" data-step="2"><span class="n">2</span>
         <span>${Widgets.netSVG({ sizes: [2, 3, 1], w: 150, h: 100, r: 12 })}</span>
-        <span class="name">Smaller model</span><span class="ev">2-8-8-1 on the same 500 shots: best <b>0.677</b></span></div>
+        <span class="name">Smaller model</span><span class="ev">2-8-8-1: <b>0.677</b></span></div>
       <div class="gen-cure" data-step="3"><span class="n">3</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">
           <path d="M8,14 C40,92 70,92 100,60 S150,20 170,8" style="fill:none;stroke:var(--ink);stroke-width:5"/>
           <line x1="66" y1="6" x2="66" y2="96" style="stroke:var(--muted);stroke-width:3;stroke-dasharray:8 6"/>
           <circle cx="66" cy="78" r="9" style="fill:var(--ink)"/></svg>
-        <span class="name">Stop early, keep the best</span><span class="ev">best <b>0.675</b>, at step 20<br>${Code.i('best = copy.deepcopy(model.state_dict())')}</span></div>
+        <span class="name">Stop early, keep the best</span><span class="ev"><b>0.675</b> at step 20<br>${Code.i('best = copy.deepcopy(model.state_dict())')}</span></div>
       <div class="gen-cure" data-step="4"><span class="n">4</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">
           <line x1="4" y1="96" x2="172" y2="96" style="stroke:var(--muted);stroke-width:3"/>
           ${[[22, 70], [66, 40], [110, 60], [154, 30]].map(([x, y]) => `<rect x="${x - 14}" y="${y}" width="28" height="${96 - y}" style="fill:var(--grad-soft);stroke:var(--ink);stroke-width:3"/>
           <line x1="${x}" y1="${y - 22}" x2="${x}" y2="${y - 4}" style="stroke:var(--grad);stroke-width:4;marker-end:url(#ah-grad)"/>`).join('')}</svg>
-        <span class="name">Weight decay</span><span class="ev">pull every weight toward 0: <b>0.76</b> at the end</span></div>
+        <span class="name">Weight decay</span><span class="ev"><b>0.76</b></span></div>
       <div class="gen-cure" data-step="5"><span class="n">5</span>
         <span id="gen-drop"></span>
-        <span class="name">Dropout</span><span class="ev">random neurons off while training: <b>0.71</b> at the end</span></div>
+        <span class="name">Dropout</span><span class="ev"><b>0.71</b></span></div>
     </div>`,
     init(el, api) {
       // dropout picture: a new random half of the hidden neurons is crossed out every 0.8 s
@@ -7019,6 +7005,7 @@ Deck.css(`
       <li><b>Weight decay</b>: every step shrinks each weight a little toward 0.</li>
       <li><b>Dropout</b>: random neurons off at every step, like the rotating bank tellers from the break game.</li>
     </ul>
+    <p>The numbers on the slide are validation losses: the big net on all 20,558 shots 0.660; a 2-8-8-1 on the same 500 shots, best 0.677; stopping early, best 0.675 at step 20; weight decay 0.76 and dropout 0.71 at the end of training.</p>
     <p class="ask">Which cures can you not use much on Kobe?</p>
     <p class="ans">More data and a smaller model: the rules fix both. The 105-weight Kobe net barely overfits, so keep the best checkpoint.</p>
     <p>Notebook Part 10, same story: 1.35 at the end, best 0.678 at step 10.</p>`,
@@ -7065,8 +7052,10 @@ Deck.css(`
           const sx = t => x0 + t * (x1 - x0), sy = v => y1 - (v / 1.15) * (y1 - y0);
           // axes
           polyline(ctx, [[x0, y0], [x0, y1], [x1, y1]], C.muted, 2.5);
-          Plot.text(ctx, 'loss', 4, y1 - 4, { size: 26, color: C.muted });
-          Plot.text(ctx, 'steps →', x1, Hc - 2, { size: 26, color: C.muted, align: 'right' });
+          if (k === 0) {   // axis names once, on the first card
+            Plot.text(ctx, 'loss', 4, y1 - 4, { size: 26, color: C.muted });
+            Plot.text(ctx, 'steps →', x1, Hc - 2, { size: 26, color: C.muted, align: 'right' });
+          }
           Plot.text(ctx, '0.69', x0 - 8, sy(0.69) + 9, { size: 26, color: C.muted, align: 'right', mono: true });
           polyline(ctx, [[x0 + 4, sy(0.69)], [x0 + 20, sy(0.69)]], C.muted, 2.5);
           const r = NN.rng(DOC[k].seed), N = 120;
@@ -7327,7 +7316,13 @@ Deck.css(`
 .sec-task .traps { flex: 1; align-content: space-evenly; gap: 72px 64px; }
 .sec-task .traps div { font-size: 38px; padding: 12px 0 12px 30px; }
 .sec-task .traps b { font-size: 46px; margin-bottom: 14px; }
-.sec-task .eqs { font-family: var(--font-math); font-size: 48px; }
+.sec-task .eqs { font-family: var(--font-math); font-size: 56px; }
+.sec-task .vmid { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 56px; }
+.sec-task .rules .card { font-size: 36px; gap: 14px; }
+.sec-task .rules .card h3 { font-size: 46px; }
+.sec-task .rules .card .mono { font-size: 33px; line-height: 1.35; }
+.sec-task .rules .boards { height: 80px; }
+.sec-task .rules .boards span { font-size: 32px; }
 .sec-task .eqs i { font-style: italic; }
 .sec-task .toys { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; flex: 1; min-height: 0; }
 .sec-task .toy { display: flex; flex-direction: column; gap: 16px; }
@@ -7335,7 +7330,8 @@ Deck.css(`
 .sec-task .toy .ui-row { gap: 20px 24px; }
 .sec-task .toy-read { font-family: var(--font-mono); font-size: 30px; color: var(--muted); min-width: 9em; }
 .sec-task .toy-read b { color: var(--grad); font-weight: 700; }
-.sec-task .t-code { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; align-items: start; flex: 1; }
+.sec-task .t-code { display: grid; grid-template-columns: 1120px 1fr; gap: 72px; align-items: start; flex: 1; }
+.sec-task pre.code.t-skel { font-size: 32px; }
 .sec-task .t-effect { align-self: stretch; }
 .sec-task .t-effect > div { display: flex; flex-direction: column; gap: 20px; font-size: 34px; line-height: 1.25; }
 .sec-task .t-effect .big2 { font-family: var(--font-display); font-weight: 800; font-size: 60px; line-height: 1; }
@@ -7343,9 +7339,9 @@ Deck.css(`
 .sec-task .barlab { font-family: var(--font-mono); font-size: 28px; color: var(--muted); }
 .sec-task .plan { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
 .sec-task .plan h3 { border-bottom: 3px solid var(--ink); padding-bottom: 10px; margin-bottom: 18px; }
-.sec-task .plan ol { margin: 0; padding-left: 1.3em; font-size: 34px; line-height: 1.3; display: flex; flex-direction: column; gap: 22px; }
-.sec-task .plan .blank { display: block; border-bottom: 3px dashed var(--rule); height: 44px; }
-.sec-task .t10 { display: grid; grid-template-columns: 1056px 1fr; gap: 96px; flex: 1; align-items: start; }
+.sec-task .plan ol { margin: 0; padding-left: 1.3em; font-size: 38px; line-height: 1.3; display: flex; flex-direction: column; gap: 32px; }
+.sec-task .plan .blank { display: block; border-bottom: 3px dashed var(--rule); height: 50px; }
+.sec-task .t10 { display: grid; grid-template-columns: 1056px 1fr; gap: 96px; flex: 1; align-items: start; align-content: center; }
 .sec-task .gridside { display: flex; flex-direction: column; gap: 30px; }
 .sec-task .gridside .ui-readout-value { font-size: 40px; }
 .sec-task .live-hint { font-size: 30px; color: var(--muted); line-height: 1.35; }
@@ -7493,33 +7489,33 @@ Deck.css(`
     title: 'The rules',
     html: `
     <h2>The rules: a tiny net, raw inputs</h2>
+    <div class="vmid">
     <svg class="dg" viewBox="0 0 1728 310" width="1728" height="310" role="img" aria-label="loc_x, loc_y into Linear 2 to 8, activation, Linear 8 to 8, activation, Linear 8 to 1, Sigmoid">
       ${P.s}
-      <text class="lbl-s" x="0" y="178" style="text-anchor:start">raw, in tenths</text>
-      <text class="lbl-s" x="0" y="212" style="text-anchor:start">of a foot</text>
-      <text class="lbl-s" x="0" y="250" style="text-anchor:start">x −250…248</text>
-      <text class="lbl-s" x="0" y="284" style="text-anchor:start">y −44…791</text>
+      <text class="lbl-s" x="0" y="190" style="text-anchor:start">raw</text>
+      <text class="lbl-s" x="0" y="232" style="text-anchor:start">x −250…248</text>
+      <text class="lbl-s" x="0" y="274" style="text-anchor:start">y −44…791</text>
       <g data-step="1">
         <path d="M${lin[0][0]},136 v14 H${lin[2][1]} v-14" style="fill:none;stroke:var(--ink);stroke-width:3"/>
         <text class="lbl" x="${(lin[0][0] + lin[2][1]) / 2}" y="196" style="font-size:34px">≤ 3 Linear layers · ≤ 8 neurons each</text>
-        <text class="lbl-s" x="${(lin[0][0] + lin[2][1]) / 2}" y="242" style="font-size:30px">2-8-8-1 = 105 parameters is the biggest legal net</text>
+        <text class="lbl-s" x="${(lin[0][0] + lin[2][1]) / 2}" y="242" style="font-size:30px">max: 2-8-8-1 = 105 parameters</text>
       </g>
     </svg>
-    <div class="cards">
+    <div class="cards rules">
       <div class="card" data-step="2"><h3>act = only these</h3>
         <span class="mono">nn.ReLU · nn.Sigmoid<br>nn.Tanh · nn.ELU<br>nn.LeakyReLU · nn.PReLU</span>
         <span><span class="xx">✗</span> <span class="mono">nn.Sequential</span> → score 0</span></div>
       <div class="card" data-step="3"><h3>submission.zip</h3>
-        <span class="mono">submission_model.py</span><span class="small muted">the class, its imports</span>
-        <span class="mono">submission_dic.pth</span><span class="small muted">the trained state_dict</span></div>
+        <span class="mono">submission_model.py</span>
+        <span class="mono">submission_dic.pth</span></div>
       <div class="card" data-step="4"><h3>score = test accuracy</h3>
-        <div class="boards"><span>A: live</span><span>B: final</span></div>
-        <span class="small muted">each ≈ 2,500 hidden shots</span></div>
+        <div class="boards"><span>A: live</span><span>B: final</span></div></div>
+    </div>
     </div>`,
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">The rules are strict on purpose. The network sees only loc_x and loc_y, and they arrive raw, in tenths of a foot. The statement says "already normalized", but x runs from −250 to 248 and y from −44 to 791.</p>
-    <p class="do">→ 1: 2-8-8-1 (105 numbers) is the biggest legal net. → 2: only these activations; name the layers (self.fc1, …), since nn.Sequential scores 0. → 3: a zip with the class and the weights. → 4: accuracy on hidden shots; board A is live, board B is final.</p>
+    <p class="do">→ 1: 2-8-8-1 (105 numbers) is the biggest legal net. → 2: only these activations; name the layers (self.fc1, …), since nn.Sequential scores 0. → 3: a zip with the class (submission_model.py, with its imports) and the trained state_dict (submission_dic.pth). → 4: accuracy on hidden shots, about 2,500 per board; board A is live, board B is final.</p>
     <p class="ask">Can you add the column shot_distance as a third input?</p>
     <p class="ans">No: the grader passes exactly two columns. It would not help anyway: it is computed from x and y.</p>
     <p>Keep the baseline's class name MyModel and its final nn.Sigmoid.</p>`,
@@ -7537,9 +7533,10 @@ Deck.css(`
     id: 'task-predict',
     title: 'Predict the best possible score',
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><span class="lead muted">write down one number</span></div>
+    <div class="row"><span class="tag tag-predict">predict</span></div>
     <h2>What accuracy can the best model reach?</h2>
-    <svg class="dg" viewBox="0 0 1728 450" width="1728" height="450" role="img" aria-label="accuracy ruler from 50 to 65 percent">
+    <div class="vmid">
+    <svg class="dg" viewBox="0 0 1728 410" width="1728" height="410" role="img" aria-label="accuracy ruler from 50 to 65 percent">
       <line x1="60" y1="236" x2="1660" y2="236" style="stroke:var(--ink);stroke-width:4"/>
       ${[50, 55, 60, 65].map(v => `<line x1="${ax(v)}" y1="222" x2="${ax(v)}" y2="250" style="stroke:var(--muted);stroke-width:3"/><text class="lbl-s" x="${ax(v)}" y="276" style="font-size:28px">${v}%</text>`).join('')}
       ${mark(55.3, true, '55.3%', 'always "miss"', 1, 'muted')}
@@ -7547,18 +7544,18 @@ Deck.css(`
       <g data-step="3">
         <rect x="${ax(60.5)}" y="214" width="${ax(61) - ax(60.5)}" height="44" style="fill:var(--ink)"/>
         <text class="lbl" x="${ax(60.75)}" y="92" style="font-size:40px">≈ 61%</text>
-        <text class="lbl-s" x="${ax(60.75)}" y="136" style="font-size:30px">legal 2-8-8-1 = the ceiling</text>
+        <text class="lbl-s" x="${ax(60.75)}" y="136" style="font-size:30px">legal 2-8-8-1</text>
         <line x1="${ax(60.75)}" y1="160" x2="${ax(60.75)}" y2="210" style="stroke:var(--ink);stroke-width:4"/>
       </g>
       <g data-step="4">
         <rect x="${ax(62.1)}" y="214" width="${ax(62.5) - ax(62.1)}" height="44" style="fill:var(--muted)"/>
         <line x1="${ax(62.3)}" y1="262" x2="${ax(62.3)}" y2="300" style="stroke:var(--muted);stroke-width:4"/>
         <text class="lbl" x="${ax(62.3) + 40}" y="344" style="font-size:40px;fill:var(--muted)">62–62.5%</text>
-        <text class="lbl-s" x="${ax(62.3) + 40}" y="388" style="font-size:30px">best on the leaderboard</text>
-        <text class="lbl-s" x="${ax(62.3) + 40}" y="424" style="font-size:30px">luck: ± 1 point</text>
+        <text class="lbl-s" x="${ax(62.3) + 40}" y="388" style="font-size:30px">leaderboard best</text>
       </g>
     </svg>
-    <p class="lead" data-step="5">Shots right at the rim go in only <b>62.5%</b> of the time.</p>`,
+    <p class="lead" data-step="5">Even at the rim, only <b>62.5%</b> go in.</p>
+    </div>`,
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">Before anyone trains anything: what is the best accuracy possible here? Everybody write one number.</p>
@@ -7716,26 +7713,27 @@ Deck.css(`
     title: 'Hint: fold the scaling into fc1',
     html: `
     <h2>Hide the scaling inside the first layer</h2>
-    <div class="row" style="gap:40px;align-items:flex-start">
+    <div class="vmid">
+    <div class="row" style="gap:56px;align-items:flex-end">
       <div class="col" style="gap:28px">
         <div class="kicker">while training</div>
-        <svg class="dg" viewBox="0 0 1000 170" width="1140" height="194" role="img" aria-label="raw x, y, then scaling, then fc1">${R1.s}
+        <svg class="dg" viewBox="0 0 1000 170" width="1180" height="201" role="img" aria-label="raw x, y, then scaling, then fc1">${R1.s}
           <text class="lbl-s" x="${(R1.pos[1][0] + R1.pos[1][1]) / 2}" y="160">y: −91, ÷ 88</text></svg>
         <div class="kicker" data-step="1">what you submit</div>
-        <svg class="dg" viewBox="0 0 1000 170" width="1140" height="194" data-step="1" role="img" aria-label="raw x, y into fc1 with new weights">${R2.s}
+        <svg class="dg" viewBox="0 0 1000 170" width="1180" height="201" data-step="1" role="img" aria-label="raw x, y into fc1 with new weights">${R2.s}
           <text class="lbl-s" x="${(R2.pos[1][0] + R2.pos[1][1]) / 2}" y="160">same answers · legal</text></svg>
       </div>
-      <div class="col" data-step="2" style="gap:16px;padding-top:72px">
-        <div class="kicker">new fc1</div>
+      <div class="col" data-step="2" style="gap:16px;padding-bottom:72px">
         <div class="eqs"><i>W</i>′ = <i>W</i> ÷ std</div>
-        <div class="lead muted">shift the bias to match</div>
+        <div class="lead muted">+ shift the bias</div>
       </div>
     </div>
-    <p class="lead" data-step="3">Check it: raw inputs in, the same outputs to 6 decimals.</p>`,
+    </div>`,
     notes: `
     <p class="time">1 min</p>
     <p class="say">The trap: you train on scaled inputs, but the grader feeds raw coordinates. So the scaling must live inside the weights. It is just "subtract, then divide", so it merges exactly into the first layer.</p>
-    <p class="do">Top: while training, x − 7, then ÷ 110 (y − 91, ÷ 88). → 1: you submit only fc1 with new weights. → 2: divide each weight by its input's spread, then shift the bias to match. → 3: raw inputs into the folded model must give the same outputs as scaled inputs into the original.</p>
+    <p class="do">Top: while training, x − 7, then ÷ 110 (y − 91, ÷ 88). → 1: you submit only fc1 with new weights. → 2: divide each weight by its input's spread, then shift the bias to match.</p>
+    <p class="say">Check it: raw inputs into the folded model must give the same outputs as scaled inputs into the original, to 6 decimals.</p>
     <p class="ask">Is this exact, or an approximation?</p>
     <p class="ans">Exact: subtract-and-divide followed by a linear layer is still one linear layer.</p>
     <p>Code, inside torch.no_grad(): weight /= std (per input column), then bias −= weight @ mean; outputs match to 5 × 10⁻⁷.</p>`,
@@ -7748,18 +7746,17 @@ Deck.css(`
     id: 'task-traps',
     title: 'Four ways to lose points on Kobe',
     html: `
-    <span class="tag tag-warn">pitfalls</span>
     <h2>Four ways to lose points on Kobe</h2>
     <div class="hint traps">
-      <div data-step="1"><b><span class="xx">✗</span> extra maths in forward()</b>distance, angle, buffers: not "linear + activation"</div>
-      <div data-step="2"><b><span class="xx">✗</span> Sigmoid + BCEWithLogitsLoss</b>train on the score before the Sigmoid</div>
-      <div data-step="3"><b><span class="xx">✗</span> train one class, submit another</b>write submission_model.py first, import it</div>
-      <div data-step="4"><b><span class="xx">✗</span> never reloading the zip</b>load it fresh, feed raw x, y, check the accuracy</div>
+      <div data-step="1"><b><span class="xx">✗</span> extra maths in forward()</b>only Linear + activation</div>
+      <div data-step="2"><b><span class="xx">✗</span> Sigmoid + BCEWithLogitsLoss</b>use one, not both</div>
+      <div data-step="3"><b><span class="xx">✗</span> train one class, submit another</b>import submission_model.py</div>
+      <div data-step="4"><b><span class="xx">✗</span> never reloading the zip</b>reload it, feed raw x, y</div>
     </div>`,
     notes: `
     <p class="time">1 min</p>
     <p class="say">Four mistakes that cost points on this task, three of them from real public notebooks. None shows in the training loss: you only find out when the grader runs your zip.</p>
-    <p class="do">→ 1: distance or angle inside forward() breaks the rules and gave us no gain; folding the scaling into fc1 is fine.</p>
+    <p class="do">→ 1: distance, angle or buffers inside forward() break the rules (only "linear + activation") and gave us no gain; folding the scaling into fc1 is fine.</p>
     <p class="ask">→ 2: the class must end with nn.Sigmoid. Which loss do you train with?</p>
     <p class="ans">nn.BCELoss on the Sigmoid output, or BCEWithLogitsLoss on the score before it. Never both: that is the cliffhanger bug (normal printed loss, real log loss about 4.5).</p>
     <p class="do">→ 3: write submission_model.py first and import it (one public notebook saved weights for a different shape). → 4: load the zip fresh, feed raw x, y, and check you get your validation accuracy.</p>`,
@@ -7775,7 +7772,6 @@ Deck.css(`
     id: 'task-inv',
     title: 'Task 2: optimise the input, not the weights',
     html: `
-    <div class="kicker">task 2 · Operation Inversion: digital restoration of data</div>
     <h2>Optimise the input, not the weights</h2>
     <div class="row" style="gap:96px;align-items:flex-start">
       <svg class="dg" viewBox="0 0 816 330" width="816" height="330" role="img" aria-label="training: data in, weights move">
@@ -7805,7 +7801,7 @@ Deck.css(`
         <text class="lbl-s" x="400" y="300" style="fill:var(--grad)">gradient → the missing input</text>
       </svg>
     </div>
-    <svg class="dg" viewBox="0 0 1728 250" width="1728" height="250" data-step="2" role="img" aria-label="panda plus tiny noise is classified as gibbon">
+    <svg class="dg" viewBox="-10 0 940 250" width="1222" height="325" data-step="2" role="img" aria-label="panda plus tiny noise is classified as gibbon">
       ${panda(110, 110, 0.95)}
       <text class="lbl" x="110" y="226">"panda" 57.7%</text>
       <text class="lbl-b" x="300" y="110">+ 0.007 ×</text>
@@ -7814,17 +7810,14 @@ Deck.css(`
       <text class="lbl-b" x="650" y="110">=</text>
       ${panda(800, 110, 0.95)}
       <text class="lbl" x="800" y="226" data-step="3">"gibbon" 99.3%</text>
-      <text class="lbl-s" x="1000" y="80" style="text-anchor:start;font-size:30px" data-step="3">same trick: DeepDream, style transfer</text>
-      <text class="lbl-s" x="1000" y="124" style="text-anchor:start;font-size:30px" data-step="3">Fredrikson 2014: dosing model + dose</text>
-      <text class="lbl-s" x="1000" y="168" style="text-anchor:start;font-size:30px" data-step="3">→ patient's missing gene = this task</text>
     </svg>`,
     notes: `
     <p class="time">2 min</p>
     <p class="say">Task two, "Operation Inversion". You get a frozen trained network and rows of inputs with its output y, but one input column was set to zeros. Recover that column.</p>
     <p class="do">Left: in training the data is fixed and the weights move. → 1: in inversion the weights are frozen and the missing input moves downhill instead. Analogy: the model is a lock; we turn the key until it opens.</p>
     <p class="ask">→ 2: a network says "panda" (57.7%). We add invisible noise built from the gradient with respect to the input. What now?</p>
-    <p class="ans">→ 3: "gibbon", 99.3% (Goodfellow et al., 2014): the same tool as our task.</p>
-    <p>Fredrikson et al. (2014) recovered a patient's missing genetic marker from a drug-dosing model this way. Our task numbers come from replicas we built; check the real statement.</p>`,
+    <p class="ans">→ 3: "gibbon", 99.3% (Goodfellow et al., 2014): the same tool as our task. The same trick drives DeepDream and style transfer.</p>
+    <p>Fredrikson et al. (2014) recovered a patient's missing genetic marker from a drug-dosing model and the dose this way: exactly this task. Our task numbers come from replicas we built; check the real statement.</p>`,
   });
 
   /* ================================================================
@@ -7900,10 +7893,10 @@ Deck.css(`
     title: 'Two toy inversions',
     html: `
     <h2>One unknown: one answer, or two</h2>
-    <p class="small muted" style="margin-top:-16px">toy frozen model: <span class="m"><i>f</i> = <i>a</i> + 2<i>b</i> + <i>c</i><sup>2</sup></span> &nbsp;·&nbsp; we know <span class="m"><i>f</i> = 4.65</span></p>
+    <p class="small muted" style="margin-top:-16px">frozen model: <span class="m"><i>f</i> = <i>a</i> + 2<i>b</i> + <i>c</i><sup>2</sup> = 4.65</span></p>
     <div class="toys">
-      <div class="toy"><h3>find <i>b</i> (a = 1, c = 1.5): one answer</h3><div id="task-toy1"></div></div>
-      <div class="toy"><h3>find <i>c</i> (a = 1, b = 0.7): two answers</h3><div id="task-toy2"></div></div>
+      <div class="toy"><h3>find <i>b</i> (a = 1, c = 1.5)</h3><div id="task-toy1"></div></div>
+      <div class="toy"><h3>find <i>c</i> (a = 1, b = 0.7)</h3><div id="task-toy2"></div></div>
     </div>`,
     init(el, api) {
       // loss for b: (2b - 1.4)^2, gradient 4(2b - 1.4); SGD from b = 0
@@ -7919,7 +7912,7 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Two tiny versions of the task: the frozen "model" is a + 2b + c², and its output is 4.65. Each curve shows how wrong the output is for every value of the unknown; the magenta dots are the optimiser's steps.</p>
+    <p class="say">Two tiny versions of the task: the frozen "model" is a + 2b + c², and its output is 4.65. Left: one unknown with one answer; right: one unknown with two answers. Each curve shows how wrong the output is for every value of the unknown; the magenta dots are the optimiser's steps.</p>
     <p class="do">Left: before each <b>Run</b> ask "land, crawl, bounce or fly off?". lr 0.125 lands on 0.7 in one jump; 0.05 crawls; 0.25 bounces; 0.3 flies off. Right (Adam): start +0.1 → +1.5, start −0.1 → −1.5, both perfect; start 0 never moves (a flat hilltop).</p>
     <p class="ask">We got +1.5, the true answer. Did gradient descent "know" it?</p>
     <p class="ans">No: it rolled into whichever valley was downhill from the start. Two keys open the same lock.</p>
@@ -8026,24 +8019,23 @@ Deck.css(`
     html: `
     <h2>Your starting point: fill the TODOs</h2>
     <div class="t-code">
-      ${Code.py(SKEL, { hl: '1:1-3 2:4-6 3:7 4:9-10 5:12', size: 's' })}
+      ${Code.py(SKEL, { hl: '1:1-3 2:4-6 3:7 4:9-10 5:12', cls: 't-skel' })}
       <div class="stack t-effect">
-        <div data-only="0"><span class="muted">X, y, N come from data.csv,<br>as float32 tensors</span></div>
-        <div data-only="1"><span class="big2">frozen</span><span>the weights never change</span>
+        <div data-only="1"><span class="big2">frozen</span>
           <svg class="dg" viewBox="0 0 120 90" width="120" height="90">${lock(60, 40)}</svg></div>
-        <div data-only="2"><span class="big2 grad">only z learns</span><span>one unknown per row, all 1,000 rows at once</span></div>
-        <div data-only="3"><span class="big2">lr ≈ 0.1</span><span>Adam moves each value about lr per step</span>
+        <div data-only="2"><span class="big2 grad">only z learns</span></div>
+        <div data-only="3"><span class="big2">lr ≈ 0.1</span>
           <div><div class="barlab">lr 0.001 · 500 steps → MSE 0.43</div><div class="bar" style="width:${0.433 / 0.433 * 520}px"></div></div>
           <div><div class="barlab">lr 0.1 · 500 steps → MSE 0.024</div><div class="bar" style="width:${0.0236 / 0.433 * 520}px"></div></div></div>
-        <div data-only="4"><span class="big2">[:, 0]</span><span>model gives (N, 1), y is (N,)</span>
-          <span class="small"><span class="xx">✗</span> forget it: (N, 1) − (N,) becomes (N, N), MSE 2.44, worse than zeros</span></div>
-        <div data-only="5"><span class="big2">then check</span><span>residual of every row · grid of values · pick an answer</span></div>
+        <div data-only="4"><span class="big2">[:, 0]</span>
+          <span><span class="xx">✗</span> without it: (N, N), MSE 2.44</span></div>
+        <div data-only="5"><span class="big2">check each row</span><span>leftover error · two answers?</span></div>
       </div>
     </div>`,
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">The shape of a first solution, incomplete on purpose: the three dots are for you.</p>
-    <p class="do">→ 1: load and freeze the weights. → 2: find the zero column; only z learns. → 3: Adam moves each value about lr per step: lr 0.001 barely moves (MSE 0.43), lr 0.1 gives 0.024. → 4: without [:, 0], (N, 1) − (N,) silently becomes an N × N table (MSE 2.44, worse than zeros). → 5: check each row's leftover error; a grid of values (torch.linspace) shows rows with two answers.</p>
+    <p class="say">The shape of a first solution, incomplete on purpose: the three dots are for you. X, y and N come from data.csv, as float32 tensors.</p>
+    <p class="do">→ 1: load and freeze the weights; they never change. → 2: find the zero column; only z learns, one unknown per row, all 1,000 rows at once. → 3: Adam moves each value about lr per step: lr 0.001 barely moves (MSE 0.43), lr 0.1 gives 0.024. → 4: the model gives (N, 1), y is (N,); without [:, 0], (N, 1) − (N,) silently becomes an N × N table (MSE 2.44, worse than zeros). → 5: check each row's leftover error; a grid of values (torch.linspace) shows rows with two answers.</p>
     <p class="ask">Why .sum() over rows and not .mean()?</p>
     <p class="ans">Each row is its own problem; with plain SGD, .mean() shrinks each row's gradient 1,000-fold. Adam does not care.</p>
     <p>Our replica: all zeros scores 0 (MSE 0.968); this skeleton reaches 0.024 in under a second.</p>`,
@@ -8111,13 +8103,13 @@ Deck.css(`
             <ol data-step="1"><li>zeros baseline, find the column</li><li>Adam lr 0.1 on z only, 500 steps</li><li>residuals + grid: count the answers</li></ol>
           </div></div>
       </div>
-      <div class="side"><div id="task-plan-timer"></div><p class="small muted">done when: 3 experiments per task, in order</p></div>
+      <div class="side"><div id="task-plan-timer"></div></div>
     </div>`,
     init(el, api) { Widgets.timer(api, el.querySelector('#task-plan-timer'), 3); },
     notes: `
     <p class="time">3.5 min</p>
     <p class="say">Plan before you type. In pairs, write the first three experiments for each task, in order, in three minutes. One writes, the other checks: is there a baseline, a validation split, a number that says it worked?</p>
-    <p class="do">Press <b>Start</b> and walk around; look for plans with a big model and no baseline. At 0:00 ask two pairs to read a plan, then press → for the example.</p>
+    <p class="do">Done when: three experiments per task, in order. Press <b>Start</b> and walk around; look for plans with a big model and no baseline. At 0:00 ask two pairs to read a plan, then press → for the example.</p>
     <p class="ask">Does your first experiment give a number to compare everything else with?</p>
     <p class="ans">It should: for Kobe, "always miss" (55.3%) and a straight-line model (about 59%); for inversion, all zeros (MSE 0.968). A good Kobe net then lands near 61%.</p>
     <p>Short on time: do it for Kobe only.</p>`,
@@ -8149,7 +8141,7 @@ Deck.slide({
   title: 'The whole lecture in one picture',
   html: `
   <h2>The whole lecture in one picture</h2>
-  <div class="fill-center">${Widgets.loopSVG({ w: 1560, h: 640, notes: true })}</div>`,
+  <div class="fill-center">${Widgets.loopSVG({ w: 1640, h: 720, notes: true })}</div>`,
   notes: `
   <p class="time">2 min</p>
   <p class="say">The whole lecture is one loop, with today's words on every box. Data is scaled, batched and split; the model is linear layers with activations between them; the loss is MSE for numbers and cross-entropy for yes/no or classes. Then loss.backward() finds the gradients and optimizer.step() moves the weights, with Adam at lr 1e-3 as the default start.</p>

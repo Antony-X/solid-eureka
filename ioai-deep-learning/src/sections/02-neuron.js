@@ -751,7 +751,7 @@ Deck.css(`
         }
         ctx.restore();
       }
-      api.onStep(k => { u0 = u; goal = target(k); tw = 0; });
+      api.onStep(k => { if (target(k) === goal) return; u0 = u; goal = target(k); tw = 0; });
       api.onEnter(() => { u = u0 = goal = target(api.step); tw = 1; draw(); });
       api.loop(dt => {
         if (tw < 1) { tw = Math.min(1, tw + dt / 1.1); const e = tw < 0.5 ? 2 * tw * tw : 1 - 2 * (1 - tw) * (1 - tw); u = u0 + (goal - u0) * e; draw(); }

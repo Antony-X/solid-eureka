@@ -363,10 +363,11 @@
     const side = document.createElement('div');
     side.className = 'courtnet-side';
     root.appendChild(side);
-    const rng = NN.rng(5);
+    let rng = NN.rng(o.rngSeed || 5);
     const S = { net: null, optim: null, epoch: 0, playing: !!o.autoplay, loss: 0, acc: 0 };
-    const base = 1 - Y.reduce((a, b) => a + b, 0) / Y.length;
+    const base = o.baseline != null ? o.baseline : 1 - Y.reduce((a, b) => a + b, 0) / Y.length;
     function makeNet() {
+      rng = NN.rng(o.rngSeed || 5);   // same shuffle order after every reset, so a demo repeats exactly
       S.net = new NN.MLP([2].concat(o.hidden, [1]), { act: o.act, seed: 3 });
       S.optim = NN.optimizer(o.opt, { lr: o.lr });
       S.epoch = 0;

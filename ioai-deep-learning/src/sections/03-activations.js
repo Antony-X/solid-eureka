@@ -689,9 +689,9 @@ with torch.no_grad():
         const a = P(-900, 0), b = P(900, 0);
         ctx.strokeStyle = C.ink; ctx.lineWidth = 5;
         ctx.beginPath(); ctx.moveTo(fr.sx(a[0]), fr.sy(a[1])); ctx.lineTo(fr.sx(b[0]), fr.sy(b[1])); ctx.stroke();
-        // label the two sides of the line, near its right end (skip a label that would leave the court)
-        const t = (d * nx - 140) / ny;
-        [[42, 'active: output > 0'], [-42, leaky ? 'output small, not 0' : 'output = 0']].forEach(([off, txt]) => {
+        // label the two sides of the line, left of centre (skip a label that would leave the canvas)
+        const t = (d * nx + 110) / ny;
+        [[72, 'active: output > 0'], [-72, leaky ? 'output small, not 0' : 'output = 0']].forEach(([off, txt]) => {
           const [lx, ly] = P(t, off), X = fr.sx(lx), Y = fr.sy(ly);
           if (Y < 36 || Y > fr.h - 24) return;
           ctx.font = `600 28px ${C.fontMono}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -760,7 +760,7 @@ with torch.no_grad():
       <div><div class="qq"><b>1</b><span>ReLU(−5) = ?</span></div><div class="qa" data-step="1">0</div></div>
       <div><div class="qq"><b>2</b><span>sigmoid(0) = ?</span></div><div class="qa" data-step="2">0.5</div></div>
       <div><div class="qq"><b>3</b><span>The steepest slope of a sigmoid?</span></div><div class="qa" data-step="3">0.25, at 0</div></div>
-      <div><div class="qq"><b>4</b><span>2-8-8-1 with no activations, on the circle?</span></div><div class="qa" data-step="4">one straight line, under 60%</div></div>
+      <div><div class="qq"><b>4</b><span>2-8-8-1 with no activations, on the circle?</span></div><div class="qa" data-step="4">straight line, ~59%</div></div>
     </div>`,
     notes: `
     <p class="time">1 min</p>

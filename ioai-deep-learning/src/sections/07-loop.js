@@ -13,8 +13,9 @@ Deck.css(`
 .sec-loop .lp-num { font-family: var(--font-mono); font-size: 48px; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .sec-loop .lp-num small { font-size: 30px; color: var(--muted); font-weight: 500; }
 .sec-loop .lp-cells { display: flex; flex-direction: column; gap: 30px; margin-top: 16px; }
-.sec-loop .lp-cell { display: grid; grid-template-columns: 96px 980px 1fr; align-items: center; gap: 24px; }
+.sec-loop .lp-cell { display: grid; grid-template-columns: 150px 980px 1fr; align-items: center; gap: 24px; }
 .sec-loop .lp-cell .n { font-family: var(--font-mono); font-size: 30px; color: var(--muted); }
+.sec-loop .lp-cell .n::before { content: 'part '; }
 .sec-loop .lp-cell code { font-family: var(--font-mono); font-size: 40px; background: var(--code-bg); border-left: 6px solid var(--ink); padding: 16px 28px; white-space: pre; }
 .sec-loop .lp-cell .what { font-size: 36px; color: var(--muted); }
 .sec-loop .lp-cell.bug code { border-left-color: var(--bad); }
@@ -102,7 +103,10 @@ Deck.css(`
         const loss1 = net.lossAndGrad(Xs, D.Y, 'bce', idx);
         net.W = copy(W0); net.b = copy(b0);
         let gmax = 0; G.forEach(g => g.forEach(v => { gmax = Math.max(gmax, Math.abs(v)); }));
-        S = { idx, W0, b0, W1, b1, G, gmax, act, loss0, loss1 };
+        // the weight that moved most in this step (shown in magenta at beat 5)
+        let big = { d: -1 };
+        W0.forEach((w, l) => w.forEach((v, i) => { const d = Math.abs(W1[l][i] - v); if (d > big.d) big = { d, l, i, from: v, to: W1[l][i] }; }));
+        S = { idx, W0, b0, W1, b1, G, gmax, act, loss0, loss1, big };
       }
 
       const wWidth = v => 2 + 12 * Math.min(1, Math.abs(v) / 1.2);
@@ -124,12 +128,17 @@ Deck.css(`
             s += `<line class="w ${w >= 0 ? 'pos' : 'neg'}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke-width:${wWidth(w).toFixed(1)}"/>`;
           }
         }
+        // beat 5: the weight that moved most, drawn as a parameter being updated (solid magenta)
+        if (k >= 5) {
+          const l = S.big.l, j = Math.floor(S.big.i / sizes[l]), i = S.big.i % sizes[l];
+          s += `<line x1="${xs[l]}" y1="${ys[l][i]}" x2="${xs[l + 1]}" y2="${ys[l + 1][j]}" style="stroke:var(--grad);stroke-width:10;stroke-linecap:round"/>`;
+        }
         // output -> loss (straight down)
         s += `<line class="flow" x1="${xs[3]}" y1="368" x2="${xs[3]}" y2="452" style="stroke-width:4;opacity:${k >= 3 ? 1 : 0.3}"/>`;
         // nodes; in the forward beat, fill = how strongly each hidden unit fires on this batch
         let amax = 0; for (let l = 1; l < 3; l++) S.act[l].forEach(v => { amax = Math.max(amax, v); });
         sizes.forEach((m, l) => ys[l].forEach((y, i) => {
-          const r = l === 0 ? 28 : l === 3 ? 34 : 26;
+          const r = l === 0 ? 28 : l === 3 ? 34 : 28;
           const cls = l === 0 ? 'nrn in' : l === 3 ? 'nrn out' : 'nrn';
           s += `<circle class="${cls}" cx="${xs[l]}" cy="${y}" r="${r}"/>`;
           if (k >= 2 && l > 0 && l < 3) {
@@ -143,8 +152,9 @@ Deck.css(`
         s += `<rect class="box" x="672" y="460" width="136" height="112" style="stroke-width:${k === 3 || k === 5 ? 5 : 3}"/>`;
         s += `<text class="lbl-s" x="740" y="490">loss</text>`;
         s += `<text class="lbl" x="740" y="538" style="font-size:34px">${k >= 5 ? S.loss1.toFixed(2) : k >= 3 ? S.loss0.toFixed(2) : '?'}</text>`;
-        const say = { 1: ['every .grad = 0', 'g'], 4: ['a gradient for all 105', 'g'], 5: ['weights moved, loss fell', 'i'] }[k];
-        if (say) s += `<text class="${say[1] === 'g' ? 'lbl-g' : 'lbl'}" x="320" y="644" style="font:600 32px var(--font-mono)">${say[0]}</text>`;
+        const f2 = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2);
+        const say = { 1: ['every .grad = 0', 'g'], 4: ['a gradient for all 105', 'g'], 5: [`biggest nudge: ${f2(S.big.from)} → ${f2(S.big.to)}`, 'g'] }[k];
+        if (say) s += `<text class="${say[1] === 'g' ? 'lbl-g' : 'lbl'}" x="${k === 5 ? 240 : 320}" y="644" style="font:600 32px var(--font-mono)">${say[0]}</text>`;
         return s + '</svg>';
       }
 
@@ -190,7 +200,7 @@ Deck.css(`
       <li><b>2 forward</b>: the batch flows left to right; dark hidden neurons are the ones that fire a lot on these 64 shots; blank ones are off (ReLU gave 0).</li>
       <li><b>3 loss</b>: one number for the whole batch, about 0.7 for a fresh network (a coin flip is 0.69).</li>
       <li><b>4 backward</b>: magenta dashed lines are gradients, thicker means "this weight is more to blame". Every one of the 105 weights gets one, in one call.</li>
-      <li><b>5 step</b>: the weights change a little and the loss on the same batch goes down (0.695 → 0.664). Point at the "after the step" readout.</li>
+      <li><b>5 step</b>: every weight moves a little against its gradient. The thick magenta line is the one weight that moved most, with its old and new value underneath; all the others moved less, too little to see. Point at the "after the step" readout: the loss on the same 64 shots went down (0.695 → 0.664).</li>
     </ul>
     <p class="do">Optional: "Next batch: run 5 beats" plays the same five beats on the next 64 shots, with the code lines lighting up in turn. Press it two or three times while saying the beats aloud. "Reset" goes back to the fresh network.</p>
     <p class="ask">Which line actually changes the weights?</p>
@@ -208,21 +218,22 @@ Deck.slide({
   <div class="row"><span class="tag tag-code">live coding</span><span class="kicker">notebooks/01_live_coding.ipynb</span></div>
   <h2>Now we build it, cell by cell</h2>
   <div class="lp-cells">
-    <div class="lp-cell"><span class="n">[1]</span><code>df = pd.read_csv("data_train.csv")</code><span class="what">25,000 shots</span></div>
-    <div class="lp-cell"><span class="n">[2]</span><code>X_tr = (X_tr - mu) / sd</code><span class="what">scale</span></div>
-    <div class="lp-cell"><span class="n">[3]</span><code>model = MLP()</code><span class="what">105 weights</span></div>
-    <div class="lp-cell"><span class="n">[4]</span><code>for epoch in range(30): ...</code><span class="what">train</span></div>
-    <div class="lp-cell"><span class="n">[5]</span><code>model.eval()</code><span class="what">measure</span></div>
-    <div class="lp-cell bug"><span class="n">[6]</span><code># break it on purpose, 4 times</code><span class="what">bugs</span></div>
+    <div class="lp-cell"><span class="n">3</span><code>df = pd.read_csv("data_train.csv")</code><span class="what">25,000 shots</span></div>
+    <div class="lp-cell bug"><span class="n">4</span><code>model(X_train)   # raw x, y</code><span class="what">mistake 1</span></div>
+    <div class="lp-cell"><span class="n">5</span><code>train(model, opt)   # 30 epochs</code><span class="what">train, measure</span></div>
+    <div class="lp-cell bug"><span class="n">6</span><code># opt.zero_grad()</code><span class="what">mistake 2</span></div>
+    <div class="lp-cell bug"><span class="n">7</span><code>nn.Sigmoid() + BCEWithLogitsLoss</code><span class="what">mistake 3</span></div>
+    <div class="lp-cell bug"><span class="n">8</span><code>y.view(-1)   # (N,)</code><span class="what">mistake 4</span></div>
   </div>`,
   notes: `
-  <p class="time">3 min (1 for the slide, 2 for cell 1 in the notebook)</p>
-  <p class="say">Now I write the whole thing in front of you. I will type, not paste, and before every run you predict what will happen. I will also make four mistakes on purpose; these are the mistakes that cost points in competitions.</p>
-  <p class="do">Switch to notebooks/01_live_coding.ipynb. The imports and the data loading are already written; run cell 1 and print X.shape (25000, 2), y.shape (25000, 1) and y.mean() = 0.447 (44.7% made). Make the font big (Ctrl/Cmd +) and use a light theme.</p>
+  <p class="time">3 min (1 for the slide, 2 for Part 3 in the notebook)</p>
+  <p class="say">Now we run the real thing in PyTorch, one cell at a time. Before every run you predict what will happen. I will also make four mistakes on purpose; these are the mistakes that cost points in competitions.</p>
+  <p class="do">Switch to notebooks/01_live_coding.ipynb. The slide lists the notebook's parts in the order we use them. Run Part 0 (setup) and Part 1 (the MLP class) if you have not already; skip Part 2 (it belongs to the optimizer section). Then run Part 3: the file has 25,000 shots and 44.7% went in, so "always miss" is already 55.3% right. The table under it shows the raw coordinates in the hundreds: point at it, it is the next mistake. Make the font big (Ctrl/Cmd +) and use a light theme.</p>
   <ul>
-    <li>Type, don't paste. Say each line aloud as you type it, then point at the output and say it again.</li>
-    <li>Before each run, ask for a prediction (hands up, or a number on paper).</li>
-    <li>Keep the finished notebook open on a second device; if the live code breaks, switch to it. Every result is also on the next slides.</li>
+    <li>The notebook is complete and its saved outputs are the numbers to expect (same seed, so you will get the same numbers). Run it with Shift+Enter, one cell at a time. If you feel confident, delete the loop in Part 5 and re-type it live while saying the five beats.</li>
+    <li>Say each line aloud before you run it, then point at the output and say it again.</li>
+    <li>At every PREDICT cell stop and take a vote (fingers or a number on paper) before running the next cell.</li>
+    <li>If the notebook breaks, every result is also on the next slides.</li>
   </ul>
   <p class="ask">Before running cell 1: what fraction of Kobe's shots went in? (Remember the opening.)</p>
   <p class="ans">About 45% (44.7% in the task file). So "always miss" is right about 55% of the time; that is the floor every model must beat.</p>`,
@@ -258,15 +269,15 @@ Deck.slide({
     const sx = Plot.scale(0, 4, 40, w - 60);
     const ticks = [0, 1, 2, 3, 4].map(v => `<line x1="${sx(v)}" y1="${ax}" x2="${sx(v)}" y2="${ax + 18}" style="stroke:var(--muted);stroke-width:2.5"/><text class="lbl" x="${sx(v)}" y="${ax + 44}" style="fill:var(--muted)">${v}</text>`).join('');
     host.innerHTML = `
-      <svg class="dg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="loss at the first step: 0.69 expected, 2.36 with raw inputs">
-        <text class="lbl-s" x="1000" y="24" style="text-anchor:start">loss printed at the very first step</text>
+      <svg class="dg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="loss at the first step: 0.69 expected, 2.32 with raw inputs">
+        <text class="lbl-s" x="40" y="24" style="text-anchor:start">loss printed before any training</text>
         <line x1="${sx(0)}" y1="${ax}" x2="${sx(4)}" y2="${ax}" style="stroke:var(--muted);stroke-width:3"/>
         ${ticks}
         <line x1="${sx(0.69)}" y1="${ax - 76}" x2="${sx(0.69)}" y2="${ax}" style="stroke:var(--muted);stroke-width:3;stroke-dasharray:12 10"/>
         <text class="lbl" x="${sx(0.69)}" y="${ax - 100}" style="fill:var(--muted)">coin flip 0.69</text>
         <g data-step="1">
-          <circle cx="${sx(2.36)}" cy="${ax}" r="18" style="fill:var(--bad)"/>
-          <text class="lbl" x="${sx(2.36)}" y="${ax - 56}" style="fill:var(--bad);font-size:48px">✗ raw: 2.36</text>
+          <circle cx="${sx(2.32)}" cy="${ax}" r="18" style="fill:var(--bad)"/>
+          <text class="lbl" x="${sx(2.32)}" y="${ax - 56}" style="fill:var(--bad);font-size:48px">✗ raw: 2.32</text>
         </g>
         <g data-step="3">
           <circle cx="${sx(0.69)}" cy="${ax}" r="18" style="fill:var(--ok)"/>
@@ -278,11 +289,11 @@ Deck.slide({
   <p class="time">3 min</p>
   <p class="say">Planned mistake number one. I feed the coordinates straight from the file into the network. They are in tenths of feet: x goes from −250 to 248 and y up to 791. The network was built expecting numbers around −2 to 2.</p>
   <p class="ask">A fresh network knows nothing, so it should say about 50/50 for every shot. What loss should the very first step print? And what do you think it prints with these raw numbers?</p>
-  <p class="ans">It should print about 0.69 (the loss of a coin flip, ln 2; with Kobe's 45% it is 0.687). With raw inputs it prints about 2.3 (2.36 in our run with seed 0; other seeds gave 2.1 and 3.8). The very first sanity check fails.</p>
-  <p class="do">In the notebook, run the first training step on raw inputs and read the loss aloud. Then press → to show the fix (step 2): subtract the mean, divide by the standard deviation. Run again: 0.69 (step 3).</p>
+  <p class="ans">It should print about 0.69 (the loss of a coin flip, ln 2; with Kobe's 45% it is 0.687). With raw inputs the notebook prints 2.323 (seed 0; other seeds give anything from 2.1 to 3.8). The very first sanity check fails.</p>
+  <p class="do">Take the vote, then run notebook Part 4 (first code cell) and read the loss aloud: 2.323. Press → (step 1) to put it on the line. It also prints the logits range, −37.8 to −0.1: the fresh network is already sure that every shot misses. Press → for the fix (step 2): subtract the training mean, divide by the training standard deviation (next notebook cell). Run the last cell of Part 4: 0.691. Press → (step 3).</p>
   <p class="say">Why it goes wrong: each first-layer neuron multiplies x by a weight of size about 0.5. With x around 100, the neuron's value is around 50 instead of around 0.5, so the network starts out extremely confident, and confident-and-wrong is expensive.</p>
   <p><b>Common mistake:</b> computing the mean and std on the validation (or test) data, or on everything. Always use the training statistics and apply the same numbers to validation, test and the grader's data.</p>
-  <p>Story (30 s): this advice is in LeCun, Bottou, Orr and Müller's "Efficient BackProp" from 1998: "Convergence is usually faster if the average of each input variable over the training set is close to zero." 28 years later it is still bug number one. Our numbers (task file, 80/20 split): mean (6.5, 91.7), std (110, 88).</p>`,
+  <p>Story (30 s): this advice is in LeCun, Bottou, Orr and Müller's "Efficient BackProp" from 1998: "Convergence is usually faster if the average of each input variable over the training set is close to zero." 28 years later it is still bug number one. The notebook's numbers (task file, 80/20 split): mean (7.6, 91.3), std (110, 88).</p>`,
 });
 
 /* ---------- 4. live demo: SGD needs scaled inputs ---------- */
@@ -291,7 +302,7 @@ Deck.slide({
   title: 'Live demo: scale your inputs',
   html: `
   <div class="row"><span class="tag tag-try">try it live</span></div>
-  <h2>Plain SGD learns nothing from raw inputs</h2>
+  <h2>Does plain SGD care about raw inputs?</h2>
   <div class="lp-court grow"></div>`,
   init(el, api) {
     Widgets.courtNet(api, el.querySelector('.lp-court'), {
@@ -303,10 +314,10 @@ Deck.slide({
   <p class="time">2.5 min</p>
   <p class="say">This is the same 2-8-8-1 network training live in the browser on 3,000 of Kobe's real shots. The colour on the court is the predicted chance of a make: orange means "likely in", blue means "likely miss". The optimizer is plain SGD with learning rate 0.1, and the inputs are raw coordinates.</p>
   <p class="ask">Predict: after 100 epochs, will it beat "always miss" (54.6% on these shots)?</p>
-  <p class="do">1) Press Train with "raw inputs" and "SGD" selected (the default). Watch for about 6 seconds: the accuracy sits at 54.6%, exactly "always miss", and the court goes uniformly blue. It predicts "miss" everywhere.</p>
+  <p class="do">1) Press Train with "raw inputs" and "SGD" selected (the default). Watch for about 6 seconds: the accuracy sits at 54.6%, exactly "always miss", and the court stays one pale colour (about 45% everywhere): it predicts "miss" for every shot. It stops by itself at epoch 120 (about 10 s).</p>
   <p class="do">2) Click "scaled inputs" (this resets the net), press Train: within a few seconds the accuracy climbs to about 60% and an orange spot appears around the rim, which is exactly where Kobe made more than half his shots.</p>
-  <p class="do">3) Click "Adam", then try both raw and scaled: both reach about 60%. Adam hides the problem.</p>
-  <p class="ans">With raw inputs and SGD the huge numbers make the first steps enormous, the ReLU neurons die (output 0 for every shot) and the network collapses to a constant: always miss. Scaled, the same optimizer works. Adam rescales every step by itself, so it survives raw inputs here, but scaling is free and makes every default (learning rate, initialisation) behave as designed.</p>
+  <p class="do">3) Click "Adam", then try raw and scaled: both reach about 60% (raw is jumpier, it can dip back to 55% for a while). Adam hides the problem.</p>
+  <p class="ans">No for the first question: with raw inputs and SGD the huge numbers make the first steps enormous, the network is knocked into a state where every shot gets the same answer, and it never recovers: always miss. Scaled, the same optimizer works. Adam rescales every step by itself, so it survives raw inputs here, but scaling is free and makes every default (learning rate, initialisation) behave as designed.</p>
   <p>Note: the loss readout at epoch 0 shows about 14.5 for raw inputs (this browser network starts with larger weights than PyTorch's default, which gives 2.3); either way it is far above 0.69. If a run looks stuck, press Reset and Train again. In our PyTorch runs the same thing happens: SGD + momentum lr 0.1 on raw inputs collapsed to "always miss" on all 3 seeds; scaled reached 60.3%.</p>`,
 });
 
@@ -333,7 +344,7 @@ Deck.slide({
     <div class="stack lp-eff">
       <div data-only="0 1"><div class="lbl">shapes</div><div class="lp-num">X (25000, 2)</div><div class="lp-num">y (25000, 1)</div></div>
       <div data-only="2"><div class="lbl">split</div><div class="lp-num">20,000 <small>train</small></div><div class="lp-num">5,000 <small>validation</small></div></div>
-      <div data-only="3"><div class="lbl">train mean / std</div><div class="lp-num">x 6.5 / 110</div><div class="lp-num">y 91.7 / 88</div></div>
+      <div data-only="3"><div class="lbl">train mean / std</div><div class="lp-num">x 7.6 / 110</div><div class="lp-num">y 91.3 / 88</div></div>
       <div data-only="4"><div class="lbl">model from part 2</div>${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 520, h: 420, r: 18 })}<div class="lp-num">105 <small>weights</small></div></div>
       <div data-only="5"><div class="lbl">loss takes logits</div><div class="lp-num">no sigmoid</div><div class="lbl" style="margin-top:24px">optimizer</div><div class="lp-num">Adam, lr 0.001</div></div>
     </div>
@@ -341,7 +352,7 @@ Deck.slide({
   notes: `
   <p class="time">1.5 min (then type it in the notebook)</p>
   <p class="say">This is everything that happens before the loop: turn the table into tensors, split 80/20, scale with the training statistics, build the model, choose the loss and the optimizer. Twelve lines.</p>
-  <p class="do">Press → five times; each press highlights a group of lines and the right side shows the result: the shapes, the split sizes, the mean and std, the 105-weight model, the loss and optimizer. Then type the same cells in the notebook.</p>
+  <p class="do">Press → five times; each press highlights a group of lines and the right side shows the result: the shapes, the split sizes, the mean and std, the 105-weight model, the loss and optimizer. The notebook (Parts 3 to 5) does the same with two small differences: it splits with sklearn's train_test_split(..., random_state=0) and writes .view(-1, 1) instead of .unsqueeze(1). Same result.</p>
   <ul>
     <li><b>unsqueeze(1)</b> turns y from shape (25000,) into (25000, 1), the same shape as the model's output. We will break this on purpose later.</li>
     <li>MLP is the class from the "From one neuron to an MLP" part: fc1 = Linear(2, 8), fc2 = Linear(8, 8), fc3 = Linear(8, 1), ReLU in between, and <b>no sigmoid at the end</b>. In the notebook it is cell 3.</li>
@@ -379,7 +390,7 @@ Deck.slide({
   notes: `
   <p class="time">3 min (including typing it in the notebook)</p>
   <p class="say">Two loops. The outer loop runs over epochs: one epoch means the network has seen every training shot once. The inner loop cuts the shuffled shots into batches of 64; every batch gets the five beats we just saw.</p>
-  <p class="do">Press → four times: the outer loop; the shuffle and the batches; the five beats; the print. Then type it in the notebook, saying the five beats aloud again, and run it (about 10 seconds on a laptop).</p>
+  <p class="do">Press → four times: the outer loop; the shuffle and the batches; the five beats; the print. Then go to notebook Part 5: the same loop sits inside a function train(model, opt), and the shuffle-and-cut is written in one line, torch.randperm(len(X_train_s)).split(64). Point at the five numbered comments, say the beats aloud again, and run the next cell (about 10 seconds on a laptop). The notebook prints the train and validation loss after epochs 1, 5, 10, 20, 30: they fall from 0.674 to 0.664.</p>
   <ul>
     <li>20,000 / 64 = 312.5, so 313 batches per epoch; the last one has only 32 shots. 30 epochs × 313 = 9,390 updates. (The optimizer section used the Kaggle file with 20,558 training shots, which gives 322 steps per epoch; same idea.)</li>
     <li>randperm reshuffles every epoch so the batches are different each time.</li>
@@ -403,7 +414,7 @@ Deck.slide({
     title: 'Kobe results: baselines vs MLP',
     html: `
     <div class="row"><span class="tag tag-predict">predict</span></div>
-    <h2>Will 105 weights beat 0.687?</h2>
+    <h2>Will 105 weights beat “always miss”?</h2>
     <div class="lp-bars">
       <div class="lp-bar-head"><span>model</span><span>val loss</span><span class="lp-scale"><span>accuracy 50%</span><span>65%</span></span></div>
       ${row('always “miss”', '0.687', 55, 1, 'base')}
@@ -417,7 +428,7 @@ Deck.slide({
     <p class="do">Press → three times to reveal the three rows from top to bottom, then once more for the takeaway.</p>
     <p class="ans">Yes, but by a little: 0.662 against 0.687, and 61% accuracy against 55%. Logistic regression sits in between (0.675, 58%) because it can only draw a straight boundary, and Kobe's good zone is a small disc around the rim.</p>
     <p class="say">Is 61% bad? No. Even at the rim Kobe only scored about 63% of the time, so no model that sees only the position can be right much more than 61% of the time. The labels are coin flips with a probability that depends on position. In the task you are fighting for about 5 points between 55% and 61%.</p>
-    <p>Numbers: mean of 3 seeds on the Kaggle labelled shots, 80/20 split, Adam lr 0.001, batch 64, 30 epochs. Our check of the slide code on the task file (seed 0): constant 0.686, logistic 0.673 (58.6%), MLP 0.6625 (60.6%). Your live numbers will differ in the third digit; the order will not.</p>`,
+    <p>Numbers: mean of 3 seeds on the Kaggle labelled shots, 80/20 split, Adam lr 0.001, batch 64, 30 epochs. Our check of the slide code on the task file (seed 0): constant 0.686, logistic 0.673 (58.6%), MLP 0.6625 (60.6%). The notebook (Part 5, seed 0) prints constant 0.6876 (55.2%), logistic regression 0.6781 (57.3%), MLP 0.6641 (60.8%): the third digit differs from the slide, the order and the gaps do not.</p>`,
   });
 }
 
@@ -446,19 +457,19 @@ Deck.slide({
     </div>
     <div data-step="3" class="col">
       <div class="lbl kicker">Kobe, validation accuracy</div>
-      <div class="lp-verdict"><span class="big-n bad">53%</span><span>✗ without zero_grad</span></div>
+      <div class="lp-verdict"><span class="big-n bad">45%</span><span>✗ without zero_grad <span class="muted">(“made” for every shot)</span></span></div>
       <div class="lp-verdict"><span class="big-n muted">55%</span><span>always “miss”</span></div>
     </div>
   </div>`,
   notes: `
   <p class="time">2 min</p>
   <p class="ask">I delete the line opt.zero_grad() and train again. Vote with fingers: 1 it crashes, 2 nothing changes, 3 it trains, but worse.</p>
-  <p class="do">Count the votes, then press → to reveal answer 3. In the notebook: comment out opt.zero_grad(), run, read the result.</p>
+  <p class="do">Count the votes, then press → to reveal answer 3. Then run notebook Part 6: the line is already commented out, point at it before you run (about 10 s).</p>
   <p class="ans">3. No error at all. PyTorch adds every new gradient to the one already stored in .grad. Without clearing, each step uses the sum of all gradients since the start, a stale and ever-growing direction.</p>
   <p class="do">Press → for the tiny demo: w is a single number, the gradient of 2w is 2, but calling backward() three times stores 2, then 4, then 6. Press → again for the Kobe result.</p>
-  <p class="say">On Kobe, the network without zero_grad reaches only 53% accuracy (log loss 0.686): worse than always saying "miss". No error message, just a silently bad model.</p>
+  <p class="say">On Kobe, the network without zero_grad reaches 45% accuracy (log loss 0.70): it says "made" for every single shot, worse than always saying "miss". No error message, just a silently bad model.</p>
   <p>Why PyTorch adds up gradients on purpose: sometimes you want the gradient of a big batch that does not fit in memory, so you call backward() on several small batches and step once. The cost is that you must clear by hand.</p>
-  <p>Numbers: mean of 3 seeds (Adam, Kaggle data). Our run of the slide code on the task file with seed 0 was even worse: 44% accuracy, it predicted "made" for every shot. Adam limits the damage because it rescales steps; with plain SGD the summed gradient keeps growing. This is Karpathy's famous mistake #3: "you forgot to .zero_grad() (in pytorch) before .backward()".</p>`,
+  <p>Numbers: the notebook prints val log loss 0.7015, accuracy 44.8%, "made" for 100% of shots (seed 0). With other seeds and splits we got 53% (log loss 0.686, the number in the bug-hunt notes later); any result below 55% makes the point. Adam limits the damage because it rescales steps; with plain SGD the summed gradient keeps growing. This is Karpathy's famous mistake #3: "you forgot to .zero_grad() (in pytorch) before .backward()".</p>`,
 });
 
 /* ---------- 9. the cliffhanger reveal: sigmoid + BCEWithLogitsLoss ---------- */

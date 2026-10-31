@@ -81,10 +81,11 @@ Deck.css(`
         <rect class="box act" x="665" y="272" width="140" height="116"/>
         <path id="n1-glyph" d="" fill="none" style="stroke:var(--ink);stroke-width:6;stroke-linecap:round;stroke-linejoin:round"/>
         <text class="lbl-s" id="n1-act" x="735" y="420">ReLU</text>
-        <line class="flow" x1="810" y1="330" x2="868" y2="330"/>
-        <text class="lbl-b" id="n1-o" x="935" y="330" style="font-size:56px">0</text>
+        <line class="flow" x1="810" y1="330" x2="856" y2="330"/>
+        <text class="lbl-b" id="n1-o" x="874" y="330" style="font-size:56px;text-anchor:start">0</text>
       </svg>
       <div class="neu-side">
+        <p class="n1-cap" style="font-size:34px;font-weight:600;margin:0"></p>
         <div class="n1-plot"></div>
         <div class="neu-ctl"></div>
       </div>
@@ -93,7 +94,7 @@ Deck.css(`
       const S = { w: [0.5, 1], b: -1, act: 'relu' };
       const x = [1, 2];
       const plotHost = el.querySelector('.n1-plot');
-      const cv = Plot.canvas(plotHost, 680, 420);
+      const cv = Plot.canvas(plotHost, 680, 380);
       const ctl = el.querySelector('.neu-ctl');
       const $ = s => el.querySelector(s);
       function draw() {
@@ -118,16 +119,16 @@ Deck.css(`
         const C = Plot.colors(), ctx = cv.ctx;
         cv.clear();
         const sx = Plot.scale(-4, 4, 70, 660);
-        const sy = S.act === 'relu' ? Plot.scale(-1, 4, 370, 40) : Plot.scale(-0.25, 1.25, 370, 40);
+        const sy = S.act === 'relu' ? Plot.scale(-1, 4, 330, 40) : Plot.scale(-0.25, 1.25, 330, 40);
         Plot.axes(ctx, sx, sy, { font: 28, xt: [-4, -2, 0, 2, 4], yt: S.act === 'relu' ? [0, 1, 2, 3, 4] : [0, 0.5, 1], fmt: v => fnum(v, 1) });
         Plot.fn(ctx, sx, sy, f, { color: C.ink, width: 5 });
         const zc = clamp(z, -4, 4);
         ctx.save(); ctx.setLineDash([8, 8]); ctx.strokeStyle = C.muted; ctx.lineWidth = 3;
         ctx.beginPath(); ctx.moveTo(sx(zc), sy(0)); ctx.lineTo(sx(zc), sy(f(zc))); ctx.lineTo(sx(-4), sy(f(zc))); ctx.stroke(); ctx.restore();
         Plot.dot(ctx, sx(zc), sy(f(zc)), 12, C.ink, C.paper);
-        Plot.text(ctx, 'output', 80, 30, { size: 28, color: C.ink, base: 'top' });
+        Plot.text(ctx, 'output', sx(0) + 14, 30, { size: 28, color: C.ink, base: 'top' });
         Plot.text(ctx, 'sum', 660, sy(0) - 12, { size: 28, color: C.ink, align: 'right' });
-        Plot.text(ctx, S.act === 'relu' ? 'ReLU: negative → 0' : 'sigmoid = logistic regression', 90, 84, { size: 30, weight: 700, color: C.ink });
+        $('.n1-cap').textContent = S.act === 'relu' ? 'ReLU: a negative sum becomes 0' : 'sigmoid: this neuron is logistic regression';
       }
       const sl = [
         UI.slider(ctl, { label: 'weight 1', min: -2, max: 2, step: 0.1, value: S.w[0], fmt: v => fnum(v, 1), oninput: v => { S.w[0] = v; draw(); } }),
@@ -160,7 +161,7 @@ Deck.css(`
     <h2>One neuron cuts the court with a straight line</h2>
     <div class="neu-demo">
       <div class="n2-court"></div>
-      <div class="neu-side">
+      <div class="neu-side" style="align-self:stretch">
         <div class="neu-readouts"></div>
         <p class="neu-cap" style="margin-top:8px">Arrow: the orange side, where this neuron says "made".</p>
         <div class="neu-ctl" style="margin-top:auto"></div>
@@ -190,9 +191,9 @@ Deck.css(`
         cv.clear(C.paper);
         if (S.act === 'sigmoid') Plot.heat(ctx, (x, y) => sig(zf(x, y)), fr, { res: 64, strength: 0.6 });
         else Plot.heat(ctx, (x, y) => 0.5 + 0.5 * Math.min(1, relu(zf(x, y)) / 3), fr, { res: 64, strength: 0.65, gamma: 1 });
-        ctx.save(); ctx.lineWidth = 1.5; ctx.strokeStyle = C.paper;
+        ctx.save(); ctx.lineWidth = 2; ctx.strokeStyle = C.paper;
         for (let i = 0; i < show; i++) {
-          ctx.beginPath(); ctx.arc(fr.sx(D.X[i][0]), fr.sy(D.X[i][1]), 5, 0, 2 * Math.PI);
+          ctx.beginPath(); ctx.arc(fr.sx(D.X[i][0]), fr.sy(D.X[i][1]), 6, 0, 2 * Math.PI);
           ctx.fillStyle = D.Y[i] ? C.c1 : C.c0; ctx.fill(); ctx.stroke();
         }
         ctx.restore();
@@ -217,19 +218,20 @@ Deck.css(`
       const ctl = el.querySelector('.neu-ctl');
       const sl = [
         UI.slider(ctl, { label: 'turn', min: -180, max: 180, step: 5, value: S.th, fmt: v => Math.round(v) + '°', oninput: v => { S.th = v; draw(); } }),
-        UI.slider(ctl, { label: 'shift', min: -3, max: 4, step: 0.1, value: S.d, fmt: v => fnum(v * 10, 0) + ' ft', oninput: v => { S.d = v; draw(); } }),
+        // shown as the line's distance from the rim (positive: the rim is on the orange side)
+        UI.slider(ctl, { label: 'shift', min: -4, max: 3, step: 0.1, value: -S.d, fmt: v => fnum(v * 10, 0) + ' ft', oninput: v => { S.d = -v; draw(); } }),
         UI.slider(ctl, { label: 'steepness', min: 0.3, max: 8, step: 0.1, value: S.s, fmt: v => v.toFixed(1), oninput: v => { S.s = v; draw(); } }),
       ];
       const row = UI.row(ctl);
       UI.choice(row, [{ value: 'sigmoid', label: 'sigmoid' }, { value: 'relu', label: 'ReLU' }], S.act, v => { S.act = v; draw(); });
-      UI.button(row, 'Reset', () => { S.th = -90; S.d = -1; S.s = 2; sl[0].set(-90); sl[1].set(-1); sl[2].set(2); draw(); });
+      UI.button(row, 'Reset', () => { S.th = -90; S.d = -1; S.s = 2; sl[0].set(-90); sl[1].set(1); sl[2].set(2); draw(); });
       draw();
       api.onTheme(draw);
     },
     notes: `
     <p class="time">2 min</p>
     <p class="say">Now feed the neuron every position on Kobe's court. The colour shows the neuron's answer: orange where it says "made", blue where it says "missed". Whatever weights you choose, the border between the two colours is always a straight line. The arrow shows which side is orange. One neuron can only ever cut the court in two with one straight cut.</p>
-    <p class="do">"turn" rotates the arrow (this changes the two weights), "shift" slides the line (this changes the bias), "steepness" makes the colour change sharp or soft (all weights bigger or smaller). Start: the line is 10 ft out and the neuron says "made" for everything closer. Read the accuracy aloud: 54.5%, worse than "always miss" (55.4%)! Then let a student direct you: "turn it, shift it, beat 55%". The best they can find is about 59%: a line hugging the rim (shift about −1 ft), i.e. "made only if almost under the basket". Switch to ReLU once: the far side becomes plain paper, the neuron is simply off there.</p>
+    <p class="do">"turn" rotates the arrow (this changes the two weights), "shift" sets how far the line is from the rim (this changes the bias; a negative shift puts the rim on the blue side), "steepness" makes the colour change sharp or soft (all weights bigger or smaller). Start: the line is 10 ft out and the neuron says "made" for everything closer. Read the accuracy aloud: 54.5%, worse than "always miss" (55.4%)! Then let a student direct you: "turn it, shift it, beat 55%". The best they can find is about 59%: turn about −90°, shift about 1 ft, a line hugging the rim, i.e. "made only if almost under the basket" (about 4,200 of the 25,000 labelled shots are at the rim itself and Kobe made 62% of them). Switch to ReLU once: the far side becomes plain paper, the neuron is simply off there.</p>
     <p class="ask">Kobe scores near the rim and misses far away, in all directions. Can one straight line separate "near" from "far"?</p>
     <p class="ans">No. "Near the rim" is a half-disc, and its border is curved. The best single line gets about 59% on these shots, only a little above "always miss" (55%). The 2-8-8-1 network we build later gets about 61%. We need several lines combined: a hidden layer.</p>
     <p>Background: the line is where the sum is exactly 0 (w₁x + w₂y + b = 0). The arrow is the weight vector (w₁, w₂); it is always perpendicular to the line. The bias moves the line without turning it. Bigger weights do not move the line, they only make the transition sharper. Inputs here are court positions in units of 10 ft, the accuracy is measured on the 6,000 Kobe shots stored in the deck (500 are drawn).</p>`,
@@ -290,7 +292,7 @@ Deck.css(`
       <li>Step 2, ReLU: −1 becomes <b>0</b> (the top neuron is off, its arrow turns dotted), 1.5 stays <b>1.5</b>.</li>
       <li>Step 3, output sum: 2·0 + (−1)·1.5 + 0.5 = <b>−1</b>.</li>
       <li>Step 4, sigmoid: σ(−1) = 1/(1 + e¹) = <b>0.269</b>, "27% chance it goes in".</li>
-      <li>Step 5, the shot was made (y = 1): loss = −ln(0.269) = <b>1.313</b>. A confident wrong-ish answer costs a lot; the loss section explains this.</li>
+      <li>Step 5, the shot was made (y = 1): loss = −ln(0.269) = <b>1.313</b>. The network gave a made shot only a 27% chance, so the loss is high (a perfect 100% would give loss 0); the loss section explains this.</li>
     </ul>
     <p class="ask">The top hidden neuron output 0. How much does its outgoing weight (2) matter for this shot?</p>
     <p class="ans">Not at all: 2 × 0 = 0. And during training it will also get zero gradient for this shot. If a ReLU neuron is off for every shot, it never learns again: a "dead ReLU" (next section).</p>
@@ -328,7 +330,7 @@ Deck.css(`
     id: 'neu-xor',
     title: 'Invent first: XOR with two ReLUs',
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-pair">pairs · 3 min</span><h2>Find weights that compute XOR</h2></div>
+    <div class="row" style="gap:32px"><span class="tag tag-pair">pairs · 2 min</span><h2>Find weights that compute XOR</h2></div>
     <div class="neu-row" style="gap:56px">
       <div class="col" style="gap:28px">${XOR}
         <p class="lead" data-step="3">Two hidden neurons solve what froze the field.</p></div>
@@ -345,7 +347,7 @@ Deck.css(`
       </div>
     </div>`,
     init(el, api) {
-      Widgets.timer(api, el.querySelector('.xor-timer'), 3);
+      Widgets.timer(api, el.querySelector('.xor-timer'), 2);
       const S = 420;
       const cv = Plot.canvas(el.querySelector('.xor-map'), S, S);
       const fr = Plot.frame(30, 10, S - 40, [-0.5, 1.5]);
@@ -357,8 +359,8 @@ Deck.css(`
         Plot.contour(ctx, (a, b) => out(a, b), fr, { res: 80, level: 0.5, color: C.ink, width: 4 });
         ctx.save(); ctx.strokeStyle = C.rule; ctx.lineWidth = 2; ctx.strokeRect(fr.x0, fr.y0, fr.x1 - fr.x0, fr.y1 - fr.y0); ctx.restore();
         [[0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]].forEach(([a, b, y]) => Plot.dot(ctx, fr.sx(a), fr.sy(b), 18, y ? C.c1 : C.c0, C.paper));
-        Plot.text(ctx, '(0,0)', fr.sx(0) + 26, fr.sy(0) + 10, { size: 28, color: C.ink });
-        Plot.text(ctx, '(1,1)', fr.sx(1) - 26, fr.sy(1) - 4, { size: 28, color: C.ink, align: 'right', base: 'bottom' });
+        Plot.text(ctx, '(0,0)', fr.sx(0), fr.sy(0) + 26, { size: 28, color: C.ink, align: 'center', base: 'top' });
+        Plot.text(ctx, '(1,1)', fr.sx(1), fr.sy(1) - 26, { size: 28, color: C.ink, align: 'center', base: 'bottom' });
       }
       draw();
       api.onTheme(draw);
@@ -366,7 +368,7 @@ Deck.css(`
     notes: `
     <p class="time">3 min (2 min pair work, 1 min reveal)</p>
     <p class="say">XOR is "one or the other, but not both". It is the function a single neuron cannot learn, the one that stalled the field in 1969. Your turn to be the training algorithm: in pairs, find weights and biases for this network of two hidden ReLU neurons so that the output matches the "want" column for all four inputs. The output neuron just adds, no bend.</p>
-    <p class="do">Press Start on the timer (3 min). Walk around. If a pair is stuck after a minute, give the hint: "let h₁ count how many inputs are on, and let h₂ fire only when both are on." Then press → to reveal the weights, → again for the table, → for the picture.</p>
+    <p class="do">Press Start on the timer (2 min). Walk around. If a pair is stuck after a minute, give the hint: "let h₁ count how many inputs are on, and let h₂ fire only when both are on." Then press → to reveal the weights, → again for the table, → for the picture.</p>
     <ul>
       <li>Step 1: h₁ = ReLU(x₁ + x₂), h₂ = ReLU(x₁ + x₂ − 1), out = h₁ − 2·h₂.</li>
       <li>Step 2 (table): (0,0) → 0 − 0 = 0; (0,1) and (1,0) → 1 − 0 = 1; (1,1) → 2 − 2·1 = 0. Exactly XOR.</li>
@@ -458,7 +460,7 @@ Deck.css(`
     id: 'neu-count',
     title: 'Count the parameters',
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-pair">pairs</span><h2>The Kobe network has 105 numbers to learn</h2></div>
+    <div class="row" style="gap:32px"><span class="tag tag-pair">pairs</span><h2>How many numbers does the Kobe net learn?</h2></div>
     <div class="neu-row" style="gap:64px">
       <svg class="dg" viewBox="0 0 1100 700" width="1100" height="700" role="img" aria-label="2-8-8-1 network with parameter counts per layer">
         ${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 1100, h: 520, r: 22 })}
@@ -555,8 +557,9 @@ Deck.css(`
         });
         [0, 1, 2, 3].forEach(l => vals(l).forEach((v, i) => {
           const k = l + '-' + i;
-          texts[k].textContent = l === 0 || l === 3 ? fmt(v, 1) : (v === 0 ? '0' : Math.abs(v) >= 10 ? Math.round(v) : fmt(v, 1));
-          texts[k].style.fill = l > 0 && l < 3 && v === 0 ? 'var(--muted)' : '';
+          const off = l > 0 && l < 3 && v < 0.05;   // tiny activations read as 0, never "0.0"
+          texts[k].textContent = l === 0 || l === 3 ? fmt(v, 1) : (off ? '0' : Math.abs(v) >= 10 ? Math.round(v) : fmt(v, 1));
+          texts[k].style.fill = off ? 'var(--muted)' : '';
           fills[k].style.opacity = l === 0 || l === 3 ? 0 : Math.min(1, v / 1.5).toFixed(2);
         }));
         pEl.textContent = Math.round(100 * S.res.p) + '%';
@@ -622,10 +625,10 @@ Deck.css(`
     notes: `
     <p class="time">2 min</p>
     <p class="say">This is a real 2-8-8-1 network, the largest the Kobe task allows, already trained on 20,000 of Kobe's shots. The court colour is its answer everywhere: orange where it thinks he scores more often, blue where he misses more. Click a spot and watch the forward pass: the position goes in on the left, each layer does weigh-add-bend, and a chance comes out on the right.</p>
-    <p class="do">It starts on a mid-range shot from the left elbow (about 41%). Click "Rim": about 60% (the inputs are 0 there, so the first arrows carry nothing and only the biases matter). Click "Corner 3": about 35%. Click "Half court": about 4%. Then click anywhere on the court. Point out: thick orange arrows push the next neuron up, thick blue ones push it down, dotted ones carry nothing because the neuron before them is off (0). Yellow fill = how strongly a neuron fires. The number in the output circle is the raw score (logit); the sigmoid turns it into the percentage. "Real shot" picks one of Kobe's real shots and shows what really happened. Optional: "lines on" draws each first-layer neuron's straight cut on the court; the curved orange zone near the rim is built from these straight cuts.</p>
+    <p class="do">It starts on a mid-range shot from the left elbow (about 41%). Click "Rim": about 60% (the inputs are 0 there, so the first arrows carry nothing and only the biases matter). Click "Corner 3": about 35%. Click "Half court": about 5%. Then click anywhere on the court. Point out: thick orange arrows push the next neuron up, thick blue ones push it down, dotted ones carry nothing because the neuron before them is off (0). Yellow fill = how strongly a neuron fires. The number in the output circle is the raw score (logit); the sigmoid turns it into the percentage. "Real shot" picks one of Kobe's real shots and shows what really happened. Optional: "lines on" draws each first-layer neuron's straight cut on the court; the curved orange zone near the rim is built from these straight cuts.</p>
     <p class="ask">Even at the rim the network only says about 60%. Is the network bad?</p>
-    <p class="ans">No, basketball is noisy. Kobe made only 62.5% of his shots at the rim, so no model can be sure. This network is right 61.8% of the time on shots it never saw, versus 55% for "always miss". That is close to the best anyone gets on this data.</p>
-    <p>Background: inputs are the court position in units of 10 ft (x across, y away from the rim), so the rim is (0, 0) and half court is y ≈ 4.1. Some hidden neurons show 0 for every position you click: they are "dead" ReLUs (one in the first layer, three in the second), which is common and is discussed in the activations section. The weights were trained in PyTorch with Adam (lr 0.01, 25 epochs, batch 64); validation log loss 0.660, accuracy 61.8%.</p>`,
+    <p class="ans">No, basketball is noisy. Kobe made only 62% of his shots at the rim, so no model can be sure. This network is right about 61% of the time, versus 55% for "always miss". That is close to the best anyone gets from position alone (the best real Kobe-task scores were about 62%).</p>
+    <p>Background: inputs are the court position in units of 10 ft (x across, y away from the rim), so the rim is (0, 0) and half court is y ≈ 4.1. (In the Kobe task the grader feeds the raw numbers, in tenths of a foot; the network must cope with that.) Some hidden neurons show 0 for every position you click: they are "dead" ReLUs (one in the first layer, two in the second), which is common and is discussed in the activations section. The weights were trained in PyTorch with Adam (lr 0.01, 25 epochs, batch 64) on 20,000 shots; on all 25,000 labelled shots it scores accuracy 60.9%, log loss 0.664 (validation about 61–62%, log loss 0.66).</p>`,
   });
 
   /* =====================================================================
@@ -637,7 +640,7 @@ Deck.css(`
     title: 'An MLP in PyTorch',
     html: `
     <h2>The same network, in PyTorch</h2>
-    <div class="t-code">
+    <div class="t-code" style="grid-template-columns: 960px 1fr; gap: 64px">
       <div class="col" style="gap:36px">
         ${Code.py(`
           class MLP(nn.Module):
@@ -766,6 +769,6 @@ Deck.css(`
     <p class="do">Press → four times: a digit-recognition MLP (101,770), AlexNet from 2012 (60 million, the network that started the deep-learning boom), GPT-3 from 2020 (175 billion). At the GPT-3 zoom, the Kobe network's square is far smaller than one pixel. Last press: the punchline.</p>
     <p class="ask">GPT-3 is a chatbot model, not an MLP. Which of today's parts does it use?</p>
     <p class="ans">All of them. About two thirds of GPT-3's 175 billion parameters sit in MLP blocks just like ours: Linear(12288 → 49152), GELU, Linear(49152 → 12288), repeated in each of its 96 layers. It is trained with backprop and Adam. The recipe is the same; the scale is 1.7 billion times bigger (175,000,000,000 / 105 ≈ 1.67 × 10⁹).</p>
-    <p>Sources: GPT-3 175 billion parameters, 96 layers, width 12288, feed-forward width 4 × 12288 (Brown et al. 2020); AlexNet 60 million (Krizhevsky et al. 2012). Do not quote parameter counts for newer models: they are not officially published. Data per parameter is a nice contrast: Kobe's net sees about 245 labelled shots per parameter, GPT-3 saw about 1.7 words per parameter.</p>`,
+    <p>Sources: GPT-3 175 billion parameters, 96 layers, width 12288, feed-forward width 4 × 12288 (Brown et al. 2020); AlexNet 60 million (Krizhevsky et al. 2012). Do not quote parameter counts for newer models: they are not officially published. Data per parameter is a nice contrast: Kobe's net sees about 190 training shots per parameter (20,000 / 105), GPT-3 saw about 1.7 tokens (word pieces) per parameter (300 billion / 175 billion).</p>`,
   });
 })();

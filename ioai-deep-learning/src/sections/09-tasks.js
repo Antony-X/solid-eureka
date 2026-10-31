@@ -23,6 +23,9 @@ Deck.css(`
 .sec-task .hint { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 64px; }
 .sec-task .hint div { border-left: 6px solid var(--ink); padding: 4px 0 4px 22px; font-size: 32px; line-height: 1.25; }
 .sec-task .hint b { display: block; font-size: 36px; margin-bottom: 4px; }
+.sec-task .traps { flex: 1; align-content: start; gap: 56px 64px; margin-top: 24px; }
+.sec-task .traps div { font-size: 34px; padding: 8px 0 8px 26px; }
+.sec-task .traps b { font-size: 42px; margin-bottom: 10px; }
 .sec-task .eqs { font-family: var(--font-math); font-size: 48px; }
 .sec-task .eqs i { font-style: italic; }
 .sec-task .toys { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; flex: 1; min-height: 0; }
@@ -48,6 +51,9 @@ Deck.css(`
 .sec-task .live-hint b { color: var(--ink); }
 .sec-task .courtnet-side { gap: 30px; }
 .sec-task .courtnet-side .pg-readouts { gap: 20px 36px; }
+.sec-task .rim-cap { font-size: 32px; display: flex; align-items: center; gap: 16px; }
+.sec-task .rim-disc { width: 34px; height: 34px; border-radius: 50%; border: 4px solid var(--ink); background: var(--c1-soft); box-sizing: border-box; }
+.sec-task .rim-dash { width: 48px; border-top: 5px dashed var(--ink); }
 `);
 
 {
@@ -247,10 +253,11 @@ Deck.css(`
         <line x1="${ax(60.75)}" y1="160" x2="${ax(60.75)}" y2="210" style="stroke:var(--ink);stroke-width:4"/>
       </g>
       <g data-step="4">
-        <rect x="${ax(61.5)}" y="292" width="${ax(63.5) - ax(61.5)}" height="16" style="fill:var(--muted);opacity:.5"/>
-        <text class="lbl" x="${ax(62.5) + 30}" y="344" style="font-size:40px">62–62.5%</text>
-        <text class="lbl-s" x="${ax(62.5) + 30}" y="388" style="font-size:30px">best on the leaderboard</text>
-        <text class="lbl-s" x="${ax(62.5) + 30}" y="424" style="font-size:30px">luck: ± 1 point</text>
+        <rect x="${ax(62.1)}" y="214" width="${ax(62.5) - ax(62.1)}" height="44" style="fill:var(--muted)"/>
+        <line x1="${ax(62.3)}" y1="262" x2="${ax(62.3)}" y2="300" style="stroke:var(--muted);stroke-width:4"/>
+        <text class="lbl" x="${ax(62.3) + 40}" y="344" style="font-size:40px;fill:var(--muted)">62–62.5%</text>
+        <text class="lbl-s" x="${ax(62.3) + 40}" y="388" style="font-size:30px">best on the leaderboard</text>
+        <text class="lbl-s" x="${ax(62.3) + 40}" y="424" style="font-size:30px">luck: ± 1 point</text>
       </g>
     </svg>
     <p class="lead" data-step="5">Shots right at the rim go in only <b>62.5%</b> of the time.</p>`,
@@ -282,12 +289,16 @@ Deck.css(`
     <h2>Accuracy only sees the 50% line</h2>
     <div class="row" style="align-items:flex-start; gap:96px">
       <div id="task-rim-bars"></div>
-      <div id="task-rim-court"></div>
+      <div class="col" style="gap:14px">
+        <div id="task-rim-court"></div>
+        <div class="rim-cap" data-step="1"><span class="rim-disc"></span>"made" only within 3 ft → <b>60.7%</b></div>
+        <div class="rim-cap" data-step="2"><span class="rim-dash"></span>best straight cut → <b>58.6%</b></div>
+      </div>
     </div>`,
     init(el, api) {
       const BW = 960, BH = 620;
       const cb = Plot.canvas(el.querySelector('#task-rim-bars'), BW, BH);
-      const CW = 672, fr = Widgets.courtFrame(0, 0, CW);
+      const CW = 620, fr = Widgets.courtFrame(0, 0, CW);
       const cc = Plot.canvas(el.querySelector('#task-rim-court'), CW, Math.ceil(fr.h) + 2);
       const sx = Plot.scale(-0.5, 29.5, 110, BW - 20), sy = Plot.scale(0, 0.8, BH - 70, 50);
       function bars() {
@@ -329,7 +340,6 @@ Deck.css(`
           ctx.fillStyle = Plot.alpha(C.c1, 0.35); ctx.fill();
           ctx.strokeStyle = C.ink; ctx.lineWidth = 4; ctx.stroke();
           ctx.restore();
-          tag(ctx, C, 'disc: "made" only within 3 ft → 60.7%', fr.sy(405), false);
         }
         if (k >= 2) {
           // best straight cut on the task data: 0.208 x + 0.978 y = 18.2, "made" below it
@@ -338,15 +348,7 @@ Deck.css(`
           ctx.strokeStyle = C.ink; ctx.lineWidth = 5; ctx.setLineDash([16, 10]);
           ctx.beginPath(); ctx.moveTo(fr.sx(-250), fr.sy(yAt(-250))); ctx.lineTo(fr.sx(250), fr.sy(yAt(250))); ctx.stroke();
           ctx.restore();
-          tag(ctx, C, 'dashed: best straight cut → 58.6%', fr.sy(405) + 46, true);
         }
-      }
-      function tag(ctx, C, t, y, dash) {
-        ctx.save(); ctx.font = `700 27px ${C.fontBody}`;
-        const w = ctx.measureText(t).width;
-        ctx.fillStyle = C.paper; ctx.fillRect(10, y - 21, w + 20, 42);
-        ctx.fillStyle = C.ink; ctx.textBaseline = 'middle'; ctx.fillText(t, 20, y);
-        ctx.restore();
       }
       const draw = () => { bars(); court(api.step); };
       draw();
@@ -371,8 +373,8 @@ Deck.css(`
     id: 'task-live',
     title: 'Live: the net learns the hot zone',
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-try">try it live</span></div>
-    <h2>SGD on raw numbers learns nothing</h2>
+    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><span class="tag tag-try">try it live</span></div>
+    <h2>What does plain SGD learn from raw numbers?</h2>
     <div class="grow" id="task-live"></div>`,
     init(el, api) {
       const w = Widgets.courtNet(api, el.querySelector('#task-live'), {
@@ -384,13 +386,15 @@ Deck.css(`
       h.className = 'live-hint';
       h.innerHTML = '<b>1</b> SGD + raw inputs &nbsp; <b>2</b> SGD + scaled &nbsp; <b>3</b> Adam + raw';
       side.appendChild(h);
+      // when a run reaches its last epoch, flip the button back to "Train" so the next toggle does not auto-start
+      api.loop(() => { if (w.S.playing && w.S.epoch >= 100) w.pause(); return true; });
       api.onLeave(() => w.pause());
     },
     notes: `
     <p class="time">2 min</p>
     <p class="say">This is a legal 2-8-8-1 ReLU network training live on 3,000 of Kobe's shots. Orange background = the net thinks "made", blue = "missed". It starts with plain SGD, learning rate 0.1, on the raw coordinates, exactly as the grader will hand them over.</p>
     <p class="ask">Predict: with raw numbers in the hundreds, what will plain SGD learn?</p>
-    <p class="do">1) Click <b>Train</b> (100 epochs, about 5 seconds). Watch accuracy: it sits at 54.6%, the "always miss" value for these 3,000 shots, and the court turns blue everywhere. Huge inputs make huge activations; the ReLUs die and the net settles on a constant.</p>
+    <p class="do">1) Click <b>Train</b> (100 epochs, about 8 seconds; the button turns back into Train when the run ends). Watch accuracy: it sits at 54.6%, the "always miss" value for these 3,000 shots, and the court turns blue everywhere. Huge inputs make huge activations; the ReLUs die and the net settles on a constant.</p>
     <p class="do">2) Click <b>scaled inputs</b>, then <b>Train</b>. Same network, same learning rate, inputs divided by their spread: within a second the orange blob appears around the hoop and accuracy climbs to about 60%.</p>
     <p class="do">3) Click <b>Adam</b> and <b>raw inputs</b>, then <b>Train</b>. Adam also gets to about 60% (after a wobbly start). Adam takes steps of about the same size whatever the gradient size, so it hides the scaling problem. Scale anyway: it makes every learning rate and default behave as designed.</p>
     <p class="ans">Plain SGD on raw coordinates collapses to "always miss"; scaling fixes it; Adam hides the problem.</p>
@@ -429,21 +433,40 @@ Deck.css(`
         <div class="lead muted">then shift the bias to match</div>
       </div>
     </div>
-    <div class="hint" data-step="3">
-      <div><b>✗ maths inside forward()</b>distance, angle, buffers: not "linear + activation"</div>
-      <div><b>write submission_model.py first</b>import that class to train</div>
-      <div><b>reload the zip and test it</b>raw inputs in, same accuracy out</div>
-      <div><b>the board wobbles ± 1 point</b>trust your validation split</div>
-    </div>`,
+    <p class="lead" data-step="3">Check it: raw inputs in, the same outputs to 6 decimals.</p>`,
     notes: `
-    <p class="time">1.5 min</p>
+    <p class="time">1 min</p>
     <p class="say">Here is the trap. You will train on scaled inputs, because that is the right thing to do. But the grader feeds raw coordinates into your network. So the scaling must live inside the weights. The good news: the scaling is itself a linear operation, so you can merge it into the first linear layer exactly.</p>
     <p class="do">Top row: while training, x has 7 subtracted and is divided by 110 (y: minus 91, divided by 88; these are the means and spreads of the task data). → 1: what you submit has no separate scaling box: the first layer's weights are changed so it gives exactly the same outputs on raw numbers.</p>
-    <p class="do">→ 2: the recipe in words: divide each weight by the spread of the input it multiplies; then shift the bias by the new weights times the means. Do not give them code; let them derive it on paper (it is one line of algebra) and check it numerically.</p>
+    <p class="do">→ 2: the recipe in words: divide each weight by the spread of the input it multiplies; then shift the bias by the new weights times the means. Do not give them code; let them derive it on paper (it is one line of algebra) and check it numerically. → 3: the check is the proof: feed raw coordinates to the folded model and scaled coordinates to the original one; the outputs must agree.</p>
     <p>The algebra, for the coach: fc1 on scaled input is W·((x − μ)/σ) + b = (W/σ)·x + (b − (W/σ)·μ), where "/σ" divides column j of W by σ_j. In PyTorch, inside torch.no_grad(): weight ← weight / std (broadcast over columns), bias ← bias − new_weight @ mean. We checked it: the outputs match to 5 × 10⁻⁷; the reference pipeline gives the same accuracy on raw inputs after folding.</p>
-    <p class="do">→ 3: four more hints. Computing distance or angle inside forward() breaks the "only linear layers and activations" rule, and it does not help (we measured no gain). Public notebooks lost everything by training one class and submitting another, so write submission_model.py first and import it. Before uploading, load the zip in a fresh notebook and run it on raw inputs. And do not chase the board: it moves by about one point by pure luck.</p>
     <p class="ask">Why is folding the scaling into fc1 exact, and not just an approximation?</p>
     <p class="ans">Subtracting a mean and dividing by a spread is a linear (affine) step, and a linear step followed by a linear layer is still one linear layer. Nothing is lost.</p>`,
+  });
+
+  /* ================================================================
+     7b. Four ways to lose Kobe points
+     ================================================================ */
+  Deck.slide({
+    id: 'task-traps',
+    title: 'Four ways to lose points on Kobe',
+    html: `
+    <span class="tag tag-warn">pitfalls</span>
+    <h2>Four ways to lose points on Kobe</h2>
+    <div class="hint traps">
+      <div data-step="1"><b><span class="xx">✗</span> extra maths in forward()</b>distance, angle, buffers: not "linear + activation"</div>
+      <div data-step="2"><b><span class="xx">✗</span> Sigmoid + BCEWithLogitsLoss</b>train on the score before the Sigmoid</div>
+      <div data-step="3"><b><span class="xx">✗</span> train one class, submit another</b>write submission_model.py first, import it</div>
+      <div data-step="4"><b><span class="xx">✗</span> never reloading the zip</b>load it fresh, feed raw x, y, check the accuracy</div>
+    </div>`,
+    notes: `
+    <p class="time">1 min</p>
+    <p class="say">Four mistakes that cost points on this exact task; three of them are in real public notebooks for it. None of them shows up in your training loss: you only find out when the grader runs your zip.</p>
+    <p class="do">→ 1: computing distance or angle inside forward() breaks the rule "only linear layers and activations", and it does not even help: we measured no gain over plain x, y. Scaling folded into fc1 (previous slide) is fine because it lives in the weights.</p>
+    <p class="ask">→ 2 first ask: your class must end with nn.Sigmoid, because the grader expects a probability. Which loss do you train with?</p>
+    <p class="ans">Either nn.BCELoss on the Sigmoid output, or BCEWithLogitsLoss on the raw score before the Sigmoid (for example a method logits() that stops after fc3, while forward() adds the Sigmoid). Never the Sigmoid output into BCEWithLogitsLoss: that is the cliffhanger bug from before the break. A Sigmoid has no weights, so the saved state_dict is the same either way.</p>
+    <p class="do">→ 3: one public notebook wrote a 2-1-1-1 class into submission_model.py but saved 2-8-4-1 weights, so loading failed. Write submission_model.py first and import that exact class in your training notebook. → 4: before uploading, open a fresh notebook, unzip, load the class and the weights, feed raw coordinates, and check that you get your validation accuracy back.</p>
+    <p>One more, if asked: do not chase the live board. With about 2,500 shots per board it wobbles by about ±1 point by pure luck; trust your own validation split.</p>`,
   });
 
   /* ================================================================

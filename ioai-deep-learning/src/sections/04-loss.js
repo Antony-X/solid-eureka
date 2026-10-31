@@ -2,8 +2,10 @@ Deck.section({ id: 'loss', title: 'Loss: how wrong are we?', minutes: 13 });
 
 Deck.css(`
 .sec-loss .lx-grid { display: grid; grid-template-columns: 960px 1fr; gap: 72px; flex: 1; min-height: 0; align-items: start; }
+.sec-loss .lx-grid.wide { grid-template-columns: 1104px 1fr; }
 .sec-loss .lx-side { display: flex; flex-direction: column; gap: 32px; min-width: 0; height: 100%; }
 .sec-loss .lx-side .ui-row { gap: 20px; }
+.sec-loss .lx-side .ui-readout-label { font-size: 28px; }
 .sec-loss .lx-note { font-size: 34px; color: var(--muted); }
 .sec-loss .lx-ctl { margin-top: auto; display: flex; flex-direction: column; gap: 24px; }
 .sec-loss canvas.lx-drag { cursor: grab; }
@@ -22,9 +24,8 @@ Deck.css(`
 .sec-loss .lx-cards.is-rev .lx-card.is-ans { opacity: 1; border-color: var(--ok); border-width: 6px; padding: 25px 29px 33px; }
 .sec-loss .lx-cards.is-rev .lx-card.is-ans .tick { opacity: 1; }
 .sec-loss .lx-facts { display: grid; grid-template-columns: auto 1fr; gap: 24px 40px; align-items: baseline; font-size: 44px; }
-.sec-loss .lx-facts .k { font-size: 64px !important; }
-.sec-loss .lx-facts .k { font-family: var(--font-mono); font-size: 56px; font-weight: 600; text-align: right; }
-.sec-loss .lx-pick { display: grid; grid-template-columns: 400px 1fr 280px 560px; gap: 0 40px; align-items: center; }
+.sec-loss .lx-facts .k { font-family: var(--font-mono); font-size: 64px; font-weight: 600; text-align: right; }
+.sec-loss .lx-pick { display: grid; grid-template-columns: 400px 1fr 280px 560px; gap: 0 40px; align-items: stretch; }
 .sec-loss .lx-pick .hd { font-family: var(--font-mono); font-size: 28px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 12px; border-bottom: 2px solid var(--rule); align-self: end; }
 .sec-loss .lx-pick .cell { padding: 14px 0; border-bottom: 2px solid var(--rule); min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
 .sec-loss .lx-pick .what { font-family: var(--font-display); font-weight: 750; font-size: 56px; line-height: 1.05; }
@@ -32,7 +33,7 @@ Deck.css(`
 .sec-loss .lx-pick .last { font-size: 44px; }
 .sec-loss .lx-pick .fn { font-family: var(--font-mono); font-size: 40px; font-weight: 600; }
 .sec-loss .lx-pick [data-step] { transition: opacity .35s ease, transform .35s ease; }
-.sec-loss .lx-vote { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; flex: 1; min-height: 0; align-items: start; }
+.sec-loss .lx-vote { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; align-items: start; }
 .sec-loss .lx-opts { display: flex; flex-direction: column; gap: 44px; padding-top: 12px; }
 .sec-loss .lx-opt { display: flex; gap: 28px; align-items: center; font-size: 52px; line-height: 1.1; }
 .sec-loss .lx-opt b { font-family: var(--font-mono); font-size: 40px; font-weight: 600; min-width: 64px; height: 64px; display: grid; place-items: center; border: 3px solid var(--ink); }
@@ -66,6 +67,22 @@ Deck.css(`
     xt.forEach(v => label(ctx, C, fx(v), sx(v), y0 + 14, { size: 28, kind: 'mono', color: C.muted, align: 'center', base: 'top' }));
     yt.forEach(v => label(ctx, C, fy(v), x0 - 14, sy(v), { size: 28, kind: 'mono', color: C.muted, align: 'right' }));
   }
+  function textW(ctx, C, s, size, kind, weight) {
+    ctx.save(); ctx.font = font(C, size, kind, weight); const w = ctx.measureText(s).width; ctx.restore(); return w;
+  }
+  // gradient-style arrow: dashed magenta shaft, open chevron head (DESIGN §2.3 / §4)
+  function gradArrow(ctx, C, x0, y0, x1, y1) {
+    const ang = Math.atan2(y1 - y0, x1 - x0), head = 22;
+    ctx.save(); ctx.strokeStyle = C.grad; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.setLineDash([14, 10]);
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1 - Math.cos(ang) * 6, y1 - Math.sin(ang) * 6); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(x1 - head * Math.cos(ang - 0.5), y1 - head * Math.sin(ang - 0.5));
+    ctx.lineTo(x1, y1);
+    ctx.lineTo(x1 - head * Math.cos(ang + 0.5), y1 - head * Math.sin(ang + 0.5));
+    ctx.stroke(); ctx.restore();
+  }
   const sig = z => 1 / (1 + Math.exp(-z));
   const softplus = z => Math.max(z, 0) + Math.log1p(Math.exp(-Math.abs(z)));
 
@@ -83,7 +100,7 @@ Deck.css(`
     title: 'Squared error: big misses cost the most',
     html: `
     <h2>Squared error: big misses cost the most</h2>
-    <div class="lx-grid">
+    <div class="lx-grid wide">
       <div class="lx-mse-cv"></div>
       <div class="lx-side">
         <div class="lx-mse-ro"></div>
@@ -92,10 +109,11 @@ Deck.css(`
       </div>
     </div>`,
     init(el, api) {
-      const W = 960, H = 720, L = 120, R = 36, T = 64, B = 96;
+      const W = 1104, H = 720, L = 120, R = 36, T = 64, B = 96;
       const cv = Plot.canvas(el.querySelector('.lx-mse-cv'), W, H, 'lx-drag');
-      const Y0 = 25, Y1 = 70;
-      const sx = Plot.scale(-1, 29, L, W - R), sy = Plot.scale(Y0, Y1, H - B, T);
+      const Y0 = 25, Y1 = 70, XM = 31;
+      // wide x axis so a 10-point miss (one square) fits between two neighbouring dots
+      const sx = Plot.scale(-1, XM, L, W - R), sy = Plot.scale(Y0, Y1, H - B, T);
       const XA = 0, XB = 28;                      // where the two handles sit
       const S = { c: YBAR, b: 0, fitting: false }; // line: y = c + b (x - 14)
       const yAt = x => S.c + S.b * (x - 14);
@@ -105,12 +123,16 @@ Deck.css(`
       function draw() {
         const C = Plot.colors(), ctx = cv.ctx;
         cv.clear();
-        axes(ctx, C, sx, sy, [0, 5, 10, 15, 20, 25], [30, 40, 50, 60, 70], v => v, v => v + '%');
+        axes(ctx, C, sx, sy, [0, 5, 10, 15, 20, 25, 30], [30, 40, 50, 60, 70], v => v, v => v + '%');
         label(ctx, C, 'shots made', L + 12, T - 34, { size: 28, color: C.ink });
         label(ctx, C, 'feet from the rim', W - R, H - 22, { size: 28, color: C.ink, align: 'right' });
         ctx.save();
         ctx.beginPath(); ctx.rect(L, T - 8, W - R - L, H - B - T + 8); ctx.clip();
-        // squares: one per bin, side = the miss
+        // squares: one per bin, side = the miss; a number goes inside a square only if it
+        // does not collide with a dot or another number
+        const taken = BX.map((x, i) => [sx(x), sy(BY[i]), 26, 26]);
+        const free = (cx, cy, w, h) => !taken.some(r => Math.abs(r[0] - cx) < (r[2] + w) / 2 && Math.abs(r[1] - cy) < (r[3] + h) / 2);
+        const nums = [];
         BX.forEach((x, i) => {
           const px = sx(x), py = sy(BY[i]), pf = sy(yAt(x));
           const side = Math.abs(pf - py);
@@ -120,11 +142,17 @@ Deck.css(`
           ctx.fillStyle = Plot.alpha(C.grad, 0.16); ctx.fillRect(left, top, side, side);
           ctx.strokeStyle = C.grad; ctx.lineWidth = 3; ctx.strokeRect(left, top, side, side);
           const area = (yAt(x) - BY[i]) ** 2;
-          if (side > 62) label(ctx, C, area.toFixed(0), left + side / 2, top + side / 2, { size: side > 90 ? 34 : 28, kind: 'mono', weight: 600, color: C.grad, align: 'center' });
+          if (side > 62) nums.push([area.toFixed(0), left + side / 2, top + side / 2, side > 90 ? 34 : 28]);
+        });
+        nums.sort((a, b) => b[3] - a[3]).forEach(([txt, cx, cy, size]) => {
+          const w = textW(ctx, C, txt, size, 'mono', 600) + 8, h = size + 6;
+          if (!free(cx, cy, w, h)) return;
+          taken.push([cx, cy, w, h]);
+          label(ctx, C, txt, cx, cy, { size, kind: 'mono', weight: 600, color: C.grad, align: 'center' });
         });
         // the model: a straight line
         ctx.strokeStyle = C.ink; ctx.lineWidth = 5; ctx.lineCap = 'round';
-        ctx.beginPath(); ctx.moveTo(sx(-1), sy(yAt(-1))); ctx.lineTo(sx(29), sy(yAt(29))); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(sx(-1), sy(yAt(-1))); ctx.lineTo(sx(XM), sy(yAt(XM))); ctx.stroke();
         ctx.restore();
         // targets: hollow ink dots
         BX.forEach((x, i) => { ctx.lineWidth = 3.5; Plot.dot(ctx, sx(x), sy(BY[i]), 10, C.paper, C.ink); });
@@ -233,12 +261,19 @@ Deck.css(`
         ctx.restore();
         if (!sand || S.made) {
           FC.forEach((p, i) => {
-            if (api.step < i + 1) return;
             const x = sx(p), y = sy(-Math.log(p));
-            Plot.dot(ctx, x, y, 11, C.c1); ctx.lineWidth = 3; ctx.strokeStyle = C.paper; ctx.stroke();
+            if (api.step < i + 1) {
+              // not revealed yet: a "?" above this forecast on the x axis (predict first)
+              label(ctx, C, '?', Math.max(L + 22, x), sy(0) - 34, { size: 40, kind: 'mono', weight: 700, color: C.muted, align: 'center' });
+              return;
+            }
+            Plot.dot(ctx, x, y, sand ? 8 : 11, C.c1); ctx.lineWidth = 3; ctx.strokeStyle = C.paper; ctx.stroke();
+            if (sand) return;   // in the sandbox the table on the right carries the four numbers
             const txt = (-Math.log(p)).toFixed(2);
-            if (i === 3) label(ctx, C, txt, x + 26, y + 4, { size: 32, kind: 'mono', weight: 600, halo: true });
-            else label(ctx, C, txt, x, y - 32, { size: 32, kind: 'mono', weight: 600, align: 'center', halo: true });
+            const o = { size: 32, kind: 'mono', weight: 600, halo: true };
+            if (i === 3) label(ctx, C, txt, x + 26, y + 4, o);
+            else if (i === 2) label(ctx, C, txt, x + 24, y - 18, o);   // right of the dot, off the steep curve
+            else label(ctx, C, txt, x, y - 32, { ...o, align: 'center' });
           });
         }
         if (sand) {
@@ -313,8 +348,8 @@ Deck.css(`
       const cv = Plot.canvas(el.querySelector('.lx-acc-cv'), W, H, 'lx-drag');
       const sx = Plot.scale(0, 30, L, W - R);
       const strip = { y0: 22, y1: 150 };
-      const syA = Plot.scale(0, 0.6, 400, 205);
-      const syB = Plot.scale(0, 1.5, 650, 465);
+      const syA = Plot.scale(0, 0.6, 390, 205);
+      const syB = Plot.scale(0, 2.1, 662, 452);   // log loss reaches 1.98 at 0 ft
       const S = { t: 6, rolling: false };
       function curve(ctx, f, sy, color) {
         ctx.beginPath();
@@ -356,7 +391,7 @@ Deck.css(`
         panelAxes(ctx, C, syA, [0, 0.2, 0.4, 0.6], v => Math.round(v * 100) + '%');
         curve(ctx, errAt, syA, C.ink);
         if (showB) {
-          panelAxes(ctx, C, syB, [0, 0.5, 1, 1.5], v => v.toFixed(1));
+          panelAxes(ctx, C, syB, [0, 0.5, 1, 1.5, 2], v => v.toFixed(1));
           curve(ctx, llAt, syB, C.ink);
         }
         // x ticks
@@ -380,7 +415,7 @@ Deck.css(`
           if (Math.abs(len) > 22) {
             // arrow along the tangent, pointing downhill (magenta: this is the gradient)
             const dy = (syB(lb + g * (len / (sx(1) - sx(0)))) - yy);
-            Plot.arrow(ctx, x, yy, x + len, yy + dy, { color: C.grad, width: 5, head: 22 });
+            gradArrow(ctx, C, x, yy, x + len, yy + dy);
           }
           label(ctx, C, 'log loss ' + lb.toFixed(2), x + (lr ? 18 : -18), syB.range[1] - 26, { size: 30, kind: 'mono', weight: 600, align: lr ? 'left' : 'right', halo: true });
         }
@@ -468,7 +503,11 @@ Deck.css(`
         Plot.dot(ctx, x, y, 15, C.ink); ctx.lineWidth = 4; ctx.strokeStyle = C.paper; ctx.stroke();
         const p = sig(S.z);
         const right = S.z >= 0;   // the curve is flat on the far side, so the label sits there
-        label(ctx, C, `score ${S.z >= 0 ? '+' : ''}${S.z.toFixed(1)} → ${(100 * p).toFixed(p < 0.01 || p > 0.99 ? 1 : 0)}%`, x + (right ? 30 : -30), y + (right ? 50 : -50), { size: 36, kind: 'mono', weight: 600, align: right ? 'left' : 'right', halo: true });
+        const txt = `score ${S.z >= 0 ? '+' : ''}${S.z.toFixed(1)} → ${(100 * p).toFixed(p < 0.01 || p > 0.99 ? 1 : 0)}%`;
+        const tw = textW(ctx, C, txt, 36, 'mono', 600);
+        // left edge of the label, kept inside the plot
+        const lx = Math.max(L + 16, Math.min(W - R - tw, right ? x + 30 : x - 30 - tw));
+        label(ctx, C, txt, lx, y + (right ? 50 : -50), { size: 36, kind: 'mono', weight: 600, halo: true });
         zt.textContent = (S.z >= 0 ? '+' : '') + S.z.toFixed(1);
         pt.textContent = (100 * p).toFixed(p < 0.01 || p > 0.99 ? 1 : 0) + '%';
         lt.textContent = (-Math.log(p)).toFixed(2);
@@ -488,7 +527,7 @@ Deck.css(`
     <p class="do">Drag along the curve (click anywhere on it): show 0 → 50%, +2 → 88%, −2 → 12%, and that even +6 never quite reaches 100%. Then press → to show the pipeline. The numbers in the pipeline follow the dot: drag again and watch score → % → loss update.</p>
     <p class="say">In PyTorch the model stops at the score. The loss, <code>nn.BCEWithLogitsLoss</code>, applies the sigmoid itself, then the log. "With logits" in the name means: give me the raw scores. When you need the actual percentage, for a submission or to look at, you call <code>torch.sigmoid(score)</code> yourself.</p>
     <p class="ask">Why let the loss do the sigmoid instead of the model?</p>
-    <p class="ans">It is more accurate on a computer. For a very confident wrong score (say −120) the sigmoid rounds to exactly 0 in float32, and log(0) breaks. Done together, the loss computes it exactly (120) and still gives a useful gradient.</p>
+    <p class="ans">It is more accurate on a computer. For a very confident wrong score (say −120 for a shot that went in) the sigmoid rounds to exactly 0 in float32, and log(0) is minus infinity. PyTorch's separate <code>nn.BCELoss</code> then caps the loss at 100 and the gradient becomes 0: the model cannot learn from its worst mistake. Done together, <code>BCEWithLogitsLoss</code> computes the loss exactly (120) with a full-size gradient (−1). (We checked both numbers in PyTorch.)</p>
     <p>Background: logit = log-odds, z = ln(p / (1 − p)); σ(z) = 1/(1 + e^(−z)). The PyTorch docs: BCEWithLogitsLoss "combines a Sigmoid layer and the BCELoss in one single class" and is "more numerically stable". Remember this slide: the last slide of this section asks what happens if you add a sigmoid to the model anyway.</p>`,
   });
 
@@ -530,7 +569,7 @@ Deck.css(`
   const glyphNum = `<svg class="dg" viewBox="0 0 260 120" width="340" height="157" aria-hidden="true">
       <line x1="10" y1="80" x2="250" y2="80" style="stroke:var(--muted);stroke-width:3"/>
       ${[20, 70, 120, 170, 220].map(x => `<line x1="${x}" y1="70" x2="${x}" y2="90" style="stroke:var(--muted);stroke-width:3"/>`).join('')}
-      <path d="M150,30 L150,70" style="stroke:var(--ink);stroke-width:5"/><circle cx="150" cy="80" r="11" class="ink"/>
+      <path d="M150,38 L150,70" style="stroke:var(--ink);stroke-width:5"/><circle cx="150" cy="80" r="11" class="ink"/>
       <text class="lbl" x="150" y="16">3.7</text></svg>`;
   const glyphYes = `<svg class="dg" viewBox="0 0 260 120" width="340" height="157" aria-hidden="true">
       <circle cx="70" cy="60" r="34" class="c1"/><text class="lbl" x="70" y="60" style="fill:var(--paper)">in</text>
@@ -601,7 +640,7 @@ Deck.css(`
         <div class="lx-opt"><b>4</b>the loss becomes NaN</div>
       </div>
     </div>
-    <p class="lead" data-step="2">Talk to your neighbour 1 minute, then vote again. <span class="muted">We run it after the break.</span></p>`,
+    <p class="lead" data-step="2">Talk 1 minute with a neighbour, then vote again.</p>`,
     steps: 2,
     notes: `
     <p class="time">2 min</p>
@@ -610,6 +649,6 @@ Deck.css(`
     <p class="do">→ Discussion: one minute with a neighbour, ideally with someone who voted differently. Then vote again and write the new counts next to the old ones.</p>
     <p class="say">Don't tell them the answer, even if they ask. Say: "We'll run it live after the break and you'll see." Leave the vote counts on the board.</p>
     <p class="do">Hint you may give if the room is stuck: "Remember the logits slide: what does BCEWithLogitsLoss do first with whatever it receives?"</p>
-    <p>For you only (the reveal is in "The training loop, live"): the answer is 3. Nothing crashes and nothing is NaN. The loss applies a second sigmoid, so the chance it sees is σ(σ(z)), always between 50% and 73%. The printed loss looks normal and accuracy stays around 61%, but the real outputs become extreme (76% of them below 1% or above 99%), and the true log loss of what you would submit is 4.69 instead of 0.662. Good discussion arguments to listen for: "it double-squashes" (correct), "it crashes because of shapes" (no, shapes are fine), "NaN because log(0)" (no, the inner sigmoid never reaches exactly 0 here).</p>`,
+    <p>For you only (the reveal is in "The training loop, live"): the answer is 3. Nothing crashes and nothing is NaN. The loss applies a second sigmoid, so the chance it sees is σ(σ(z)), always between 50% and 73%. The printed loss looks normal and accuracy stays around 61%, but the real outputs become extreme (76% of them below 1% or above 99%), and the true log loss of what you would submit is 4.69 instead of 0.662. Good discussion arguments to listen for: "it double-squashes" (correct), "it crashes because of shapes" (no, shapes are fine), "NaN because log(0)" (no: whatever the model outputs, even exactly 0, the loss's own sigmoid turns it into at least 50%, so the log never sees 0).</p>`,
   });
 })();

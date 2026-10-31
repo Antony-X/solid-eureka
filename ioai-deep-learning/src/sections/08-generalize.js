@@ -125,24 +125,28 @@ Deck.css(`
       const sx = Plot.scale(-1.05, 1.05, 24, W - 24), sy = Plot.scale(-2.1, 2.1, H - 24, 70);
       const f = x => Math.sin(3 * x);
       const r = NN.rng(3), n = 12, noise = 0.3;
-      const X = [], Y = [], VX = [], VY = [];
-      for (let i = 0; i < n; i++) { const x = -1 + 2 * (i + 0.5) / n + 0.6 / n * (r() - 0.5); X.push([x]); Y.push(f(x) + noise * r.normal()); }
+      const XA = [], YA = [], VX = [], VY = [];
+      for (let i = 0; i < n; i++) { const x = -1 + 2 * (i + 0.5) / n + 0.6 / n * (r() - 0.5); XA.push([x]); YA.push(f(x) + noise * r.normal()); }
       for (let i = 0; i < 200; i++) { const x = -1 + 2 * r(); VX.push([x]); VY.push(f(x) + noise * r.normal()); }
-      const NETS = { big: { sizes: [1, 32, 32, 1], lr: 0.003 }, small: { sizes: [1, 3, 1], lr: 0.01 } };
-      const S = { kind: 'big', net: null, opt: null, step: 0, hist: [], best: null, playing: false, train: 0, val: 0, restored: false };
+      // 68 more shots of the same curve for the "more data" button (the first 12 stay the same)
+      const r2 = NN.rng(7);
+      for (let i = n; i < 80; i++) { const x = -1 + 2 * r2(); XA.push([x]); YA.push(f(x) + noise * r2.normal()); }
+      let X = XA.slice(0, n), Y = YA.slice(0, n);
+      const S = { n: 12, net: null, opt: null, step: 0, hist: [], best: null, playing: false, train: 0, val: 0, restored: false };
       const valLoss = () => { let v = 0; for (let i = 0; i < VX.length; i++) { const e = S.net.predict(VX[i]) - VY[i]; v += e * e; } return v / VX.length; };
       const snap = () => ({ step: S.step, val: S.val, W: S.net.W.map(a => a.slice()), b: S.net.b.map(a => a.slice()) });
       function make() {
-        const k = NETS[S.kind];
-        S.net = new NN.MLP(k.sizes, { act: 'tanh', seed: 3 });
-        S.opt = NN.optimizer('adam', { lr: k.lr });
+        X = XA.slice(0, S.n); Y = YA.slice(0, S.n);
+        S.net = new NN.MLP([1, 32, 32, 1], { act: 'tanh', seed: 3 });
+        S.opt = NN.optimizer('adam', { lr: 0.003 });
         S.step = 0; S.restored = false;
         S.train = S.net.lossAndGrad(X, Y, 'mse'); S.val = valLoss();
         S.hist = [[S.step, S.train, S.val]];
         S.best = snap();
       }
       function advance(k) {
-        for (let i = 0; i < k && S.step < MAX; i++) {
+        const t0 = performance.now();   // at most ~4 ms of training per frame
+        for (let i = 0; i < k && S.step < MAX && (i < 1 || performance.now() - t0 < 4); i++) {
           S.train = S.net.lossAndGrad(X, Y, 'mse');
           S.opt.step(S.net.params(), S.net.grads());
           S.step++;
@@ -167,7 +171,7 @@ Deck.css(`
         S.train = S.net.lossAndGrad(X, Y, 'mse'); S.val = valLoss(); draw();
       });
       const ctl2 = UI.row(side);
-      UI.choice(ctl2, [{ value: 'big', label: 'big net 1-32-32-1' }, { value: 'small', label: 'small net 1-3-1' }], 'big', v => { S.kind = v; make(); S.playing = false; sync(); draw(); });
+      UI.choice(ctl2, [{ value: 12, label: '12 points' }, { value: 80, label: '80 points' }], 12, v => { S.n = +v; make(); S.playing = false; sync(); draw(); }, { label: 'training data' });
       function sync() { play.textContent = S.playing ? 'Pause' : 'Train'; }
 
       function drawFit() {
@@ -179,10 +183,11 @@ Deck.css(`
         for (let i = 0; i < 70; i++) Plot.dot(ctx, sx(VX[i][0]), sy(VY[i]), 6, C.paper, C.muted);
         Plot.fn(ctx, sx, sy, x => S.net.predict([x]), { color: C.ink, width: 5 });
         ctx.lineWidth = 2.5;
-        X.forEach((x, i) => { ctx.beginPath(); ctx.arc(sx(x[0]), sy(Y[i]), 11, 0, 2 * Math.PI); ctx.fillStyle = C.ink; ctx.fill(); ctx.strokeStyle = C.paper; ctx.stroke(); });
+        const rad = S.n > 12 ? 8 : 11;
+        X.forEach((x, i) => { ctx.beginPath(); ctx.arc(sx(x[0]), sy(Y[i]), rad, 0, 2 * Math.PI); ctx.fillStyle = C.ink; ctx.fill(); ctx.strokeStyle = C.paper; ctx.stroke(); });
         ctx.restore();
         Plot.dot(ctx, 40, 30, 11, C.ink, null);
-        Plot.text(ctx, '12 training points', 62, 40, { size: 28, color: C.ink, weight: 600 });
+        Plot.text(ctx, S.n + ' training points', 62, 40, { size: 28, color: C.ink, weight: 600 });
         Plot.dot(ctx, 360, 30, 7, C.paper, C.muted);
         Plot.text(ctx, 'validation points', 378, 40, { size: 28, color: C.muted });
         Plot.text(ctx, 'model', W - 30, 40, { size: 28, color: C.ink, weight: 700, align: 'right' });
@@ -192,6 +197,7 @@ Deck.css(`
         const C = Plot.colors(), ctx = lc.ctx;
         lc.clear();
         logAxes(ctx, lx, ly, [1, 10, 100, 1000], [0.001, 0.01, 0.1, 1], { ylabel: 'loss (log scale)' });
+        Plot.text(ctx, 'steps →', CW - 8, CH - 6, { size: 26, color: C.muted, align: 'right' });
         const P = (s, v) => [lx(L10(Math.max(1, s))), ly(L10(Math.max(0.0008, Math.min(1.5, v))))];
         if (S.best && S.best.step > 0) {
           const bx = lx(L10(S.best.step));
@@ -221,12 +227,12 @@ Deck.css(`
       api.onTheme(draw);
     },
     notes: `
-    <p class="time">3 min</p>
-    <p class="say">Twelve noisy points from a smooth curve, the dashed line, and a big network with about a thousand weights. The small hollow dots are validation points: the network never trains on them. Watch both loss curves: magenta is the training loss, black is the validation loss.</p>
+    <p class="time">2.5 min</p>
+    <p class="say">Twelve noisy points from a smooth curve, the dashed line, and a big network with about a thousand weights. The small hollow dots are validation points: the network never trains on them. On the right, two loss curves: magenta is the training loss, black is the validation loss.</p>
     <p class="ask">Before I press Train: if we train for a very long time, what happens to the training loss? And to the validation loss?</p>
-    <p class="do">Take a few answers, then press <b>Train</b> (about 10 seconds). Narrate: first the black curve becomes smooth and close to the dashed curve and both losses fall. Then the network starts bending its curve through every single black point: the training loss dives towards 0, while the validation loss turns back up. The dashed vertical line marks the step with the best validation loss so far. Press <b>Restore best</b>: the model jumps back to that smoother curve. Then click <b>small net 1-3-1</b> and Train: it cannot bend enough to memorise, so its two curves stay close.</p>
-    <p class="ans">Training loss keeps falling (to about 0: it memorises all 12 points, noise included). Validation loss falls, reaches its minimum very early (around step 75), then climbs to more than twice that value. Memorising answers is not understanding.</p>
-    <p>Everyday picture: a student who memorises last year's exam answers scores 100% on that paper and badly on a new one. The gap between the two curves is the warning sign, not the training loss alone. The y-axis is logarithmic so that the training loss diving towards 0 stays visible. Loss here is mean squared error, because this is a curve-fitting demo.</p>`,
+    <p class="do">Take a few answers, then press <b>Train</b> (about 10 seconds). Narrate: first the black model curve becomes smooth and close to the dashed curve and both losses fall. Then the network starts bending its curve through every single black point: the training loss dives towards 0, while the validation loss turns back up. The dashed vertical line marks the step with the best validation loss so far. Press <b>Restore best</b>: the model jumps back to that smoother curve. Then click <b>80 points</b> and press Train again: the same big net now cannot thread a curve through every point, so the two loss curves stay close together.</p>
+    <p class="ans">Training loss keeps falling (to about 0: it memorises all 12 points, noise included). Validation loss falls, reaches its minimum early (around step 80, about 0.10), then climbs to about 0.27, more than twice as bad. With 80 points the two losses end close together (about 0.08 and 0.10). Memorising answers is not understanding.</p>
+    <p>Everyday picture: a student who memorises last year's exam answers scores 100% on that paper and badly on a new one. The gap between the two curves is the warning sign, not the training loss alone. The y-axis is logarithmic so that the training loss diving towards 0 stays visible. Loss here is mean squared error, because this is a curve-fitting demo. Do not demo a "smaller net" here: on only 12 points even a 7-weight net ends up chasing the noise if you train it long enough.</p>`,
   });
 
   /* ================= 3. Kobe: bigger net? ================= */
@@ -238,11 +244,11 @@ Deck.css(`
     <h2>Kobe: does an 80× bigger net score better?</h2>
     <div class="gen-two grow">
       <div class="col">
-        <h3>all 20,558 training shots</h3>
+        <h3>all 20,558 shots · parameters:</h3>
         <div class="gen-nets">
-          <div class="gen-net">${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 300, h: 380, r: 14 })}<span class="p">105 parameters</span>
+          <div class="gen-net">${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 300, h: 380, r: 14 })}<span class="p">2-8-8-1 · 105</span>
             <div class="gen-score" data-step="1">0.662<small>val loss</small></div></div>
-          <div class="gen-net">${Widgets.netSVG({ sizes: [2, 32, 32, 32, 1], w: 420, h: 380, r: 5, edgeWidth: 0.7 })}<span class="p">8,577 parameters</span>
+          <div class="gen-net">${Widgets.netSVG({ sizes: [2, 64, 64, 64, 1], w: 420, h: 380, r: 3, edgeWidth: 0.5 })}<span class="p">2-64-64-64-1 · 8,577</span>
             <div class="gen-score" data-step="1">0.660<small>val loss</small></div></div>
         </div>
       </div>

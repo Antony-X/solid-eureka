@@ -41,13 +41,13 @@ Deck.slide({
       <line x1="120" y1="190" x2="1166" y2="190" stroke="var(--ink)" stroke-width="8" stroke-linecap="round"/>
       ${[['vectors', 120], ['matrices', 380], ['gradient<br>descent', 640], ['classical ML', 900]].map(([t, x]) => `
         <circle cx="${x}" cy="190" r="26" fill="var(--ink)"/>
-        <foreignObject x="${x - 140}" y="240" width="280" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="text-align:center;font-size:34px;line-height:1.15;color:var(--muted)">${t}</div></foreignObject>`).join('')}
-      <circle cx="1220" cy="190" r="46" fill="var(--grad)"/>
-      <circle cx="1220" cy="190" r="66" fill="none" stroke="var(--grad)" stroke-width="5" stroke-dasharray="10 10"/>
-      <text x="1220" y="80" text-anchor="middle" font-family="var(--font-mono)" font-size="26" letter-spacing="3" fill="var(--grad)">TODAY</text>
+        <foreignObject x="${x - 140}" y="240" width="280" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="text-align:center;font-size:38px;line-height:1.15;color:var(--muted)">${t}</div></foreignObject>`).join('')}
+      <circle cx="1220" cy="190" r="46" fill="var(--ink)"/>
+      <circle cx="1220" cy="190" r="66" fill="none" stroke="var(--ink)" stroke-width="5"/>
+      <text x="1220" y="80" text-anchor="middle" font-family="var(--font-mono)" font-size="32" font-weight="600" letter-spacing="3" fill="var(--ink)">TODAY</text>
       <foreignObject x="1060" y="268" width="320" height="140"><div xmlns="http://www.w3.org/1999/xhtml" style="text-align:center;font-family:var(--font-display);font-weight:800;font-size:44px;line-height:1.05;color:var(--ink)">neural networks</div></foreignObject>
       <circle cx="1560" cy="190" r="26" fill="var(--paper)" stroke="var(--ink)" stroke-width="5"/>
-      <foreignObject x="1440" y="240" width="240" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="text-align:center;font-size:34px;line-height:1.15;color:var(--muted)">harder tasks<br>(tomorrow)</div></foreignObject>
+      <foreignObject x="1420" y="240" width="280" height="120"><div xmlns="http://www.w3.org/1999/xhtml" style="text-align:center;font-size:38px;line-height:1.15;color:var(--muted)">harder tasks<br>(tomorrow)</div></foreignObject>
     </svg>
   </div>`,
   notes: `
@@ -72,10 +72,11 @@ Deck.slide({
     const rows = secs.map((sec, i) => {
       const start = t; t += sec.minutes || 0;
       const kind = /break/i.test(sec.title) ? 'brk' : /task/i.test(sec.title) ? 'task' : /live|loop/i.test(sec.title) ? 'code' : '';
+      const tag = kind === 'task' ? ' <span class="tag">tasks</span>' : kind === 'code' ? ' <span class="tag tag-code">live code</span>' : '';
       const clock = Math.floor(start / 60) + ':' + String(start % 60).padStart(2, '0');
       return `<div class="map-row ${kind}"><span class="map-clock">${clock}</span>
         <span class="map-bar"><span style="width:${100 * (sec.minutes || 0) / most}%"></span></span>
-        <span class="map-title">${sec.title}</span><span class="map-min">${sec.minutes} min</span></div>`;
+        <span class="map-title">${sec.title}${tag}</span><span class="map-min">${sec.minutes} min</span></div>`;
     });
     host.innerHTML = `<div class="map">${rows.join('')}</div>`;
     host.dataset.total = total;
@@ -83,7 +84,7 @@ Deck.slide({
   notes: `
   <p class="time">1 min</p>
   <p class="say">Here is the plan. Roughly every ten minutes you will do something: predict what happens before I run a demo, compute something on paper, or write code. There is one break in the middle. The last part prepares you for the two tasks you will solve this afternoon.</p>
-  <p class="do">Point at the orange rows (the tasks) and the blue row (live coding). Tell them to keep a notebook open for paper exercises.</p>
+  <p class="do">Point at the two tagged rows: "live code" (we write the training loop together) and "tasks" (the two problems you start today). Tell them to keep paper and a pen ready: many slides ask them to write a prediction before the answer appears.</p>
   <p>Pacing: the presenter window (key P) shows the planned clock for every section and warns you when you are behind. If you are late, the safest places to cut are the extra demos in "Activations" (sigmoid towers, space warping) and the optimizer schedules slide.</p>`,
 });
 
@@ -93,22 +94,29 @@ Deck.slide({
   html: `
   <h2>One picture for the whole day</h2>
   <div class="fill-center">${Widgets.loopSVG({ w: 1500, h: 560, steps: true })}</div>
-  <p class="lead muted" data-step="7">By 3:00 you can explain every arrow.</p>`,
+  <p class="lead muted" data-step="6">By 3:00 you can explain every arrow.</p>`,
   notes: `
   <p class="time">2 min</p>
   <p class="say">Every neural network you will ever train, from our 105-parameter network to ChatGPT, runs this loop. Data goes into the model, the model makes a prediction, the loss measures how wrong it is. Then we go backwards: gradients tell every weight which way to move, the optimizer moves them a little, and we repeat thousands of times.</p>
-  <p class="do">Press → to build the picture one box at a time; name each box as it appears. Black arrows are the forward pass; magenta arrows are learning (gradients and updates). Magenta always means "learning" in this deck.</p>
+  <p class="do">Press → six times to build the picture one box at a time (data, model, loss, gradients, update, then "repeat"); name each box as it appears. Black arrows are the forward pass; magenta arrows are learning (gradients and updates). Magenta always means "learning" in this deck.</p>
   <p class="ask">Which of these boxes did you already meet with logistic regression?</p>
   <p class="ans">All of them. Logistic regression has data, a (very small) model, a loss (cross-entropy), gradients and gradient-descent updates. Today we make the model box bigger and learn how to make the loop work well.</p>`,
 });
 
 Deck.css(`
-.sec-open .recall { display: flex; flex-direction: column; gap: 44px; margin-top: 16px; }
-.sec-open .recall-row { display: grid; grid-template-columns: 70px 1fr 1fr; gap: 40px; align-items: baseline; }
-.sec-open .recall-row .n { font-family: var(--font-mono); font-size: 34px; color: var(--muted); }
-.sec-open .recall-row .q { font-size: 40px; }
-.sec-open .recall-row .a { font-size: 40px; border-left: 6px solid var(--ok); padding-left: 24px; }
+.sec-open .map { gap: 18px; }
+.sec-open .map-row.code .map-bar span, .sec-open .map-row.task .map-bar span { background: var(--ink); }
+.sec-open .map-min { font-size: 28px; }
+.sec-open .map-title .tag { font-size: 28px; padding: 2px 14px 1px; margin-left: 20px; vertical-align: 4px; }
+.sec-open .recall { display: flex; flex-direction: column; gap: 64px; margin-top: 24px; }
+.sec-open .recall-row { display: grid; grid-template-columns: 64px 1fr 1fr; gap: 48px; align-items: baseline; }
+.sec-open .recall-row .n { font-family: var(--font-mono); font-size: 40px; color: var(--muted); }
+.sec-open .recall-row .q { font-size: 48px; line-height: 1.2; }
+.sec-open .recall-row .a { font-size: 48px; line-height: 1.2; border-left: 8px solid var(--ok); padding-left: 28px; }
+.sec-open .kobe-grid { display: grid; grid-template-columns: 720px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
 .sec-open .kobe-pct { font-family: var(--font-display); font-weight: 800; font-size: 200px; line-height: .9; font-stretch: 110%; }
+.sec-open .kobe-key { font-size: 40px; }
+.sec-open .kobe-key b { font-weight: 700; }
 `);
 
 Deck.slide({
@@ -123,27 +131,31 @@ Deck.slide({
     <div class="recall-row"><span class="n">2</span><span class="q">What shape is its decision boundary?</span>
       <span class="a" data-step="2">one straight line</span></div>
     <div class="recall-row"><span class="n">3</span><span class="q">What does backprop tell each weight?</span>
-      <span class="a" data-step="3">which way to move to make the loss smaller</span></div>
+      <span class="a" data-step="3">which way to move so the loss gets smaller</span></div>
   </div>`,
   notes: `
   <p class="time">3 min (2 to write, 1 to reveal)</p>
-  <p class="do">Everyone writes answers on paper, no notes. Then press → three times to reveal the answers one by one; ask for a show of hands "who had it?" after each.</p>
-  <p class="say">Testing yourself is one of the strongest ways to remember something; this takes two minutes and tells me where you are.</p>
-  <p class="ans">1) A probability between 0 and 1 (it squashes a weighted sum through the S-shaped sigmoid). 2) One straight line: points on one side get p &gt; 0.5, on the other side p &lt; 0.5. This is the limitation we break today. 3) For every weight, which direction (and roughly how strongly) to nudge it so the loss goes down. Gradient descent then takes a small step in that direction.</p>
-  <p>Background for you: the formula is p = σ(w·x + b). You do not need to write it on the board; the picture "one straight line" is what matters for the next section.</p>`,
+  <p class="say">Before we start, three quick questions about things you already know. Write your answers on paper, no notes, no phones. Testing yourself is one of the strongest ways to remember something, and it tells me where you are.</p>
+  <p class="do">Give them 2 minutes (watch the clock). Then press → three times to reveal the answers one by one. After each one ask "hands up if you had it" and glance at the room.</p>
+  <p class="ans">1) A probability between 0 and 1. It adds up the inputs times their weights, then squashes the result through the S-shaped sigmoid. 2) One straight line: on one side the probability is above 0.5, on the other side below. This is exactly the limitation we break today. 3) For every weight: which direction to nudge it, and roughly how strongly, so that the loss goes down. Gradient descent then takes a small step in that direction.</p>
+  <p>If many hands stay down on 3: say "backprop is just bookkeeping: it works out, for every knob, whether turning it left or right makes the error smaller". Do not derive anything now; section 6 comes back to it with a ball rolling downhill.</p>
+  <p>Background for you only (do not write it on the board): the formula is p = σ(w·x + b), and for sigmoid + cross-entropy the gradient with respect to the weighted sum z is simply p − y. The picture "one straight line" is what matters for the next section.</p>`,
 });
 
 Deck.slide({
   id: 'open-kobe',
   title: "Predict: Kobe's shooting",
   html: `
-  <div class="row"><span class="tag tag-predict">predict</span></div>
-  <div class="split split-46">
-    <div id="open-kobe-court" class="fill-center"></div>
+  <div class="kobe-grid">
+    <div id="open-kobe-court"></div>
     <div class="col gap-l">
-      <h2>Kobe Bryant took 25,697 labelled shots. What % went in?</h2>
+      <div class="col">
+        <span class="tag tag-predict">predict</span>
+        <h2>25,697 Kobe Bryant shots. What % went in?</h2>
+        <p class="kobe-key"><b class="c1">● orange: in</b> &nbsp; <b class="c0">● blue: missed</b></p>
+      </div>
       <div data-step="1"><div class="kobe-pct">44.6%</div></div>
-      <p class="lead" data-step="2">So always guessing <span class="c0">“miss”</span> is right <b>55%</b> of the time.</p>
+      <p class="lead" data-step="2">So always guessing <b class="c0">“miss”</b> is right <b>55%</b> of the time.</p>
     </div>
   </div>`,
   init(el, api) {
@@ -153,10 +165,10 @@ Deck.slide({
     const draw = () => {
       const C = Plot.colors(), ctx = cv.ctx;
       cv.clear(C.paper);
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 2;
       for (let i = 0; i < 800; i++) {
         const [x, y] = KOBE.X[i];
-        ctx.beginPath(); ctx.arc(fr.sx(x), fr.sy(y), 5, 0, 2 * Math.PI);
+        ctx.beginPath(); ctx.arc(fr.sx(x), fr.sy(y), 6, 0, 2 * Math.PI);
         ctx.fillStyle = KOBE.Y[i] ? C.c1 : C.c0; ctx.fill(); ctx.strokeStyle = C.paper; ctx.stroke();
       }
       Widgets.drawCourt(ctx, fr, { color: C.ink, width: 3 });
@@ -166,9 +178,9 @@ Deck.slide({
   },
   notes: `
   <p class="time">2 min</p>
-  <p class="say">Today's running example is real data: every shot Kobe Bryant took in 20 NBA seasons, with its position on the court. Orange dots went in, blue dots missed. This is also the data of your first task this afternoon.</p>
-  <p class="do">Everyone writes a number on paper first. Then → reveals 44.6%, → again reveals the consequence.</p>
-  <p class="ask">If 44.6% went in, how accurate is a "model" that always says "miss"?</p>
-  <p class="ans">55.4% (about 55%). Remember this number: any model that does not clearly beat 55% has learned nothing. Later we will see that the best possible model only reaches about 61%, because the same spot can produce both a make and a miss.</p>
-  <p>Facts for the coach: the data is the Kaggle "Kobe Bryant Shot Selection" set (30,697 shots from 1996 to his last game on 13 April 2016; 5,000 had hidden labels). His regular-season career field-goal percentage was .447. Kobe died in a helicopter crash in January 2020; mention it respectfully if it comes up, and never joke about it.</p>`,
+  <p class="say">Today's running example is real data: the shots Kobe Bryant took in his 20 NBA seasons, each with its position on the court. The basket is at the bottom of this picture. Orange dots went in, blue dots missed. This is also the data of your first task this afternoon.</p>
+  <p class="do">Everyone writes a number on paper first (15 seconds). Ask two or three students to say theirs out loud. Then → reveals 44.6%, and → again reveals the consequence.</p>
+  <p class="ask">If 44.6% went in, how often is a "model" right that always says "miss"?</p>
+  <p class="ans">55.4% of the time (100 − 44.6), so about 55%. Remember this number: any model that does not clearly beat 55% has learned nothing. Later we will see that even the best possible model only reaches about 61%, because the same spot on the court produces both makes and misses.</p>
+  <p>Facts for the coach: the data is the Kaggle "Kobe Bryant Shot Selection" set: all 30,697 field-goal attempts from 1996 to his last game on 13 April 2016; 5,000 have a hidden label, which leaves 25,697 labelled shots. The dots are a random 800 of them. His regular-season career field-goal percentage was .447. Your task file has 25,000 of these shots (44.7% made). Kobe died in a helicopter crash in January 2020; mention it respectfully if it comes up, and never joke about it.</p>`,
 });

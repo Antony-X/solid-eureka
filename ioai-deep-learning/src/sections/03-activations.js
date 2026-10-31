@@ -29,11 +29,11 @@ Deck.css(`
 .sec-act .chain svg { display: block; }
 .sec-act .where { font-size: 36px; }
 .sec-act .where td:first-child { color: var(--muted); }
-.sec-act .quiz { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 96px; flex: 1; align-content: start; }
-.sec-act .quiz > div { display: flex; flex-direction: column; gap: 14px; border-top: 3px solid var(--rule); padding-top: 22px; }
-.sec-act .quiz .qq { font-size: 48px; display: flex; gap: 24px; align-items: baseline; }
-.sec-act .quiz .qq b { font-family: var(--font-mono); font-size: 44px; color: var(--muted); }
-.sec-act .quiz .qa { font-size: 44px; font-weight: 700; color: var(--ok); padding-left: 64px; }
+.sec-act .quiz { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 48px 96px; flex: 1; min-height: 0; }
+.sec-act .quiz > div { display: flex; flex-direction: column; gap: 28px; border-top: 3px solid var(--rule); padding-top: 28px; }
+.sec-act .quiz .qq { font-size: 56px; line-height: 1.2; display: flex; gap: 28px; align-items: baseline; }
+.sec-act .quiz .qq b { font-family: var(--font-mono); font-size: 56px; color: var(--muted); }
+.sec-act .quiz .qa { font-size: 56px; font-weight: 700; color: var(--ok); padding-left: 76px; }
 .sec-act .fitwrap .fit1d-controls { gap: 24px 40px; }
 `);
 
@@ -90,7 +90,7 @@ Deck.css(`
     title: 'Predict: 10 linear layers vs 1',
     html: `
     <span class="tag tag-predict">predict</span>
-    <div class="big q-big">10 layers with no activation. Versus 1 layer?</div>
+    <div class="big q-big">Can 10 layers with no activation draw more than 1?</div>
     <svg class="dg q-chain" viewBox="0 0 1728 300" width="1728" height="300" role="img" aria-label="a chain of ten linear layers and a single linear layer">
       ${chain(10, 70, '10 × Linear')}
       ${chain(1, 236, '1 × Linear')}
@@ -131,7 +131,7 @@ Deck.css(`
     notes: `
     <p class="time">2 min</p>
     <p class="say">Let us check the vote with a real network. This is a 2-8-8-1 network, 105 weights, with no activation between the layers. Watch what it does with the circle.</p>
-    <p class="do">Press Train. The boundary stays one straight line and the accuracy stays near 50%: all 105 weights behave like one neuron. Press Pause. Now click <b>ReLU</b> under "between the layers" and press Train again: within a few seconds the boundary bends around the orange disk and the accuracy climbs towards 100%. Optionally try <b>tanh</b>: a smooth round boundary.</p>
+    <p class="do">Press Train. The boundary stays one straight line and the accuracy gets stuck at 59% (the line can only slice off part of the blue ring): all 105 weights behave like one neuron. Press Pause. Now click <b>ReLU</b> under "between the layers" and press Train again: within about a second the boundary bends around the orange disk and the accuracy reaches 100%. Optionally try <b>tanh</b>: a smooth round boundary.</p>
     <p class="ask">What exactly did we change between the two runs?</p>
     <p class="ans">Only one thing: a bend (the activation) after each hidden neuron. Same data, same 105 weights, same optimizer. The bend is what lets depth add power.</p>
     <p>Why it works: with ReLU every hidden neuron becomes "a line, but flat on one side". Combining many such bent ramps gives polygons, which is why the ReLU boundary looks slightly angular.</p>`,
@@ -154,7 +154,7 @@ Deck.css(`
         <div class="zoo-ro grad" data-step="1"><span>slope</span><b class="vd">0</b></div>
       </div>`).join('')}
     </div>
-    <p class="small muted">Move the pointer over a plot to read the values. Input now: <b class="mono" id="act-z">0.0</b></p>`,
+    <p class="small muted">input <b class="mono" id="act-z">0.0</b> · point at any plot</p>`,
     init(el, api) {
       const W = 336, H = 500;
       let z0 = 0;
@@ -336,7 +336,7 @@ with torch.no_grad():
         curve(ctx, B, fit.f, C.ink, 6, null, 800);
         fit.knots.forEach(t => Plot.dot(ctx, B.sx(t), B.sy(fit.f(t)), N > 16 ? 6 : 9, C.ink, C.paper));
         rN.set(N);
-        rE.set(fit.mse < 0.0001 ? fit.mse.toExponential(1) : fit.mse.toFixed(4));
+        rE.set(fit.mse < 0.0001 ? fit.mse.toFixed(6) : fit.mse.toFixed(4));
       }
       draw();
       api.onTheme(draw);
@@ -345,8 +345,8 @@ with torch.no_grad():
     steps: 2,
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">The hat was one building block. Now the dashed curve is any wiggly curve, and each white dot is a hinge: one hidden ReLU neuron. With only three hinges the best we can do is a rough zig-zag. Watch the thick line as we add hinges.</p>
-    <p class="do">Press → for 8 hinges, → again for 32 (or click the numbers under "hinges"). The readout "error" (mean squared error) drops from about 0.1 to almost zero. With ≤ 8 hinges the faint lines show each neuron's own ramp.</p>
+    <p class="say">The hat was one building block. Now the dashed curve is any wiggly curve, and each dot is a hinge: one hidden ReLU neuron. With only three hinges the best we can do is a rough zig-zag. Watch the thick line as we add hinges.</p>
+    <p class="do">Press → for 8 hinges, → again for 32 (or click the numbers under "hinges"). The readout "error" (mean squared error) drops from 0.07 (3 hinges) to 0.002 (8) to 0.000005 (32): the dashed curve disappears under the thick line. With ≤ 8 hinges the faint lines show each neuron's own ramp.</p>
     <p class="ask">If I want the error ten times smaller, what do I do?</p>
     <p class="ans">Add more hinges, that is, more neurons in the hidden layer. One hidden layer is a "connect-the-dots machine": every extra neuron is an extra dot where the line may bend.</p>
     <p>How the weights are chosen here: the hinge positions are evenly spaced, and the output weights are the best possible ones (least squares, solved exactly in the browser). On the next slides gradient descent will have to find them on its own. Analogy that works: Lego skyline. With enough thin bricks you can copy any skyline.</p>`,
@@ -424,15 +424,15 @@ with torch.no_grad():
     init(el, api) {
       Widgets.fit1d(api, el.querySelector('#act-fit'), {
         w: 1728, h: 620, f: target, xs: [-1, 1], ys: [-1.6, 1.4], n: 40, hidden: [4], act: 'relu', lr: 0.01, steps: 30,
-        seed: 2, controls: ['play', 'reset', 'width'], maxEpochs: 12000,
+        seed: 2, controls: ['play', 'reset', 'width'], maxEpochs: 9000, // 9000: stops in a calm spot (Adam spikes at 12000)
       });
     },
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">So far we placed the hinges by hand. A real network starts from random weights and must find them with gradient descent, the same training you know from logistic regression. Here is a 1-4-1 ReLU network learning the dots.</p>
-    <p class="do">Press Train: with 4 neurons the line gets the rough shape but cannot follow the wiggles (error about 0.014). Click <b>2 neurons</b> and Train: worse (about 0.06). Click <b>32 neurons</b> and Train: it first hesitates, then snaps onto the curve within about 8 seconds (error near 0.0002). Point at the corners in the thick line: those are the hinges the network found by itself.</p>
-    <p class="ask">With 32 neurons the training paused for a few seconds at a bad fit before improving. Why could that happen?</p>
-    <p class="ans">Gradient descent only walks downhill from where it starts; it can crawl across flat stretches. Having enough neurons makes a good fit possible; it does not make finding it instant. That is the theme of the next slide.</p>`,
+    <p class="do">Press Train: with 4 neurons the line gets the rough shape but cannot follow the wiggles; the error stops at about 0.014. Click <b>2 neurons</b> (it restarts by itself; press Train only if the button says Train): worse, it stops at about 0.06. Click <b>8 neurons</b>: about 0.005, still worse than the 8 hand-placed hinges on the previous slide (0.002). Click <b>32 neurons</b>: within a second it is close (0.001), it lingers there for a few seconds, then drops to about 0.0001 and stops after about 5 seconds. Point at the corners in the thick line: those are the hinges the network found by itself.</p>
+    <p class="ask">With 2 neurons the error stays at 0.06 however long we train. Why?</p>
+    <p class="ans">Two ReLU neurons give at most two bends, and this curve needs more. Training can only find what the network is able to draw. And with 8 neurons it could have matched our hand-placed hinges but ended a bit worse: gradient descent walks downhill from where it starts and can settle in a slightly worse spot. Enough neurons make a good fit possible; they do not promise that training finds it. That is the theme of the next slide.</p>`,
   });
 
   /* ================================================================
@@ -445,23 +445,23 @@ with torch.no_grad():
     <h2>One wide layer can copy any curve</h2>
     <div class="split split-46" style="align-items:start">
       <div class="col" style="gap:36px">
-        <p class="lead">Enough neurons in one hidden layer copy any smooth curve, inside the data range.</p>
+        <p class="lead">Enough neurons: any curve, inside the data range.</p>
         <p class="tiny">Cybenko 1989 · Hornik 1991</p>
         <div class="nots">
           <div class="small muted" data-step="1">It does not promise:</div>
           <div data-step="1"><b>✗</b>training will find it</div>
           <div data-step="2"><b>✗</b>how many neurons</div>
-          <div data-step="3"><b>✗</b>good guesses on new, noisy data</div>
+          <div data-step="3"><b>✗</b>good guesses on noisy data</div>
           <div data-step="4"><b>✗</b>anything outside the data</div>
         </div>
       </div>
       <div id="act-uat-cv"></div>
     </div>`,
     init(el, api) {
-      // a 1-16-1 ReLU net trained on the dots in [-1, 1] (deterministic)
+      // a 1-32-1 ReLU net trained on the dots in [-1, 1] (deterministic)
       const X = [], Y = [];
       for (let i = 0; i < 40; i++) { const x = -1 + 2 * (i + 0.5) / 40; X.push([x]); Y.push(target(x)); }
-      const net = new NN.MLP([1, 16, 1], { act: 'relu', seed: 8 });
+      const net = new NN.MLP([1, 32, 1], { act: 'relu', seed: 8 }); // seed 8: fits well (MSE 0.0003), tails go opposite ways
       const opt = NN.optimizer('adam', { lr: 0.01 });
       for (let e = 0; e < 5000; e++) { net.lossAndGrad(X, Y, 'mse'); opt.step(net.params(), net.grads()); }
       const W = 960, H = 720;
@@ -490,9 +490,9 @@ with torch.no_grad():
     <p class="say">What we just built has a name: the universal approximation theorem. Cybenko proved it in 1989 for sigmoids, and Hornik in 1991 showed the type of bend hardly matters. In words: one hidden layer with enough neurons can copy any smooth curve, as closely as you like, inside a bounded range. It is a true and important theorem. But students often read far more into it than it says.</p>
     <p class="do">Press → four times, one "does not promise" at a time, and say one sentence for each:</p>
     <ul>
-      <li><b>Training will find it.</b> The theorem says good weights exist; we just saw gradient descent hesitate.</li>
+      <li><b>Training will find it.</b> The theorem says good weights exist; we just saw 8 trained neurons end worse than 8 hand-placed hinges.</li>
       <li><b>How many neurons.</b> It may need a huge number, especially with many inputs.</li>
-      <li><b>Good guesses on new, noisy data.</b> A wide net can also copy the noise. Kobe's shots are noisy: even at the rim he scored only about 62%.</li>
+      <li><b>Good guesses on noisy data.</b> A wide net can also copy the noise. Kobe's shots are noisy: even at the rim he scored only about 62%.</li>
       <li><b>Anything outside the data.</b> On the last step the right plot shows the trained network outside its data: ReLU networks continue as straight lines, wherever those happen to point.</li>
     </ul>
     <p class="ask">The Kobe data has no shots from beyond about 79 feet. What will a ReLU network predict for a shot from 300 feet?</p>
@@ -632,7 +632,9 @@ with torch.no_grad():
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">Remember the sigmoid's slope: at most 0.25. Backprop multiplies by that slope once per layer, on the way back from the loss to the first layer. So after ten sigmoid layers the signal is at best 0.25 to the power 10, about one millionth. These bars are measured in PyTorch on a fresh 10-layer network: how big the gradient is at each layer.</p>
-    <p class="do">Point at the sigmoid row: the last layer (right) gets a gradient of about 0.37, the first layer (left) about 0.0000003: a million times smaller. The first layers barely learn. Press → for the ReLU row: every layer gets a gradient of similar size, because ReLU's slope is exactly 1 wherever it is active.</p>
+    <p class="do">Point at the sigmoid row: the last layer (right) gets a gradient of about 0.37, the first layer (left) about 0.0000003: a million times smaller. The first layers barely learn.</p>
+    <p class="ask">Before I show it: same network, but with ReLU. What will the bars look like?</p>
+    <p class="ans">Press → for the ReLU row: every layer gets a gradient of similar size (0.44 at the first layer, 1.64 at the last), because ReLU's slope is exactly 1 wherever it is active.</p>
     <p class="ask">The scale on the left jumps by a factor of 1,000 per grid line. Why draw it like that?</p>
     <p class="ans">On a normal scale the sigmoid bars for the first layers would be invisible, which is exactly the problem: they are effectively zero.</p>
     <p>Setup (our run): 10 hidden layers of 64 neurons, a batch of 256 random inputs, MSE on random targets, at initialisation; sigmoid with Xavier initialisation, ReLU with Kaiming (He) initialisation; norm of each layer's weight gradient, geometric mean of 5 seeds. tanh (not shown) stays flat around 0.12–0.14 per layer. Analogy: a dimmer switch stuck at the ends: turning the knob further does nothing, so the gradient is about zero. This is one big reason ReLU replaced sigmoid in hidden layers around 2010–2012.</p>`,
@@ -679,7 +681,7 @@ with torch.no_grad():
           const on = p[0] * nx + p[1] * ny > d;
           if (on) act++;
           ctx.beginPath(); ctx.arc(fr.sx(p[0]), fr.sy(p[1]), 6, 0, 2 * Math.PI);
-          ctx.fillStyle = Plot.alpha(lab[i] ? C.c1 : C.c0, on ? 1 : 0.18); ctx.fill();
+          ctx.fillStyle = Plot.alpha(lab[i] ? C.c1 : C.c0, on ? 1 : leaky ? 0.38 : 0.18); ctx.fill();
           if (on) { ctx.strokeStyle = C.paper; ctx.stroke(); }
         });
         Widgets.drawCourt(ctx, fr, { color: Plot.alpha(C.ink, 0.6), width: 3 });
@@ -687,9 +689,18 @@ with torch.no_grad():
         const a = P(-900, 0), b = P(900, 0);
         ctx.strokeStyle = C.ink; ctx.lineWidth = 5;
         ctx.beginPath(); ctx.moveTo(fr.sx(a[0]), fr.sy(a[1])); ctx.lineTo(fr.sx(b[0]), fr.sy(b[1])); ctx.stroke();
+        // label the two sides of the line, near its right end (skip a label that would leave the court)
+        const t = (d * nx - 140) / ny;
+        [[42, 'active: output > 0'], [-42, leaky ? 'output small, not 0' : 'output = 0']].forEach(([off, txt]) => {
+          const [lx, ly] = P(t, off), X = fr.sx(lx), Y = fr.sy(ly);
+          if (Y < 36 || Y > fr.h - 24) return;
+          ctx.font = `600 28px ${C.fontMono}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.lineWidth = 8; ctx.lineJoin = 'round'; ctx.strokeStyle = C.paper; ctx.strokeText(txt, X, Y);
+          ctx.fillStyle = C.ink; ctx.fillText(txt, X, Y);
+        });
         ctx.restore();
         const frac = act / pts.length;
-        rA.set(Math.round(100 * frac) + '% of shots');
+        rA.set(act >= 8 ? Math.round(100 * frac) + '% of shots' : act + (act === 1 ? ' shot' : ' shots'));
         if (frac > 0) rG.set('flows');
         else rG.set(leaky ? 'weak, but alive' : '<span class="bad">0 ✗ dead</span>');
       }
@@ -699,7 +710,7 @@ with torch.no_grad():
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">One danger of ReLU. A hidden neuron is a line on the court: on one side (shaded) it outputs a positive number, on the other side exactly 0. Bright shots are on its active side; faded shots get 0. Backprop only sends learning signal through shots where the neuron is active.</p>
-    <p class="do">Drag "move the line" to the right: the line moves up the court and fewer shots stay bright. At about 45 ft no shot is active any more: the readout says "0 ✗ dead". This neuron outputs 0 for every shot, its slope is 0 for every shot, so its gradient is 0 and it never moves again. Then click <b>Leaky ReLU</b>: the inactive side now passes a little signal (slope 0.01), so the neuron can still come back.</p>
+    <p class="do">Drag "line from rim" to the right: the line moves up the court and fewer shots stay bright (77% at 0 ft, 41% at 10 ft, 15% at 20 ft, a single deep heave at 35 ft). Past about 39 ft no shot is active any more: the readout says "0 ✗ dead". This neuron outputs 0 for every shot, its slope is 0 for every shot, so its gradient is 0 and it never moves again. Then click <b>Leaky ReLU</b>: the faded shots light up a little, because the inactive side now passes a small signal (slope 0.01 in PyTorch), so the neuron can still come back.</p>
     <p class="ask">The Kobe task allows at most 8 neurons per layer. Why is a dead neuron worse there than in a big network?</p>
     <p class="ans">Each dead neuron costs 1/8 = 12.5% of the layer. Three dead neurons lose over a third of a tiny network.</p>
     <p>How it happens: a too-large learning rate throws a neuron's line off the data in one step (in our test with a 2-64-64-1 net, learning rate 3.0 killed 56% of the second layer, versus about 9% at 0.01), or unscaled inputs. Fixes: a smaller learning rate, scaled inputs, a different seed, or Leaky ReLU / ELU / tanh (all allowed in the Kobe task). Link to the paper exercise E2: there hidden unit 1 got gradient 0 for one input; a dead neuron is that, for every input.</p>`,
@@ -749,7 +760,7 @@ with torch.no_grad():
       <div><div class="qq"><b>1</b><span>ReLU(−5) = ?</span></div><div class="qa" data-step="1">0</div></div>
       <div><div class="qq"><b>2</b><span>sigmoid(0) = ?</span></div><div class="qa" data-step="2">0.5</div></div>
       <div><div class="qq"><b>3</b><span>The steepest slope of a sigmoid?</span></div><div class="qa" data-step="3">0.25, at 0</div></div>
-      <div><div class="qq"><b>4</b><span>2-8-8-1 with no activations, on the circle?</span></div><div class="qa" data-step="4">one straight line, about 50%</div></div>
+      <div><div class="qq"><b>4</b><span>2-8-8-1 with no activations, on the circle?</span></div><div class="qa" data-step="4">one straight line, under 60%</div></div>
     </div>`,
     notes: `
     <p class="time">1 min</p>
@@ -759,7 +770,7 @@ with torch.no_grad():
       <li>ReLU(−5) = 0: negative inputs are cut to zero.</li>
       <li>sigmoid(0) = 0.5: a score of 0 means a 50/50 guess.</li>
       <li>0.25, in the middle: that is why ten sigmoid layers shrink the gradient to about a millionth.</li>
-      <li>One straight line, accuracy near 50%: without a bend, ten layers or one are the same.</li>
+      <li>One straight line, accuracy stuck under 60% (59% in our demo): without a bend, ten layers or one are the same.</li>
     </ul>
     <p>If many miss question 4, go back two minutes to the live demo (slide "No activation: still one line") before moving on.</p>`,
   });

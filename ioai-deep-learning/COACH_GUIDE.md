@@ -285,9 +285,7 @@ On Kobe, *width* is the first fix. The official 2-1-1-1 baseline passes one numb
 
 ### 4.8 Losses: MSE, BCE, cross-entropy, logits
 
-**Say.** The loss is one number for how wrong we are. Match it to what you predict. **Numbers → MSE**, the mean of (ŷ − *y*)² (the Inversion task is scored with it). **Yes/no → binary cross-entropy** (log loss): −[*y* log *p* + (1 − *y*) log(1 − *p*)]. It is a *surprise meter*: confident and wrong is a huge surprise, like a forecaster who said "90% rain" on a dry day. **One of K → cross-entropy** with softmax.
-
-A **logit** is the raw score *z*: *p* = σ(*z*), *z* = ln(*p*/(1 − *p*)); *z* = 2 is 88%, *z* = −2 is 12%. The model outputs logits; the loss takes logits:
+**Say.** The loss is one number for how wrong we are; match it to what you predict. **Numbers → MSE**, the mean of (ŷ − *y*)² (Inversion is scored with it). **Yes/no → binary cross-entropy** (log loss), −[*y* log *p* + (1 − *y*) log(1 − *p*)]: a *surprise meter*, where confident and wrong is a huge surprise, like "90% rain" on a dry day. **One of K → cross-entropy** with softmax. A **logit** is the raw score *z*: *p* = σ(*z*), *z* = ln(*p*/(1 − *p*)); *z* = 2 is 88%, *z* = −2 is 12%. The model outputs logits; the loss takes logits:
 
 | Task | Model outputs | Loss | Labels |
 |---|---|---|---|
@@ -295,13 +293,13 @@ A **logit** is the raw score *z*: *p* = σ(*z*), *z* = ln(*p*/(1 − *p*)); *z* 
 | yes / no | 1 logit | `nn.BCEWithLogitsLoss()` (sigmoid inside, numerically stable) | float 0/1, shape (N, 1) |
 | one of K | K logits | `nn.CrossEntropyLoss()` (softmax inside) | integer class, shape (N,) |
 
-Why not train on accuracy? It is a staircase: small weight changes rarely flip a prediction, so its gradient is zero almost everywhere.
+Accuracy can't be the loss: it is a staircase whose gradient is zero almost everywhere.
 
-**Draw.** −ln *p* for a made shot, with *p* = 0.9 → 0.105, 0.5 → 0.693, 0.1 → 2.303, 0.001 → 6.908.
+**Draw.** −ln *p* for a made shot: *p* = 0.9 → 0.105, 0.5 → 0.693, 0.1 → 2.303, 0.001 → 6.908.
 
-**Numbers.** At initialisation logits are near 0, so BCE ≈ ln 2 = **0.693** (10 classes: ln 10 = 2.303). Far from that means a bug. Kobe's best *constant* prediction (*p* = 0.446) scores **0.687**: the number to beat. Setting the output bias to logit(0.446) = −0.217 starts the net at the baseline; it removes the "hockey stick", but after 3 epochs there is no difference (our run).
+**Numbers.** At initialisation logits are near 0, so BCE ≈ ln 2 = **0.693** (10 classes: ln 10 = 2.303); far from that means a bug. Kobe's best *constant* prediction (*p* = 0.446) scores **0.687**, the number to beat. Setting the output bias to logit(0.446) = −0.217 starts the net at the baseline; after 3 epochs it makes no difference (our run).
 
-**The cliffhanger, explained.** With `nn.Sigmoid()` in the model *and* `BCEWithLogitsLoss`, the sigmoid is applied twice. The loss sees σ(σ(*z*)), which is stuck between 0.5 and 0.731, so it can never go below 0.313 on a make or 0.693 on a miss. The only way down is to push the inner sigmoid to 0 or 1. Result (3-seed mean): printed loss normal, accuracy 61%, but 76% of outputs below 0.01 or above 0.99 and a true log loss of **4.69** (correct model 0.662). No error. The same family: softmax in the model plus `CrossEntropyLoss`.
+**The cliffhanger, explained.** With `nn.Sigmoid()` in the model *and* `BCEWithLogitsLoss`, the loss sees σ(σ(*z*)), stuck between 0.5 and 0.731, so it can never go below 0.313 on a make or 0.693 on a miss. The only way down is to push the inner sigmoid to 0 or 1, so the outputs become extreme and the true log loss explodes (4.69 vs 0.662) while accuracy stays at 61%. Same family: softmax in the model plus `CrossEntropyLoss`.
 
 **They will ask.**
 - *"Why the log?"* Log loss is the negative log-likelihood of what happened, and a *proper scoring rule*: on average it is minimised by reporting your true belief.

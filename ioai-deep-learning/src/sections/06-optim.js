@@ -30,10 +30,11 @@ Deck.css(`
 .sec-opt .t-code { display: grid; grid-template-columns: 1056px 1fr; gap: 96px; flex: 1; min-height: 0; align-items: start; }
 .sec-opt .effect { font-size: 40px; line-height: 1.25; }
 .sec-opt .effect .bigv { font-family: var(--font-mono); font-size: 64px; font-weight: 600; line-height: 1.25; }
-.sec-opt .cmp { display: grid; grid-template-columns: 300px 1fr 600px; gap: 14px 32px; align-items: center; font-size: 40px; }
-.sec-opt .cmp .bar { height: 44px; background: var(--grad); }
-.sec-opt .cmp .bar.sliver { width: 6px; }
-.sec-opt .cmp .tiny { font-size: 30px; }
+.sec-opt .cmp { display: grid; grid-template-columns: 300px 1fr 420px; gap: 10px 32px; align-items: center; font-size: 40px; }
+.sec-opt .cmp .hd { font-family: var(--font-mono); font-size: 28px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.sec-opt .cmp .bw { display: flex; align-items: center; gap: 20px; }
+.sec-opt .cmp .bar { height: 44px; background: var(--grad); flex: 0 0 auto; }
+.sec-opt .cmp .bw span { font-family: var(--font-mono); font-size: 34px; color: var(--grad); font-weight: 600; }
 .sec-opt .sched { display: grid; grid-template-columns: repeat(4, 1fr); gap: 64px; }
 .sec-opt .sched > div { display: flex; flex-direction: column; gap: 12px; }
 .sec-opt .sched h3 { font-size: 40px; }
@@ -67,7 +68,7 @@ Deck.css(`
     Plot.fn(ctx, sx, sy, L1, { color: C.ink, width: 5 });
     Plot.text(ctx, 'bottom', sx(3), sy(0) - 14, { size: 28, color: C.muted, align: 'center' });
     ctx.save();
-    Plot.clip(ctx, pad.l - 20, 0, cv.w, cv.h - pad.b + 4);
+    Plot.clip(ctx, pad.l - 4, pad.t - 24, cv.w, cv.h - pad.b + 4);
     const P = st.path || [];
     if (st.tangent != null) {
       const w0 = st.tangent, s = 2 * (w0 - 3), d = view.tanLen || 1.2;
@@ -120,9 +121,9 @@ Deck.css(`
       marks: [{ x: 0, y: 0, label: 'bottom', dx: 70, dy: 40 }],
     },
     saddle: {
-      f: (x, y) => x * x - y * y + y * y * y * y / 4, g: (x, y) => [2 * x, -2 * y + y * y * y],
-      start: [-1.8, 0.001], levels: [-0.9, -0.6, -0.3, 0, 0.6, 1.5, 3, 5, 7.5, 10], shade: f => (f + 1) / 13,
-      marks: [{ x: 0, y: 0, label: 'saddle', dx: 74, dy: 0 }, { x: 0, y: SQ2, label: 'bottom', dx: 80, dy: 0 }, { x: 0, y: -SQ2, label: 'bottom', dx: 80, dy: 0 }],
+      f: (x, y) => x * x - y * y + y * y * y * y / 4 + 1, g: (x, y) => [2 * x, -2 * y + y * y * y],
+      start: [-1.8, 0.001], levels: [0.1, 0.4, 0.7, 1, 1.6, 2.5, 4, 6, 8.5, 11], shade: f => f / 13,
+      marks: [{ x: 0, y: 0, label: 'saddle', dx: 66, dy: 40 }, { x: 0, y: SQ2, label: 'bottom', dx: -88, dy: 0 }, { x: 0, y: -SQ2, label: 'bottom', dx: 80, dy: 0 }],
     },
     bowl: {
       f: (x, y) => 0.5 * (x * x + y * y), g: (x, y) => [x, y],
@@ -251,6 +252,7 @@ Deck.css(`
 
     R.set = function (cfg) {
       R.surf = SURF[cfg.surf]; R.view = cfg.view; R.steps = cfg.steps || 100; R.sps = cfg.sps || 16;
+      R.mode = cfg.mode || 'loss';
       R.defs = cfg.racers;
       bake(); R.reset();
     };
@@ -288,7 +290,7 @@ Deck.css(`
   function raceSide(side, R, kinds) {
     const head = document.createElement('div');
     head.className = 'rhead';
-    head.innerHTML = '<span>step</span><span>loss</span>';
+    head.innerHTML = '<span>step</span><span class="rh-v">loss</span>';
     const stepEl = document.createElement('div');
     stepEl.className = 'stepno';
     const list = document.createElement('div');
@@ -311,13 +313,15 @@ Deck.css(`
     R.onTick(() => {
       stepEl.textContent = R.k + ' / ' + R.steps;
       run.textContent = R.playing ? 'Pause' : 'Run';
+      head.querySelector('.rh-v').textContent = R.mode === 'arrive' ? 'at a bottom after' : 'loss';
       kinds.forEach(k => {
         const r = R.racers.find(x => x.kind === k), el = rows[k];
         el.classList.toggle('off', !r || !!r.off);
         el.classList.toggle('dim', !!(r && r.dim));
         if (!r) return;
         el.querySelector('.nm').innerHTML = `${r.name}<small>lr ${r.lr}</small>`;
-        el.querySelector('.v').textContent = r.dead ? 'blew up' : fmtLoss(r.loss);
+        el.querySelector('.v').textContent = r.dead ? 'blew up'
+          : R.mode === 'arrive' ? (r.doneAt != null ? r.doneAt + ' steps' : '–') : fmtLoss(r.loss);
       });
     });
   }
@@ -336,7 +340,7 @@ Deck.css(`
         [`How many numbers does ${Code.i('nn.Linear(8, 8)')} learn?`, '72 = 64 weights + 8 biases'],
         ['First loss of a fresh yes/no network?', '≈ 0.69 (= ln 2)'],
         ["Adam's default learning rate?", '0.001'],
-        ['Name one thing the universal approximation theorem does NOT promise.', 'That training finds the weights · small width · good on new data'],
+        ['Name one thing the universal approximation theorem does NOT promise.', 'That training finds them · how many neurons · right on new data'],
       ].map(([q, a], i) => `
         <div class="qz"><span class="n">Q${i + 1}</span><div class="q">${q}</div><div class="a" data-step="${i + 1}">${a}</div></div>`).join('')}
     </div>`,
@@ -437,7 +441,7 @@ Deck.css(`
         Plot.axes(ctx, sx, sy, { font: 26, nx: 4, ny: 2, yt: [0, 3, 6], xlabel: 'step', ylabel: 'w', zero: false });
         ctx.save(); ctx.setLineDash([12, 10]); ctx.strokeStyle = C.muted; ctx.lineWidth = 3;
         ctx.beginPath(); ctx.moveTo(sx(0), sy(3)); ctx.lineTo(sx(MAX), sy(3)); ctx.stroke(); ctx.restore();
-        ctx.save(); Plot.clip(ctx, 60, 10, 850, 210);
+        ctx.save(); Plot.clip(ctx, 64, 14, 850, 206);
         ctx.strokeStyle = C.grad; ctx.lineWidth = 4; ctx.lineJoin = 'round';
         ctx.beginPath();
         S.path.forEach((w, k) => (k ? ctx.lineTo(sx(k), sy(w)) : ctx.moveTo(sx(k), sy(w))));
@@ -471,7 +475,7 @@ Deck.css(`
       api.onTheme(draw);
     },
     notes: `
-    <p class="time">3 min</p>
+    <p class="time">2.5 min</p>
     <p class="say">Same bowl, same ball, but now we let it run, and we change only one number: the learning rate. Below the bowl you see where the weight is after each step; the dashed line is the bottom.</p>
     <p class="do">For each value, first ask "what will happen?", then click it and press <b>Run</b> (5 steps per second, at most 40 steps; <b>Reset</b> restarts). Order: <b>0.3</b> (the default when the slide opens), then <b>0.02</b>, then <b>0.9</b>, then <b>1.05</b>.</p>
     <ul>
@@ -512,7 +516,7 @@ Deck.css(`
       </div>
     </div>`,
     notes: `
-    <p class="time">2 min</p>
+    <p class="time">1.5 min</p>
     <p class="say">Here is exactly the paper step, written in PyTorch. Three steps of the loop give 0.6, 1.08 and 1.464, the same numbers you would get by hand. Every training loop you will ever write is this loop with more weights.</p>
     <p class="do">Press → five times; each press highlights a line and shows its effect on the right.</p>
     <ul>
@@ -568,17 +572,18 @@ Deck.css(`
       })()}
       <div class="row" data-step="2" style="gap:28px"><span class="tag tag-predict">predict</span><span class="lead">30 epochs. Batches of 64, or all 20,558 at once?</span></div>
       <div class="cmp" data-step="3">
-        <span>batches of 64</span><div class="bar" style="width:100%"></div><span><b>0.662</b> <span class="ok">✓</span> <span class="tiny muted">9,660 steps</span></span>
-        <span>all at once</span><div class="bar sliver"></div><span><b>0.688</b> <span class="bad">= guessing</span> <span class="tiny muted">30 steps</span></span>
+        <span></span><span class="hd">steps taken</span><span class="hd">validation loss</span>
+        <span>batches of 64</span><div class="bw"><div class="bar" style="width:640px"></div><span>9,660</span></div><span><b>0.662</b> <span class="ok">✓ learned</span></span>
+        <span>all at once</span><div class="bw"><div class="bar" style="width:6px"></div><span>30</span></div><span><b>0.688</b> <span class="bad">✗ = guessing</span></span>
       </div>
     </div>`,
     notes: `
-    <p class="time">2.5 min</p>
+    <p class="time">2 min</p>
     <p class="say">Three words people mix up. An <b>epoch</b> is one pass over all the training data: for Kobe, 20,558 shots. A <b>batch</b> is the small handful of shots we look at before taking one step: here 64. A <b>step</b> is one update of all the weights. So the network does not wait for the whole epoch: it takes a step after every batch.</p>
     <p class="do">Step 0: the bar is all 20,558 training shots. → (1): cut into batches of 64: the zoom shows one batch (real Kobe shots, orange = made, blue = missed). Ask the class to compute the number of steps per epoch before you point at 322.</p>
     <p class="ask">20,558 shots in batches of 64: how many steps per epoch, and how big is the last batch?</p>
     <p class="ans">20,558 / 64 = 321.2, so 322 steps; 321 full batches use 20,544 shots, leaving 14 for the last batch. 30 epochs = 9,660 steps.</p>
-    <p class="do">→ (2): the prediction question; take a vote. → (3): the answer from our real Kobe runs.</p>
+    <p class="do">→ (2): the prediction question; take a vote. → (3): the answer from our real Kobe runs. The magenta bars are the number of steps (weight updates) each one took in 30 epochs; the loss is on the right.</p>
     <p class="say">Same 30 epochs, but batches of 64 make 9,660 steps and reach validation loss 0.662. Using all shots at once makes only 30 steps, and the loss 0.688 is no better than always guessing 44.6%. Count steps, not epochs.</p>
     <p>Why batches work: the slope from 64 random shots is a noisy but honest estimate of the slope from all shots, and it is 300 times cheaper. The noise makes the path wobble but it still goes downhill. Yann LeCun tweeted in 2018: "Friends dont let friends use minibatches larger than 32" (a joke with a point). Typical batch sizes for small tables: 32 to 256.</p>`,
   });
@@ -606,6 +611,7 @@ Deck.css(`
       });
       out(A, el.querySelector('.opt-sc-ra'));
       out(B, el.querySelector('.opt-sc-rb'));
+      A.reset(); B.reset();
       const ctl = el.querySelector('.opt-sc-ctl');
       const run = UI.button(ctl, 'Run', () => {
         const go = !(A.playing || B.playing);
@@ -618,12 +624,12 @@ Deck.css(`
       [A, B].forEach(R => R.onTick(() => { if (R.racers[0].doneAt != null && R.playing) R.pause(); }));
     },
     notes: `
-    <p class="time">2 min</p>
+    <p class="time">1.5 min</p>
     <p class="say">Kobe's coordinates are in tenths of feet: x goes from −250 to 248, y up to 791. Big, unequal inputs stretch the loss bowl into a long narrow valley. On the left, gradient descent zig-zags across the narrow direction and crawls along the long one. On the right we first subtract the mean and divide by the spread of each input: the bowl becomes round and the same algorithm walks straight to the bottom.</p>
     <p class="do">Ask "which side gets to the bottom first, and by how much?" Then press <b>Run</b>. The right side finishes almost immediately (7 steps); the left zig-zags and needs 246 steps.</p>
     <p class="ask">Why not just use a bigger learning rate on the left?</p>
     <p class="ans">The steep direction (up and down) explodes as soon as lr goes above 0.02, exactly like lr 1.05 on the last demo. The steepest direction sets the speed limit, and the flat direction then crawls. On the round bowl both directions are equally steep, so lr 0.5 is safe.</p>
-    <p>How bad is it on real data? For logistic regression on Kobe-like raw coordinates, the steepest direction of the bowl is about 40,000 times steeper than the flattest; after standardising, the ratio is 1.01 (our numerical check). In the next section you will see the symptom in code: with raw inputs the first loss is 2.33 instead of 0.69. Rule: compute mean and std on the training data only, and apply the same numbers to validation and test (LeCun et al., "Efficient BackProp", 1998).</p>
+    <p>How bad is it on real data? For logistic regression on Kobe's raw coordinates, the steepest direction of the bowl is about 30,000 times steeper than the flattest; after standardising, the ratio is about 1.04 (our numerical check on data_train.csv). In the next section you will see the symptom in code: with raw inputs the first loss is 2.33 instead of 0.69. Rule: compute mean and std on the training data only, and apply the same numbers to validation and test (LeCun et al., "Efficient BackProp", 1998).</p>
     <p>The toy surfaces here: left 0.5(x² + 100y²), right 0.5(x² + y²), same start (−5, 1.5).</p>`,
   });
 
@@ -664,7 +670,7 @@ Deck.css(`
       api.onStep(config);
     },
     notes: `
-    <p class="time">3 min</p>
+    <p class="time">2.5 min</p>
     <p class="say">Now a 2-D loss surface seen from above, like a map with height lines. It is a long, narrow valley: very steep across, almost flat along. The bottom is the cross. Three classic optimizers race from the same start, 100 steps each.</p>
     <p class="do">Step 0: only plain gradient descent (SGD, dotted path). Ask "predict the path", then press <b>Run</b>. It bounces from wall to wall and then crawls along the floor: after 100 steps it is still far from the bottom (loss 0.27).</p>
     <p class="do">→ (1) adds <b>momentum</b> (dashed) and starts the race again automatically; SGD is dimmed. → (2) adds <b>Adam</b> (solid). Use <b>Run</b>/<b>Reset</b> to replay.</p>
@@ -683,8 +689,9 @@ Deck.css(`
     title: 'Adam is not magic',
     html: `
     <div class="stack">
-      <h2 data-only="0">Tilt the valley: Adam loses its edge</h2>
-      <h2 data-only="1">At a saddle, momentum and Adam escape first</h2>
+      <h2 data-only="0">Turn the valley 45°: who wins now?</h2>
+      <h2 data-only="1">Tilted valley: Adam loses its edge</h2>
+      <h2 data-only="2">At a saddle, momentum and Adam escape first</h2>
     </div>
     <div class="demo wide">
       <div class="opt-hon-cv"></div>
@@ -693,13 +700,17 @@ Deck.css(`
     init(el, api) {
       const R = Race(api, el.querySelector('.opt-hon-cv'), 1104, 720);
       raceSide(el.querySelector('.opt-hon-side'), R, ['sgd', 'momentum', 'adam']);
-      let last = -1;
+      let surf = '';
       const config = k => {
-        if (k === last) return;
-        last = k;
-        if (k === 0) R.set({ surf: 'tilted', view: { cx: -0.8, cy: -0.6, ppu: 92 }, steps: 100, sps: 16, racers: RACERS.map(r => Object.assign({}, r)) });
-        else {
-          R.set({ surf: 'saddle', view: { cx: 0, cy: 0, ppu: 158 }, steps: 150, sps: 25, racers: RACERS.map(r => Object.assign({}, r, { lr: 0.05 })) });
+        const want = k < 2 ? 'tilted' : 'saddle';
+        if (want === surf) { if (k === 1 && R.k === 0 && !R.playing) R.play(); return; }
+        surf = want;
+        if (want === 'tilted') {
+          R.set({ surf: 'tilted', view: { cx: -0.8, cy: -0.6, ppu: 92 }, steps: 100, sps: 16, racers: RACERS.map(r => Object.assign({}, r)) });
+          if (k === 1) R.play();
+        } else {
+          R.set({ surf: 'saddle', view: { cx: 0, cy: 0, ppu: 158 }, steps: 150, sps: 25, mode: 'arrive',
+            racers: RACERS.map(r => Object.assign({}, r, { lr: 0.05, tol: 0.05 })) });
           R.play();
         }
       };
@@ -709,12 +720,12 @@ Deck.css(`
     notes: `
     <p class="time">2 min</p>
     <p class="say">Is Adam simply the best? Here is the same valley, only turned by 45 degrees. Nothing else changed: same start distance, same learning rates.</p>
-    <p class="do">Ask "who wins now?", then press <b>Run</b>. SGD and momentum behave exactly as before (they do not care how the valley is turned; final losses 0.27 and 0.0003 again). Adam now gets stuck high on the side of the valley (loss about 7, worse than plain SGD).</p>
+    <p class="do">Ask "who wins now?" and take a vote. Then → (1): the headline changes and the race starts (or press <b>Run</b>). SGD and momentum behave exactly as before (they do not care how the valley is turned; final losses 0.27 and 0.0003 again). Adam now zig-zags across the valley and crawls along it: after 100 steps it is still far from the bottom (loss about 7, much worse than plain SGD).</p>
     <p class="ask">Why does turning the valley hurt Adam?</p>
-    <p class="ans">Adam gives each weight (each axis: left-right, up-down) its own step size. That only helps when the steep direction lines up with an axis. In the tilted valley the steep direction is diagonal, so both axes look equally steep and Adam's trick no longer helps. Adam is a strong default, not magic.</p>
-    <p class="do">→ (1) switches to a <b>saddle</b> and starts the race: downhill to the top and bottom, uphill to the left and right, with the start almost exactly on the ridge. All three use lr 0.05.</p>
-    <p class="say">Plain SGD walks straight into the saddle and sits there, because the slope that would push it off is almost zero. Momentum escapes sooner, and Adam escapes first because it turns even a tiny slope into a normal-sized step (escape after about 66, 25 and 11 steps). Big networks have many saddles and flat regions, which is one reason momentum and Adam are popular.</p>
-    <p>Surfaces: tilted valley = the same 0.5(u² + 100v²) in rotated coordinates; saddle = x² − y² + y⁴/4 from (−1.8, 0.001), bottoms at (0, ±1.41). If the start were exactly on the ridge (y = 0), nobody would escape: in real training the noise from mini-batches gives the kick.</p>`,
+    <p class="ans">Adam gives each weight (each axis: left-right, up-down) its own step size. That only helps when the steep direction lines up with an axis. In the tilted valley the steep direction is diagonal, so both axes look equally steep and Adam's trick no longer helps; worse, the big wall-to-wall slopes make it shrink its steps along the floor too. Adam is a strong default, not magic.</p>
+    <p class="do">→ (2) switches to a <b>saddle</b> and starts the race: downhill to the top and bottom, uphill to the left and right, with the start almost exactly on the ridge. All three use lr 0.05. The right column now shows after how many steps each one reached a bottom.</p>
+    <p class="say">Plain SGD walks straight into the saddle and sits there, because the slope that would push it off is almost zero. Adam leaves the saddle first (after about 11 steps), because it turns even a tiny slope into a normal-sized step; momentum leaves after about 25, SGD only after about 66. They reach a bottom after 41 (Adam), 34 (momentum) and 82 (SGD) steps. Big networks have many saddles and flat regions, which is one reason momentum and Adam are popular.</p>
+    <p>Surfaces: tilted valley = the same 0.5(u² + 100v²) in rotated coordinates; saddle = x² − y² + y⁴/4 + 1 from (−1.8, 0.001), saddle point at (0, 0) with loss 1, bottoms at (0, ±1.41) with loss 0. If the start were exactly on the ridge (y = 0), nobody would escape: in real training the noise from mini-batches gives the kick.</p>`,
   });
 
   /* ------------------------------------------------------------------ */
@@ -722,7 +733,7 @@ Deck.css(`
     id: 'opt-adam-step',
     title: "Predict: Adam's first step",
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>How far does each weight move?</h2></div>
+    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>lr 0.001: how far does each weight move?</h2></div>
     ${(() => {
       const P = [{ x: 250, t: 'slope 1000' }, { x: 776, t: 'slope 1' }, { x: 1302, t: 'slope 0.001' }];
       const unit = 70; // 0.001 of movement is drawn this long
@@ -745,16 +756,16 @@ Deck.css(`
         const ax = gx + 60;
         // plain gradient descent, lr 0.001: moves 1, 0.001, 0.000001
         s += `<g data-step="1">`;
-        if (i === 0) s += `<line class="back" x1="${ax}" y1="400" x2="${gx + 470}" y2="400" style="stroke-dasharray:none"/><text class="lbl" x="${ax}" y="448" style="text-anchor:start;font-size:34px">1: flies off</text>`;
+        if (i === 0) s += `<line class="back" x1="${ax}" y1="400" x2="${gx + 470}" y2="400" style="stroke-dasharray:none"/><text class="lbl" x="${ax}" y="448" style="text-anchor:start;font-size:34px">1 · flies off</text>`;
         else if (i === 1) s += `<line class="back" x1="${ax}" y1="400" x2="${ax + unit}" y2="400" style="stroke-dasharray:none"/><text class="lbl" x="${ax}" y="448" style="text-anchor:start;font-size:34px">0.001</text>`;
-        else s += `<circle cx="${ax}" cy="400" r="6" style="fill:var(--grad)"/><text class="lbl" x="${ax}" y="448" style="text-anchor:start;font-size:34px">0.000001: stuck</text>`;
+        else s += `<circle cx="${ax}" cy="400" r="6" style="fill:var(--grad)"/><text class="lbl" x="${ax}" y="448" style="text-anchor:start;font-size:34px">0.000001 · stuck</text>`;
         s += `</g><g data-step="2"><line class="back" x1="${ax}" y1="510" x2="${ax + unit}" y2="510" style="stroke-dasharray:none"/><text class="lbl" x="${ax}" y="558" style="text-anchor:start;font-size:34px">0.001</text></g>`;
       });
       return s + '</svg>';
     })()}
     <p class="lead" data-step="3"><mark>Adam: every weight moves about lr per step.</mark></p>`,
     notes: `
-    <p class="time">2 min</p>
+    <p class="time">1.5 min</p>
     <p class="say">Three weights sit on very different slopes: 1000, 1 and 0.001. We take one step with learning rate 0.001. How far does each weight move, first with plain gradient descent, then with Adam?</p>
     <p class="do">Let everyone write two answers per weight. → (1) plain gradient descent: the move is lr × slope, so 1, 0.001 and 0.000001. The steep one flies off, the flat one is stuck. → (2) Adam: all three move exactly 0.001. → (3) the takeaway.</p>
     <p class="ask">Why does Adam move them all by the same amount?</p>
@@ -789,7 +800,7 @@ Deck.css(`
       rows.forEach(r => {
         s += `<line x1="${sx(0.65)}" y1="${r.y}" x2="${sx(0.71)}" y2="${r.y}" style="stroke:var(--grid);stroke-width:2"/>`;
         s += `<text class="lbl-b" x="0" y="${r.y}" style="text-anchor:start">${r.l}</text>`;
-        const g = `<circle cx="${sx(r.v)}" cy="${r.y}" r="16" style="fill:var(--ink)"/><text class="lbl" x="${sx(r.v) + 30}" y="${r.y}" style="text-anchor:start;font-size:34px">${r.v.toFixed(3)}</text>` +
+        const g = `<circle cx="${sx(r.v)}" cy="${r.y}" r="16" style="fill:var(--ink)"/><text class="lbl" x="${sx(r.v) + 30}" y="${r.y}" style="text-anchor:start;font-size:34px;paint-order:stroke;stroke:var(--paper);stroke-width:10px;stroke-linejoin:round">${r.v.toFixed(3)}</text>` +
           `<text class="lbl" x="0" y="${r.y + 46}" style="text-anchor:start;font-size:30px;${r.cls ? 'fill:var(--bad)' : 'fill:var(--muted)'}">${r.note}</text>`;
         if (r.st) s += `<text class="lbl" x="${sx(0.68)}" y="${r.y}" style="fill:var(--muted);font-size:40px" data-until="${r.st}">?</text><g data-step="${r.st}">${g}</g>`;
         else s += g;
@@ -798,7 +809,7 @@ Deck.css(`
     })()}
     <p class="lead" data-step="4"><mark>lr 0.001 is Adam's default, not a law of nature.</mark></p>`,
     notes: `
-    <p class="time">2 min</p>
+    <p class="time">1.5 min</p>
     <p class="say">Real numbers from our runs on Kobe's shots: our legal 2-8-8-1 network, 30 epochs, validation loss (lower is better). The dashed line is the "dumb" model that always predicts 44.6%: loss 0.688. Adam with lr 0.001 gets 0.662. Now predict the three others: better than guessing or not?</p>
     <p class="do">Take a quick vote on each row (thumbs up = beats the dashed line). Then → three times to reveal one row at a time, and → once more for the takeaway.</p>
     <ul>
@@ -840,7 +851,7 @@ Deck.css(`
       </div>
     </div>`,
     notes: `
-    <p class="time">1.5 min</p>
+    <p class="time">1 min</p>
     <p class="say">In practice you never write the update by hand. You make an optimizer once, give it the model's weights and a learning rate, and inside the loop you call three lines: zero_grad, backward, step. They do exactly what our hand-written lines did, for every weight at once.</p>
     <p class="do">→ (1): the default. Adam with 0.001, then also try 0.003 and 0.0003 and keep whatever is best on validation. → (2): the three loop lines next to the manual version from the paper step (for plain SGD, step() is exactly w -= lr * w.grad; Adam does its smarter version). → (3): changing the optimizer is one line; the loop stays the same.</p>
     <ul>
@@ -850,7 +861,7 @@ Deck.css(`
       <li><b>SGD with momentum 0.9</b> is still common for image networks (CNNs), where a well-tuned SGD often ends up slightly better, but its good learning-rate range is narrower.</li>
     </ul>
     <p class="ask">Which order do the three lines go in, and could zero_grad go after backward?</p>
-    <p class="ans">zero_grad, backward, step (zero_grad may also go right after step). Not between backward and step: then step would see a gradient of zero and nothing would learn.</p>
+    <p class="ans">zero_grad, backward, step (zero_grad may also go right after step). Not between backward and step: it would wipe the fresh slopes, step would find no gradient and no weight would move.</p>
     <p>The code is tested: it runs with any model, loss_fn and DataLoader. The full loop with the forward pass is built line by line in the next section.</p>`,
   });
 
@@ -867,7 +878,7 @@ Deck.css(`
           const curves = [
             ['constant', '', t => 1],
             ['step down', 'MultiStepLR', t => (t < 0.5 ? 1 : t < 0.75 ? 0.1 : 0.01)],
-            ['warm-up + cosine', 'LinearLR + Cosine…', t => (t < 0.08 ? t / 0.08 : 0.5 * (1 + Math.cos(Math.PI * (t - 0.08) / 0.92)))],
+            ['warm-up + cosine', 'OneCycleLR', t => (t < 0.08 ? t / 0.08 : 0.5 * (1 + Math.cos(Math.PI * (t - 0.08) / 0.92)))],
             ['drop when stuck', 'ReduceLROnPlateau', t => (t < 0.45 ? 1 : t < 0.62 ? 0.5 : t < 0.8 ? 0.25 : 0.125)],
           ];
           return curves.map(([name, cls, f]) => {
@@ -899,6 +910,6 @@ Deck.css(`
     </ul>
     <p class="ask">Why would a smaller learning rate at the end give a better result?</p>
     <p class="ans">With mini-batches every step is a bit noisy, so with a constant lr the weights keep jiggling around the bottom. Smaller steps shrink the jiggle so the weights settle closer to the bottom.</p>
-    <p>If you are running late, skip this slide. On a small tabular test (our run), cosine or ReduceLROnPlateau improved the final validation loss from 0.42 to about 0.37, but keeping the best epoch mattered about as much. PyTorch: torch.optim.lr_scheduler; call sched.step() once per batch (cosine) or sched.step(val_loss) once per epoch (plateau).</p>`,
+    <p>If you are running late, skip this slide. On a small tabular test (our run), cosine or ReduceLROnPlateau improved the final validation loss from 0.42 to about 0.37, but keeping the best epoch mattered about as much. PyTorch: torch.optim.lr_scheduler. OneCycleLR does warm-up then cosine decay in one object (call sched.step() after every batch); ReduceLROnPlateau is called as sched.step(val_loss) once per epoch.</p>`,
   });
 })();

@@ -430,7 +430,7 @@ with torch.no_grad():
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">So far we placed the hinges by hand. A real network starts from random weights and must find them with gradient descent, the same training you know from logistic regression. Here is a 1-4-1 ReLU network learning the dots.</p>
-    <p class="do">Press Train: with 4 neurons the line gets the rough shape but cannot follow the wiggles; the error stops at about 0.014. Click <b>2 neurons</b> (it restarts by itself; press Train only if the button says Train): worse, it stops at about 0.06. Click <b>8 neurons</b>: about 0.005, still worse than the 8 hand-placed hinges on the previous slide (0.002). Click <b>32 neurons</b>: within a second it is close (0.001), it lingers there for a few seconds, then drops to about 0.0001 and stops after about 5 seconds. Point at the corners in the thick line: those are the hinges the network found by itself.</p>
+    <p class="do">Press Train: with 4 neurons the line gets the rough shape but cannot follow the wiggles; the error stops at about 0.014. Click <b>2 neurons</b> (it restarts by itself; press Train only if the button says Train): worse, it stops at about 0.06. Click <b>8 neurons</b>: about 0.005, still worse than the 8 hand-placed hinges on the previous slide (0.002). Click <b>32 neurons</b>: within a second it is close (0.001), it lingers there for a few seconds, then drops to about 0.0001 and stops after 5 to 7 seconds (9,000 epochs). Point at the corners in the thick line: those are the hinges the network found by itself.</p>
     <p class="ask">With 2 neurons the error stays at 0.06 however long we train. Why?</p>
     <p class="ans">Two ReLU neurons give at most two bends, and this curve needs more. Training can only find what the network is able to draw. And with 8 neurons it could have matched our hand-placed hinges but ended a bit worse: gradient descent walks downhill from where it starts and can settle in a slightly worse spot. Enough neurons make a good fit possible; they do not promise that training finds it. That is the theme of the next slide.</p>`,
   });
@@ -726,7 +726,7 @@ with torch.no_grad():
     title: 'ReLU or tanh on Kobe?',
     html: `
     <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>On Kobe: ReLU or tanh?</h2></div>
-    <svg class="dg" viewBox="0 0 1728 290" width="1728" height="290" role="img" aria-label="validation log loss on Kobe: constant 0.688, logistic regression 0.675, tanh 0.664, ReLU 0.662">
+    <svg class="dg" style="margin-top:48px" viewBox="0 0 1728 290" width="1728" height="290" role="img" aria-label="validation log loss on Kobe: constant 0.688, logistic regression 0.675, tanh 0.664, ReLU 0.662">
       <line x1="100" y1="200" x2="1640" y2="200" style="stroke:var(--muted);stroke-width:3"/>
       ${[0.66, 0.67, 0.68, 0.69].map(v => `<line x1="${nlX(v)}" y1="190" x2="${nlX(v)}" y2="210" style="stroke:var(--muted);stroke-width:3"/><text class="lbl-s" x="${nlX(v)}" y="240">${v.toFixed(2)}</text>`).join('')}
       <text class="lbl-s" x="1640" y="276" style="text-anchor:end">validation log loss · lower is better →</text>
@@ -734,7 +734,7 @@ with torch.no_grad():
         <circle cx="${nlX(v)}" cy="200" r="16" style="fill:var(--${c});stroke:var(--paper);stroke-width:3"/>
         <text class="lbl" x="${nlX(v)}" y="${i === 3 ? 108 : i === 2 ? 150 : 150}" style="fill:var(--${c});${i === 3 ? 'text-anchor:start' : i === 2 ? 'text-anchor:end' : ''}">${n} ${v.toFixed(3)}</text></g>`).join('')}
     </svg>
-    <table class="tbl where" data-step="2">
+    <table class="tbl where" style="margin-top:48px" data-step="2">
       <tr><td>hidden layers</td><td><b>ReLU</b> as the default; tanh is fine for small nets</td></tr>
       <tr><td>transformers</td><td>GELU or SiLU</td></tr>
       <tr><td>output layer</td><td><b>none</b>: output a raw score; the loss adds the sigmoid</td></tr>

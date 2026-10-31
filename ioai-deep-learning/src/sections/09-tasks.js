@@ -23,9 +23,9 @@ Deck.css(`
 .sec-task .hint { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 64px; }
 .sec-task .hint div { border-left: 6px solid var(--ink); padding: 4px 0 4px 22px; font-size: 32px; line-height: 1.25; }
 .sec-task .hint b { display: block; font-size: 36px; margin-bottom: 4px; }
-.sec-task .traps { flex: 1; align-content: start; gap: 56px 64px; margin-top: 24px; }
-.sec-task .traps div { font-size: 34px; padding: 8px 0 8px 26px; }
-.sec-task .traps b { font-size: 42px; margin-bottom: 10px; }
+.sec-task .traps { flex: 1; align-content: space-evenly; gap: 72px 64px; }
+.sec-task .traps div { font-size: 38px; padding: 12px 0 12px 30px; }
+.sec-task .traps b { font-size: 46px; margin-bottom: 14px; }
 .sec-task .eqs { font-family: var(--font-math); font-size: 48px; }
 .sec-task .eqs i { font-style: italic; }
 .sec-task .toys { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; flex: 1; min-height: 0; }
@@ -138,7 +138,7 @@ Deck.css(`
     <p class="do">Press → three times: one column per press. Read only the bold words; the grey code is the hint for how.</p>
     <ul>
       <li><b>Before:</b> seed, so a result can be repeated; scale with the mean and standard deviation of the TRAINING part only; compute a baseline (for Kobe "always miss" already gets 55.3%); keep 20% aside as validation.</li>
-      <li><b>While:</b> BCEWithLogitsLoss for yes/no (the model outputs a raw score, no sigmoid inside the training model); Adam 1e-3 to start, then try 3e-3 and 1e-2; judge by the validation loss.</li>
+      <li><b>While:</b> BCEWithLogitsLoss for yes/no, fed the raw score (for Kobe the submitted class ends with a Sigmoid, so train on the score before it; the pitfalls slide comes back to this); Adam 1e-3 to start, then try 3e-3 and 1e-2; judge by the validation loss.</li>
       <li><b>Before submitting:</b> save the best weights with copy.deepcopy (a plain state_dict() keeps changing as you train); count the parameters in code: sum(p.numel() for p in model.parameters()).</li>
     </ul>
     <p class="ask">The official Kobe baseline notebook printed a training loss of 0.6877. Which check would have told its author that the model learned nothing?</p>
@@ -207,14 +207,14 @@ Deck.css(`
     </svg>
     <div class="cards">
       <div class="card" data-step="2"><h3>act = only these</h3>
-        <span class="mono">nn.ReLU · nn.Sigmoid · nn.Tanh<br>nn.ELU · nn.LeakyReLU · nn.PReLU</span>
+        <span class="mono">nn.ReLU · nn.Sigmoid<br>nn.Tanh · nn.ELU<br>nn.LeakyReLU · nn.PReLU</span>
         <span><span class="xx">✗</span> <span class="mono">nn.Sequential</span> → score 0</span></div>
       <div class="card" data-step="3"><h3>submission.zip</h3>
         <span class="mono">submission_model.py</span><span class="small muted">the class, its imports</span>
         <span class="mono">submission_dic.pth</span><span class="small muted">the trained state_dict</span></div>
       <div class="card" data-step="4"><h3>score = test accuracy</h3>
-        <div class="boards"><span>board A · live</span><span>board B · final</span></div>
-        <span class="small muted">each board: half the test set, ≈ 2,500 shots</span></div>
+        <div class="boards"><span>A: live</span><span>B: final</span></div>
+        <span class="small muted">each ≈ 2,500 hidden shots</span></div>
     </div>`,
     notes: `
     <p class="time">2 min</p>
@@ -418,19 +418,19 @@ Deck.css(`
     title: 'Hint: fold the scaling into fc1',
     html: `
     <h2>Hide the scaling inside the first layer</h2>
-    <div class="row" style="gap:64px;align-items:flex-start">
-      <div class="col" style="gap:20px">
+    <div class="row" style="gap:40px;align-items:flex-start">
+      <div class="col" style="gap:28px">
         <div class="kicker">while training</div>
-        <svg class="dg" viewBox="0 0 1000 170" width="1000" height="170" role="img" aria-label="raw x, y, then scaling, then fc1">${R1.s}
+        <svg class="dg" viewBox="0 0 1000 170" width="1140" height="194" role="img" aria-label="raw x, y, then scaling, then fc1">${R1.s}
           <text class="lbl-s" x="${(R1.pos[1][0] + R1.pos[1][1]) / 2}" y="160">y: −91, ÷ 88</text></svg>
         <div class="kicker" data-step="1">what you submit</div>
-        <svg class="dg" viewBox="0 0 1000 170" width="1000" height="170" data-step="1" role="img" aria-label="raw x, y into fc1 with new weights">${R2.s}
+        <svg class="dg" viewBox="0 0 1000 170" width="1140" height="194" data-step="1" role="img" aria-label="raw x, y into fc1 with new weights">${R2.s}
           <text class="lbl-s" x="${(R2.pos[1][0] + R2.pos[1][1]) / 2}" y="160">same answers · legal</text></svg>
       </div>
-      <div class="col" data-step="2" style="gap:16px;padding-top:56px">
+      <div class="col" data-step="2" style="gap:16px;padding-top:72px">
         <div class="kicker">new fc1</div>
         <div class="eqs"><i>W</i>′ = <i>W</i> ÷ std</div>
-        <div class="lead muted">then shift the bias to match</div>
+        <div class="lead muted">shift the bias to match</div>
       </div>
     </div>
     <p class="lead" data-step="3">Check it: raw inputs in, the same outputs to 6 decimals.</p>`,
@@ -518,7 +518,7 @@ Deck.css(`
       <text class="lbl-b" x="650" y="110">=</text>
       ${panda(800, 110, 0.95)}
       <text class="lbl" x="800" y="226" data-step="3">"gibbon" 99.3%</text>
-      <text class="lbl-s" x="1000" y="80" style="text-anchor:start;font-size:30px" data-step="3">same trick: DeepDream · style transfer ·</text>
+      <text class="lbl-s" x="1000" y="80" style="text-anchor:start;font-size:30px" data-step="3">same trick: DeepDream, style transfer</text>
       <text class="lbl-s" x="1000" y="124" style="text-anchor:start;font-size:30px" data-step="3">Fredrikson 2014: dosing model + dose</text>
       <text class="lbl-s" x="1000" y="168" style="text-anchor:start;font-size:30px" data-step="3">→ patient's missing gene = this task</text>
     </svg>`,
@@ -587,7 +587,7 @@ Deck.css(`
       ctx.restore();
       cfg.marks.forEach(m => {
         ctx.save(); ctx.strokeStyle = C.ink; ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.moveTo(sx(m), sy(0) - 14); ctx.lineTo(sx(m), sy(0) + 14); ctx.stroke(); ctx.restore();
+        ctx.beginPath(); ctx.moveTo(sx(m), sy(0) - 18); ctx.lineTo(sx(m), sy(0)); ctx.stroke(); ctx.restore();
       });
       const x = S.path[S.path.length - 1];
       rd.innerHTML = S.gone ? `step ${S.path.length - 1}: <b>blows up</b>` : `step ${S.path.length - 1}: ${cfg.short} = <b>${(Math.abs(x) < 5e-4 ? 0 : x).toFixed(3)}</b>`;
@@ -627,6 +627,7 @@ Deck.css(`
     notes: `
     <p class="time">2 min</p>
     <p class="say">Two tiny versions of the task, small enough to see everything. The "frozen model" is a + 2b + c², and we know its output is 4.65. Each picture shows the loss, how wrong the output is, for every value of the unknown. The magenta dots are the optimiser's steps.</p>
+    <p class="ask">Before each run on the left, ask for a quick hand vote: "Will it land, crawl, bounce, or fly off?"</p>
     <p class="do">Left (find b, starting from 0): press <b>Run</b> with lr 0.125: one jump and it lands exactly on 0.7. Choose lr 0.05: small careful steps. lr 0.25: it bounces between 0 and 1.4 forever. lr 0.3: each bounce is bigger and it flies off the chart. The step size must fit the steepness of the valley.</p>
     <p class="do">Right (find c, Adam lr 0.1): start +0.1 → it rolls to +1.5. Start −0.1 → it rolls to −1.5. Both give exactly 4.65. Start exactly 0 → it never moves: 0 is the top of the hill, the slope there is exactly zero, so the gradient says nothing.</p>
     <p class="ask">Starting at +0.1 we get +1.5; the true answer was +1.5. Did gradient descent "know" the answer?</p>
@@ -763,32 +764,38 @@ Deck.css(`
   /* ================================================================
      12. How it's scored
      ================================================================ */
-  const mx = m => 80 + (Math.log10(1) - Math.log10(m)) / (Math.log10(1) - Math.log10(0.003)) * 1560;  // MSE 1 → 0.003, log
+  const sx100 = v => 60 + v * 15.4;                   // score 0..100 on a straight ruler
   const sc = m => Math.max(0, Math.min(100, (0.968 - m) / (0.968 - 0.0045) * 100));
-  const rmark = (m, label, step, up) => `<g data-step="${step}">
-      <circle cx="${mx(m)}" cy="230" r="14" style="fill:var(--ink);stroke:var(--paper);stroke-width:3"/>
-      <text class="lbl" x="${mx(m)}" y="${up ? 150 : 310}" style="font-size:38px">${sc(m) <= 0 || sc(m) >= 100 ? Math.round(sc(m)) : sc(m).toFixed(1)}</text>
-      <text class="lbl-s" x="${mx(m)}" y="${up ? 104 : 356}" style="font-size:30px">${label}</text></g>`;
+  const rmark = (m, label, mse, step, up) => {
+    const x = sx100(sc(m)), s = sc(m), anchor = s > 99 ? 'end' : s < 1 ? 'start' : 'middle';
+    const tx = s > 99 ? x + 20 : s < 1 ? x - 20 : x;
+    return `<g data-step="${step}">
+      <circle cx="${x}" cy="260" r="13" style="fill:var(--ink);stroke:var(--paper);stroke-width:3"/>
+      <line x1="${x}" y1="${up ? 170 : 282}" x2="${x}" y2="${up ? 238 : 330}" style="stroke:var(--ink);stroke-width:3"/>
+      <text class="lbl" x="${tx}" y="${up ? 40 : 370}" style="font-size:44px;font-weight:700;text-anchor:${anchor}">${s <= 0 || s >= 100 ? Math.round(s) : s.toFixed(1)}</text>
+      <text class="lbl-s" x="${tx}" y="${up ? 92 : 420}" style="font-size:30px;fill:var(--ink);text-anchor:${anchor}">${label}</text>
+      <text class="lbl-s" x="${tx}" y="${up ? 136 : 462}" style="font-size:28px;text-anchor:${anchor}">MSE ${mse}</text></g>`;
+  };
   Deck.slide({
     id: 'task-ruler',
     title: 'How the inversion task is scored',
     html: `
     <h2>Score: zeros get 0, the best got 100</h2>
-    <svg class="dg" viewBox="0 0 1728 520" width="1728" height="520" role="img" aria-label="score ruler: MSE on a log scale and the score above it">
-      <line x1="80" y1="230" x2="1660" y2="230" style="stroke:var(--ink);stroke-width:4"/>
-      ${[1, 0.1, 0.01].map(m => `<line x1="${mx(m)}" y1="216" x2="${mx(m)}" y2="244" style="stroke:var(--muted);stroke-width:3"/><text class="lbl-s" x="${mx(m)}" y="${m === 1 ? 440 : 440}">${m}</text>`).join('')}
-      <text class="lbl-s" x="1660" y="490" style="text-anchor:end;font-size:30px">MSE vs the true column → smaller is better</text>
-      <text class="lbl-s" x="80" y="40" style="text-anchor:start;font-size:30px">score out of 100</text>
-      ${rmark(0.968, 'all zeros', 1, true)}
-      ${rmark(0.433, 'Adam lr 0.001', 2, false)}
-      ${rmark(0.0236, 'Adam lr 0.1', 3, true)}
-      ${rmark(0.0045, 'best known', 4, false)}
+    <svg class="dg" viewBox="0 0 1728 500" width="1728" height="500" role="img" aria-label="score ruler from 0 to 100 with four submissions on it">
+      <line x1="${sx100(0)}" y1="260" x2="${sx100(100)}" y2="260" style="stroke:var(--ink);stroke-width:4"/>
+      ${[0, 25, 50, 75, 100].map(v => `<line x1="${sx100(v)}" y1="246" x2="${sx100(v)}" y2="274" style="stroke:var(--muted);stroke-width:3"/>`).join('')}
+      <text class="lbl-s" x="${sx100(25)}" y="306" style="font-size:28px">25</text>
+      <text class="lbl-s" x="${sx100(75)}" y="306" style="font-size:28px">75</text>
+      ${rmark(0.968, 'all zeros', '0.968', 1, true)}
+      ${rmark(0.433, 'Adam lr 0.001', '0.433', 2, true)}
+      ${rmark(0.0236, 'Adam lr 0.1', '0.024', 3, true)}
+      ${rmark(0.0045, 'best known', '0.0045', 4, false)}
     </svg>
     <p class="lead" data-step="5">The last two points are all about rows with two answers.</p>`,
     notes: `
     <p class="time">45 s</p>
     <p class="say">How the inversion task is scored: you submit your recovered column and they compute the mean squared error against the truth. Submitting all zeros gives the baseline error 0.968, which scores 0. The best known solution has error 0.0045, which scores 100. In between, the score is a straight line in the error.</p>
-    <p class="do">→ 1–4: zeros 0 points; Adam with lr 0.001 about 55; Adam with lr 0.1 about 98 (on our replica); best known 100. The axis is logarithmic so you can see that the last two points need the error to shrink five-fold.</p>
+    <p class="do">→ 1–4: zeros 0 points; Adam with lr 0.001 about 55; Adam with lr 0.1 about 98 (on our replica); best known 100. Point at the tiny gap between 98 and 100: on the ruler it is nothing, but the error (MSE) has to shrink five-fold, from 0.024 to 0.0045. → 5: that is where the rows with two answers come in.</p>
     <p>Formula for the coach: score = (0.968 − MSE) / (0.968 − 0.0045) × 100, clipped to [0, 100]. Our replica numbers: 0.433 → 55.5, 0.0236 → 98.0, the full recipe (all answers per row, weighted by a learned prior, submit the weighted mean) 0.0145 → 99.0. The shape bug (MSE 2.44) scores 0.</p>
     <p class="ask">You have a 98. Is it worth two more hours?</p>
     <p class="ans">Only if other tasks are done. The cheap 98 comes in 15 minutes; the last 2 points need careful thinking about rows with two answers. Olympiad strategy: bank the safe score first on every task, then polish.</p>`,

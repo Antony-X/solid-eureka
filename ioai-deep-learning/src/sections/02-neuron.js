@@ -460,7 +460,7 @@ Deck.css(`
     id: 'neu-count',
     title: 'Count the parameters',
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-pair">pairs</span><h2>How many numbers does the Kobe net learn?</h2></div>
+    <div class="row" style="gap:32px"><span class="tag tag-pair">pairs</span><h2>How many numbers does 2-8-8-1 learn?</h2></div>
     <div class="neu-row" style="gap:64px">
       <svg class="dg" viewBox="0 0 1100 700" width="1100" height="700" role="img" aria-label="2-8-8-1 network with parameter counts per layer">
         ${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 1100, h: 520, r: 22 })}

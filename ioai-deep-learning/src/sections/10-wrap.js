@@ -4,7 +4,7 @@ Deck.css(`
 .sec-wrap .can { display: flex; flex-direction: column; gap: 36px; font-size: 48px; line-height: 1.15; margin-top: 16px; }
 .sec-wrap .can div { display: flex; gap: 36px; align-items: baseline; }
 .sec-wrap .can b { font-family: var(--font-mono); color: var(--muted); font-weight: 600; font-size: 36px; min-width: 1.2em; }
-.sec-wrap .exit { display: flex; flex-direction: column; gap: 34px; margin-top: 8px; }
+.sec-wrap .exit { display: flex; flex-direction: column; gap: 28px; }
 .sec-wrap .exit-row { display: grid; grid-template-columns: 48px 1fr 700px; gap: 40px; align-items: baseline; font-size: 40px; line-height: 1.2; }
 .sec-wrap .exit-row .n { font-family: var(--font-mono); font-size: 34px; color: var(--muted); }
 .sec-wrap .exit-row .a { border-left: 8px solid var(--ok); padding-left: 24px; }

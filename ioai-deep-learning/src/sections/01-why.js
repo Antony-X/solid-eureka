@@ -221,7 +221,7 @@ Deck.css(`
     </div>`,
     init(el, api) {
       const D = NN.data.circle(300, 101, 0);
-      const W = 960, H = 768, S = 285, ZS = 1.15, CUT = 0.36;   // inner r² ≤ 0.25, outer r² ≥ 0.50
+      const W = 960, H = 768, S = 285, ZS = 1.3, CUT = 0.36;   // inner r² ≤ 0.25, outer r² ≥ 0.50
       const cv = Plot.canvas(el.querySelector('#why-lift'), W, H);
       const st = { t: 0, pitch: 90, yaw: 0, plane: 0, ring: 0 };
       const goal = { t: 0, pitch: 90, yaw: 0, plane: 0, ring: 0 };
@@ -229,8 +229,8 @@ Deck.css(`
         { t: 0, pitch: 90, yaw: 0, plane: 0, ring: 0 },
         { t: 1, pitch: 24, yaw: -32, plane: 0, ring: 0 },
         { t: 1, pitch: 24, yaw: -32, plane: 1, ring: 0 },
-        { t: 1, pitch: 34, yaw: -32, plane: 1, ring: 1 },
-        { t: 1, pitch: 34, yaw: -32, plane: 1, ring: 1 },
+        { t: 1, pitch: 24, yaw: -32, plane: 1, ring: 1 },
+        { t: 1, pitch: 24, yaw: -32, plane: 1, ring: 1 },
       ];
       const proj = (x, y, z) => {
         const a = st.yaw * Math.PI / 180, p = st.pitch * Math.PI / 180;

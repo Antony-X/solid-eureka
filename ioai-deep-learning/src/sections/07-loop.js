@@ -457,7 +457,7 @@ Deck.slide({
     </div>
     <div data-step="3" class="col">
       <div class="lbl kicker">Kobe, validation accuracy</div>
-      <div class="lp-verdict"><span class="big-n bad">45%</span><span>✗ without zero_grad <span class="muted">(“made” for every shot)</span></span></div>
+      <div class="lp-verdict"><span class="big-n bad">45%</span><span>✗ without zero_grad<br><span class="small muted">says “made” for every shot</span></span></div>
       <div class="lp-verdict"><span class="big-n muted">55%</span><span>always “miss”</span></div>
     </div>
   </div>`,
@@ -474,11 +474,11 @@ Deck.slide({
 
 /* ---------- 9. the cliffhanger reveal: sigmoid + BCEWithLogitsLoss ---------- */
 {
-  // validation outputs (5,000 shots, 20 bins on [0, 1]) from our run of the slide code on the task file
-  const HIST_OK = [12, 7, 5, 6, 11, 137, 565, 956, 1258, 516, 310, 321, 896, 0, 0, 0, 0, 0, 0, 0];
-  const HIST_BUG = [3882, 29, 27, 24, 20, 16, 12, 12, 18, 16, 16, 928, 0, 0, 0, 0, 0, 0, 0, 0];
+  // validation outputs (5,000 shots, 20 bins on [0, 1]) of notebook Part 7 (seed 0, CPU), the same models the room sees
+  const HIST_OK = [11, 3, 8, 2, 12, 132, 447, 1197, 1352, 668, 77, 145, 946, 0, 0, 0, 0, 0, 0, 0];
+  const HIST_BUG = [3890, 32, 23, 20, 18, 11, 9, 8, 10, 14, 25, 940, 0, 0, 0, 0, 0, 0, 0, 0];
   const hist = (H, title, note) => {
-    const w = 480, h = 420, x0 = 30, y0 = 360, bw = (w - 2 * x0) / 20, k = 290 / 3882;
+    const w = 480, h = 420, x0 = 30, y0 = 360, bw = (w - 2 * x0) / 20, k = 290 / 3890;
     let s = `<svg class="dg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${title}">`;
     s += `<text class="lbl" x="${x0}" y="22" style="text-anchor:start">${title}</text>`;
     H.forEach((c, i) => { if (c) s += `<rect x="${x0 + i * bw + 1}" y="${y0 - Math.max(3, c * k)}" width="${bw - 2}" height="${Math.max(3, c * k)}" style="fill:var(--ink)"/>`; });
@@ -506,48 +506,50 @@ Deck.slide({
       <div class="col" style="gap:28px">
         <div data-step="3" class="row" style="gap:40px;align-items:start">
           <div>${hist(HIST_OK, 'correct model')}</div>
-          <div>${hist(HIST_BUG, 'two sigmoids', `<text class="lbl" x="80" y="86" style="text-anchor:start;fill:var(--bad)">← 76% say “&lt; 1%”</text>`)}</div>
+          <div>${hist(HIST_BUG, 'two sigmoids', `<text class="lbl" x="80" y="86" style="text-anchor:start;fill:var(--bad)">← 77% say “&lt; 1%”</text>`)}</div>
         </div>
-        <div class="lbl-s tiny" data-step="3" style="margin-top:-12px">predicted chance of a make, 5,000 validation shots</div>
-        <div data-step="4" class="lp-verdict"><span class="big-n bad">4.69</span><span>✗ true log loss <span class="muted">(correct: 0.662)</span></span></div>
+        <div class="small muted" data-step="3" style="margin-top:-12px">predicted chance of a make, 5,000 validation shots</div>
+        <div data-step="4" class="lp-verdict"><span class="big-n bad">8.39</span><span>✗ true log loss <span class="muted">(correct model: 0.66)</span></span></div>
       </div>
     </div>`,
     notes: `
     <p class="time">3 min</p>
     <p class="say">Before the break you voted: a sigmoid as the last layer of the model, and BCEWithLogitsLoss as the loss. Crash, normal, quietly worse, or NaN? Let's run it.</p>
-    <p class="do">In the notebook change the last line of forward to return torch.sigmoid(self.fc3(h)) and train. Then press → for each reveal:</p>
+    <p class="do">Re-take the vote (1 crash, 2 normal, 3 quietly worse, 4 NaN). Run notebook Part 7: the class SigmoidMLP adds nn.Sigmoid() after the MLP's last layer (the same as the first code line on the slide), and trains with the same loop (about 10 s). Then press → for each reveal, running the matching notebook cell:</p>
     <ul>
-      <li>Step 1: the printed loss ends around 0.68. Looks like a normal run.</li>
-      <li>Step 2: accuracy (output above 0.5 = "made") is 61%, the same as the correct model.</li>
-      <li>Step 3: the histograms of the predicted chances. The correct model says between 0 and 0.62 for every shot. The buggy one says "less than 1%" for 76% of all shots, including mid-range jumpers that go in 40% of the time.</li>
-      <li>Step 4: score those outputs as probabilities (log loss, which is what Kaggle and many olympiad tasks use): 4.69, against 0.662 for the correct model and 0.687 for a constant guess.</li>
+      <li>Step 1: the printed loss ends at 0.685 (the notebook table). Looks like a normal, slightly weak run.</li>
+      <li>Step 2: accuracy (output above 0.5 = "made") is 60.9%, the same as the correct model.</li>
+      <li>Step 3: the histograms of the predicted chances (the notebook draws the same two). The correct model says between 0 and 0.63 for every shot. The buggy one says "less than 1%" for 77% of all shots, including mid-range jumpers that go in 40% of the time.</li>
+      <li>Step 4: score those outputs as probabilities (log loss, which is what Kaggle and many olympiad tasks use): the notebook prints 8.387, against 0.664 for the correct model and 0.688 for a constant guess.</li>
     </ul>
     <p class="ans">"Quietly worse": no crash, no NaN, normal-looking loss and accuracy, but the probabilities are garbage. A bug can leave accuracy unchanged and still destroy the competition metric.</p>
     <p class="say">Why: the loss applies its own sigmoid to whatever the model outputs. The model's output is already squeezed between 0 and 1, so the loss only ever sees chances between 50% and 73%. To push a "miss" as low as it can go, the network must push its own output all the way down to 0. So it learns extreme outputs.</p>
     <p>The maths, if a student asks: the loss sees σ(σ(z)), and σ(s) for s in (0, 1) lies in (0.5, 0.731). So each made shot costs at least −ln 0.731 = 0.313 and each miss at least −ln 0.5 = 0.693: the printed loss is trapped and can never look very good or very bad. The two fixes: remove the sigmoid from the model (preferred; BCEWithLogitsLoss is numerically safer), or keep it and use nn.BCELoss.</p>
     <p>Kobe task note: a final nn.Sigmoid in the submitted model is allowed (the official baseline has one). If you train with it, use nn.BCELoss; or train without it using BCEWithLogitsLoss and add the sigmoid only in the submitted class. Also: with this bug, "logits > 0" accuracy reads 44% (everything "made"), because the outputs are never negative.</p>
-    <p>Numbers: 4.69 and 61% are the mean of 3 seeds; our run of the slide code on the task file (seed 0): printed val loss 0.6845, accuracy 61.7%, true log loss 4.60, 76.4% of outputs below 0.01. Karpathy's mistake #4 is the multi-class cousin: "you passed softmaxed outputs to a loss that expects raw logits".</p>`,
+    <p>Numbers: all from notebook Part 7 (seed 0). The true log loss depends on how close to 0 the outputs are pushed: each made shot that gets "0%" costs about 16, so other seeds and splits gave 4.6 to 4.7 (the 4.69 quoted in other sections' notes) and the notebook gives 8.39. Either way it is far worse than the 0.69 of a constant guess. Karpathy's mistake #4 is the multi-class cousin: "you passed softmaxed outputs to a loss that expects raw logits".</p>`,
   });
 }
 
 /* ---------- 10. planned mistake 4: target shape ---------- */
 {
-  const cell = 116;
+  // the notebook's example (Part 8): perfect predictions 1..5 as a column (5, 1), targets 1..5 as (5,)
+  const cell = 92, N = 5;
   const grid = () => {
-    const x0 = 196, y0 = 90;
-    let s = `<svg class="dg" viewBox="0 0 576 530" width="576" height="530" role="img" aria-label="predictions (3,1) minus targets (3,) broadcast to a 3 by 3 grid">`;
-    s += `<text class="lbl-s" x="${x0 + 1.5 * cell}" y="30">target  (3,)</text>`;
-    s += `<text class="lbl-s" x="64" y="${y0 + 1.5 * cell - 18}">pred</text><text class="lbl-s" x="64" y="${y0 + 1.5 * cell + 18}">(3, 1)</text>`;
-    [1, 2, 3].forEach((t, j) => { s += `<text class="lbl" x="${x0 + j * cell + cell / 2}" y="70">${t}</text>`; });
-    [1, 2, 3].forEach((p, i) => {
-      s += `<text class="lbl" x="${x0 - 26}" y="${y0 + i * cell + cell / 2}">${p}</text>`;
-      [1, 2, 3].forEach((t, j) => {
-        const d = (p - t) ** 2, diag = i === j;
+    const x0 = 196, y0 = 96, W = 696, H = y0 + N * cell + 72;
+    let s = `<svg class="dg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="predictions (5,1) minus targets (5,) broadcast to a 5 by 5 table">`;
+    s += `<text class="lbl-s" x="${x0 + N * cell / 2}" y="24">target  (5,)</text>`;
+    s += `<text class="lbl-s" x="72" y="${y0 + N * cell / 2 - 18}">pred</text><text class="lbl-s" x="72" y="${y0 + N * cell / 2 + 18}">(5, 1)</text>`;
+    for (let j = 0; j < N; j++) s += `<text class="lbl" x="${x0 + j * cell + cell / 2}" y="68">${j + 1}</text>`;
+    let tot = 0;
+    for (let i = 0; i < N; i++) {
+      s += `<text class="lbl" x="${x0 - 26}" y="${y0 + i * cell + cell / 2}">${i + 1}</text>`;
+      for (let j = 0; j < N; j++) {
+        const d = (i - j) ** 2, diag = i === j; tot += d;
         s += `<rect x="${x0 + j * cell}" y="${y0 + i * cell}" width="${cell}" height="${cell}" style="fill:${diag ? 'var(--paper)' : 'var(--code-bg)'};stroke:var(--ink);stroke-width:3"/>`;
-        s += `<text class="lbl" x="${x0 + j * cell + cell / 2}" y="${y0 + i * cell + cell / 2}" style="font-size:40px;fill:${diag ? 'var(--ink)' : 'var(--bad)'}">${d}</text>`;
-      });
-    });
-    s += `<text class="lbl" x="${x0 + 1.5 * cell}" y="${y0 + 3 * cell + 44}" style="fill:var(--bad);font-size:34px">average of 9 = 1.33</text>`;
+        s += `<text class="lbl" x="${x0 + j * cell + cell / 2}" y="${y0 + i * cell + cell / 2}" style="font-size:38px;fill:${diag ? 'var(--ink)' : 'var(--bad)'}">${d}</text>`;
+      }
+    }
+    s += `<text class="lbl" x="${x0 + N * cell / 2}" y="${y0 + N * cell + 44}" style="fill:var(--bad);font-size:34px">average of 25 = ${(tot / N / N).toFixed(1)}</text>`;
     return s + '</svg>';
   };
   Deck.slide({
@@ -556,12 +558,12 @@ Deck.slide({
     html: `
     <div class="row"><span class="tag tag-warn">planned mistake 4</span></div>
     <h2>Targets must be (N, 1), not (N,)</h2>
-    <div class="split" style="align-items:start;grid-template-columns:1080px 1fr;gap:72px">
+    <div class="split" style="align-items:start;grid-template-columns:960px 1fr;gap:72px">
       <div class="col" style="gap:40px">
         <div data-step="1"><div class="kicker">BCEWithLogitsLoss: loud</div>
-          <div class="lp-err"><span class="e">ValueError:</span> Target size (torch.Size([64])) must be the same as input size (torch.Size([64, 1]))</div></div>
+          <div class="lp-err"><span class="e">ValueError:</span> Target size (torch.Size([5])) must be the same as input size (torch.Size([5, 1]))</div></div>
         <div data-step="2"><div class="kicker">MSELoss: silent (only a warning)</div>
-          <div class="lp-err">perfect predictions [1, 2, 3] → loss <span class="e">1.33</span>, not 0</div></div>
+          <div class="lp-err">perfect predictions 1…5 → loss <span class="e">4.0</span>, not 0</div></div>
         <div data-step="3">${Code.py(`y = y.unsqueeze(1)    # (N,) -> (N, 1)`, { cls: 'lp-c30' })}</div>
       </div>
       <div data-step="2">${grid()}</div>
@@ -569,20 +571,20 @@ Deck.slide({
     notes: `
     <p class="time">2 min</p>
     <p class="say">Last planned mistake. I remove the unsqueeze(1), so y has shape (N,) while the model outputs shape (N, 1).</p>
-    <p class="do">In the notebook remove .unsqueeze(1) and run. Press → to show the error. Read it aloud, slowly: "Target size 64 must be the same as input size 64 by 1."</p>
+    <p class="do">Run the first code cell of notebook Part 8: five validation shots, the model outputs (5, 1), the targets were flattened to (5,). Press → to show the error. Read it aloud, slowly: "Target size 5 must be the same as input size 5 by 1." (In the training loop it would say 64 and 64 by 1.)</p>
     <p class="say">This one is the friendly bug: it crashes, it tells you exactly what is wrong. Read error messages from the last line up; the last line says what, the lines above say where.</p>
-    <p class="do">Press → again. Now the same mistake with MSELoss, the loss for numbers (and the loss of the inversion task).</p>
-    <p class="ask">Three predictions 1, 2, 3 and targets 1, 2, 3: perfect. What is the MSE?</p>
-    <p class="ans">It should be 0, but PyTorch prints 1.33. A column (3, 1) minus a row (3,) is "broadcast" to a 3×3 table: every prediction is compared with every target. Only the diagonal is what you meant; the average of all 9 squares is 12/9 = 1.33. PyTorch only prints a UserWarning ("Using a target size … that is different to the input size … This will likely lead to incorrect results due to broadcasting"), easy to miss. With 20,000 shots the table would have 400 million entries.</p>
+    <p class="do">Now the same mistake with MSELoss, the loss for numbers (and the loss of the inversion task). Ask first, then run the next notebook cell and press →.</p>
+    <p class="ask">Five predictions 1, 2, 3, 4, 5 and targets 1, 2, 3, 4, 5: perfect. What is the MSE?</p>
+    <p class="ans">It should be 0, but PyTorch prints 4.0. A column (5, 1) minus a row (5,) is "broadcast" to a 5×5 table: every prediction is compared with every target. Only the diagonal is what you meant; the average of all 25 squares is 100/25 = 4.0. The notebook prints the shape of pred − truth: (5, 5). PyTorch only prints a UserWarning ("Using a target size … that is different to the input size … This will likely lead to incorrect results due to broadcasting"), easy to miss. With 20,000 shots the table would have 400 million entries.</p>
     <p class="do">Press → for the fix: y.unsqueeze(1) (or y.view(-1, 1)). Habit: print logits.shape and y.shape once before training.</p>
-    <p>Verified in PyTorch 2.15: the ValueError text above is exact, and MSELoss on (3,1) vs (3,) perfect predictions returns 1.3333 with the warning.</p>`,
+    <p>Verified in PyTorch 2.15: the ValueError text above is exact, and MSELoss on (5, 1) vs (5,) perfect predictions returns 4.0 with the warning. With 3 numbers it would be 1.33.</p>`,
   });
 }
 
 /* ---------- 11. evaluate correctly ---------- */
 {
   const sig = (() => {
-    const w = 520, h = 330, x0 = 40, x1 = 500, y0 = 270, y1 = 30;
+    const w = 520, h = 330, x0 = 40, x1 = 500, y0 = 270, y1 = 20;
     const sx = z => x0 + (z + 6) / 12 * (x1 - x0), sy = p => y0 - p * (y0 - y1);
     let d = '';
     for (let i = 0; i <= 60; i++) { const z = -6 + i / 5; d += (i ? 'L' : 'M') + sx(z).toFixed(1) + ',' + sy(1 / (1 + Math.exp(-z))).toFixed(1); }
@@ -594,8 +596,8 @@ Deck.slide({
       <circle cx="${sx(0)}" cy="${sy(0.5)}" r="10" style="fill:var(--ink)"/>
       <text class="lbl-s" x="${sx(0) - 64}" y="${sy(0.5) - 28}">50%</text>
       <text class="lbl-s" x="${sx(0)}" y="${y0 + 32}">logit 0</text>
-      <text class="lbl" x="${sx(3)}" y="${sy(0.5) + 56}">made</text>
-      <text class="lbl" x="${sx(-4)}" y="${sy(0.5) - 96}">miss</text>
+      <text class="lbl" x="${sx(4)}" y="${y0 + 32}" style="fill:var(--c1)">made →</text>
+      <text class="lbl" x="${sx(-4)}" y="${y0 + 32}" style="fill:var(--c0)">← miss</text>
     </svg>`;
   })();
   Deck.slide({
@@ -616,21 +618,21 @@ Deck.slide({
         <div data-only="1"><div class="lbl">evaluation mode</div><div class="lp-num">dropout off</div><div class="lp-num"><small>(a habit: our net has none)</small></div></div>
         <div data-only="2"><div class="lbl">no graph, no .grad</div><div class="lp-num">faster, less memory</div></div>
         <div data-only="3"><div class="lbl">logit &gt; 0 means &gt; 50%</div>${sig}</div>
-        <div data-only="4"><div class="lbl">printed</div><div class="lp-num">0.662 <small>val loss</small></div><div class="lp-num">61% <small>accuracy</small></div><div class="lp-num">≈ 0.3 <small>predicted “made”</small></div></div>
+        <div data-only="4"><div class="lbl">printed</div><div class="lp-num">0.662 <small>val loss</small></div><div class="lp-num">61% <small>accuracy</small></div><div class="lp-num">≈ 0.25 <small>predicted “made”</small></div></div>
       </div>
     </div>`,
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">The last cell: measure the model on the validation shots it never trained on. Three habits: switch to evaluation mode, turn off gradient tracking, and turn logits into decisions correctly.</p>
-    <p class="do">Press → four times, one line group at a time, then run the cell in the notebook.</p>
+    <p class="do">Press → four times, one line group at a time. In the notebook the same lines are the function evaluate() at the start of Part 5, which you have already used; scroll back to it and point at model.eval(), torch.no_grad() and logits &gt; 0.</p>
     <ul>
       <li><b>model.eval()</b> switches layers like dropout and batch-norm to their test behaviour. Our Linear + ReLU net has neither, so here it changes nothing, but forgetting it is Karpathy's mistake #2, so build the habit. Call model.train() before training again.</li>
       <li><b>torch.no_grad()</b>: we only measure, so PyTorch does not need to remember the computation for backward. Faster and less memory.</li>
       <li><b>logits &gt; 0</b>: a logit of 0 is exactly 50%, positive means "more likely made". No sigmoid needed to decide.</li>
       <li>Print three numbers: loss, accuracy, and the fraction predicted "made". If that fraction is 0 or 1, the model is a constant: always check it.</li>
     </ul>
-    <p class="ask">Our model predicts "made" for about 30% of shots, but Kobe made 45%. Is that a bug?</p>
+    <p class="ask">Our model predicts "made" for only about a quarter of the shots, but Kobe made 45%. Is that a bug?</p>
     <p class="ans">No. "Made" is predicted only where the chance is above 50%, which is basically within 3 feet of the rim. Everywhere else the best single guess is "miss", even though 40% of those shots go in.</p>
-    <p>Numbers from our run of this exact code on the task file (seed 0): val loss 0.6625, accuracy 60.6%, fraction "made" 0.305. Longer or faster training (Adam lr 1e-2) brings the fraction down to about 0.22.</p>`,
+    <p>Numbers: the notebook's model (Part 5, seed 0) gives val loss 0.664, accuracy 60.8%, fraction "made" 0.23; our run of the slide code with another split gave 0.6625, 60.6% and 0.305. The fraction depends on exactly where the 50% line ends up around the rim, so anything from 0.2 to 0.3 is normal.</p>`,
   });
 }

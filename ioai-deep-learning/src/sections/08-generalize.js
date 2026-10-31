@@ -9,7 +9,7 @@ Deck.css(`
 .sec-gen .gen-two { display: grid; grid-template-columns: 816px 816px; gap: 96px; align-items: start; }
 .sec-gen .gen-nets { display: flex; gap: 64px; align-items: flex-end; margin-top: 24px; }
 .sec-gen .gen-net { display: flex; flex-direction: column; gap: 12px; align-items: center; }
-.sec-gen .gen-net .p { font-family: var(--font-mono); font-size: 30px; color: var(--muted); }
+.sec-gen .gen-net .p { font-family: var(--font-mono); font-size: 30px; line-height: 1.25; color: var(--muted); text-align: center; }
 .sec-gen .gen-score { font-family: var(--font-display); font-weight: 800; font-size: 80px; line-height: 1; font-stretch: 110%; }
 .sec-gen .gen-score small { display: block; font-family: var(--font-mono); font-size: 28px; font-weight: 500; color: var(--muted); font-stretch: 100%; margin-top: 8px; text-align: center; }
 .sec-gen .gen-cures { display: flex; flex-direction: column; gap: 14px; }
@@ -197,7 +197,7 @@ Deck.css(`
         const C = Plot.colors(), ctx = lc.ctx;
         lc.clear();
         logAxes(ctx, lx, ly, [1, 10, 100, 1000], [0.001, 0.01, 0.1, 1], { ylabel: 'loss (log scale)' });
-        Plot.text(ctx, 'steps →', CW - 8, CH - 6, { size: 26, color: C.muted, align: 'right' });
+        Plot.text(ctx, 'steps →', CW - 160, CH - 14, { size: 26, color: C.muted });
         const P = (s, v) => [lx(L10(Math.max(1, s))), ly(L10(Math.max(0.0008, Math.min(1.5, v))))];
         if (S.best && S.best.step > 0) {
           const bx = lx(L10(S.best.step));
@@ -227,10 +227,10 @@ Deck.css(`
       api.onTheme(draw);
     },
     notes: `
-    <p class="time">2.5 min</p>
+    <p class="time">2 min</p>
     <p class="say">Twelve noisy points from a smooth curve, the dashed line, and a big network with about a thousand weights. The small hollow dots are validation points: the network never trains on them. On the right, two loss curves: magenta is the training loss, black is the validation loss.</p>
     <p class="ask">Before I press Train: if we train for a very long time, what happens to the training loss? And to the validation loss?</p>
-    <p class="do">Take a few answers, then press <b>Train</b> (about 10 seconds). Narrate: first the black model curve becomes smooth and close to the dashed curve and both losses fall. Then the network starts bending its curve through every single black point: the training loss dives towards 0, while the validation loss turns back up. The dashed vertical line marks the step with the best validation loss so far. Press <b>Restore best</b>: the model jumps back to that smoother curve. Then click <b>80 points</b> and press Train again: the same big net now cannot thread a curve through every point, so the two loss curves stay close together.</p>
+    <p class="do">Take two or three answers, then press <b>Train</b> (about 10 seconds). Narrate: first the black model curve becomes smooth and close to the dashed curve and both losses fall. Then the network starts bending its curve through every single black point: the training loss dives towards 0, while the validation loss turns back up. The dashed vertical line marks the step with the best validation loss so far. Press <b>Restore best</b>: the model jumps back to that smoother curve. Then click <b>80 points</b> and press Train again: the same big net now cannot thread a curve through every point, so the two loss curves stay close together.</p>
     <p class="ans">Training loss keeps falling (to about 0: it memorises all 12 points, noise included). Validation loss falls, reaches its minimum early (around step 80, about 0.10), then climbs to about 0.27, more than twice as bad. With 80 points the two losses end close together (about 0.08 and 0.10). Memorising answers is not understanding.</p>
     <p>Everyday picture: a student who memorises last year's exam answers scores 100% on that paper and badly on a new one. The gap between the two curves is the warning sign, not the training loss alone. The y-axis is logarithmic so that the training loss diving towards 0 stays visible. Loss here is mean squared error, because this is a curve-fitting demo. Do not demo a "smaller net" here: on only 12 points even a 7-weight net ends up chasing the noise if you train it long enough.</p>`,
   });
@@ -244,11 +244,11 @@ Deck.css(`
     <h2>Kobe: does an 80× bigger net score better?</h2>
     <div class="gen-two grow">
       <div class="col">
-        <h3>all 20,558 shots · parameters:</h3>
+        <h3>all 20,558 training shots</h3>
         <div class="gen-nets">
-          <div class="gen-net">${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 300, h: 380, r: 14 })}<span class="p">2-8-8-1 · 105</span>
+          <div class="gen-net">${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 300, h: 340, r: 14 })}<span class="p">2-8-8-1<br>105 parameters</span>
             <div class="gen-score" data-step="1">0.662<small>val loss</small></div></div>
-          <div class="gen-net">${Widgets.netSVG({ sizes: [2, 64, 64, 64, 1], w: 420, h: 380, r: 3, edgeWidth: 0.5 })}<span class="p">2-64-64-64-1 · 8,577</span>
+          <div class="gen-net">${Widgets.netSVG({ sizes: [2, 64, 64, 64, 1], w: 420, h: 340, r: 3, edgeWidth: 0.5 })}<span class="p">2-64-64-64-1<br>8,577 parameters</span>
             <div class="gen-score" data-step="1">0.660<small>val loss</small></div></div>
         </div>
       </div>
@@ -287,7 +287,7 @@ Deck.css(`
     },
     notes: `
     <p class="time">1.5 min</p>
-    <p class="say">Same Kobe data, same training recipe. On the left our legal net with 105 parameters; next to it a net with 8,577 parameters, 80 times bigger.</p>
+    <p class="say">Same Kobe data, same training recipe. On the left our legal net with 105 parameters; next to it a 2-64-64-64-1 net with 8,577 parameters, 80 times bigger.</p>
     <p class="ask">With all 20,558 training shots, will the big net get a much better, about the same, or a much worse validation loss? Hands up for each.</p>
     <p class="do">After the vote press →: 0.662 against 0.660. Then ask "and if we only had 500 shots?" and press → again for the right panel.</p>
     <p class="ans">About the same: 0.662 vs 0.660, a difference of 0.002. The limit is the randomness of basketball (the same spot gives makes and misses), not the size of the network. With only 500 shots, a 2-256-256-1 net memorises: its training loss falls to 0.37 while its validation loss climbs to 1.23, far worse than simply guessing 44.6% for every shot (0.688).</p>
@@ -305,7 +305,7 @@ Deck.css(`
       <div class="gen-cure" data-step="1"><span class="n">1</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">${
           Array.from({ length: 36 }, (_, i) => `<circle cx="${14 + (i % 9) * 19}" cy="${14 + Math.floor(i / 9) * 24}" r="6" style="fill:var(--ink)"/>`).join('')}</svg>
-        <span class="name">More data</span><span class="ev">same kind of big net, all 20,558 shots: <b>0.660</b></span></div>
+        <span class="name">More data</span><span class="ev">big net, all 20,558 shots: <b>0.660</b></span></div>
       <div class="gen-cure" data-step="2"><span class="n">2</span>
         <span>${Widgets.netSVG({ sizes: [2, 3, 1], w: 150, h: 100, r: 12 })}</span>
         <span class="name">Smaller model</span><span class="ev">2-8-8-1 on the same 500 shots: best <b>0.677</b></span></div>
@@ -341,7 +341,7 @@ Deck.css(`
         sizes.forEach((n, l) => ys(n).forEach((y, i) => {
           const dead = off.has(l + ':' + i);
           s += `<circle cx="${xs[l]}" cy="${y}" r="8" style="fill:var(--paper);stroke:${dead ? 'var(--rule)' : 'var(--ink)'};stroke-width:3"/>`;
-          if (dead) s += `<path d="M${xs[l] - 9},${y - 9} L${xs[l] + 9},${y + 9} M${xs[l] + 9},${y - 9} L${xs[l] - 9},${y + 9}" style="stroke:var(--bad);stroke-width:3.5"/>`;
+          if (dead) s += `<path d="M${xs[l] - 9},${y - 9} L${xs[l] + 9},${y + 9} M${xs[l] + 9},${y - 9} L${xs[l] - 9},${y + 9}" style="stroke:var(--ink);stroke-width:3.5"/>`;
         }));
         host.innerHTML = s + '</svg>';
       };
@@ -351,9 +351,9 @@ Deck.css(`
       api.loop(dt => { if (api.step >= 5) { t += dt; if (t > 0.8) { t = 0; shuffle(); } } return true; });
     },
     notes: `
-    <p class="time">2 min</p>
+    <p class="time">1.5 min</p>
     <p class="say">Here is our patient again: the big net that memorised 500 shots and reached a validation loss of 1.23. Five standard cures, each with what it did on Kobe.</p>
-    <p class="do">Press → five times, one cure per click. Spend the most time on 3 and 5.</p>
+    <p class="do">Press → five times, one cure per click, about 15 seconds each; tell the bank story at cure 5. Spend the most time on 3 (stop early) and 5 (dropout).</p>
     <ul>
       <li><b>More data</b>: the best cure when you can get it. With all 20,558 shots, a big net (2-64-64-64-1) reaches 0.660 instead of memorising.</li>
       <li><b>Smaller model</b>: fewer weights means less room to memorise. Our legal 2-8-8-1 on the same 500 shots: best 0.677.</li>
@@ -369,17 +369,17 @@ Deck.css(`
 
   /* ================= 5. loss-curve doctor ================= */
   const DOC = [
-    { dx: '<b>Learning rate too high</b> → divide it by 10', seed: 11 },
-    { dx: '<b>Overfitting</b> → stop early, keep the best', seed: 12, val: true },
-    { dx: '<b>Learning rate too low</b> → ×10, or train longer', seed: 13 },
-    { dx: '<b>Stuck at 0.69: learned nothing</b> → hunt the bug', seed: 14 },
-    { dx: '<b>Very noisy</b> → bigger batch or smaller lr', seed: 15 },
-    { dx: '<b>Healthy</b> → keep it, save the best', seed: 16, val: true },
+    { dx: '<b>Learning rate too high</b><br>→ divide it by 10', seed: 11, lab: 0.36 },
+    { dx: '<b>Overfitting</b><br>→ stop early, keep the best', seed: 12, val: true },
+    { dx: '<b>Learning rate too low</b><br>→ ×10, or train longer', seed: 13 },
+    { dx: '<b>Learned nothing</b><br>→ hunt the bug', seed: 14 },
+    { dx: '<b>Very noisy</b><br>→ bigger batch or smaller lr', seed: 15, lab: 0.98 },
+    { dx: '<b>Healthy</b><br>→ keep it, save the best', seed: 16, val: true },
   ];
   const docCurve = (k, t, r) => {
     const z = () => r() - 0.5;
     switch (k) {
-      case 0: return 0.62 - 0.12 * Math.exp(-t * 18) + 0.32 * t * t + (r() < 0.12 ? 0.25 * r() : 0) + 0.08 * z();
+      case 0: return 0.69 - 0.15 * (1 - Math.exp(-t * 18)) + 0.36 * t * t + (t > 0.03 && r() < 0.12 ? 0.25 * r() : 0) + (t > 0.03 ? 0.08 * z() : 0);
       case 1: return 0.12 + 0.58 * Math.exp(-4.5 * t) + 0.01 * z();
       case 2: return 0.69 - 0.16 * t + 0.008 * z();
       case 3: return 0.69 + 0.006 * z();
@@ -424,21 +424,21 @@ Deck.css(`
             Plot.text(ctx, 'val', x1 - 4, va[N][1] - 14, { size: 26, color: C.ink, align: 'right', weight: 700 });
             if (tr[N][1] + 32 > y1 - 6) { const m = Math.round(N * 0.7); Plot.text(ctx, 'train', tr[m][0], tr[m][1] - 14, { size: 26, color: C.grad, align: 'center', weight: 700 }); }
             else Plot.text(ctx, 'train', x1 - 4, tr[N][1] + 32, { size: 26, color: C.grad, align: 'right', weight: 700 });
-          } else Plot.text(ctx, 'train', x1 - 4, tr[N][1] < (y0 + y1) / 2 ? tr[N][1] + 40 : tr[N][1] - 18, { size: 26, color: C.grad, align: 'right', weight: 700 });
+          } else Plot.text(ctx, 'train', x1 - 4, DOC[k].lab ? sy(DOC[k].lab) : tr[N][1] < (y0 + y1) / 2 ? tr[N][1] + 40 : tr[N][1] - 18, { size: 26, color: C.grad, align: 'right', weight: 700 });
         });
       };
       draw();
       api.onTheme(draw);
     },
     notes: `
-    <p class="time">2.5 min</p>
+    <p class="time">2 min</p>
     <p class="say">Reading the loss curve is the most useful debugging skill you will learn today. Six patients. Magenta is always the training loss, black the validation loss; the little 0.69 mark on each axis is the loss of a net that knows nothing. Write down a diagnosis for each card, then we check.</p>
-    <p class="do">Give 60 seconds of silent writing, then press → six times, one diagnosis per click. Before each click ask one student for their answer.</p>
+    <p class="do">Give 45 seconds of silent writing (just the numbers 1 to 6 and a word each), then press → six times, one diagnosis per click. Before each click ask one student for their answer; keep it quick.</p>
     <ol>
       <li><b>Learning rate too high</b>: the loss jumps around, spikes, drifts up; in the worst case it becomes nan. Fix: divide the lr by 10. (Kobe: Adam with lr 1.0 ended at 0.701, worse than guessing.)</li>
       <li><b>Overfitting</b>: training keeps falling, validation turns up. Fix: keep the best checkpoint, stop early, smaller model or more data.</li>
       <li><b>Learning rate too low</b>: a slow, almost straight line that never flattens. Fix: lr ×10, or train longer. (Kobe: plain SGD with lr 0.001 only reached 0.683.)</li>
-      <li><b>Stuck at 0.69</b>: flat from the start, the net learned nothing. Suspects: forgotten <code>optimizer.step()</code> or <code>zero_grad</code>, dead ReLUs, labels shuffled separately from inputs, unscaled inputs.</li>
+      <li><b>Learned nothing</b>: flat at 0.69 from the start. Suspects: forgotten <code>optimizer.step()</code> or <code>zero_grad</code>, dead ReLUs, labels shuffled separately from inputs, unscaled inputs.</li>
       <li><b>Very noisy</b>: each step sees a small random batch, so the loss wiggles. Some wiggle is normal; this much means a bigger batch, a smaller lr, or simply plotting a moving average.</li>
       <li><b>Healthy</b>: fast drop, then flat, validation just a little above training. A small gap is normal and is not overfitting.</li>
     </ol>
@@ -488,18 +488,18 @@ Deck.css(`
       api.onTheme(draw);
     },
     notes: `
-    <p class="time">1.5 min</p>
+    <p class="time">1 min</p>
     <p class="say">Andrej Karpathy, who led AI at Tesla, wrote the most famous checklist for training networks. His key sentence: neural net training fails silently. A wrong program usually still runs and still prints a loss, it is just quietly worse. So before trusting any run, do four cheap checks.</p>
     <p class="do">Press → four times, one check per click; the court map appears with check 4.</p>
     <ol>
       <li><b>Look at the very first loss.</b> A fresh net guesses about 50/50, so binary cross-entropy starts near 0.69. On Kobe with scaled inputs we got 0.69; with raw coordinates (values in the hundreds) 2.33. A strange first number is your first warning.</li>
       <li><b>Beat a dumb baseline.</b> On Kobe, always saying "miss" is right 55.2% of the time, and always predicting 44.6% gives loss 0.688. If you do not beat these clearly, the net has learned nothing. So "55% accuracy" is not a result, it is the baseline.</li>
-      <li><b>Overfit a tiny batch.</b> Train on just two shots for a few hundred steps. A working net must reach a loss near 0. If it cannot memorise two examples, there is a bug in the code, not a lack of data.</li>
+      <li><b>Overfit a tiny batch.</b> Train on just two shots (one made, one missed, from different spots) for a few hundred steps. A working net must reach a loss near 0. If it cannot memorise two examples, there is a bug in the code, not a lack of data. (Two shots from the very same spot with different results can never reach 0, so do not pick those.)</li>
       <li><b>Look at what it predicts.</b> For Kobe: draw the predicted chance of a make on the court, like here. Orange near the rim, blue far away: that makes sense. A striped or random map means a bug.</li>
     </ol>
     <p class="ask">Why is check 3 so powerful?</p>
     <p class="ans">Memorising two examples is the easiest task there is. If even that fails, the problem must be in the code (loss, labels, optimizer, shapes), and you found it in seconds instead of after a long run.</p>
-    <p>Karpathy also tweeted (2018) his list of the most common mistakes: not overfitting a single batch first, forgetting train/eval mode, forgetting zero_grad before backward, and passing softmaxed outputs to a loss that expects raw logits. All of them appear in the bug hunt next.</p>`,
+    <p>Karpathy also tweeted (2018) his list of the most common mistakes: not overfitting a single batch first, forgetting train/eval mode, forgetting zero_grad before backward, and passing softmaxed outputs to a loss that expects raw logits. Three of them (train/eval mode, zero_grad, a sigmoid before a loss that expects raw logits) appear in the bug hunt next.</p>`,
   });
 
   /* ================= 7. bug hunt ================= */
@@ -523,7 +523,7 @@ Deck.css(`
     <div class="row"><span class="tag tag-pair">pairs · 4 min</span></div>
     <h2>This loop has five bugs. Find them.</h2>
     <div class="gen-hunt">
-      ${Code.py(HUNT, { size: 's', hl: '1:1 2:4 3:8 4:9-11 5:12' })}
+      ${Code.py(HUNT, { size: 's', hl: '1:1 2:4-5 3:8 4:9-11 5:12' })}
       <div class="stack">
         <div data-until="1" id="gen-timer"></div>
         <div class="gen-bugs">
@@ -540,10 +540,10 @@ Deck.css(`
     <p class="time">5 min (4 in pairs, 1 to reveal)</p>
     <p class="do">Hand out the printed loop (the same 12 lines). Pairs circle every bug they find. Press <b>Start</b> on the timer. When it ends, ask "who found 5? 4? 3?" and then press → five times; each click highlights one bug in the code and lists it on the right. Ask the class for each one before clicking.</p>
     <ol>
-      <li><b>Line 1: scaling with validation statistics.</b> The mean and standard deviation must come from the training shots only, and then be applied to both. Otherwise information from the "mock exam" leaks into training, and train and validation are scaled differently.</li>
-      <li><b>Line 4: <code>nn.Sigmoid()</code> at the end together with <code>BCEWithLogitsLoss</code>.</b> The loss already applies a sigmoid, so it is applied twice. Silent: on Kobe the printed loss looked normal and accuracy stayed 61%, but the real log loss of the outputs was 4.69 instead of 0.662. The model must output logits.</li>
+      <li><b>Line 1: scaling with validation statistics.</b> The mean and standard deviation must come from the training shots only, and then be applied to both. Here they come from the "mock exam", so information about the validation shots leaks into training. On Kobe the damage is tiny (a random split has almost the same mean), which is exactly why nobody notices it; with a hidden test set you do not even have those statistics, and the Kobe grader feeds raw coordinates, so you must keep the training mean and standard deviation.</li>
+      <li><b>Lines 4 and 5: <code>nn.Sigmoid()</code> at the end together with <code>BCEWithLogitsLoss</code>.</b> The loss already applies a sigmoid, so it is applied twice. Silent: on Kobe the printed loss looked normal and accuracy stayed 61%, but the real log loss of the outputs was 4.69 instead of 0.662. The model must output logits.</li>
       <li><b>Line 8: the label shape.</b> <code>yb</code> has shape (64,) but the model outputs (64, 1). <code>BCEWithLogitsLoss</code> stops with "Target size (torch.Size([64])) must be the same as input size (torch.Size([64, 1]))". Fix: make the labels (N, 1) with <code>ytr.unsqueeze(1)</code>. This is the only one of the five bugs that crashes. (With <code>MSELoss</code> the same mismatch does not crash: it silently compares every output with every label.)</li>
-      <li><b>Lines 9 to 11: no <code>opt.zero_grad()</code>.</b> Gradients add up step after step. On Kobe: 0.686 and 53.4% accuracy, worse than always saying "miss".</li>
+      <li><b>Lines 9 to 11: no <code>opt.zero_grad()</code>.</b> Gradients add up step after step. On Kobe (our 2-8-8-1 runs, mean of 3 seeds): log loss 0.686 and 53.4% accuracy, worse than always saying "miss".</li>
       <li><b>Line 12: the "validation" loss is computed on the training data</b>, so it can only look good. Use <code>Xva, yva</code>, call <code>model.eval()</code> and wrap it in <code>with torch.no_grad():</code>, then <code>model.train()</code> again before training.</li>
     </ol>
     <p>Most often missed: bug 1 (it looks harmless) and bug 2 (it looks like what logistic regression does). Bonus if someone points out that <code>nn.Sequential</code> is fine in general but forbidden by the Kobe task rules. We ran this exact code in PyTorch 2.15: it stops at bug 3 with the ValueError above; with the five fixes it trains normally.</p>`,
@@ -566,9 +566,9 @@ Deck.css(`
       ${ERRS.map((e, i) => `<div class="gen-err"><pre class="gen-msg">${e[0]}</pre><div class="gen-fix" data-step="${i + 1}">${e[1]}</div></div>`).join('')}
     </div>`,
     notes: `
-    <p class="time">1 min</p>
+    <p class="time">30 s</p>
     <p class="say">The good news: some bugs are loud. PyTorch stops and prints an error. Students often panic at the long red traceback. Read only the last line: it says what is wrong, and often how to fix it. These five are the ones you will meet today, copied exactly from PyTorch 2.15.</p>
-    <p class="do">For each line, ask "what is the fix?" and then press → to reveal it (five clicks).</p>
+    <p class="do">Ask "what is the fix?" for the first message only, then press → five times quickly to reveal all the fixes. The slide is a reference: tell students to come back to it when they hit one of these errors in the tasks.</p>
     <ol>
       <li>The input has 3 columns but the first layer was built for 2 (64 rows × 3 columns times a 2 × 8 weight matrix). Make the layer match the data, or remove the extra column.</li>
       <li>Data loaded with numpy or pandas is float64 ("Double"), the model's weights are float32 ("Float"). Convert: <code>torch.tensor(X, dtype=torch.float32)</code> or <code>X.float()</code>.</li>
@@ -609,7 +609,7 @@ Deck.css(`
         polyline(ctx, pts, C.ink, 5);
         pts.forEach(p => Plot.dot(ctx, p[0], p[1], 7, C.ink, null));
         Plot.text(ctx, 'memorising', x40 - 14, sy(L10(60)), { size: 28, color: C.ink, weight: 700, align: 'right' });
-        Plot.text(ctx, 'huge: best', sx(L10(400)), sy(L10(0.93)) - 22, { size: 28, color: C.ink, weight: 700, align: 'right' });
+        Plot.text(ctx, 'huge: best', sx(L10(400)), sy(L10(1.4)) - 16, { size: 28, color: C.ink, weight: 700, align: 'right' });
         // grokking: schematic accuracy curves
         ctx = gk.ctx; gk.clear();
         sx = Plot.scale(1, 5, 96, Wc - 24); sy = Plot.scale(0, 100, Hc - 96, 40);
@@ -622,16 +622,16 @@ Deck.css(`
         Plot.fn(ctx, sx, sy, trainAcc, { color: C.grad, width: 4 });
         Plot.fn(ctx, sx, sy, valAcc, { color: C.ink, width: 5 });
         Plot.text(ctx, 'train', sx(2.2) - 24, sy(80), { size: 28, color: C.grad, weight: 700, align: 'right' });
-        Plot.text(ctx, 'validation', sx(3.0), sy(9) - 12, { size: 28, color: C.ink, weight: 700 });
+        Plot.text(ctx, 'validation', sx(2.7), sy(3) - 18, { size: 28, color: C.ink, weight: 700 });
       };
       draw();
       api.onTheme(draw);
     },
     notes: `
-    <p class="time">1 min (cut to 20 s if late: keep only the vacation story)</p>
-    <p class="say">One last surprise: the rule "too big means overfitting" is not the whole story. Left: we fit 40 training points with models of growing size. The error on new data first gets worse as the model grows, explodes exactly when the model has just enough weights to pass through all 40 points, and then, as the model keeps growing, gets better again. The biggest model is the best of all. This is called double descent; it is one reason huge networks like ChatGPT work at all.</p>
+    <p class="time">30 s (if late, skip the left panel and tell only the vacation story)</p>
+    <p class="say">One last surprise: "too big means overfitting" is not the whole story. Left: 40 training points, models of growing size. The error on new data explodes when the model has just enough weights to pass through all 40 points, then falls again: the biggest model is the best. This is double descent, part of why huge networks work so well.</p>
     <p class="do">Press → for the right panel.</p>
-    <p class="say">Right: grokking. On some small puzzles, a network reaches 100% on its training data quickly while staying at chance on new data, and then, thousands of steps later, it suddenly "gets it". How was it discovered? The researcher Alethea Power said: "And then one day, we got lucky. And by lucky, I mean forgetful." A team member went on holiday and forgot to stop the training run; when they came back, the network had generalised.</p>
+    <p class="say">Right: grokking. On some small puzzles a network memorises its training data quickly, stays at chance on new data, and thousands of steps later suddenly "gets it". The researcher Alethea Power: "And then one day, we got lucky. And by lucky, I mean forgetful." A team member went on holiday and forgot to stop the training run.</p>
     <p class="ask">Should you train your Kobe net for a week, hoping it groks?</p>
     <p class="ans">No. Grokking was seen on tiny algorithmic puzzles, not on noisy data like basketball shots, and double descent needs models far bigger than the Kobe rules allow. For our tasks the classic advice holds: watch the validation loss and keep the best checkpoint.</p>
     <p>Background: the left curve is real, from a small linear-regression experiment in our research notes (400 random features, 40 training points, least-squares fit using the first P features; median test error over 50 random datasets; peak 167 at P = 40, 0.93 at P = 400). Sources: Belkin et al., PNAS 2019; Nakkiran et al. 2019 ("Deep Double Descent"); Power et al. 2022 ("Grokking"); the quote is from Quanta Magazine, April 2024. The word "grok" comes from Heinlein's 1961 novel <i>Stranger in a Strange Land</i>. The right panel is a schematic, not data.</p>`,

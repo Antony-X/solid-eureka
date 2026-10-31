@@ -247,8 +247,9 @@ Deck.css(`
           ctx.save(); ctx.setLineDash([8, 8]); ctx.lineWidth = 2.5; ctx.strokeStyle = C.muted;
           ctx.beginPath(); ctx.moveTo(x, sy(0)); ctx.lineTo(x, yy); ctx.stroke(); ctx.restore();
           Plot.dot(ctx, x, yy, 14, S.made ? C.c1 : C.c0); ctx.lineWidth = 4; ctx.strokeStyle = C.paper; ctx.stroke();
+          // keep the label on the flat side of the curve
           const right = S.made ? x < W - 300 : x < L + 260;
-          label(ctx, C, 'loss ' + y.toFixed(2), x + (right ? 28 : -28), yy - 34, { size: 34, kind: 'mono', weight: 600, align: right ? 'left' : 'right', halo: true });
+          label(ctx, C, 'loss ' + y.toFixed(2), x + (right ? 28 : -28), yy - (S.made || !right ? 34 : 80), { size: 34, kind: 'mono', weight: 600, align: right ? 'left' : 'right', halo: true });
         }
       }
       // controls (visible from step 5)

@@ -547,7 +547,7 @@ Deck.css(`
       ctx.beginPath(); ctx.moveTo(sx.range[0], sy(0)); ctx.lineTo(sx.range[1], sy(0)); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(sx.range[0], sy(0)); ctx.lineTo(sx.range[0], sy(cfg.ymax)); ctx.stroke();
       ctx.restore();
-      Plot.text(ctx, 'loss', sx.range[0] + 10, 36, { size: 28, base: 'top', color: C.muted });
+      Plot.text(ctx, 'loss', 4, 36, { size: 28, base: 'top', color: C.muted });
       Plot.text(ctx, cfg.name, sx.range[1], sy(0) - 12, { size: 34, align: 'right', color: C.ink, weight: 700 });
       ctx.save(); Plot.clip(ctx, 0, 20, W, H - 50);
       Plot.fn(ctx, sx, sy, cfg.L, { color: C.ink, width: 5 });
@@ -595,7 +595,7 @@ Deck.css(`
         L: b => (2 * b - 1.4) ** 2, dL: b => 4 * (2 * b - 1.4), marks: [0.7],
         choices: [0.05, 0.125, 0.25, 0.3].map(v => ({ value: v, label: 'lr ' + v })), value: 0.125, set: v => { c1.lr = v; } };
       // loss for c: (c^2 - 2.25)^2, gradient 4c(c^2 - 2.25); Adam lr 0.1
-      const c2 = { name: 'c', short: 'c', dom: [-2.4, 2.4], ymax: 7.5, xt: [-1.5, 0, 1.5], start: 0.1, opt: 'adam', lr: 0.1, dt: 0.12, maxSteps: 60,
+      const c2 = { name: 'c', short: 'c', dom: [-2.4, 2.4], ymax: 7.5, xt: [-1.5, 0, 1.5], start: 0.1, opt: 'adam', lr: 0.1, dt: 0.08, maxSteps: 110,
         L: c => (c * c - 2.25) ** 2, dL: c => 4 * c * (c * c - 2.25), marks: [-1.5, 1.5],
         choices: [0.1, -0.1, 0].map(v => ({ value: v, label: 'start ' + (v > 0 ? '+' : '') + v })), value: 0.1, set: v => { c2.start = v; } };
       toy(api, el.querySelector('#task-toy1'), c1);

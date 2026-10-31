@@ -319,7 +319,7 @@ Deck.css(`
       <path d="M306,312 L330,312 L354,284" fill="none" style="stroke:var(--ink);stroke-width:5"/>
       <text class="lbl-s" x="330" y="18" data-until="1">bias ?</text><text class="lbl-s" x="330" y="18" data-step="1">bias 0</text>
       <text class="lbl-s" x="330" y="370" data-until="1">bias ?</text><text class="lbl-s" x="330" y="370" data-step="1">bias −1</text>
-      <text class="lbl-m" x="392" y="40" style="font-size:32px">h₁</text><text class="lbl-m" x="392" y="342" style="font-size:32px">h₂</text>
+      <text class="lbl-m" x="404" y="58" style="font-size:32px">h₁</text><text class="lbl-m" x="404" y="324" style="font-size:32px">h₂</text>
       <circle class="nrn out" cx="560" cy="190" r="42"/><text class="lbl-m" x="560" y="190">out</text>
       <text class="lbl-s" x="560" y="262">no bend</text>
     </svg>`;
@@ -503,7 +503,7 @@ Deck.css(`
     let z = KN.b3; for (let i = 0; i < 8; i++) z += KN.W3[i] * h2[i];
     return { x: [u, v], h1, h2, z, p: sig(z) };
   };
-  const FW = { w: 960, h: 640, xs: [96, 340, 584, 770], r: [40, 30, 30, 40] };
+  const FW = { w: 960, h: 640, xs: [96, 340, 584, 760], r: [40, 33, 33, 40] };
   const fwdY = n => Array.from({ length: n }, (_, i) => n === 1 ? 300 : n === 2 ? [220, 390][i] : 36 + i * 74);
   const FWD_SVG = (() => {
     const L = [2, 8, 8, 1];
@@ -520,8 +520,8 @@ Deck.css(`
         `<text class="lbl" data-t="${l}-${i}" x="${FW.xs[l]}" y="${y}" style="font-size:28px"></text>`;
     }));
     s += `<text class="lbl-m" x="24" y="220">x</text><text class="lbl-m" x="24" y="390">y</text><text class="lbl-s" x="96" y="462">×10 ft</text>`;
-    s += `<text class="lbl-b fwd-p" x="882" y="290" style="font-size:60px"></text><text class="lbl-s" x="882" y="346">goes in</text>`;
-    s += `<text class="lbl fwd-real" x="870" y="430" style="font-size:32px"></text>`;
+    s += `<text class="lbl-b fwd-p" x="818" y="290" style="font-size:60px;text-anchor:start"></text><text class="lbl-s" x="822" y="346" style="text-anchor:start">goes in</text>`;
+    s += `<text class="lbl fwd-real" x="818" y="430" style="font-size:32px;text-anchor:start"></text>`;
     ['input', 'hidden 1', 'hidden 2'].forEach((t, l) => { s += `<text class="lbl-s" x="${FW.xs[l]}" y="${FW.h - 22}">${t}</text>`; });
     return s + '</svg>';
   })();
@@ -538,7 +538,7 @@ Deck.css(`
       const W = 720, fr = Widgets.courtFrame(0, 0, W);
       const cv = Plot.canvas(el.querySelector('.fwd-court'), W, Math.ceil(fr.h));
       const D = window.KOBE;
-      const S = { pt: [0, 0], res: kfwd(0, 0), t: 9, real: null, lines: false };
+      const S = { pt: [-90, 160], res: kfwd(-0.9, 1.6), t: 9, real: null, lines: false };
       const edges = Array.from(el.querySelectorAll('[data-e]')).map(n => { const [l, i, j] = n.dataset.e.split('-').map(Number); return { n, l, i, j }; });
       const fills = {}, texts = {};
       el.querySelectorAll('[data-n]').forEach(n => (fills[n.dataset.n] = n));
@@ -622,7 +622,7 @@ Deck.css(`
     notes: `
     <p class="time">2 min</p>
     <p class="say">This is a real 2-8-8-1 network, the largest the Kobe task allows, already trained on 20,000 of Kobe's shots. The court colour is its answer everywhere: orange where it thinks he scores more often, blue where he misses more. Click a spot and watch the forward pass: the position goes in on the left, each layer does weigh-add-bend, and a chance comes out on the right.</p>
-    <p class="do">Click "Rim": about 60%. Click "Corner 3": about 35%. Click "Half court": about 4%. Then click anywhere on the court. Point out: thick orange arrows push the next neuron up, thick blue ones push it down, dotted ones carry nothing because the neuron before them is off (0). Yellow fill = how strongly a neuron fires. "Real shot" picks one of Kobe's real shots and shows what really happened. Optional: "lines on" draws each first-layer neuron's straight cut on the court; the curved orange zone near the rim is built from these straight cuts.</p>
+    <p class="do">It starts on a mid-range shot from the left elbow (about 41%). Click "Rim": about 60% (the inputs are 0 there, so the first arrows carry nothing and only the biases matter). Click "Corner 3": about 35%. Click "Half court": about 4%. Then click anywhere on the court. Point out: thick orange arrows push the next neuron up, thick blue ones push it down, dotted ones carry nothing because the neuron before them is off (0). Yellow fill = how strongly a neuron fires. The number in the output circle is the raw score (logit); the sigmoid turns it into the percentage. "Real shot" picks one of Kobe's real shots and shows what really happened. Optional: "lines on" draws each first-layer neuron's straight cut on the court; the curved orange zone near the rim is built from these straight cuts.</p>
     <p class="ask">Even at the rim the network only says about 60%. Is the network bad?</p>
     <p class="ans">No, basketball is noisy. Kobe made only 62.5% of his shots at the rim, so no model can be sure. This network is right 61.8% of the time on shots it never saw, versus 55% for "always miss". That is close to the best anyone gets on this data.</p>
     <p>Background: inputs are the court position in units of 10 ft (x across, y away from the rim), so the rim is (0, 0) and half court is y ≈ 4.1. Some hidden neurons show 0 for every position you click: they are "dead" ReLUs (one in the first layer, three in the second), which is common and is discussed in the activations section. The weights were trained in PyTorch with Adam (lr 0.01, 25 epochs, batch 64); validation log loss 0.660, accuracy 61.8%.</p>`,
@@ -715,7 +715,7 @@ Deck.css(`
       const S = 768, P = 24, side0 = S - 72;
       const cv = Plot.canvas(el.querySelector('.scale-cv'), S, S);
       const target = k => Math.log10(MODELS[Math.min(k, 3)].n) + 2 * Math.log10(1 / 0.82);
-      let u = target(0), goal = u;
+      let u = target(0), goal = u, u0 = u, tw = 1;
       function draw() {
         const C = Plot.colors(), ctx = cv.ctx;
         cv.clear();
@@ -751,10 +751,10 @@ Deck.css(`
         }
         ctx.restore();
       }
-      api.onStep(k => { goal = target(k); });
-      api.onEnter(() => { u = goal = target(api.step); draw(); });
+      api.onStep(k => { u0 = u; goal = target(k); tw = 0; });
+      api.onEnter(() => { u = u0 = goal = target(api.step); tw = 1; draw(); });
       api.loop(dt => {
-        if (Math.abs(goal - u) > 1e-3) { u += (goal - u) * Math.min(1, dt * 2.2); if (Math.abs(goal - u) < 1e-3) u = goal; draw(); }
+        if (tw < 1) { tw = Math.min(1, tw + dt / 1.1); const e = tw < 0.5 ? 2 * tw * tw : 1 - 2 * (1 - tw) * (1 - tw); u = u0 + (goal - u0) * e; draw(); }
         return true;
       });
       draw();

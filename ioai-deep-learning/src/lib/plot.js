@@ -110,10 +110,10 @@
       const fmt = opt.fmt || (v => +v.toFixed(3) + '');
       ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       const yb = opt.xAt != null ? sy(opt.xAt) : y1;
-      xt.forEach(v => { if (opt.skipZero && v === 0) return; ctx.fillText(fmt(v), sx(v), yb + 8); });
+      xt.forEach(v => { if (opt.skipZero && v === 0) return; ctx.fillText((opt.fmtX || fmt)(v), sx(v), yb + 8); });
       ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
       const xl = opt.yAt != null ? sx(opt.yAt) : x0;
-      yt.forEach(v => { if (opt.skipZero && v === 0) return; ctx.fillText(fmt(v), xl - 10, sy(v)); });
+      yt.forEach(v => { if (opt.skipZero && v === 0) return; ctx.fillText((opt.fmtY || fmt)(v), xl - 10, sy(v)); });
       ctx.font = `${opt.font || 28}px ${C.fontBody}`;
       if (opt.xlabel) { ctx.textAlign = 'right'; ctx.textBaseline = 'bottom'; ctx.fillStyle = C.ink; ctx.fillText(opt.xlabel, x1, (opt.xAt != null ? sy(opt.xAt) : y1) - 8); }
       if (opt.ylabel) { ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.ink; ctx.fillText(opt.ylabel, (opt.yAt != null ? sx(opt.yAt) : x0) + 10, y0 + 2); }

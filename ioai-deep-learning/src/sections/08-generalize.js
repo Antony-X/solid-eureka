@@ -19,7 +19,7 @@ Deck.css(`
 .sec-gen .gen-cure .name { font-family: var(--font-display); font-weight: 750; font-size: 46px; line-height: 1.05; }
 .sec-gen .gen-cure .ev { font-size: 32px; line-height: 1.25; }
 .sec-gen .gen-cure .ev b { font-family: var(--font-mono); }
-.sec-gen .gen-patient { font-size: 34px; }
+.sec-gen .gen-patient { font-size: 34px; max-width: none; }
 .sec-gen .gen-patient b { font-family: var(--font-mono); }
 .sec-gen .gen-doc { display: grid; grid-template-columns: repeat(3, 544px); gap: 28px 48px; }
 .sec-gen .gen-card { display: flex; flex-direction: column; gap: 6px; position: relative; }
@@ -197,7 +197,7 @@ Deck.css(`
           const bx = lx(L10(S.best.step));
           polyline(ctx, [[bx, ly.range[1]], [bx, ly.range[0]]], C.muted, 3, [10, 8]);
           Plot.dot(ctx, bx, P(S.best.step, S.best.val)[1], 9, C.ink, null);
-          Plot.text(ctx, 'best', bx + 12, ly.range[1] + 50, { size: 28, color: C.ink, weight: 700 });
+          Plot.text(ctx, 'best', bx + 12, ly.range[0] - 14, { size: 28, color: C.ink, weight: 700 });
         }
         polyline(ctx, S.hist.map(h => P(h[0], h[1])), C.grad, 4);
         polyline(ctx, S.hist.map(h => P(h[0], h[2])), C.ink, 5);
@@ -265,9 +265,9 @@ Deck.css(`
         [10, 100, 1000].forEach(v => Plot.text(ctx, v.toLocaleString('en-US'), sx(L10(v)), sy.range[0] + 34, { size: 26, color: C.muted, align: 'center', mono: true }));
         [0.4, 0.6, 0.8, 1, 1.2].forEach(v => Plot.text(ctx, v.toFixed(1), sx.range[0] - 10, sy(v) + 9, { size: 26, color: C.muted, align: 'right', mono: true }));
         Plot.text(ctx, 'loss', sx.range[0] + 10, 46, { size: 28, color: C.ink });
-        Plot.text(ctx, 'step', sx.range[1], sy.range[0] - 12, { size: 28, color: C.ink, align: 'right' });
+        Plot.text(ctx, 'steps →', sx.range[1] + 150, sy.range[0] + 34, { size: 26, color: C.ink, align: 'right' });
         polyline(ctx, [[sx.range[0], sy(0.688)], [sx.range[1], sy(0.688)]], C.muted, 3, [12, 10]);
-        Plot.text(ctx, 'constant guess 0.688', sx.range[0] + 12, sy(0.688) + 34, { size: 26, color: C.muted });
+        Plot.text(ctx, 'guess 44.6% always: 0.688', sx.range[1], sy(0.688) - 14, { size: 26, color: C.muted, align: 'right' });
         const pts = a => st.map((s, i) => [sx(L10(s)), sy(a[i])]);
         polyline(ctx, pts(tr), C.grad, 4); polyline(ctx, pts(va), C.ink, 5);
         pts(tr).forEach(p => Plot.dot(ctx, p[0], p[1], 7, C.grad, null));
@@ -302,22 +302,22 @@ Deck.css(`
         <span class="name">More data</span><span class="ev">same kind of big net, all 20,558 shots: <b>0.660</b></span></div>
       <div class="gen-cure" data-step="2"><span class="n">2</span>
         <span>${Widgets.netSVG({ sizes: [2, 3, 1], w: 150, h: 100, r: 12 })}</span>
-        <span class="name">Smaller model</span><span class="ev">2-8-8-1 on the same 500 shots: best <b id="gen-c-small">0.677</b></span></div>
+        <span class="name">Smaller model</span><span class="ev">2-8-8-1 on the same 500 shots: best <b>0.677</b></span></div>
       <div class="gen-cure" data-step="3"><span class="n">3</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">
           <path d="M8,14 C40,92 70,92 100,60 S150,20 170,8" style="fill:none;stroke:var(--ink);stroke-width:5"/>
           <line x1="66" y1="6" x2="66" y2="96" style="stroke:var(--muted);stroke-width:3;stroke-dasharray:8 6"/>
           <circle cx="66" cy="78" r="9" style="fill:var(--ink)"/></svg>
-        <span class="name">Stop early, keep the best</span><span class="ev"><b id="gen-c-early">0.676</b> · ${Code.i('best = copy.deepcopy(model.state_dict())')}</span></div>
+        <span class="name">Stop early, keep the best</span><span class="ev"><b>0.675</b> · ${Code.i('best = copy.deepcopy(model.state_dict())')}</span></div>
       <div class="gen-cure" data-step="4"><span class="n">4</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">
           <line x1="4" y1="96" x2="172" y2="96" style="stroke:var(--muted);stroke-width:3"/>
           ${[[22, 70], [66, 40], [110, 60], [154, 30]].map(([x, y]) => `<rect x="${x - 14}" y="${y}" width="28" height="${96 - y}" style="fill:var(--grad-soft);stroke:var(--ink);stroke-width:3"/>
           <line x1="${x}" y1="${y - 22}" x2="${x}" y2="${y - 4}" style="stroke:var(--grad);stroke-width:4;marker-end:url(#ah-grad)"/>`).join('')}</svg>
-        <span class="name">Weight decay</span><span class="ev">pull every weight a little toward 0: <b id="gen-c-wd">…</b></span></div>
+        <span class="name">Weight decay</span><span class="ev">pull every weight toward 0: <b>0.76</b> at the end</span></div>
       <div class="gen-cure" data-step="5"><span class="n">5</span>
         <span id="gen-drop"></span>
-        <span class="name">Dropout</span><span class="ev">switch off random neurons while training: <b id="gen-c-drop">…</b></span></div>
+        <span class="name">Dropout</span><span class="ev">switch off random neurons while training: <b>0.71</b> at the end</span></div>
     </div>`,
     init(el, api) {
       // dropout picture: a new random half of the hidden neurons is crossed out every 0.8 s
@@ -351,14 +351,14 @@ Deck.css(`
     <ul>
       <li><b>More data</b>: the best cure when you can get it. With all 20,558 shots, a big net (2-64-64-64-1) reaches 0.660 instead of memorising.</li>
       <li><b>Smaller model</b>: fewer weights means less room to memorise. Our legal 2-8-8-1 on the same 500 shots: best 0.677.</li>
-      <li><b>Stop early and keep the best weights</b>: after every epoch measure the validation loss; whenever it is the best so far, save a copy of the weights (the code on the slide); at the end, load that copy. This is exactly the "Restore best" button from the live demo.</li>
-      <li><b>Weight decay</b>: every step also shrinks each weight a little toward 0, so the net cannot build the huge, wild weights that memorising needs. In PyTorch: <code>torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=...)</code>.</li>
-      <li><b>Dropout</b>: during training, randomly switch off some neurons in every step (watch the crosses jump around), so no neuron can rely on one particular partner. <code>nn.Dropout(0.5)</code> between layers; it is switched off automatically by <code>model.eval()</code>, which is one reason to always call it before evaluating.</li>
+      <li><b>Stop early and keep the best weights</b>: after every epoch measure the validation loss; whenever it is the best so far, save a copy of the weights (the code on the slide); at the end, load that copy. This is exactly the "Restore best" button from the live demo. On the patient, the best validation loss came very early (step 20): 0.675 instead of 1.23.</li>
+      <li><b>Weight decay</b>: every step also shrinks each weight a little toward 0, so the net cannot build the huge, wild weights that memorising needs. In PyTorch: <code>torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1.0)</code>. On the patient after 2,000 steps: 0.76 instead of 1.23. Better, but it does not beat stopping early; cures are often combined.</li>
+      <li><b>Dropout</b>: during training, randomly switch off some neurons in every step (watch the crosses jump around), so no neuron can rely on one particular partner. <code>nn.Dropout(0.5)</code> between layers; it is switched off automatically by <code>model.eval()</code>, which is one reason to always call it before evaluating. On the patient (dropout 0.5 after both hidden layers), after 2,000 steps: 0.71 instead of 1.23.</li>
     </ul>
     <p class="say">Story: Geoffrey Hinton said he got the idea for dropout at his bank. The tellers kept changing, and a teller told him they were moved around a lot. Hinton guessed the reason: cheating the bank needs several employees to cooperate, and rotating people breaks up such conspiracies. Randomly removing neurons breaks up "conspiracies" between neurons, which is what memorising is.</p>
     <p class="ask">Which cure can you NOT use much in the Kobe task, and why?</p>
     <p class="ans">"Smaller model" and "more data" are fixed by the rules (at most 2-8-8-1, the given shots). With only 105 parameters and 20,000 shots, the Kobe net barely overfits at all; early stopping with the best checkpoint is the cure worth keeping.</p>
-    <p>Source for the bank story: Hinton's answer in the Google Brain "Ask me anything" on Reddit, August 2016; dropout paper: Hinton et al. 2012 / Srivastava et al. 2014. Numbers 1 to 3 are from our runs on the real Kobe data (500-shot runs: full-batch Adam, lr 1e-3, 2,000 steps, validation on the usual 5,139 shots).</p>`,
+    <p>Source for the bank story: Hinton's answer in the Google Brain "Ask me anything" on Reddit, August 2016; dropout paper: Hinton et al. 2012 / Srivastava et al. 2014. All numbers are from our runs on the real Kobe data, same 80/20 split as everywhere in the deck (500-shot runs: full-batch Adam or AdamW, lr 1e-3, 2,000 steps, validation on the usual 5,139 shots, best checkpoint measured every 10 steps).</p>`,
   });
 
   /* ================= 5. loss-curve doctor ================= */
@@ -399,16 +399,16 @@ Deck.css(`
           const ctx = cv.ctx;
           cv.clear();
           const x0 = 76, x1 = Wc - 8, y0 = 14, y1 = Hc - 34;
-          const sx = t => x0 + t * (x1 - x0), sy = v => y1 - (v / 1.0) * (y1 - y0);
+          const sx = t => x0 + t * (x1 - x0), sy = v => y1 - (v / 1.15) * (y1 - y0);
           // axes
           polyline(ctx, [[x0, y0], [x0, y1], [x1, y1]], C.muted, 2.5);
-          Plot.text(ctx, 'loss', 4, y0 + 22, { size: 26, color: C.muted });
+          Plot.text(ctx, 'loss', 4, y1 - 4, { size: 26, color: C.muted });
           Plot.text(ctx, 'steps →', x1, Hc - 2, { size: 26, color: C.muted, align: 'right' });
           Plot.text(ctx, '0.69', x0 - 8, sy(0.69) + 9, { size: 26, color: C.muted, align: 'right', mono: true });
           polyline(ctx, [[x0 + 4, sy(0.69)], [x0 + 20, sy(0.69)]], C.muted, 2.5);
           const r = NN.rng(DOC[k].seed), N = 120;
           const tr = [], va = [];
-          for (let i = 0; i <= N; i++) { const t = i / N; tr.push([sx(t), sy(Math.min(0.98, Math.max(0.02, docCurve(k, t, r))))]); }
+          for (let i = 0; i <= N; i++) { const t = i / N; tr.push([sx(t), sy(Math.min(1.12, Math.max(0.02, docCurve(k, t, r))))]); }
           if (DOC[k].val) { const r2 = NN.rng(DOC[k].seed + 50); for (let i = 0; i <= N; i++) { const t = i / N; va.push([sx(t), sy(Math.min(0.98, docVal(k, t, r2)))]); } }
           ctx.save(); ctx.beginPath(); ctx.rect(x0, y0 - 4, x1 - x0 + 4, y1 - y0 + 4); ctx.clip();
           polyline(ctx, tr, C.grad, 4);
@@ -417,7 +417,7 @@ Deck.css(`
           if (va.length) {
             Plot.text(ctx, 'val', x1 - 4, va[N][1] - 14, { size: 26, color: C.ink, align: 'right', weight: 700 });
             Plot.text(ctx, 'train', x1 - 4, tr[N][1] + 32, { size: 26, color: C.grad, align: 'right', weight: 700 });
-          } else Plot.text(ctx, 'train', x1 - 4, Math.max(y0 + 26, tr[N][1] - 16), { size: 26, color: C.grad, align: 'right', weight: 700 });
+          } else Plot.text(ctx, 'train', x1 - 4, tr[N][1] < (y0 + y1) / 2 ? tr[N][1] + 40 : tr[N][1] - 18, { size: 26, color: C.grad, align: 'right', weight: 700 });
         });
       };
       draw();
@@ -580,7 +580,7 @@ Deck.css(`
     <h2>Bigger can be worse, then better again</h2>
     <div class="gen-two grow">
       <div class="col"><h3>double descent</h3><div id="gen-dd"></div></div>
-      <div class="col" data-step="1"><h3>grokking: understanding comes late</h3><div id="gen-grok"></div></div>
+      <div class="col" data-step="1"><h3>grokking: understanding comes late</h3><div id="gen-grok"></div><span class="gen-cap">schematic, after Power et al. 2022</span></div>
     </div>`,
     init(el, api) {
       const Wc = 816, Hc = 600;
@@ -614,9 +614,8 @@ Deck.css(`
         const valAcc = t => 3 + 95 / (1 + Math.exp(-7 * (t - 4.1)));
         Plot.fn(ctx, sx, sy, trainAcc, { color: C.grad, width: 4 });
         Plot.fn(ctx, sx, sy, valAcc, { color: C.ink, width: 5 });
-        Plot.text(ctx, 'train', sx(2.75), sy(80), { size: 28, color: C.grad, weight: 700, align: 'right' });
+        Plot.text(ctx, 'train', sx(2.2) - 24, sy(80), { size: 28, color: C.grad, weight: 700, align: 'right' });
         Plot.text(ctx, 'validation', sx(3.0), sy(9) - 12, { size: 28, color: C.ink, weight: 700 });
-        Plot.text(ctx, 'schematic, after Power et al. 2022', Wc - 24, sy(50) + 9, { size: 26, color: C.muted, align: 'right' });
       };
       draw();
       api.onTheme(draw);

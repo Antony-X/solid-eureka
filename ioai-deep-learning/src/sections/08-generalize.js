@@ -17,7 +17,7 @@ Deck.css(`
 .sec-gen .gen-cure:last-child { border-bottom: 0; }
 .sec-gen .gen-cure .n { font-family: var(--font-mono); font-size: 40px; color: var(--muted); }
 .sec-gen .gen-cure .name { font-family: var(--font-display); font-weight: 750; font-size: 46px; line-height: 1.05; }
-.sec-gen .gen-cure .ev { font-size: 32px; line-height: 1.25; }
+.sec-gen .gen-cure .ev { font-size: 36px; line-height: 1.25; }
 .sec-gen .gen-cure .ev b { font-family: var(--font-mono); }
 .sec-gen .gen-patient { font-size: 34px; max-width: none; }
 .sec-gen .gen-patient b { font-family: var(--font-mono); }
@@ -67,42 +67,35 @@ Deck.css(`
     id: 'gen-split',
     title: 'Train, validation, test',
     html: `
-    <h2>Grade the model on shots it never saw</h2>
+    <h2>Grade on shots it never saw</h2>
     <div class="fill-center gen-split-fig">
-      <svg class="dg" viewBox="0 0 1728 600" width="1728" height="600" role="img" aria-label="Kobe's labelled shots split into training and validation; the test set is hidden by the grader">
+      <svg class="dg" viewBox="0 0 1728 430" width="1728" height="430" role="img" aria-label="Kobe's labelled shots split into training and validation; the test set is hidden by the grader">
         <g>
-          <text class="lbl-b" x="539" y="60" style="font-size:48px">train</text>
-          <rect x="0" y="120" width="1078" height="150" style="fill:var(--ink)"/>
-          <text class="lbl" x="539" y="195" style="fill:var(--paper);font-size:40px">20,558 shots</text>
-          <text class="lbl" x="539" y="330" style="font-size:36px;font-weight:700">homework</text>
-          <text class="lbl-s" x="539" y="380" style="font-size:32px">the weights learn from these</text>
+          <text class="lbl-b" x="539" y="50" style="font-size:52px">train</text>
+          <rect x="0" y="100" width="1078" height="200" style="fill:var(--ink)"/>
+          <text class="lbl" x="539" y="200" style="fill:var(--paper);font-size:44px">20,558 shots</text>
+          <text class="lbl" x="539" y="390" style="font-size:40px;font-weight:700">homework</text>
         </g>
         <g data-step="1">
-          <text class="lbl-b" x="1213" y="60" style="font-size:48px">validation</text>
-          <rect x="1078" y="120" width="270" height="150" style="fill:var(--muted)"/>
-          <line x1="1078" y1="112" x2="1078" y2="278" style="stroke:var(--paper);stroke-width:6"/>
-          <text class="lbl" x="1213" y="195" style="fill:var(--paper);font-size:36px">5,139</text>
-          <text class="lbl" x="1213" y="330" style="font-size:36px;font-weight:700">mock exam</text>
-          <text class="lbl-s" x="1213" y="380" style="font-size:30px">choose settings,</text>
-          <text class="lbl-s" x="1213" y="418" style="font-size:30px">when to stop</text>
+          <text class="lbl-b" x="1213" y="50" style="font-size:52px">validation</text>
+          <rect x="1078" y="100" width="270" height="200" style="fill:var(--muted)"/>
+          <line x1="1078" y1="92" x2="1078" y2="308" style="stroke:var(--paper);stroke-width:6"/>
+          <text class="lbl" x="1213" y="200" style="fill:var(--paper);font-size:40px">5,139</text>
+          <text class="lbl" x="1213" y="390" style="font-size:40px;font-weight:700">mock exam</text>
         </g>
         <g data-step="2">
-          <text class="lbl-b" x="1568" y="60" style="font-size:48px">test</text>
-          <rect x="1412" y="122" width="312" height="146" style="fill:none;stroke:var(--ink);stroke-width:4;stroke-dasharray:14 10"/>
-          <text class="lbl" x="1568" y="195" style="font-size:40px">hidden</text>
-          <text class="lbl" x="1568" y="330" style="font-size:36px;font-weight:700">the real exam</text>
-          <text class="lbl-s" x="1568" y="380" style="font-size:30px">the grader keeps it;</text>
-          <text class="lbl-s" x="1568" y="418" style="font-size:30px">scored once</text>
-        </g>
-        <g data-step="3">
-          <text x="0" y="540" style="font-family:var(--font-display);font-weight:800;font-size:56px;fill:var(--ink)">Tune on the exam, and you only fool yourself.</text>
+          <text class="lbl-b" x="1568" y="50" style="font-size:52px">test</text>
+          <rect x="1412" y="102" width="312" height="196" style="fill:none;stroke:var(--ink);stroke-width:4;stroke-dasharray:14 10"/>
+          <text class="lbl" x="1568" y="200" style="font-size:44px">hidden</text>
+          <text class="lbl" x="1568" y="390" style="font-size:40px;font-weight:700">the real exam</text>
         </g>
       </svg>
     </div>`,
     notes: `
     <p class="time">1 min</p>
     <p class="say">A model is only useful on shots it has never seen, so we split the data like a school year. Training shots are homework; validation shots are a mock exam for choosing settings, like the learning rate or when to stop. The test set is the real exam: the grader keeps it hidden and scores it once.</p>
-    <p class="do">Press → three times.</p>
+    <p class="do">Press → twice (validation, then test).</p>
+    <p class="say">The weights learn from the training shots; the validation shots choose settings and when to stop. Tune on the exam, and you only fool yourself.</p>
     <p class="ask">You try 50 settings and keep the best validation score. Is that score still honest?</p>
     <p class="ans">Slightly too optimistic: you picked the luckiest of 50. That is why the hidden test set exists.</p>
     <p>Scale with the mean and spread of the training shots only. The slide's 20,558 / 5,139 come from Kaggle's labelled shots; the notebook's task file splits 20,000 / 5,000.</p>`,
@@ -113,7 +106,7 @@ Deck.css(`
     id: 'gen-overfit',
     title: 'Overfitting, live',
     html: `
-    <h2>A big net on 12 points memorises the noise</h2>
+    <h2>A big net memorises 12 noisy points</h2>
     <div class="gen-demo">
       <div id="gen-fit"></div>
       <div class="gen-side" id="gen-fit-side"></div>
@@ -300,30 +293,30 @@ Deck.css(`
     title: 'Five cures for memorising',
     html: `
     <h2>Five cures for memorising</h2>
-    <p class="gen-patient">The patient: 2-256-256-1 on 500 Kobe shots, validation loss <b>1.23</b></p>
+    <p class="gen-patient">patient: 2-256-256-1 on 500 shots · val loss <b>1.23</b></p>
     <div class="gen-cures">
       <div class="gen-cure" data-step="1"><span class="n">1</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">${
           Array.from({ length: 36 }, (_, i) => `<circle cx="${14 + (i % 9) * 19}" cy="${14 + Math.floor(i / 9) * 24}" r="6" style="fill:var(--ink)"/>`).join('')}</svg>
-        <span class="name">More data</span><span class="ev">big net, all 20,558 shots: <b>0.660</b></span></div>
+        <span class="name">More data</span><span class="ev">all 20,558 shots: <b>0.660</b></span></div>
       <div class="gen-cure" data-step="2"><span class="n">2</span>
         <span>${Widgets.netSVG({ sizes: [2, 3, 1], w: 150, h: 100, r: 12 })}</span>
-        <span class="name">Smaller model</span><span class="ev">2-8-8-1 on the same 500 shots: best <b>0.677</b></span></div>
+        <span class="name">Smaller model</span><span class="ev">2-8-8-1: <b>0.677</b></span></div>
       <div class="gen-cure" data-step="3"><span class="n">3</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">
           <path d="M8,14 C40,92 70,92 100,60 S150,20 170,8" style="fill:none;stroke:var(--ink);stroke-width:5"/>
           <line x1="66" y1="6" x2="66" y2="96" style="stroke:var(--muted);stroke-width:3;stroke-dasharray:8 6"/>
           <circle cx="66" cy="78" r="9" style="fill:var(--ink)"/></svg>
-        <span class="name">Stop early, keep the best</span><span class="ev">best <b>0.675</b>, at step 20<br>${Code.i('best = copy.deepcopy(model.state_dict())')}</span></div>
+        <span class="name">Stop early, keep the best</span><span class="ev"><b>0.675</b> at step 20<br>${Code.i('best = copy.deepcopy(model.state_dict())')}</span></div>
       <div class="gen-cure" data-step="4"><span class="n">4</span>
         <svg class="dg" viewBox="0 0 176 100" width="176" height="100" aria-hidden="true">
           <line x1="4" y1="96" x2="172" y2="96" style="stroke:var(--muted);stroke-width:3"/>
           ${[[22, 70], [66, 40], [110, 60], [154, 30]].map(([x, y]) => `<rect x="${x - 14}" y="${y}" width="28" height="${96 - y}" style="fill:var(--grad-soft);stroke:var(--ink);stroke-width:3"/>
           <line x1="${x}" y1="${y - 22}" x2="${x}" y2="${y - 4}" style="stroke:var(--grad);stroke-width:4;marker-end:url(#ah-grad)"/>`).join('')}</svg>
-        <span class="name">Weight decay</span><span class="ev">pull every weight toward 0: <b>0.76</b> at the end</span></div>
+        <span class="name">Weight decay</span><span class="ev"><b>0.76</b></span></div>
       <div class="gen-cure" data-step="5"><span class="n">5</span>
         <span id="gen-drop"></span>
-        <span class="name">Dropout</span><span class="ev">random neurons off while training: <b>0.71</b> at the end</span></div>
+        <span class="name">Dropout</span><span class="ev"><b>0.71</b></span></div>
     </div>`,
     init(el, api) {
       // dropout picture: a new random half of the hidden neurons is crossed out every 0.8 s
@@ -359,6 +352,7 @@ Deck.css(`
       <li><b>Weight decay</b>: every step shrinks each weight a little toward 0.</li>
       <li><b>Dropout</b>: random neurons off at every step, like the rotating bank tellers from the break game.</li>
     </ul>
+    <p>The numbers on the slide are validation losses: the big net on all 20,558 shots 0.660; a 2-8-8-1 on the same 500 shots, best 0.677; stopping early, best 0.675 at step 20; weight decay 0.76 and dropout 0.71 at the end of training.</p>
     <p class="ask">Which cures can you not use much on Kobe?</p>
     <p class="ans">More data and a smaller model: the rules fix both. The 105-weight Kobe net barely overfits, so keep the best checkpoint.</p>
     <p>Notebook Part 10, same story: 1.35 at the end, best 0.678 at step 10.</p>`,
@@ -405,8 +399,10 @@ Deck.css(`
           const sx = t => x0 + t * (x1 - x0), sy = v => y1 - (v / 1.15) * (y1 - y0);
           // axes
           polyline(ctx, [[x0, y0], [x0, y1], [x1, y1]], C.muted, 2.5);
-          Plot.text(ctx, 'loss', 4, y1 - 4, { size: 26, color: C.muted });
-          Plot.text(ctx, 'steps →', x1, Hc - 2, { size: 26, color: C.muted, align: 'right' });
+          if (k === 0) {   // axis names once, on the first card
+            Plot.text(ctx, 'loss', 4, y1 - 4, { size: 26, color: C.muted });
+            Plot.text(ctx, 'steps →', x1, Hc - 2, { size: 26, color: C.muted, align: 'right' });
+          }
           Plot.text(ctx, '0.69', x0 - 8, sy(0.69) + 9, { size: 26, color: C.muted, align: 'right', mono: true });
           polyline(ctx, [[x0 + 4, sy(0.69)], [x0 + 20, sy(0.69)]], C.muted, 2.5);
           const r = NN.rng(DOC[k].seed), N = 120;

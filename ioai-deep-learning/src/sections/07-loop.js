@@ -2,10 +2,14 @@ Deck.section({ id: 'loop', title: 'The training loop, live', minutes: 28 });
 
 Deck.css(`
 .sec-loop .lp-two { display: grid; grid-template-columns: 860px 820px; gap: 48px; flex: 1; min-height: 0; align-items: start; }
-.sec-loop .lp-left { gap: 40px; }
+.sec-loop .lp-left { gap: 56px; }
 .sec-loop .lp-read { gap: 56px; }
 .sec-loop .lp-t6 { display: grid; grid-template-columns: 1056px 576px; gap: 96px; flex: 1; min-height: 0; align-items: start; }
 .sec-loop pre.lp-c30 { font-size: 30px; padding: 24px 30px; }
+.sec-loop pre.lp-beats-code { font-size: 32px; line-height: 1.75; }
+.sec-loop pre.lp-tall { line-height: 1.65; }
+.sec-loop pre.lp-c36 { font-size: 36px; line-height: 1.7; }
+.sec-loop .lp-t6.lp-wide { grid-template-columns: 1120px 1fr; gap: 72px; }
 .sec-loop .lp-eff { display: flex; flex-direction: column; gap: 36px; }
 .sec-loop .stack.lp-eff { display: grid; }
 .sec-loop .stack.lp-eff > div { display: flex; flex-direction: column; gap: 20px; }
@@ -28,7 +32,7 @@ Deck.css(`
 .sec-loop .lp-opt .ok-frame { position: absolute; inset: -9px; border: 6px solid var(--ok); pointer-events: none; }
 .sec-loop .lp-opt .ok-tag { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 52px; font-weight: 700; color: var(--ok); }
 .sec-loop .lp-opt .dim { position: absolute; inset: -3px; background: color-mix(in srgb, var(--paper) 68%, transparent); pointer-events: none; }
-.sec-loop .lp-bars { display: flex; flex-direction: column; gap: 64px; margin-top: 24px; }
+.sec-loop .lp-bars { display: flex; flex-direction: column; gap: 88px; margin-top: 40px; }
 .sec-loop .lp-bar-row { display: grid; grid-template-columns: 540px 240px 1fr; gap: 32px; align-items: center; }
 .sec-loop .lp-bar-row .name { font-size: 48px; line-height: 1.1; }
 .sec-loop .lp-bar-row .ll { font-family: var(--font-mono); font-size: 64px; font-weight: 600; }
@@ -36,7 +40,7 @@ Deck.css(`
 .sec-loop .lp-track i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ink); }
 .sec-loop .lp-track b { position: absolute; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 56px; font-weight: 600; padding-left: 20px; }
 .sec-loop .lp-bar-row.base .lp-track i { background: var(--muted); }
-.sec-loop .lp-bar-head { display: grid; grid-template-columns: 540px 240px 1fr; gap: 32px; font-family: var(--font-mono); font-size: 28px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.sec-loop .lp-bar-head { margin-bottom: -56px; display: grid; grid-template-columns: 540px 240px 1fr; gap: 32px; font-family: var(--font-mono); font-size: 28px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 .sec-loop .lp-scale { display: flex; justify-content: space-between; }
 .sec-loop .lp-err { font-family: var(--font-mono); font-size: 30px; line-height: 1.45; background: var(--code-bg); border-left: 6px solid var(--bad); padding: 22px 28px; white-space: pre-wrap; }
 .sec-loop .lp-err .e { color: var(--bad); font-weight: 700; }
@@ -60,7 +64,7 @@ Deck.css(`
     id: 'loop-beats',
     title: 'The five beats of one training step',
     html: `
-    <h2>Every training step is the same five lines</h2>
+    <h2>Every step: the same five lines</h2>
     <div class="lp-two">
       <div class="col lp-left">
         ${Code.py(`
@@ -294,12 +298,11 @@ Deck.slide({
   id: 'loop-court',
   title: 'Live demo: scale your inputs',
   html: `
-  <div class="row"><span class="tag tag-try">try it live</span></div>
-  <h2>Does plain SGD care about raw inputs?</h2>
+  <div class="row" style="gap:32px"><span class="tag tag-try">try it live</span><h2>Does plain SGD care about raw inputs?</h2></div>
   <div class="lp-court grow"></div>`,
   init(el, api) {
     Widgets.courtNet(api, el.querySelector('.lp-court'), {
-      w: 720, hidden: [8, 8], act: 'relu', opt: 'sgd', lr: 0.1, sgdLr: 0.1, adamLr: 0.01,
+      w: 780, hidden: [8, 8], act: 'relu', opt: 'sgd', lr: 0.1, sgdLr: 0.1, adamLr: 0.01,
       normalize: false, controls: ['play', 'reset', 'norm', 'opt'], n: 3000, maxEpochs: 120, showDots: 700,
     });
   },
@@ -317,7 +320,7 @@ Deck.slide({
   id: 'loop-setup',
   title: 'The script, part 1: setup',
   html: `
-  <h2>Before the loop: data, model, loss, optimizer</h2>
+  <h2>Setup: data, model, loss, optimizer</h2>
   <div class="lp-t6">
     ${Code.py(`
       X = torch.tensor(df[["loc_x", "loc_y"]].values,
@@ -331,13 +334,13 @@ Deck.slide({
       X_tr, y_tr, X_va, y_va = X[tr], y[tr], X[va], y[va]
       model = MLP()                      # 2-8-8-1
       loss_fn = nn.BCEWithLogitsLoss()
-      opt = torch.optim.Adam(model.parameters(), lr=1e-3)`, { hl: '1:1-4 2:5-6,9 3:7-8 4:10 5:11-12', cls: 'lp-c30' })}
+      opt = torch.optim.Adam(model.parameters(), lr=1e-3)`, { hl: '1:1-4 2:5-6,9 3:7-8 4:10 5:11-12', cls: 'lp-c30 lp-tall' })}
     <div class="stack lp-eff">
       <div data-only="0 1"><div class="lbl">shapes</div><div class="lp-num">X (25000, 2)</div><div class="lp-num">y (25000, 1)</div></div>
       <div data-only="2"><div class="lbl">split</div><div class="lp-num">20,000 <small>train</small></div><div class="lp-num">5,000 <small>validation</small></div></div>
       <div data-only="3"><div class="lbl">train mean / std</div><div class="lp-num">x 6.5 / 110</div><div class="lp-num">y 91.7 / 88</div></div>
-      <div data-only="4"><div class="lbl">model: 2-8-8-1</div>${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 520, h: 420, r: 18 })}<div class="lp-num">105 <small>weights</small></div></div>
-      <div data-only="5"><div class="lbl">loss takes logits</div><div class="lp-num">no sigmoid</div><div class="lbl" style="margin-top:24px">optimizer</div><div class="lp-num">Adam, lr 0.001</div></div>
+      <div data-only="4">${Widgets.netSVG({ sizes: [2, 8, 8, 1], w: 520, h: 420, r: 18 })}<div class="lp-num">105 <small>weights</small></div></div>
+      <div data-only="5"><div class="lbl">loss takes logits</div><div class="lp-num">no sigmoid</div></div>
     </div>
   </div>`,
   notes: `
@@ -369,12 +372,12 @@ Deck.slide({
               loss = loss_fn(logits, y_tr[idx])
               loss.backward()
               opt.step()
-          print(epoch, loss.item())`, { hl: '1:1 2:2-4 3:5-9 4:10' })}
+          print(epoch, loss.item())`, { hl: '1:1 2:2-4 3:5-9 4:10', cls: 'lp-c36' })}
     <div class="lp-eff">
-      <div data-step="1"><div class="lbl">epoch = every shot once</div><div class="lp-num">30 <small>epochs</small></div></div>
-      <div data-step="2"><div class="lbl">20,000 shots ÷ 64</div><div class="lp-num">313 <small>batches per epoch</small></div></div>
-      <div data-step="3"><div class="lbl">one batch = one step</div><div class="lp-num">9,390 <small>steps</small></div></div>
-      <div data-step="4"><div class="lbl">printed at the end</div><div class="lp-num">≈ 0.64 <small>last batch</small></div></div>
+      <div data-step="1"><div class="lp-num">30 <small>epochs</small></div></div>
+      <div data-step="2"><div class="lbl">20,000 ÷ 64</div><div class="lp-num">313 <small>batches per epoch</small></div></div>
+      <div data-step="3"><div class="lbl">30 × 313</div><div class="lp-num">9,390 <small>steps</small></div></div>
+      <div data-step="4"><div class="lbl">printed</div><div class="lp-num">≈ 0.64 <small>last batch</small></div></div>
     </div>
   </div>`,
   notes: `
@@ -399,21 +402,19 @@ Deck.slide({
     id: 'loop-results',
     title: 'Kobe results: baselines vs MLP',
     html: `
-    <div class="row"><span class="tag tag-predict">predict</span></div>
-    <h2>Will 105 weights beat “always miss”?</h2>
+    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>Will 105 weights beat “always miss”?</h2></div>
     <div class="lp-bars">
-      <div class="lp-bar-head"><span>model</span><span>val loss</span><span class="lp-scale"><span>accuracy 50%</span><span>65%</span></span></div>
+      <div class="lp-bar-head"><span></span><span>val loss</span><span class="lp-scale"><span>accuracy 50%</span><span>65%</span></span></div>
       ${row('always “miss”', '0.686', 56, 1, 'base')}
       ${row('logistic regression', '0.673', 59, 2)}
       ${row('<b>2-8-8-1 MLP</b>', '<mark>0.665</mark>', 60, 3)}
-    </div>
-    <p class="lead muted bottom" data-step="4">Small gap, real gain: basketball is noisy.</p>`,
+    </div>`,
     notes: `
     <p class="time">2 min (+2 for notebook Part 6)</p>
     <p class="ask">Always guessing 45% gives validation loss 0.686. Will our network beat it, by a lot or a little?</p>
-    <p class="do">Run the baseline cell of notebook Part 5 (the same three rows), then press → four times.</p>
+    <p class="do">Run the baseline cell of notebook Part 5 (the same three rows), then press → three times.</p>
     <p class="ans">By a little: 0.665 against 0.686, 60% against 56% accuracy ("always miss" is 56% on these validation shots). Logistic regression is in between; you may have seen it, if not: it is one neuron, so only a straight boundary.</p>
-    <p class="say">Is 60% bad? No: even at the rim Kobe made fewer than two in three, so position alone cannot do much better.</p>
+    <p class="say">Small gap, real gain. Is 60% bad? No: basketball is noisy; even at the rim Kobe made fewer than two in three, so position alone cannot do much better.</p>
     <p class="do">Then notebook Part 6, mistake 2 (no slide): delete opt.zero_grad() and predict. No error, but accuracy about 44%: it calls every shot "made", worse than "always miss", because each new gradient is added to the old ones.</p>`,
   });
 }
@@ -477,7 +478,7 @@ Deck.slide({
     id: 'loop-sigmoid',
     title: 'Cliffhanger reveal: two sigmoids',
     html: `
-    <div class="row"><span class="tag tag-warn">planned mistake 3</span><span class="kicker">the vote from before the break</span></div>
+    <div class="row"><span class="tag tag-warn">planned mistake 3</span></div>
     <h2>Two sigmoids: normal loss, broken model</h2>
     <div class="lp-sig-grid">
       <div class="col" style="gap:36px">
@@ -485,8 +486,8 @@ Deck.slide({
           return torch.sigmoid(self.fc3(x))
           loss_fn = nn.BCEWithLogitsLoss()`, { cls: 'lp-c30' })}
         <div class="lp-seen">
-          <div data-step="1" class="ui-readout"><span class="ui-readout-label">printed loss</span><span class="ui-readout-value">0.68 <span class="small muted">looks normal</span></span></div>
-          <div data-step="2" class="ui-readout"><span class="ui-readout-label">accuracy</span><span class="ui-readout-value">62% <span class="small muted">looks normal</span></span></div>
+          <div data-step="1" class="ui-readout"><span class="ui-readout-label">printed loss</span><span class="ui-readout-value">0.68</span></div>
+          <div data-step="2" class="ui-readout"><span class="ui-readout-label">accuracy</span><span class="ui-readout-value">62%</span></div>
         </div>
       </div>
       <div class="col" style="gap:28px">
@@ -494,8 +495,8 @@ Deck.slide({
           <div>${hist(HIST_OK, 'correct model')}</div>
           <div>${hist(HIST_BUG, 'two sigmoids', `<text class="lbl" x="80" y="86" style="text-anchor:start;fill:var(--bad)">← 76% say “&lt; 1%”</text>`)}</div>
         </div>
-        <div class="small muted" data-step="3" style="margin-top:-12px">predicted chance of a make, 5,000 validation shots</div>
-        <div data-step="4" class="lp-verdict"><span class="big-n bad">4.53</span><span>✗ true log loss <span class="muted">(correct model: 0.665)</span></span></div>
+        <div class="small muted" data-step="3" style="margin-top:-12px">predicted chance of a make</div>
+        <div data-step="4" class="lp-verdict"><span class="big-n bad">4.53</span><span>✗ true log loss <span class="muted">(correct: 0.665)</span></span></div>
       </div>
     </div>`,
     notes: `
@@ -505,7 +506,7 @@ Deck.slide({
     <ul>
       <li>1: printed loss 0.68, looks normal.</li>
       <li>2: accuracy 61.7%, like the correct model.</li>
-      <li>3: 76% of its outputs are under 1%; none above 99%.</li>
+      <li>3: histograms of the predicted chance on the 5,000 validation shots: 76% of its outputs are under 1%; none above 99%.</li>
       <li>4: true log loss (the competition metric) about 4.5, against 0.665.</li>
     </ul>
     <p class="ans">Quietly worse: normal-looking numbers, garbage probabilities.</p>
@@ -589,7 +590,7 @@ Deck.slide({
     title: 'Evaluate correctly',
     html: `
     <h2>Measure on validation, without gradients</h2>
-    <div class="lp-t6">
+    <div class="lp-t6 lp-wide">
       ${Code.py(`
         model.eval()
         with torch.no_grad():
@@ -597,9 +598,9 @@ Deck.slide({
             val_loss = loss_fn(logits, y_va).item()
             pred = (logits > 0).float()
             acc = (pred == y_va).float().mean().item()
-            print(val_loss, acc, pred.mean().item())`, { hl: '1:1 2:2-3 3:5 4:7' })}
+            print(val_loss, acc, pred.mean().item())`, { hl: '1:1 2:2-3 3:5 4:7', cls: 'lp-c36' })}
       <div class="stack lp-eff">
-        <div data-only="1"><div class="lbl">evaluation mode</div><div class="lp-num">dropout off</div><div class="lp-num"><small>(a habit: our net has none)</small></div></div>
+        <div data-only="1"><div class="lbl">evaluation mode</div><div class="lp-num">dropout off</div></div>
         <div data-only="2"><div class="lbl">no graph, no .grad</div><div class="lp-num">faster, less memory</div></div>
         <div data-only="3"><div class="lbl">logit &gt; 0 means &gt; 50%</div>${sig}</div>
         <div data-only="4"><div class="lbl">printed</div><div class="lp-num">0.665 <small>val loss</small></div><div class="lp-num">60% <small>accuracy</small></div><div class="lp-num">≈ 0.35 <small>predicted “made”</small></div></div>

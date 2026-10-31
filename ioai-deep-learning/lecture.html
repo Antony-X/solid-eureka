@@ -2178,7 +2178,6 @@ Deck.plan = {
  },
  "slides": [
   "open-title",
-  "open-map",
   "open-refresh",
   "open-kobe",
   "why-line",
@@ -2197,15 +2196,12 @@ Deck.plan = {
   "loss-ce",
   "loss-pick",
   "loss-vote",
-  "brk-timer",
-  "brk-tb1",
-  "brk-tb2",
+  "brk-plain",
   "opt-lr",
   "opt-batch",
   "opt-race",
   "opt-default",
   "loop-beats",
-  "loop-live",
   "loop-court",
   "loop-setup",
   "loop-code",
@@ -2216,7 +2212,6 @@ Deck.plan = {
   "gen-overfit",
   "gen-cures",
   "gen-doctor",
-  "task-kobe",
   "task-rules",
   "task-predict",
   "task-fold",
@@ -2225,8 +2220,7 @@ Deck.plan = {
   "task-toys",
   "task-code",
   "task-plan",
-  "wrap-loop",
-  "wrap-tasks"
+  "wrap-loop"
  ]
 };
 
@@ -2240,16 +2234,12 @@ Deck.slide({
   cls: 'plain',
   html: `
   <div class="split split-46">
-    <div class="col gap-l">
-      <div class="kicker">IOAI training · deep learning</div>
-      <h1>Neural<br>networks,<br>hands&#8209;on</h1>
-      <p class="lead muted">From straight lines to any function.</p>
-    </div>
+    <h1>Neural<br>networks,<br>hands&#8209;on</h1>
     <div class="fill-center" id="open-spiral"></div>
   </div>`,
   init(el, api) {
     const pg = Widgets.playground(api, el.querySelector('#open-spiral'), {
-      size: 820, data: 'spiral', n: 400, hidden: [8, 8], act: 'tanh', opt: 'adam', lr: 0.02,
+      size: 860, data: 'spiral', n: 400, hidden: [8, 8], act: 'tanh', opt: 'adam', lr: 0.02,
       steps: 6, autoplay: true, controls: [], readouts: false, res: 64, maxEpochs: 6000, dot: 6,
     });
     // restart the show every time we come back to the title
@@ -2257,7 +2247,7 @@ Deck.slide({
   },
   notes: `
   <p class="time">1 min</p>
-  <p class="say">Today we go from models that draw one straight line to neural networks, which can learn almost any shape. Everything on these slides is computed live in this browser.</p>
+  <p class="say">Welcome to the IOAI deep-learning training. Today we go from models that draw one straight line to neural networks, which can learn almost any shape: from straight lines to any function. Everything on these slides is computed live in this browser.</p>
   <p class="do">Let the spiral train while you talk: a network with 105 numbers inside is learning to separate two interleaved spirals right now.</p>
   <p class="ask">Could one straight line separate these two spirals?</p>
   <p class="ans">No. In the first hour you will see why a network can.</p>
@@ -2347,7 +2337,7 @@ Deck.css(`
 .sec-open .recall-row .n { font-family: var(--font-mono); font-size: 40px; color: var(--muted); }
 .sec-open .recall-row .q { font-size: 48px; line-height: 1.2; }
 .sec-open .recall-row .a { font-size: 48px; line-height: 1.2; border-left: 8px solid var(--ok); padding-left: 28px; }
-.sec-open .kobe-grid { display: grid; grid-template-columns: 720px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
+.sec-open .kobe-grid { display: grid; grid-template-columns: 780px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
 .sec-open .kobe-pct { font-family: var(--font-display); font-weight: 800; font-size: 200px; line-height: .9; font-stretch: 110%; }
 .sec-open .kobe-key { font-size: 40px; }
 .sec-open .kobe-key b { font-weight: 700; }
@@ -2385,17 +2375,17 @@ Deck.slide({
     <div class="col gap-l">
       <div class="col">
         <span class="tag tag-predict">predict</span>
-        <h2>25,697 Kobe Bryant shots. What % went in?</h2>
-        <p class="kobe-key"><b class="c1">● orange: in</b> &nbsp; <b class="c0">● blue: missed</b></p>
+        <h2>Kobe's 25,697 shots: what % went in?</h2>
+        <p class="kobe-key"><b class="c1">● in</b> &nbsp; <b class="c0">● missed</b></p>
       </div>
       <div data-step="1"><div class="kobe-pct">44.6%</div></div>
-      <p class="lead" data-step="2">So always guessing <b class="c0">“miss”</b> is right <b>55%</b> of the time.</p>
+      <p class="lead" data-step="2">Always <b class="c0">“miss”</b>: right <b>55%</b></p>
     </div>
   </div>`,
   init(el, api) {
     const host = el.querySelector('#open-kobe-court');
-    const fr = Widgets.courtFrame(0, 0, 720);
-    const cv = Plot.canvas(host, 720, Math.ceil(fr.h));
+    const fr = Widgets.courtFrame(0, 0, 780);
+    const cv = Plot.canvas(host, 780, Math.ceil(fr.h));
     const draw = () => {
       const C = Plot.colors(), ctx = cv.ctx;
       cv.clear(C.paper);
@@ -2413,7 +2403,7 @@ Deck.slide({
   notes: `
   <p class="time">2 min</p>
   <p class="say">Our running example is real data: Kobe Bryant's shots from 20 NBA seasons, each with its position on the court. Basket at the bottom; orange went in, blue missed. It is also the data of your first task this afternoon.</p>
-  <p class="do">Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → the consequence.</p>
+  <p class="do">Everyone writes a number on paper (15 s); take two or three guesses aloud. → reveals 44.6%, → the consequence: always guessing "miss" is right 55% of the time.</p>
   <p class="ask">If 44.6% went in, how often is a "model" right that always says "miss"?</p>
   <p class="ans">About 55%. A model that does not clearly beat 55% has learned nothing; even the best reach only about 61%, because the same spot gives both makes and misses.</p>
   <p>Data: Kaggle "Kobe Bryant Shot Selection", 25,697 labelled shots (1996–2016); 800 are drawn. Kobe died in a helicopter crash in 2020; if it comes up, be respectful.</p>`,
@@ -2426,11 +2416,9 @@ try {
 // A plain-words refresher that assumes nothing: model = knobs, loss = how wrong,
 // training = turn the knobs a little, downhill. Joins the Opening section.
 Deck.css(`
-.sec-open .rf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; flex: 1; min-height: 0; align-items: start; margin-top: 12px; }
-.sec-open .rf-card { display: flex; flex-direction: column; gap: 22px; }
-.sec-open .rf-card h3 { font-size: 46px; }
-.sec-open .rf-card p { font-size: 34px; color: var(--muted); max-width: 15em; }
-.sec-open .rf-n { font-family: var(--font-mono); font-size: 30px; color: var(--muted); }
+.sec-open .rf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; flex: 1; min-height: 0; align-items: start; align-content: center; padding-bottom: 64px; }
+.sec-open .rf-card { display: flex; flex-direction: column; gap: 40px; }
+.sec-open .rf-card h3 { font-size: 52px; line-height: 1.1; }
 `);
 
 Deck.slide({
@@ -2440,8 +2428,7 @@ Deck.slide({
   <h2>Three ideas you need today</h2>
   <div class="rf">
     <div class="rf-card" data-step="1">
-      <span class="rf-n">1</span>
-      <svg class="dg" viewBox="0 0 540 300" width="520" height="289" role="img" aria-label="a model is a box with knobs">
+      <svg class="dg" viewBox="0 0 540 300" width="520" height="312" role="img" aria-label="a model is a box with knobs">
         <line class="flow" x1="10" y1="150" x2="118" y2="150"/>
         <text class="lbl-s" x="4" y="110" style="text-anchor:start">shot</text>
         <rect class="box" x="126" y="60" width="228" height="180" rx="8" style="stroke-width:5"/>
@@ -2453,10 +2440,8 @@ Deck.slide({
         <text class="lbl-b" x="486" y="150">41%</text>
       </svg>
       <h3>A model is a box with knobs</h3>
-      <p>Numbers go in, a guess comes out. The knobs decide the guess.</p>
     </div>
     <div class="rf-card" data-step="2">
-      <span class="rf-n">2</span>
       <svg class="dg" viewBox="0 0 500 300" width="520" height="312" role="img" aria-label="the loss measures how wrong the guess was">
         <text class="lbl" x="120" y="60">guess 41%</text>
         <text class="lbl" x="370" y="60">it went in</text>
@@ -2464,13 +2449,10 @@ Deck.slide({
         <rect x="40" y="130" width="250" height="44" rx="6" fill="var(--grad-soft)" stroke="var(--grad)" stroke-width="3"/>
         <text class="lbl-s" x="40" y="214" style="text-anchor:start">right</text>
         <text class="lbl-s" x="460" y="214" style="text-anchor:end">very wrong</text>
-        <text class="lbl" x="250" y="262">loss = how wrong</text>
       </svg>
       <h3>The loss says how wrong</h3>
-      <p>One number. Small is good. We compare the guess with the truth.</p>
     </div>
     <div class="rf-card" data-step="3">
-      <span class="rf-n">3</span>
       <svg class="dg" viewBox="0 0 500 300" width="520" height="312" role="img" aria-label="training rolls downhill on the loss">
         <path d="M30,40 C120,260 380,260 470,40" fill="none" stroke="var(--ink)" stroke-width="5"/>
         <circle cx="96" cy="150" r="20" fill="var(--grad)"/>
@@ -2480,19 +2462,18 @@ Deck.slide({
         <text class="lbl-s" x="80" y="40">loss</text>
       </svg>
       <h3>Training rolls downhill</h3>
-      <p>Turn every knob a little in the direction that makes the loss smaller. Repeat.</p>
     </div>
-  </div>
-  <p class="lead" data-step="4">Today: a much bigger box, and how to train it well.</p>`,
+  </div>`,
   notes: `
   <p class="time">3 min</p>
   <p class="say">Three ideas in plain words; everything today is built on them. If the room already knows them, keep it to one minute.</p>
   <p class="do">Press → for each card; ask a student to say it back in their own words.</p>
   <ul>
-    <li><b>Knobs:</b> a shot's position goes in, a chance comes out; the knobs (weights) decide the guess.</li>
-    <li><b>Loss:</b> one number for how wrong the guess was; small is good.</li>
+    <li><b>Knobs:</b> numbers (a shot's position) go in, a guess (a chance) comes out; the knobs (weights) decide the guess.</li>
+    <li><b>Loss:</b> one number for how wrong the guess was, comparing the guess with the truth; small is good.</li>
     <li><b>Downhill:</b> turn each knob a little in the direction that lowers the loss (the gradient; backpropagation computes it), repeat. That is gradient descent.</li>
   </ul>
+  <p class="say">Today: a much bigger box, and how to train it well.</p>
   <p class="ask">If the loss goes up after a step, what went wrong?</p>
   <p class="ans">The step was too big: we jumped over the bottom of the valley. The step size is the learning rate; we play with it after the break.</p>
   <p>If faces look unsure: W opens a whiteboard, D a pen; draw a valley and roll a ball down it.</p>`,
@@ -2508,7 +2489,7 @@ Deck.css(`
 .sec-why .why-side { display: flex; flex-direction: column; gap: 28px; }
 .sec-why .why-side .lead { max-width: 16em; }
 .sec-why .why-lay { display: grid; grid-template-columns: 768px 1fr; gap: 96px; flex: 1; min-height: 0; align-items: start; }
-.sec-why .why-lay3 { display: grid; grid-template-columns: 960px 1fr; gap: 72px; flex: 1; min-height: 0; align-items: start; }
+.sec-why .why-lay3 { display: grid; grid-template-columns: 1240px 1fr; gap: 64px; flex: 1; min-height: 0; align-items: center; }
 .sec-why .why-lay3 canvas { cursor: grab; }
 .sec-why .why-task { font-size: 40px; line-height: 1.35; }
 .sec-why .why-task b { font-family: var(--font-mono); color: var(--muted); margin-right: 14px; }
@@ -2560,13 +2541,13 @@ Deck.css(`
       const box = document.createElement('div');
       box.className = 'why-side';
       box.innerHTML = `<span class="tag tag-predict">predict</span>
-        <p class="lead" data-step="1">No. Logistic regression = one line. It gets stuck near <b>60%</b>.</p>`;
+        <p class="lead" data-step="1">No: one line stalls near <b>60%</b>.</p>`;
       side.insertBefore(box, side.firstChild);
     },
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">A toy dataset: orange dots in the middle, a blue ring around them. You may have seen logistic regression; if not, it is the simplest classifier, and its border between the colours is always one straight line. Can one straight line put all orange on one side and all blue on the other?</p>
-    <p class="do">Show of hands. Press <b>Train</b>: the line swings for about a second, then stays straight. Readouts: loss stays near 0.68, accuracy stops near 59% (it started at 58%). Press → for the answer.</p>
+    <p class="do">Show of hands. Press <b>Train</b>: the line swings for about a second, then stays straight. Readouts: loss stays near 0.68, accuracy stops near 59% (it started at 58%). Press → for the answer: no, logistic regression is one line and gets stuck near 60%.</p>
     <p class="ask">Why can't it do better, however long we train?</p>
     <p class="ans">Every straight line leaves both colours on both sides: the orange is surrounded. Training longer only polishes the line; it cannot bend it.</p>
     <p>Maths for you: p = σ(w₁x₁ + w₂x₂ + b); the 50% border w₁x₁ + w₂x₂ + b = 0 is a line.</p>`,
@@ -2708,24 +2689,16 @@ Deck.css(`
   Deck.slide({
     id: 'why-lift',
     title: 'Fix 1: invent a feature (lift to 3-D)',
+    steps: 4,
     html: `
-    <h2>Fix 1: lift the dots, then one flat cut works</h2>
+    <h2>Fix 1: lift the dots, then cut flat</h2>
     <div class="why-lay3">
       <div id="why-lift"></div>
-      <div class="why-side">
-        <div class="stack">
-          <p class="lead" data-only="0">Seen from above: the same circle data.</p>
-          <p class="lead dim-after" data-step="1">Lift each dot: further out = higher.</p>
-        </div>
-        <p class="lead dim-after" data-step="2">One flat sheet now separates them.</p>
-        <p class="lead dim-after" data-step="3">Dropped to the floor, the cut is a circle.</p>
-        <p class="lead" data-step="4"><b>But which lift for Kobe's court?</b></p>
-        <p class="tiny" data-step="1">drag to rotate</p>
-      </div>
+      <p class="lead" data-step="4"><b>Which lift for Kobe's court?</b></p>
     </div>`,
     init(el, api) {
       const D = NN.data.circle(300, 101, 0);
-      const W = 960, H = 768, S = 285, ZS = 1.3, CUT = 0.36;   // inner r² ≤ 0.25, outer r² ≥ 0.50
+      const W = 1240, H = 784, S = 295, ZS = 1.3, CUT = 0.36;   // inner r² ≤ 0.25, outer r² ≥ 0.50
       const cv = Plot.canvas(el.querySelector('#why-lift'), W, H);
       const st = { t: 0, pitch: 90, yaw: 0, plane: 0, ring: 0 };
       const goal = { t: 0, pitch: 90, yaw: 0, plane: 0, ring: 0 };
@@ -2815,8 +2788,8 @@ Deck.css(`
     },
     notes: `
     <p class="time">2 min</p>
-    <p class="say">Fix 1: invent a new feature, a trick you may have seen in classical ML. Lift each dot by its distance from the centre: the blue ring rises and a flat sheet slides between the colours. Dropped back to the floor, that flat cut is a circle.</p>
-    <p class="do">→ the dots rise; drag the picture to spin it. → the sheet, → the circle, → the question.</p>
+    <p class="say">Fix 1: invent a new feature, a trick you may have seen in classical ML. We start seen from above: the same circle data. Lift each dot by its distance from the centre (further out = higher): the blue ring rises and one flat sheet slides between the colours. Dropped back to the floor, that flat cut is a circle.</p>
+    <p class="do">→ the dots rise; drag the picture to spin it. → the sheet, → the circle, → the question. (4 presses.)</p>
     <p class="ask">Which height would you invent for Kobe's court? For a spiral?</p>
     <p class="ans">For Kobe, distance from the rim, but you had to know basketball. For a spiral, nobody knows. And the Kobe task gives the network only x and y, so it must invent features itself: next slide.</p>
     <p>Maths for you: height z = x² + y²; the sheet z = 0.36 lands on the floor as a circle of radius 0.6 (the idea behind kernel SVMs).</p>`,
@@ -2840,8 +2813,8 @@ Deck.css(`
       box.className = 'why-side';
       box.innerHTML = `<span class="tag tag-predict">predict</span>
         <div class="stack">
-          <p class="lead" data-only="0">Four straight edges: what shape?</p>
-          <p class="lead" data-step="1">Four straight edges fence in the orange.</p>
+          <p class="lead" data-only="0">Four edges: what shape?</p>
+          <p class="lead" data-step="1">A fence around the orange.</p>
         </div>`;
       side.insertBefore(box, side.firstChild);
     },
@@ -2964,7 +2937,6 @@ Deck.css(`
         <text class="lbl-b" id="n1-o" x="874" y="330" style="font-size:56px;text-anchor:start">0</text>
       </svg>
       <div class="neu-side">
-        <p class="n1-cap" style="font-size:34px;font-weight:600;margin:0"></p>
         <div class="n1-plot"></div>
         <div class="neu-ctl"></div>
       </div>
@@ -3007,7 +2979,6 @@ Deck.css(`
         Plot.dot(ctx, sx(zc), sy(f(zc)), 12, C.ink, C.paper);
         Plot.text(ctx, 'output', sx(0) + 14, 30, { size: 28, color: C.ink, base: 'top' });
         Plot.text(ctx, 'sum', 660, sy(0) - 12, { size: 28, color: C.ink, align: 'right' });
-        $('.n1-cap').textContent = S.act === 'relu' ? 'ReLU: a negative sum becomes 0' : 'sigmoid: this neuron is logistic regression';
       }
       const sl = [
         UI.slider(ctl, { label: 'weight 1', min: -2, max: 2, step: 0.1, value: S.w[0], fmt: v => fnum(v, 1), oninput: v => { S.w[0] = v; draw(); } }),
@@ -3036,12 +3007,11 @@ Deck.css(`
     id: 'neu-line',
     title: 'One neuron cuts the court with a line',
     html: `
-    <h2>One neuron cuts the court with a straight line</h2>
+    <h2>One neuron draws one straight line</h2>
     <div class="neu-demo">
       <div class="n2-court"></div>
       <div class="neu-side" style="align-self:stretch">
         <div class="neu-readouts"></div>
-        <p class="neu-cap" style="margin-top:8px">Arrow: the orange side, where this neuron says "made".</p>
         <div class="neu-ctl" style="margin-top:auto"></div>
       </div>
     </div>`,
@@ -3348,9 +3318,9 @@ Deck.css(`
         <g data-step="1"><text class="lbl-s" x="202" y="690">weights + biases</text></g>
         <g data-step="3"><text class="lbl-b" x="1060" y="640" style="font-size:56px">= 105</text></g>
       </svg>
-      <div class="qa">
+      <div class="qa" style="align-self:center">
         <div><p class="q">2-16-1?</p><p class="a" data-step="4">65 · illegal for Kobe</p></div>
-        <div><p class="q">784-128-10?<br><span class="neu-cap">(digit images)</span></p><p class="a" data-step="5">101,770</p></div>
+        <div><p class="q">784-128-10?</p><p class="a" data-step="5">101,770</p></div>
       </div>
     </div>`,
     notes: `
@@ -3802,7 +3772,7 @@ Deck.css(`
     id: 'act-zoo',
     title: 'The activation zoo',
     html: `
-    <h2>Any bend will do: the activation zoo</h2>
+    <h2>Activations: any bend will do</h2>
     <div class="zoo">${ZOO.map(k => `
       <div class="zoo-cell" data-k="${k}">
         <h3>${NN.act[k].name}</h3>
@@ -3811,9 +3781,9 @@ Deck.css(`
         <div class="zoo-ro grad" data-step="1"><span>slope</span><b class="vd">0</b></div>
       </div>`).join('')}
     </div>
-    <p class="small muted">input <b class="mono" id="act-z">0.0</b> · point at any plot</p>`,
+    <div class="zoo-ro"><span>input</span><b id="act-z">0.0</b></div>`,
     init(el, api) {
-      const W = 336, H = 500;
+      const W = 336, H = 560;
       let z0 = 0;
       const cells = ZOO.map(k => {
         const c = el.querySelector(`.zoo-cell[data-k="${k}"]`);
@@ -3851,7 +3821,7 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">Almost any bend works. ReLU: zero for negative inputs, the input itself for positive ones; Leaky ReLU keeps a small slope on the left. Sigmoid squashes into 0 to 1, tanh is the same S from −1 to 1, and GELU is a smooth ReLU used in models like GPT.</p>
-    <p class="do">Press → to show the magenta dashed <b>slope</b> curves. Sweep the pointer across the sigmoid plot and stop at the middle.</p>
+    <p class="do">Press → to show the magenta dashed <b>slope</b> curves. Point at any plot: all five follow the same input. Sweep the pointer across the sigmoid plot and stop at the middle.</p>
     <p class="ask">What is the largest slope the sigmoid ever has?</p>
     <p class="ans">0.25, at input 0; far from 0 it is flat. ReLU's slope is 1 for every positive input. Training relies on these slopes and flat spots barely learn: one reason ReLU is the usual default.</p>
     <p>Avoid "the neuron fires": these are smooth bends, not on/off switches.</p>`,
@@ -3974,11 +3944,11 @@ with torch.no_grad():
       <div class="side" id="act-hg-side"><div class="ro-row" id="act-hg-ro"></div></div>
     </div>`,
     init(el, api) {
-      const W = 1056, H = 680;
+      const W = 1056, H = 760;
       const cv = Plot.canvas(el.querySelector('#act-hg-cv'), W, H);
       const B = box(W, H, [-1, 1], [-1.6, 1.4], { l: 70, b: 52 });
       const ro = el.querySelector('#act-hg-ro');
-      const rN = UI.readout(ro, 'hinges'), rE = UI.readout(ro, 'error');
+      const rE = UI.readout(ro, 'error');
       let N = 3, fit = hingeFit(N);
       const side = el.querySelector('#act-hg-side');
       const ch = UI.choice(side, [1, 2, 3, 5, 8, 16, 32].map(v => ({ value: v, label: String(v) })), N, v => { N = v; fit = hingeFit(N); draw(); }, { label: 'hinges' });
@@ -3991,7 +3961,6 @@ with torch.no_grad():
         curve(ctx, B, target, C.muted, 3, [12, 10]);
         curve(ctx, B, fit.f, C.ink, 6, null, 800);
         fit.knots.forEach(t => Plot.dot(ctx, B.sx(t), B.sy(fit.f(t)), N > 16 ? 6 : 9, C.ink, C.paper));
-        rN.set(N);
         rE.set(fit.mse < 0.0001 ? fit.mse.toFixed(6) : fit.mse.toFixed(4));
       }
       draw();
@@ -4440,11 +4409,10 @@ Deck.section({ id: 'loss', title: 'Loss: how wrong are we?', minutes: 13 });
 
 Deck.css(`
 .sec-loss .lx-grid { display: grid; grid-template-columns: 960px 1fr; gap: 72px; flex: 1; min-height: 0; align-items: start; }
-.sec-loss .lx-grid.wide { grid-template-columns: 1104px 1fr; }
+.sec-loss .lx-grid.wide { grid-template-columns: 1200px 1fr; }
 .sec-loss .lx-side { display: flex; flex-direction: column; gap: 32px; min-width: 0; height: 100%; }
 .sec-loss .lx-side .ui-row { gap: 20px; }
 .sec-loss .lx-side .ui-readout-label { font-size: 28px; }
-.sec-loss .lx-note { font-size: 34px; color: var(--muted); }
 .sec-loss .lx-ctl { margin-top: auto; display: flex; flex-direction: column; gap: 24px; }
 .sec-loss canvas.lx-drag { cursor: grab; }
 .sec-loss .lx-made { font-family: var(--font-display); font-weight: 800; font-size: 48px; color: var(--c1); }
@@ -4467,11 +4435,11 @@ Deck.css(`
 .sec-loss .lx-pick .hd { font-family: var(--font-mono); font-size: 28px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 12px; border-bottom: 2px solid var(--rule); align-self: end; }
 .sec-loss .lx-pick .cell { padding: 14px 0; border-bottom: 2px solid var(--rule); min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
 .sec-loss .lx-pick .what { font-family: var(--font-display); font-weight: 750; font-size: 56px; line-height: 1.05; }
-.sec-loss .lx-pick .eg { font-size: 32px; color: var(--muted); }
 .sec-loss .lx-pick .last { font-size: 44px; }
 .sec-loss .lx-pick .fn { font-family: var(--font-mono); font-size: 40px; font-weight: 600; }
 .sec-loss .lx-pick [data-step] { transition: opacity .35s ease, transform .35s ease; }
-.sec-loss .lx-vote { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; align-items: start; }
+.sec-loss .lx-vote { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; align-items: center; flex: 1; min-height: 0; }
+.sec-loss .lx-opts .tag { align-self: flex-start; }
 .sec-loss .lx-opts { display: flex; flex-direction: column; gap: 44px; padding-top: 12px; }
 .sec-loss .lx-opt { display: flex; gap: 28px; align-items: center; font-size: 52px; line-height: 1.1; }
 .sec-loss .lx-opt b { font-family: var(--font-mono); font-size: 40px; font-weight: 600; min-width: 64px; height: 64px; display: grid; place-items: center; border: 3px solid var(--ink); }
@@ -4542,12 +4510,11 @@ Deck.css(`
       <div class="lx-mse-cv"></div>
       <div class="lx-side">
         <div class="lx-mse-ro"></div>
-        <p class="lx-note">Each dot: % of Kobe's shots made from that distance.<br>Each miss becomes a square.</p>
-        <div class="lx-ctl"><p class="small muted">Drag the line's end dots.</p><div class="ui-row lx-mse-btn"></div></div>
+        <div class="lx-ctl"><div class="ui-row lx-mse-btn"></div></div>
       </div>
     </div>`,
     init(el, api) {
-      const W = 1104, H = 720, L = 120, R = 36, T = 64, B = 96;
+      const W = 1200, H = 760, L = 120, R = 36, T = 64, B = 96;
       const cv = Plot.canvas(el.querySelector('.lx-mse-cv'), W, H, 'lx-drag');
       const Y0 = 25, Y1 = 70, XM = 31;
       // wide x axis so a 10-point miss (one square) fits between two neighbouring dots
@@ -4640,7 +4607,7 @@ Deck.css(`
     notes: `
     <p class="time">1.5 min</p>
     <p class="say">The loss is one number that says how wrong the model is; training makes it small. Dots: the share of Kobe's shots made from each distance; the line is our model. Each miss becomes a square, and the loss is the average square: the mean squared error.</p>
-    <p class="do">Point at the big square at 0–4 ft. Drag an end dot to grow and shrink squares, then press <b>Fit the line</b>: loss 64 → 18.</p>
+    <p class="do">Point at the big square at 0–4 ft. Drag one of the line's two black end dots to grow and shrink squares, then press <b>Fit the line</b>: loss 64 → 18.</p>
     <p class="ask">A miss of 10 points costs 100. What does a miss of 20 cost?</p>
     <p class="ans">400, four times as much: big misses are very expensive, so the line works hardest to avoid them.</p>
     <p>PyTorch: <code>nn.MSELoss()</code>, the loss for predicting numbers, as in the inversion task.</p>`,
@@ -5025,26 +4992,26 @@ Deck.css(`
     <div class="lx-pick">
       <span class="hd"></span><span class="hd">you predict</span><span class="hd">last layer</span><span class="hd">PyTorch loss</span>
       <div class="cell" data-step="1">${glyphNum}</div>
-      <div class="cell" data-step="1"><span class="what">a number</span><span class="eg">inversion task's output</span></div>
+      <div class="cell" data-step="1"><span class="what">a number</span></div>
       <div class="cell" data-step="1"><span class="last">1 output</span></div>
       <div class="cell" data-step="1"><span class="fn">nn.MSELoss()</span></div>
       <div class="cell" data-step="2">${glyphYes}</div>
-      <div class="cell" data-step="2"><span class="what">yes / no</span><span class="eg">Kobe: in or out?</span></div>
+      <div class="cell" data-step="2"><span class="what">yes / no</span></div>
       <div class="cell" data-step="2"><span class="last">1 score</span></div>
       <div class="cell" data-step="2"><span class="fn">nn.BCEWithLogitsLoss()</span></div>
       <div class="cell" data-step="3">${glyphK}</div>
-      <div class="cell" data-step="3"><span class="what">one of K</span><span class="eg">shot type: jump, layup, dunk…</span></div>
+      <div class="cell" data-step="3"><span class="what">one of K</span></div>
       <div class="cell" data-step="3"><span class="last">K scores</span></div>
       <div class="cell" data-step="3"><span class="fn">nn.CrossEntropyLoss()</span></div>
     </div>
-    <p class="lead" data-step="4">The last layer is plain <b>Linear</b>: the loss adds sigmoid or softmax.</p>`,
+    <p class="lead" data-step="4">No sigmoid or softmax in the model: the loss adds it.</p>`,
     notes: `
     <p class="time">2 min</p>
     <p class="say">Three kinds of questions cover almost every task, each with its loss. Before each row, let the class guess.</p>
     <p class="do">→ Row 1, a number (the inversion task): one output, mean squared error.</p>
     <p class="do">→ Row 2, yes/no (Kobe): one score, BCEWithLogitsLoss, the forecast loss; targets 0. or 1. as floats.</p>
-    <p class="do">→ Row 3, one of K classes: K scores; softmax turns them into shares (the bars), and the loss punishes a low share for the right answer.</p>
-    <p class="do">→ The rule: the model ends with plain Linear; the loss does the squashing.</p>
+    <p class="do">→ Row 3, one of K classes (for example Kobe's shot type: jump shot, layup, dunk, other): K scores; softmax turns them into shares (the bars), and the loss punishes a low share for the right answer.</p>
+    <p class="do">→ The rule: the model ends with a plain Linear layer, no sigmoid or softmax; the loss does the squashing itself.</p>
     <p class="ask">Which of 10 digits is in an image: how many outputs, which loss?</p>
     <p class="ans">10 scores, nn.CrossEntropyLoss. Untrained, each class gets 10%, so the first loss is about 2.3.</p>
     <p>CrossEntropyLoss wants raw scores and class numbers 0 … K−1 as integers, not one-hot.</p>`,
@@ -5057,7 +5024,7 @@ Deck.css(`
     id: 'loss-vote',
     title: 'Cliffhanger: sigmoid + BCEWithLogitsLoss',
     html: `
-    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>A sigmoid at the end. What happens?</h2></div>
+    <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>Sigmoid at the end: what happens?</h2></div>
     <div class="lx-vote">
       ${Code.py(`
         class MLP(nn.Module):
@@ -5073,9 +5040,9 @@ Deck.css(`
         <div class="lx-opt"><b>2</b>it trains normally</div>
         <div class="lx-opt"><b>3</b>it trains, but is quietly worse</div>
         <div class="lx-opt"><b>4</b>the loss becomes NaN</div>
+        <span class="tag tag-pair" data-step="2">pairs · 1 min</span>
       </div>
-    </div>
-    <p class="lead" data-step="2">Talk 1 minute with a neighbour, then vote again.</p>`,
+    </div>`,
     steps: 2,
     notes: `
     <p class="time">2 min</p>
@@ -5096,6 +5063,7 @@ Deck.section({ id: 'brk', title: 'Break', minutes: 10 });
 Deck.css(`
 .sec-brk .brk-grid { display: grid; grid-template-columns: 720px 1fr; gap: 96px; align-items: center; flex: 1; min-height: 0; }
 .sec-brk .brk-grid .timer-face { font-size: 240px; }
+.sec-brk .brk-big .timer-face { font-size: 360px; }
 .sec-brk .brk-next { display: flex; flex-direction: column; gap: 40px; }
 .sec-brk .tb { display: flex; flex-direction: column; gap: 44px; margin-top: 8px; }
 .sec-brk .tb-row { display: grid; grid-template-columns: 56px 1fr 230px; gap: 32px; align-items: baseline; font-size: 44px; line-height: 1.2; }
@@ -5142,6 +5110,22 @@ Deck.css(`
     <p class="say">Ten minutes of break: stand up, drink water, look out of a window. When we come back we play a game: ten claims about neural networks, true or bluff?</p>
     <p class="do">The timer starts by itself (Pause or Reset if needed) and only runs while this slide is visible, so keep it on screen. At 0:00 the numbers turn white on black.</p>
     <p>The game is on the next two slides, about 3 minutes in total; if you are short on time, play only the first.</p>`,
+  });
+
+  // plain break used by the main (lean) deck: just the clock
+  Deck.slide({
+    id: 'brk-plain',
+    title: 'Break: 10 minutes',
+    html: `
+    <h2>Break</h2>
+    <div class="fill-center brk-big"><div id="brk-plain-timer"></div></div>`,
+    init(el, api) {
+      Widgets.timer(api, el.querySelector('#brk-plain-timer'), 10, { auto: true });
+    },
+    notes: `
+    <p class="time">10 min</p>
+    <p class="say">Ten minutes: stand up, drink water. After the break we make the network learn.</p>
+    <p class="do">The timer starts by itself and only runs while this slide is on screen (Pause or Reset if needed).</p>`,
   });
 
   const playNotes = `

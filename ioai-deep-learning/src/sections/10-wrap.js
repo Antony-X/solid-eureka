@@ -19,7 +19,7 @@ Deck.slide({
   title: 'The whole lecture in one picture',
   html: `
   <h2>The whole lecture in one picture</h2>
-  <div class="fill-center">${Widgets.loopSVG({ w: 1560, h: 640, notes: true })}</div>`,
+  <div class="fill-center">${Widgets.loopSVG({ w: 1640, h: 720, notes: true })}</div>`,
   notes: `
   <p class="time">2 min</p>
   <p class="say">The whole lecture is one loop, with today's words on every box. Data is scaled, batched and split; the model is linear layers with activations between them; the loss is MSE for numbers and cross-entropy for yes/no or classes. Then loss.backward() finds the gradients and optimizer.step() moves the weights, with Adam at lr 1e-3 as the default start.</p>

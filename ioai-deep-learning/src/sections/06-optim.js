@@ -28,6 +28,7 @@ Deck.css(`
 .sec-opt .pair > div { display: flex; flex-direction: column; gap: 14px; }
 .sec-opt .pair .res { font-size: 40px; font-weight: 700; min-height: 1.3em; }
 .sec-opt .t-code { display: grid; grid-template-columns: 1056px 1fr; gap: 96px; flex: 1; min-height: 0; align-items: start; }
+.sec-opt pre.opt-c38 { font-size: 38px; line-height: 1.65; }
 .sec-opt .effect { font-size: 40px; line-height: 1.25; }
 .sec-opt .effect .bigv { font-family: var(--font-mono); font-size: 64px; font-weight: 600; line-height: 1.25; }
 .sec-opt .cmp { display: grid; grid-template-columns: 300px 1fr 420px; gap: 10px 32px; align-items: center; font-size: 40px; }
@@ -287,7 +288,8 @@ Deck.css(`
   }
 
   // side column with one readout row per racer + Run/Reset
-  function raceSide(side, R, kinds) {
+  function raceSide(side, R, kinds, opts) {
+    const showLr = !(opts && opts.lr === false);
     const head = document.createElement('div');
     head.className = 'rhead';
     head.innerHTML = '<span>step</span><span class="rh-v">loss</span>';
@@ -319,7 +321,7 @@ Deck.css(`
         el.classList.toggle('off', !r || !!r.off);
         el.classList.toggle('dim', !!(r && r.dim));
         if (!r) return;
-        el.querySelector('.nm').innerHTML = `${r.name}<small>lr ${r.lr}</small>`;
+        el.querySelector('.nm').innerHTML = showLr ? `${r.name}<small>lr ${r.lr}</small>` : r.name;
         el.querySelector('.v').textContent = r.dead ? 'blew up'
           : R.mode === 'arrive' ? (r.doneAt != null ? String(r.doneAt) : '–') : fmtLoss(r.loss);
       });
@@ -569,7 +571,7 @@ Deck.css(`
         s += `</g></svg>`;
         return s;
       })()}
-      <div class="row" data-step="2" style="gap:28px"><span class="tag tag-predict">predict</span><span class="lead">30 epochs. Batches of 64, or all 20,558 at once?</span></div>
+      <div class="row" data-step="2" style="gap:28px"><span class="tag tag-predict">predict</span><span class="lead">30 epochs: batches of 64, or all at once?</span></div>
       <div class="cmp" data-step="3">
         <span></span><span class="hd">steps taken</span><span class="hd">validation loss</span>
         <span>batches of 64</span><div class="bw"><div class="bar" style="width:640px"></div><span>9,660</span></div><span><b>0.662</b> <span class="ok">✓ learned</span></span>
@@ -645,7 +647,7 @@ Deck.css(`
     <div class="stack">
       <h2 data-only="0">Plain descent zig-zags in a narrow valley</h2>
       <h2 data-only="1">Momentum: a heavy ball keeps rolling</h2>
-      <h2 data-only="2">Adam: each weight gets its own step size</h2>
+      <h2 data-only="2">Adam: a step size for each weight</h2>
     </div>
     <div class="demo wide">
       <div class="opt-race-cv"></div>
@@ -653,7 +655,7 @@ Deck.css(`
     </div>`,
     init(el, api) {
       const R = Race(api, el.querySelector('.opt-race-cv'), 1104, 720);
-      raceSide(el.querySelector('.opt-race-side'), R, ['sgd', 'momentum', 'adam']);
+      raceSide(el.querySelector('.opt-race-side'), R, ['sgd', 'momentum', 'adam'], { lr: false });
       let last = -1;
       const config = k => {
         if (k === last) return;
@@ -677,7 +679,7 @@ Deck.css(`
     </ul>
     <p class="ask">Pair task (1 min): describe one walk to your neighbour; they name the optimizer.</p>
     <p class="ans">Zig-zag, then crawl: SGD. Speeds up and overshoots: momentum. Fairly straight: Adam.</p>
-    <p>The learning rates are toy values for this surface, not real-network defaults.</p>`,
+    <p>The learning rates (SGD 0.019, momentum 0.01, Adam 0.1) are toy values for this surface, not real-network defaults.</p>`,
   });
 
   /* ------------------------------------------------------------------ */
@@ -834,14 +836,14 @@ Deck.css(`
     html: `
     <h2>Start with Adam, lr 0.001</h2>
     <div class="t-code">
-      ${Code.py(LOOP, { hl: '1:1-2 2:5-7 3:1-2' })}
+      ${Code.py(LOOP, { hl: '1:1-2 2:5-7 3:1-2', cls: 'opt-c38' })}
       <div class="stack effect">
-        <div data-only="1"><p>Then try</p><p class="bigv">0.003<br>0.0003</p><p class="muted small">keep the best on validation</p></div>
-        <div data-only="2"><p>What they do for each of the 105 weights:</p>${Code.py(`
+        <div data-only="1"><p>Then try</p><p class="bigv">0.003<br>0.0003</p></div>
+        <div data-only="2"><p>For every weight:</p>${Code.py(`
           w.grad.zero_()
           loss.backward()
           w -= lr * w.grad`, { size: 's' })}</div>
-        <div data-only="3"><p>Swap one line, keep the loop:</p>${Code.py(`
+        <div data-only="3"><p>One-line swap:</p>${Code.py(`
           opt = torch.optim.SGD(
               model.parameters(),
               lr=0.1, momentum=0.9)`, { size: 's' })}</div>

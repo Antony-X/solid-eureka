@@ -1,0 +1,553 @@
+<title>Classical ML Check-in</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Atkinson+Hyperlegible+Next:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one centred column that scales from phone (players) to projector (host);
+   answers are four big coloured tiles with shapes, the deck's graph paper behind. */
+:root {
+  --bg: #eef0f3; --paper: #fbfbf8; --ink: #141b2d; --muted: #4f586b; --rule: #c4cad5; --grid: #e6e9ef;
+  --a0: #2266d0; --a1: #c85400; --a2: #a8145f; --a3: #16794f; --on: #ffffff;
+  --ok: #16794f; --bad: #b8261a; --hi: #ffe27a; --warn: #a67c00;
+  --display: 'Archivo', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+  --body: 'Atkinson Hyperlegible Next', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #090c13; --paper: #121725; --ink: #e9edf5; --muted: #a7b0c2; --rule: #3a445c; --grid: #1b2233;
+    --a0: #3b7be6; --a1: #d9681a; --a2: #c42b78; --a3: #1f9563; --on: #ffffff;
+    --ok: #4cc795; --bad: #ff7366; --hi: #5a4a12; --warn: #d8b23a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #090c13; --paper: #121725; --ink: #e9edf5; --muted: #a7b0c2; --rule: #3a445c; --grid: #1b2233;
+  --a0: #3b7be6; --a1: #d9681a; --a2: #c42b78; --a3: #1f9563; --on: #ffffff;
+  --ok: #4cc795; --bad: #ff7366; --hi: #5a4a12; --warn: #d8b23a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 18px; line-height: 1.4;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+#app {
+  min-height: 100%; display: flex; flex-direction: column; gap: 24px; max-width: 1280px; margin: 0 auto;
+  padding-block: 24px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h1 { font-size: clamp(36px, 6vw, 76px); font-weight: 850; font-stretch: 112%; line-height: .98; }
+h2 { font-size: clamp(26px, 4vw, 52px); font-weight: 800; font-stretch: 106%; line-height: 1.05; }
+h3 { font-size: clamp(20px, 2.4vw, 30px); font-weight: 750; }
+p { margin: 0; max-width: 60ch; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.col { display: flex; flex-direction: column; gap: 16px; }
+.spread { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.kicker { font-family: var(--mono); font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.btn {
+  font: 700 18px/1 var(--body); padding: 14px 22px; border-radius: 8px; border: 3px solid var(--ink);
+  background: var(--paper); color: var(--ink); cursor: pointer; min-height: 52px;
+}
+.btn:hover { filter: brightness(.97); }
+.btn:focus-visible, .tile:focus-visible, input:focus-visible { outline: 3px solid var(--a2); outline-offset: 3px; }
+.btn.primary { background: var(--ink); color: var(--paper); }
+.btn.small { font-size: 15px; padding: 8px 14px; min-height: 40px; border-width: 2px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+input[type=text] {
+  font: 700 22px var(--body); padding: 14px 16px; border: 3px solid var(--ink); border-radius: 8px;
+  background: var(--paper); color: var(--ink); width: 100%; max-width: 420px;
+}
+.card { background: var(--paper); border: 2px solid var(--rule); border-radius: 10px; padding: 20px 22px; }
+.note { font-size: 16px; color: var(--muted); border-left: 5px solid var(--rule); padding: 4px 0 4px 14px; }
+.note b { color: var(--ink); }
+
+/* question + answer tiles */
+.qhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.qtext { font-family: var(--display); font-weight: 800; font-size: clamp(24px, 3.6vw, 50px); line-height: 1.1; text-wrap: balance; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 560px) { .tiles { grid-template-columns: 1fr; } }
+.tile {
+  position: relative; display: flex; align-items: center; gap: 14px; min-height: 84px; padding: 16px 18px;
+  border: 0; border-radius: 10px; color: var(--on); text-align: left; cursor: pointer;
+  font: 700 clamp(18px, 2.2vw, 30px)/1.2 var(--body);
+}
+.tile .shape { flex: none; width: 34px; height: 34px; display: grid; place-items: center; font-size: 28px; line-height: 1; }
+.tile .count { margin-left: auto; font-family: var(--mono); font-size: clamp(20px, 2.4vw, 34px); }
+.t0 { background: var(--a0); } .t1 { background: var(--a1); } .t2 { background: var(--a2); } .t3 { background: var(--a3); }
+.tile.dim { opacity: .28; }
+.tile.right { outline: 5px solid var(--ink); outline-offset: 3px; }
+.tile.picked { outline: 5px solid var(--ink); outline-offset: 3px; }
+.tile[disabled] { cursor: default; }
+.tilebtns { display: flex; gap: 6px; margin-left: auto; }
+.tilebtns button { font: 700 22px var(--mono); width: 44px; height: 44px; border-radius: 8px; border: 2px solid var(--on); background: transparent; color: var(--on); cursor: pointer; }
+
+.timer { height: 12px; border-radius: 6px; background: var(--grid); overflow: hidden; }
+.timer > i { display: block; height: 100%; background: var(--ink); width: 100%; transition: width .25s linear; }
+.big-num { font-family: var(--display); font-weight: 850; font-size: clamp(44px, 8vw, 120px); line-height: .9; font-stretch: 110%; }
+.why { font-size: clamp(17px, 1.8vw, 24px); }
+
+/* bars */
+.bars { display: flex; flex-direction: column; gap: 10px; }
+.bar { display: grid; grid-template-columns: minmax(120px, 260px) 1fr 64px; gap: 12px; align-items: center; }
+.bar .track { display: block; height: 26px; background: var(--grid); border-radius: 5px; overflow: hidden; }
+.bar .fill { display: block; height: 100%; background: var(--ink); }
+.bar .fill.good { background: var(--ok); } .bar .fill.mid { background: var(--warn); } .bar .fill.low { background: var(--bad); }
+.bar .lab { font-weight: 700; } .bar .val { font-family: var(--mono); text-align: right; }
+@media (max-width: 560px) { .bar { grid-template-columns: 1fr 52px; } .bar .track { grid-column: 1 / -1; grid-row: 2; } }
+
+/* leaderboard */
+.board { display: flex; flex-direction: column; gap: 8px; }
+.board .r { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 8px; background: var(--grid); font-size: clamp(18px, 2vw, 28px); }
+.board .r.me { outline: 3px solid var(--ink); }
+.board .pos { font-family: var(--mono); color: var(--muted); }
+.board .nm { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.board .sc { font-family: var(--mono); font-weight: 700; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 6px 12px; border-radius: 999px; background: var(--grid); font-weight: 700; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.verdict { border: 4px solid var(--ink); border-radius: 12px; padding: 20px 24px; display: flex; flex-direction: column; gap: 10px; }
+.verdict.go { border-color: var(--ok); } .verdict.mix { border-color: var(--warn); } .verdict.stay { border-color: var(--bad); }
+.status-ok { color: var(--ok); font-weight: 700; } .status-bad { color: var(--bad); font-weight: 700; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+@media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+.min0 { min-width: 0; }
+</style>
+
+<main id="app" aria-live="polite"></main>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------------- questions ---------------- */
+  const TOPICS = {
+    types:   { name: 'Problem types',            core: false },
+    vectors: { name: 'Vectors & dot product',    core: true },
+    linear:  { name: 'Linear & logistic regression', core: true },
+    gd:      { name: 'Loss & gradient descent',  core: true },
+    overfit: { name: 'Overfitting & validation', core: true },
+    scaling: { name: 'Feature scaling',          core: true },
+    models:  { name: 'k-NN & decision trees',    core: false },
+    metrics: { name: 'Evaluation metrics',       core: false },
+    reg:     { name: 'Regularization',           core: false },
+  };
+  const Q = [
+    { t: 'Predicting tomorrow’s temperature in °C is…', o: ['classification', 'regression', 'clustering', 'reinforcement learning'], a: 1, k: 'types', why: 'The answer is a number, so it is regression.' },
+    { t: 'Splitting customers into groups when nobody gave you labels is…', o: ['regression', 'classification', 'clustering', 'overfitting'], a: 2, k: 'types', why: 'No labels means unsupervised learning: clustering (for example k-means).' },
+    { t: 'w = (2, −1) and x = (3, 4). What is w · x ?', o: ['2', '10', '−2', '(6, −4)'], a: 0, k: 'vectors', why: '2·3 + (−1)·4 = 6 − 4 = 2. One number, not a vector.' },
+    { t: 'A linear model says y = 3x + 1. What does it predict for x = 2?', o: ['5', '6', '7', '9'], a: 2, k: 'linear', why: '3·2 + 1 = 7.' },
+    { t: 'Logistic regression outputs…', o: ['a class name', 'a probability between 0 and 1', 'any real number', 'a cluster number'], a: 1, k: 'linear', why: 'It squashes a weighted sum into 0…1 with the sigmoid.' },
+    { t: 'With two features, logistic regression separates the classes with…', o: ['a circle', 'one straight line', 'any curve', 'many small boxes'], a: 1, k: 'linear', why: 'One straight line. That limit is exactly why we need neural networks.' },
+    { t: 'The loss function tells you…', o: ['how long training takes', 'how wrong the predictions are', 'how many features you have', 'the learning rate'], a: 1, k: 'gd', why: 'One number: how wrong the model is. Training tries to make it small.' },
+    { t: 'Gradient descent changes each weight…', o: ['randomly', 'in the direction that makes the loss smaller', 'so the loss gets bigger', 'only once, at the start'], a: 1, k: 'gd', why: 'Small steps downhill on the loss, repeated many times.' },
+    { t: 'Your loss jumps around and grows every step. The learning rate is probably…', o: ['too small', 'too big', 'exactly right', 'not used at all'], a: 1, k: 'gd', why: 'Too big: every step jumps over the bottom of the valley.' },
+    { t: 'Train accuracy 99%, test accuracy 60%. This is…', o: ['underfitting', 'overfitting', 'a perfect model', 'impossible'], a: 1, k: 'overfit', why: 'It memorised the training data and fails on new data.' },
+    { t: 'Why do we keep a validation set?', o: ['to have more training data', 'to check the model on data it has not seen', 'to make training faster', 'because Python requires it'], a: 1, k: 'overfit', why: 'It is our honest estimate of how the model does on new data.' },
+    { t: 'Feature 1: age (0–100). Feature 2: income (0–1,000,000). Before k-NN or gradient descent you should…', o: ['delete income', 'scale both to similar ranges', 'multiply age by 2', 'do nothing'], a: 1, k: 'scaling', why: 'Otherwise income dominates distances and gradients.' },
+    { t: 'k-NN with k = 3 classifies a new point by…', o: ['drawing one straight line', 'a majority vote of its 3 nearest training points', 'building a tree', 'averaging the whole dataset'], a: 1, k: 'models', why: 'Look at the 3 closest examples and take the most common label.' },
+    { t: 'A decision tree makes a prediction by…', o: ['asking yes/no questions about the features', 'drawing one straight line', 'random guessing', 'only using gradient descent'], a: 0, k: 'models', why: 'A chain of questions like “age < 30?” down to a leaf.' },
+    { t: '95% of emails are not spam. A model that always says “not spam” has accuracy…', o: ['5%', '50%', '95%', '100%'], a: 2, k: 'metrics', why: '95% accuracy and completely useless: always compare with a baseline.' },
+    { t: 'Adding a penalty for large weights (L2) usually…', o: ['causes overfitting', 'reduces overfitting', 'stops training', 'changes the labels'], a: 1, k: 'reg', why: 'Smaller weights make a smoother, simpler model that overfits less.' },
+  ];
+  const DUR = 20;                // seconds per question
+  const SHAPES = ['▲', '◆', '●', '■'];
+  const points = ms => Math.round(1000 - 500 * Math.min(ms, DUR * 1000) / (DUR * 1000));
+
+  /* ---------------- tiny helpers ---------------- */
+  const $app = document.getElementById('app');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage blocked */ } },
+  };
+  const now = () => Date.now();
+  const newId = () => Math.random().toString(36).slice(2, 10);
+
+  /* ---------------- platform ---------------- */
+  let room = null, canHost = false, connected = false, roomFailed = false;
+  const C = window.claude;
+  // opened outside claude.ai (a saved file): no live room, but classroom mode still works
+  const standalone = !(C && typeof C.use === 'function');
+
+  /* ---------------- app state ---------------- */
+  let view = 'home';                         // home | join | play | host | class
+  // host (live) state, also remembered in the host's own browser
+  let H = store.get('mlq-host', null);       // {gid, phase, q, t0}
+  // player state
+  let P = store.get('mlq-player', { nick: '', gid: null, ans: {} });
+  let G = null;                              // last game state heard from the host
+  let shownAt = {};                          // question index -> local time it appeared
+  // classroom-mode state
+  let K = store.get('mlq-class', null);      // {q, phase, counts: [[a,b,c,d], ...]}
+  let tick = null;
+
+  /* ---------------- scoring from the room ---------------- */
+  function players() {
+    if (!room) return [];
+    return room.peers().filter(p => p.kind === 'viewer' && !(p.isMe && p.sameTab) && p.presence &&
+      typeof p.presence.nick === 'string' && p.presence.nick && p.presence.gid === (view === 'host' ? H && H.gid : G && G.gid));
+  }
+  function scoreOf(pres) {
+    let s = 0, right = 0;
+    const ans = pres.ans || {};
+    Object.keys(ans).forEach(key => {
+      const qi = +key.slice(1), v = ans[key];
+      if (!Q[qi] || !Array.isArray(v)) return;
+      if (v[0] === Q[qi].a) { s += points(v[1]); right++; }
+    });
+    return { s, right };
+  }
+  function ranking(list) {
+    return list.map(p => Object.assign({ peer: p.peer, nick: String(p.presence.nick).slice(0, 24), isMe: p.isMe }, scoreOf(p.presence)))
+      .sort((a, b) => b.s - a.s);
+  }
+  function distribution(qi, list) {
+    const d = [0, 0, 0, 0];
+    list.forEach(p => { const v = (p.presence.ans || {})['q' + qi]; if (Array.isArray(v) && v[0] >= 0 && v[0] < 4) d[v[0]]++; });
+    return d;
+  }
+
+  /* ---------------- topic report + recommendation ---------------- */
+  // perQ: array of {right, total} per question
+  function report(perQ) {
+    const byTopic = {};
+    Object.keys(TOPICS).forEach(k => (byTopic[k] = { right: 0, total: 0 }));
+    perQ.forEach((r, i) => { const k = Q[i].k; byTopic[k].right += r.right; byTopic[k].total += r.total; });
+    let cr = 0, ct = 0, ar = 0, at = 0;
+    Object.keys(byTopic).forEach(k => {
+      const t = byTopic[k];
+      ar += t.right; at += t.total;
+      if (TOPICS[k].core) { cr += t.right; ct += t.total; }
+    });
+    const core = ct ? cr / ct : null, all = at ? ar / at : null;
+    const weak = Object.keys(byTopic).filter(k => TOPICS[k].core && byTopic[k].total && byTopic[k].right / byTopic[k].total < 0.6)
+      .sort((a, b) => byTopic[a].right / byTopic[a].total - byTopic[b].right / byTopic[b].total).map(k => TOPICS[k].name);
+    let verdict;
+    if (core == null) verdict = { cls: 'mix', head: 'Not enough answers yet', body: 'Play some questions first.' };
+    else if (core >= 0.7) verdict = { cls: 'go', head: 'Go to neural networks', body: weak.length ? 'Quick 2-minute reminder first: ' + weak.join(', ') + '.' : 'The foundations are solid.' };
+    else if (core >= 0.45) verdict = { cls: 'mix', head: 'Neural networks, after a short recap', body: 'Spend 10–15 minutes on: ' + (weak.join(', ') || 'the core topics below') + '. Then start neural networks.' };
+    else verdict = { cls: 'stay', head: 'Stay with classical ML today', body: 'Review: ' + (weak.join(', ') || 'the core topics below') + '. Neural networks build on all of these.' };
+    return { byTopic, core, all, verdict };
+  }
+  function reportHTML(rep) {
+    const pct = x => x == null ? '–' : Math.round(100 * x) + '%';
+    const rows = Object.keys(TOPICS).filter(k => rep.byTopic[k].total).map(k => {
+      const t = rep.byTopic[k], f = t.right / t.total;
+      const cls = f >= 0.7 ? 'good' : f >= 0.45 ? 'mid' : 'low';
+      return `<div class="bar"><span class="lab">${esc(TOPICS[k].name)}${TOPICS[k].core ? ' <span class="muted mono" title="needed for neural networks">· core</span>' : ''}</span>
+        <span class="track"><span class="fill ${cls}" style="width:${Math.round(100 * f)}%"></span></span><span class="val">${pct(f)}</span></div>`;
+    }).join('');
+    return `<div class="verdict ${rep.verdict.cls}"><span class="kicker">recommendation</span><h2>${esc(rep.verdict.head)}</h2><p>${esc(rep.verdict.body)}</p>
+      <p class="muted">Core topics (needed for neural networks): <b>${pct(rep.core)}</b> correct · all topics: <b>${pct(rep.all)}</b></p></div>
+      <div class="col"><h3>By topic</h3><div class="bars">${rows || '<p class="muted">No answers yet.</p>'}</div></div>`;
+  }
+
+  /* ---------------- rendering ---------------- */
+  function render() {
+    clearInterval(tick); tick = null;
+    if (view === 'home') return renderHome();
+    if (view === 'join') return renderJoin();
+    if (view === 'play') return renderPlay();
+    if (view === 'host') return renderHost();
+    if (view === 'class') return renderClass();
+  }
+
+  function renderHome() {
+    const live = room && !roomFailed;
+    $app.innerHTML = `
+      <div class="col">
+        <span class="kicker">16 questions · ${DUR} seconds each</span>
+        <h1>Classical ML check-in</h1>
+        <p class="muted">A quick game to see what the class remembers about classical machine learning, and whether to move on to neural networks.</p>
+      </div>
+      <div class="tiles" style="max-width:900px">
+        <button class="tile t0" id="go-join"><span class="shape">${SHAPES[0]}</span>Join the game</button>
+        ${canHost ? `<button class="tile t2" id="go-host"><span class="shape">${SHAPES[2]}</span>Host a live game</button>` : ''}
+        ${canHost || standalone ? `<button class="tile t3" id="go-class"><span class="shape">${SHAPES[3]}</span>Classroom mode (no phones)</button>` : ''}
+      </div>
+      <p class="note">${live
+        ? (connected ? '<span class="status-ok">Live room connected.</span> ' : 'Connecting to the live room… ') + 'Everyone with this page open joins the same game.'
+        : 'Live play is not available in this view. Students must be invited to this page and signed in to claude.ai. ' + (canHost ? 'You can still run <b>Classroom mode</b> on the big screen.' : 'Ask the host to invite you, or play along on the big screen.')}</p>`;
+    const j = document.getElementById('go-join'); if (j) j.onclick = () => { view = 'join'; render(); };
+    const h = document.getElementById('go-host'); if (h) h.onclick = () => { view = 'host'; if (!H) H = { gid: newId(), phase: 'lobby', q: 0, t0: 0 }; saveHost(); broadcast(); render(); };
+    const c = document.getElementById('go-class'); if (c) c.onclick = () => { view = 'class'; if (!K) K = { q: 0, phase: 'ask', counts: Q.map(() => [0, 0, 0, 0]) }; saveClass(); render(); };
+  }
+
+  /* ---------- player ---------- */
+  function renderJoin() {
+    $app.innerHTML = `
+      <div class="col"><span class="kicker">join</span><h2>Pick a nickname</h2></div>
+      <form id="jf" class="col" autocomplete="off">
+        <input type="text" id="nick" maxlength="20" placeholder="your nickname" aria-label="Nickname">
+        <div class="row"><button class="btn primary" type="submit">Join</button><button class="btn" type="button" id="back">Back</button></div>
+      </form>
+      ${room && !roomFailed ? '' : '<p class="note">You are not connected to the live room, so your answers will not reach the host.</p>'}`;
+    const inp = document.getElementById('nick');
+    inp.value = P.nick || '';
+    inp.focus();
+    document.getElementById('back').onclick = () => { view = 'home'; render(); };
+    document.getElementById('jf').onsubmit = e => {
+      e.preventDefault();
+      const n = inp.value.trim().replace(/\s+/g, ' ').slice(0, 20);
+      if (!n) { inp.focus(); return; }
+      P.nick = n; savePlayer(); pushPresence();
+      view = 'play'; render();
+    };
+  }
+
+  function myAnswer(qi) { return G && P.gid === G.gid ? (P.ans['q' + qi] || null) : null; }
+
+  function renderPlay() {
+    const g = G;
+    if (!g || g.phase === 'lobby') {
+      const n = players().length;
+      $app.innerHTML = `<div class="col"><span class="kicker">you are in</span><h2>${esc(P.nick)}</h2>
+        <p class="muted">${g ? 'Waiting for the host to start…' : 'Waiting for the host…'}</p>
+        ${n ? `<p class="muted">${n} player${n === 1 ? '' : 's'} here</p>` : ''}</div>
+        <div class="row"><button class="btn small" id="rename">Change nickname</button></div>`;
+      document.getElementById('rename').onclick = () => { view = 'join'; render(); };
+      return;
+    }
+    const qi = g.q, q = Q[qi], mine = myAnswer(qi);
+    if (g.phase === 'q') {
+      if (shownAt[qi] == null) shownAt[qi] = now();
+      if (mine) {
+        $app.innerHTML = `<div class="qhead"><span class="kicker">question ${qi + 1} / ${Q.length}</span></div>
+          <div class="col"><h2>Answer locked in</h2><div class="tile t${mine[0]}" style="max-width:520px"><span class="shape">${SHAPES[mine[0]]}</span>${esc(q.o[mine[0]])}</div>
+          <p class="muted">Wait for the others…</p></div>`;
+        return;
+      }
+      $app.innerHTML = `<div class="qhead"><span class="kicker">question ${qi + 1} / ${Q.length}</span><span class="mono" id="left"></span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="qtext">${esc(q.t)}</div>
+        <div class="tiles">${q.o.map((o, i) => `<button class="tile t${i}" data-i="${i}"><span class="shape">${SHAPES[i]}</span>${esc(o)}</button>`).join('')}</div>`;
+      $app.querySelectorAll('.tile').forEach(b => b.onclick = () => answer(qi, +b.dataset.i));
+      const upd = () => {
+        const left = Math.max(0, DUR - (now() - shownAt[qi]) / 1000);
+        const el = document.getElementById('left'), bar = document.getElementById('bar');
+        if (el) el.textContent = Math.ceil(left) + ' s';
+        if (bar) bar.style.width = (100 * left / DUR) + '%';
+        if (left <= 0) { $app.querySelectorAll('.tile').forEach(b => (b.disabled = true)); }
+      };
+      upd(); tick = setInterval(upd, 250);
+      return;
+    }
+    // reveal / board / final
+    const me = ranking(players().concat(selfAsPeer()));
+    const pos = me.findIndex(r => r.isMe) + 1;
+    const total = scoreOf({ ans: P.gid === g.gid ? P.ans : {} });
+    if (g.phase === 'final') {
+      $app.innerHTML = `<div class="col"><span class="kicker">final</span><h2>${esc(P.nick)}</h2>
+        <div class="big-num">${total.s}</div><p>${total.right} of ${Q.length} correct${pos ? ` · place <b>${pos}</b> of ${me.length}` : ''}</p>
+        <p class="muted">Look at the big screen for the podium.</p></div>`;
+      return;
+    }
+    const ok = mine && mine[0] === q.a;
+    $app.innerHTML = `<div class="qhead"><span class="kicker">question ${qi + 1} / ${Q.length}</span></div>
+      <div class="col"><h2 class="${ok ? 'status-ok' : 'status-bad'}">${mine ? (ok ? '✓ Correct' : '✗ Not this time') : 'No answer'}</h2>
+      ${ok ? `<div class="big-num">+${points(mine[1])}</div>` : ''}
+      <p>Answer: <b>${esc(q.o[q.a])}</b></p>
+      <p class="muted">${esc(q.why)}</p>
+      <p>Total <b class="mono">${total.s}</b>${pos ? ` · place <b>${pos}</b> of ${me.length}` : ''}</p></div>`;
+  }
+  function selfAsPeer() {
+    return P.nick && G && P.gid === G.gid ? [{ peer: 'me', isMe: true, presence: { nick: P.nick, gid: P.gid, ans: P.ans } }] : [];
+  }
+  function answer(qi, i) {
+    if (!G || G.phase !== 'q' || G.q !== qi || myAnswer(qi)) return;
+    const ms = Math.min(DUR * 1000, now() - (shownAt[qi] || now()));
+    if (ms >= DUR * 1000) return;
+    if (P.gid !== G.gid) { P.gid = G.gid; P.ans = {}; }
+    P.ans['q' + qi] = [i, ms];
+    savePlayer(); pushPresence(); render();
+  }
+  function pushPresence() {
+    if (!room || roomFailed || !P.nick) return;
+    room.presence({ nick: P.nick, gid: P.gid, ans: P.ans }).catch(() => {});
+  }
+
+  /* ---------- host (live) ---------- */
+  function renderHost() {
+    const list = players();
+    const g = H;
+    if (g.phase === 'lobby') {
+      $app.innerHTML = `<div class="spread"><span class="kicker">live game · host</span><button class="btn small" id="home">Back</button></div>
+        <h1>Join on your phone</h1>
+        <p class="note">Open this page → <b>Join the game</b> → type a nickname. Students need to be invited to this page and signed in to claude.ai.</p>
+        <div class="spread"><h3>${list.length} player${list.length === 1 ? '' : 's'}</h3>
+          <span class="${connected ? 'status-ok' : 'status-bad'}">${connected ? 'room connected' : 'connecting…'}</span></div>
+        <div class="chips" id="chips"></div>
+        <div class="row"><button class="btn primary" id="start" ${list.length ? '' : 'disabled'}>Start</button>
+          <button class="btn" id="new">New game</button></div>`;
+      const chips = document.getElementById('chips');
+      list.forEach(p => { const s = document.createElement('span'); s.className = 'chip'; s.textContent = String(p.presence.nick).slice(0, 24); chips.appendChild(s); });
+      document.getElementById('start').onclick = () => goQuestion(0);
+      document.getElementById('new').onclick = () => { H = { gid: newId(), phase: 'lobby', q: 0, t0: 0 }; saveHost(); broadcast(); render(); };
+      document.getElementById('home').onclick = () => { view = 'home'; render(); };
+      return;
+    }
+    const qi = g.q, q = Q[qi];
+    if (g.phase === 'q') {
+      const dist = distribution(qi, list), answered = dist.reduce((a, b) => a + b, 0);
+      $app.innerHTML = `<div class="qhead"><span class="kicker">question ${qi + 1} / ${Q.length}</span>
+          <span class="mono"><span id="left"></span> · ${answered}/${list.length} answered</span></div>
+        <div class="timer"><i id="bar"></i></div>
+        <div class="qtext">${esc(q.t)}</div>
+        <div class="tiles">${q.o.map((o, i) => `<div class="tile t${i}"><span class="shape">${SHAPES[i]}</span>${esc(o)}</div>`).join('')}</div>
+        <div class="row"><button class="btn primary" id="reveal">Show answer</button></div>`;
+      document.getElementById('reveal').onclick = () => goReveal();
+      const upd = () => {
+        const left = Math.max(0, DUR - (now() - g.t0) / 1000);
+        const el = document.getElementById('left'), bar = document.getElementById('bar');
+        if (el) el.textContent = Math.ceil(left) + ' s';
+        if (bar) bar.style.width = (100 * left / DUR) + '%';
+        const done = list.length && distribution(qi, players()).reduce((a, b) => a + b, 0) >= list.length;
+        if (left <= 0 || done) goReveal();
+      };
+      upd(); tick = setInterval(upd, 250);
+      return;
+    }
+    if (g.phase === 'reveal') {
+      const dist = distribution(qi, list), tot = Math.max(1, dist.reduce((a, b) => a + b, 0));
+      $app.innerHTML = `<div class="qhead"><span class="kicker">question ${qi + 1} / ${Q.length}</span><span class="mono">${Math.round(100 * dist[q.a] / tot)}% correct</span></div>
+        <div class="qtext">${esc(q.t)}</div>
+        <div class="tiles">${q.o.map((o, i) => `<div class="tile t${i} ${i === q.a ? 'right' : 'dim'}"><span class="shape">${SHAPES[i]}</span>${esc(o)}<span class="count">${dist[i]}</span></div>`).join('')}</div>
+        <p class="why">${esc(q.why)}</p>
+        <div class="row"><button class="btn primary" id="board">Scores</button></div>`;
+      document.getElementById('board').onclick = () => { H.phase = 'board'; saveHost(); broadcast(); render(); };
+      return;
+    }
+    if (g.phase === 'board') {
+      const r = ranking(list).slice(0, 6), last = qi >= Q.length - 1;
+      $app.innerHTML = `<div class="qhead"><span class="kicker">after question ${qi + 1} / ${Q.length}</span></div>
+        <h2>Leaderboard</h2><div class="board" id="lb"></div>
+        <div class="row"><button class="btn primary" id="next">${last ? 'Final results' : 'Next question'}</button></div>`;
+      fillBoard(document.getElementById('lb'), r);
+      document.getElementById('next').onclick = () => last ? goFinal() : goQuestion(qi + 1);
+      return;
+    }
+    // final
+    const r = ranking(list);
+    const perQ = Q.map((q2, i) => { const d = distribution(i, list); return { right: d[q2.a], total: d.reduce((a, b) => a + b, 0) }; });
+    $app.innerHTML = `<div class="spread"><span class="kicker">final · ${list.length} players</span>
+        <div class="row"><button class="btn small" id="copy">Copy results</button><button class="btn small" id="new">New game</button><button class="btn small" id="home">Home</button></div></div>
+      <div class="grid2"><div class="col min0"><h2>Podium</h2><div class="board" id="lb"></div></div>
+      <div class="col min0">${reportHTML(report(perQ))}</div></div>`;
+    fillBoard(document.getElementById('lb'), r.slice(0, 10));
+    document.getElementById('new').onclick = () => { H = { gid: newId(), phase: 'lobby', q: 0, t0: 0 }; saveHost(); broadcast(); render(); };
+    document.getElementById('home').onclick = () => { view = 'home'; render(); };
+    document.getElementById('copy').onclick = () => copyResults(r, perQ);
+  }
+  function fillBoard(el, rows) {
+    if (!rows.length) { el.innerHTML = '<p class="muted">No players.</p>'; return; }
+    rows.forEach((x, i) => {
+      const d = document.createElement('div'); d.className = 'r' + (x.isMe ? ' me' : '');
+      const a = document.createElement('span'); a.className = 'pos'; a.textContent = (i + 1) + '.';
+      const b = document.createElement('span'); b.className = 'nm'; b.textContent = x.nick;
+      const c = document.createElement('span'); c.className = 'sc'; c.textContent = x.s + ' · ' + x.right + '/' + Q.length;
+      d.append(a, b, c); el.appendChild(d);
+    });
+  }
+  function goQuestion(i) { H.q = i; H.phase = 'q'; H.t0 = now(); saveHost(); broadcast(); render(); }
+  function goReveal() { if (H.phase !== 'q') return; H.phase = 'reveal'; saveHost(); broadcast(); render(); }
+  function goFinal() { H.phase = 'final'; saveHost(); broadcast(); render(); }
+  function broadcast() {
+    if (!room || roomFailed || !H) return;
+    room.emit('game', { gid: H.gid, phase: H.phase, q: H.q }).catch(() => {});
+  }
+  function copyResults(r, perQ) {
+    const rep = report(perQ);
+    const lines = ['Classical ML check-in', 'Recommendation: ' + rep.verdict.head + '. ' + rep.verdict.body, '',
+      'By topic:'].concat(Object.keys(TOPICS).filter(k => rep.byTopic[k].total).map(k => `  ${TOPICS[k].name}: ${Math.round(100 * rep.byTopic[k].right / rep.byTopic[k].total)}%`))
+      .concat(['', 'Scores:']).concat(r.map((x, i) => `  ${i + 1}. ${x.nick}: ${x.s} (${x.right}/${Q.length})`));
+    const text = lines.join('\n');
+    const done = () => { const b = document.getElementById('copy'); if (b) b.textContent = 'Copied'; };
+    try { navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text)); } catch (e) { fallbackCopy(text); }
+  }
+  function fallbackCopy(text) {
+    const t = document.createElement('textarea'); t.value = text; t.rows = 10; t.style.width = '100%';
+    $app.appendChild(t); t.select();
+  }
+
+  /* ---------- classroom mode (no phones) ---------- */
+  function renderClass() {
+    const k = K, qi = k.q, q = Q[qi];
+    if (k.phase === 'final') {
+      const perQ = Q.map((q2, i) => ({ right: k.counts[i][q2.a], total: k.counts[i].reduce((a, b) => a + b, 0) }));
+      $app.innerHTML = `<div class="spread"><span class="kicker">classroom mode · results</span>
+          <div class="row"><button class="btn small" id="again">Start over</button><button class="btn small" id="home">Home</button></div></div>
+        ${reportHTML(report(perQ))}`;
+      document.getElementById('again').onclick = () => { K = { q: 0, phase: 'ask', counts: Q.map(() => [0, 0, 0, 0]) }; saveClass(); render(); };
+      document.getElementById('home').onclick = () => { view = 'home'; render(); };
+      return;
+    }
+    const counts = k.counts[qi], tot = counts.reduce((a, b) => a + b, 0), shown = k.phase === 'show';
+    $app.innerHTML = `<div class="qhead"><span class="kicker">classroom mode · question ${qi + 1} / ${Q.length}</span>
+        <span class="mono">${tot} hand${tot === 1 ? '' : 's'} counted</span></div>
+      <div class="qtext">${esc(q.t)}</div>
+      <div class="tiles">${q.o.map((o, i) => `<div class="tile t${i} ${shown ? (i === q.a ? 'right' : 'dim') : ''}"><span class="shape">${SHAPES[i]}</span><span class="min0">${esc(o)}</span>
+        <span class="tilebtns"><button data-i="${i}" data-d="-1" aria-label="one less">−</button><span class="count">${counts[i]}</span><button data-i="${i}" data-d="1" aria-label="one more">+</button></span></div>`).join('')}</div>
+      ${shown ? `<p class="why">${esc(q.why)}</p>` : '<p class="note">Students show 1–4 fingers (or ▲ ◆ ● ■ cards). Count each option with + and −, then reveal.</p>'}
+      <div class="row">
+        <button class="btn" id="prev" ${qi ? '' : 'disabled'}>Back</button>
+        ${shown ? `<button class="btn primary" id="next">${qi >= Q.length - 1 ? 'Results' : 'Next question'}</button>` : '<button class="btn primary" id="show">Show answer</button>'}
+        <button class="btn small" id="home">Home</button>
+      </div>`;
+    $app.querySelectorAll('.tilebtns button').forEach(b => b.onclick = () => {
+      const i = +b.dataset.i, d = +b.dataset.d;
+      counts[i] = Math.max(0, counts[i] + d); saveClass(); render();
+    });
+    const s = document.getElementById('show'); if (s) s.onclick = () => { k.phase = 'show'; saveClass(); render(); };
+    const n = document.getElementById('next'); if (n) n.onclick = () => { if (qi >= Q.length - 1) k.phase = 'final'; else { k.q = qi + 1; k.phase = 'ask'; } saveClass(); render(); };
+    document.getElementById('prev').onclick = () => { if (qi) { k.q = qi - 1; k.phase = 'show'; saveClass(); render(); } };
+    document.getElementById('home').onclick = () => { view = 'home'; render(); };
+  }
+
+  /* ---------- persistence ---------- */
+  function saveHost() { store.set('mlq-host', H); }
+  function savePlayer() { store.set('mlq-player', P); }
+  function saveClass() { store.set('mlq-class', K); }
+
+  /* ---------- room events ---------- */
+  function onGame(msg) {
+    const d = msg && msg.data;
+    if (!d || typeof d.gid !== 'string' || typeof d.phase !== 'string') return;
+    if (view === 'host') return;                       // the host drives, it does not follow
+    const q = Math.max(0, Math.min(Q.length - 1, d.q | 0));
+    const changed = !G || G.gid !== d.gid || G.phase !== d.phase || G.q !== q;
+    if (G && G.gid !== d.gid) shownAt = {};
+    G = { gid: d.gid, phase: d.phase, q };
+    if (P.gid !== d.gid && P.nick) { P.gid = d.gid; P.ans = {}; savePlayer(); pushPresence(); }
+    if (changed && view === 'play') render();
+  }
+
+  render();
+
+  if (C && typeof C.use === 'function') {
+    (async () => {
+      let user = null;
+      try { user = await C.use('user'); } catch (e) { user = null; }
+      try { canHost = user ? await user.canEdit() : false; } catch (e) { canHost = false; }
+      try { room = await C.use('room'); } catch (e) { room = null; }
+      if (room) {
+        const fail = () => { roomFailed = true; render(); };
+        room.onConnection(c => { connected = c; if (c && P.nick && view === 'play') pushPresence(); if (view === 'home' || view === 'host') render(); }, fail);
+        room.on('game', onGame, fail);
+        room.onPeers(ch => {
+          if (view === 'host' && H) {
+            if (ch.joined.length) broadcast();
+            render();
+          } else if (view === 'play' && G && G.phase !== 'q') render();
+        }, fail);
+        // the host repeats the game state so late joiners and reconnects catch up
+        setInterval(() => { if (view === 'host' && H) broadcast(); }, 2000);
+        if (P.nick) pushPresence();
+      }
+      if (view === 'home') render();
+    })();
+  }
+})();
+</script>

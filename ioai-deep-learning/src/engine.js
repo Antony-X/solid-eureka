@@ -142,6 +142,8 @@
           <dt>F</dt><dd>full screen</dd>
           <dt>B</dt><dd>black screen</dd>
           <dt>L</dt><dd>laser pointer</dd>
+          <dt>D</dt><dd>draw on the slide · E erases</dd>
+          <dt>W</dt><dd>whiteboard (blank graph paper)</dd>
           <dt>C</dt><dd>show clock · R resets it</dd>
           <dt>?</dt><dd>this help</dd>
         </dl>
@@ -149,6 +151,17 @@
     help.hidden = true;
     help.addEventListener('click', () => (help.hidden = true));
     root.appendChild(help);
+
+    // whiteboard + pen layer live inside the stage so they scale with it
+    D._board = el('div', 'deck-board');
+    D._board.hidden = true;
+    stage.appendChild(D._board);
+    const ink = document.createElement('canvas');
+    ink.className = 'deck-ink';
+    ink.width = W; ink.height = H;
+    stage.appendChild(ink);
+    D._ink = ink;
+    setupPen(ink);
 
     laser = el('div', 'deck-laser');
     laser.hidden = true;
@@ -233,6 +246,7 @@
     const s = D.slides[i];
     k = Math.max(0, Math.min(s.maxStep, k === 'end' ? s.maxStep : k || 0));
     if (prev && prev !== s) {
+      if (D._board && D._board.hidden) clearInk();
       prev.el.classList.remove('is-active');
       prev.el.setAttribute('aria-hidden', 'true');
       prev.api.active = false;
@@ -381,6 +395,43 @@
     window.addEventListener('resize', fitP);
   }
 
+  /* ---------- pen and whiteboard ---------- */
+  let drawing = false;
+  function setupPen(cv) {
+    const ctx = cv.getContext('2d');
+    let last = null;
+    const pos = e => {
+      const r = cv.getBoundingClientRect();
+      return [(e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height];
+    };
+    cv.addEventListener('pointerdown', e => {
+      if (!drawing) return;
+      last = pos(e);
+      cv.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    cv.addEventListener('pointermove', e => {
+      if (!drawing || !last) return;
+      const p = pos(e);
+      ctx.strokeStyle = '#e8203a'; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(last[0], last[1]); ctx.lineTo(p[0], p[1]); ctx.stroke();
+      last = p;
+    });
+    const up = () => { last = null; };
+    cv.addEventListener('pointerup', up);
+    cv.addEventListener('pointercancel', up);
+  }
+  function clearInk() { const c = D._ink; if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height); }
+  function toggleDraw(force) {
+    drawing = force === undefined ? !drawing : force;
+    D._ink.classList.toggle('is-drawing', drawing);
+  }
+  function toggleBoard() {
+    D._board.hidden = !D._board.hidden;
+    clearInk();
+    if (!D._board.hidden) toggleDraw(true);
+  }
+
   /* ---------- input ---------- */
   let typed = '';
   function onKey(e) {
@@ -409,6 +460,9 @@
       case 'b': case 'B': case '.': D._black.hidden = !D._black.hidden; break;
       case 'l': case 'L': laser.hidden = !laser.hidden; root.classList.toggle('no-cursor', !laser.hidden); break;
       case 'c': case 'C': clock.show = !clock.show; break;
+      case 'd': case 'D': toggleDraw(); break;
+      case 'e': case 'E': clearInk(); break;
+      case 'w': case 'W': toggleBoard(); break;
       case 'r': case 'R': clock.reset(); broadcast({ type: 'clock', t0: clock.t0 }); break;
       case '?': help.hidden = !help.hidden; break;
       default: return;

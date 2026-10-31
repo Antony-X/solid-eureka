@@ -341,3 +341,12 @@ svg.dg { overflow: visible; max-width: 100%; height: auto; }
 .dg .t-shared { stroke: var(--ink); stroke-width: 7; }
 .dg .t-clash { stroke: var(--bad); stroke-width: 7; }
 .dg .c0 { fill: var(--c0); } .dg .c1 { fill: var(--c1); } .dg .ink { fill: var(--ink); } .dg .muted { fill: var(--muted); }
+
+/* pen and whiteboard (keys D, E, W) */
+.deck-ink { position: absolute; inset: 0; width: 1920px; height: 1080px; z-index: 20; pointer-events: none; }
+.deck-ink.is-drawing { pointer-events: auto; cursor: crosshair; touch-action: none; }
+.deck-board {
+  position: absolute; inset: 0; z-index: 19; background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--grid) 1.5px, transparent 1.5px);
+  background-size: 48px 48px;
+}

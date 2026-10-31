@@ -86,6 +86,14 @@ projected image). Nothing may overflow; `tools/shoot.js` reports overflow.
   `UI.row(parent)`, `UI.readout(parent, label)` → `.set(html)`.
 * **`Code`** — `Code.py(src, {hl, size:'s'|'l', step})` returns a highlighted `<pre>`; `Code.i('x.shape')` inline.
 
+## Coach's priority rule: tangible, not mathematical
+
+The students do **not** know much maths. On slides: at most one short formula per slide, and
+only when it is essential; never derivations or matrix algebra. Show the idea with something
+tangible instead — a picture, a live demo, numbers on a diagram, Kobe's court, an everyday
+analogy (ball rolling downhill, heavy ball, folding paper, a weather forecaster). Put any maths
+in the speaker notes for the coach. Reviewers treat a maths-heavy slide as a major issue.
+
 ## Visual language (follow strictly)
 
 Read `src/DESIGN.md` (design review and spec): §2 projector constraints, §4 layout,

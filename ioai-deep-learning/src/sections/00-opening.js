@@ -117,19 +117,19 @@ Deck.slide({
   <div class="row"><span class="tag tag-paper">on paper · 2 min</span></div>
   <h2>Warm-up: what do you already know?</h2>
   <div class="recall">
-    <div class="recall-row"><span class="n">1</span><span class="q">Logistic regression: write <span class="m"><i>p</i></span> using <span class="m"><b>x</b></span>, <span class="m"><b>w</b></span>, <span class="m"><i>b</i></span>.</span>
-      <span class="a" data-step="1"><span class="m"><i>p</i> = σ(<b>w</b>·<b>x</b> + <i>b</i>)</span></span></div>
-    <div class="recall-row"><span class="n">2</span><span class="q">Sigmoid + cross-entropy: <span class="m">∂<i>L</i>/∂<i>z</i></span> = ?</span>
-      <span class="a" data-step="2"><span class="m"><i>p</i> − <i>y</i></span></span></div>
-    <div class="recall-row"><span class="n">3</span><span class="q">Backprop computes … (one sentence)</span>
-      <span class="a" data-step="3">the gradient of the loss for every parameter, chain rule, backwards</span></div>
+    <div class="recall-row"><span class="n">1</span><span class="q">What does logistic regression output?</span>
+      <span class="a" data-step="1">a probability between 0 and 1</span></div>
+    <div class="recall-row"><span class="n">2</span><span class="q">What shape is its decision boundary?</span>
+      <span class="a" data-step="2">one straight line</span></div>
+    <div class="recall-row"><span class="n">3</span><span class="q">What does backprop tell each weight?</span>
+      <span class="a" data-step="3">which way to move to make the loss smaller</span></div>
   </div>`,
   notes: `
   <p class="time">3 min (2 to write, 1 to reveal)</p>
   <p class="do">Everyone writes answers on paper, no notes. Then press → three times to reveal the answers one by one; ask for a show of hands "who had it?" after each.</p>
   <p class="say">Testing yourself is one of the strongest ways to remember something; this takes two minutes and tells me where you are.</p>
-  <p class="ans">1) p = σ(w·x + b), where σ(z) = 1/(1 + e^(−z)). 2) For sigmoid followed by binary cross-entropy, the derivative of the loss with respect to the raw score z is simply p − y (prediction minus label). This is why the two are always used together. 3) Backprop computes ∂loss/∂parameter for every parameter, by applying the chain rule backwards through the computation, reusing intermediate results.</p>
-  <p>If many students miss question 2, spend 30 seconds deriving it: L = −[y log p + (1−y) log(1−p)], dp/dz = p(1−p), so dL/dz = p − y. It returns in the loss section.</p>`,
+  <p class="ans">1) A probability between 0 and 1 (it squashes a weighted sum through the S-shaped sigmoid). 2) One straight line: points on one side get p &gt; 0.5, on the other side p &lt; 0.5. This is the limitation we break today. 3) For every weight, which direction (and roughly how strongly) to nudge it so the loss goes down. Gradient descent then takes a small step in that direction.</p>
+  <p>Background for you: the formula is p = σ(w·x + b). You do not need to write it on the board; the picture "one straight line" is what matters for the next section.</p>`,
 });
 
 Deck.slide({

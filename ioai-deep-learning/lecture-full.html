@@ -5750,7 +5750,7 @@ Deck.css(`
     <p class="do">Ask "which side gets to the bottom first, and by how much?" Then press <b>Run</b>. The right side finishes almost immediately (7 steps); the left zig-zags and needs 246 steps.</p>
     <p class="ask">Why not just use a bigger learning rate on the left?</p>
     <p class="ans">The steep direction (up and down) explodes as soon as lr goes above 0.02, exactly like lr 1.05 on the last demo. The steepest direction sets the speed limit, and the flat direction then crawls. On the round bowl both directions are equally steep, so lr 0.5 is safe.</p>
-    <p>How bad is it on real data? For logistic regression on Kobe's raw coordinates, the steepest direction of the bowl is about 30,000 times steeper than the flattest; after standardising, the ratio is about 1.04 (our numerical check on data_train.csv). In the next section you will see the symptom in code: with raw inputs the first loss is 2.33 instead of 0.69. Rule: compute mean and std on the training data only, and apply the same numbers to validation and test (LeCun et al., "Efficient BackProp", 1998).</p>
+    <p>How bad is it on real data? For logistic regression on Kobe's raw coordinates, the steepest direction of the bowl is about 30,000 times steeper than the flattest; after standardising, the ratio is about 1.04 (our numerical check on data_train.csv). In the next section you will see the symptom in code: with raw inputs the first loss is about 2.36 instead of 0.69. Rule: compute mean and std on the training data only, and apply the same numbers to validation and test (LeCun et al., "Efficient BackProp", 1998).</p>
     <p>The toy surfaces here: left 0.5(x² + 100y²), right 0.5(x² + y²), same start (−5, 1.5).</p>`,
   });
 

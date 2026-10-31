@@ -187,7 +187,7 @@
     if (o.controls.includes('play')) playBtn = UI.button(side, 'Train', () => { S.playing = !S.playing; sync(); }, { kind: 'primary' });
     if (o.controls.includes('reset')) UI.button(side, 'Reset', () => { makeNet(); draw(); });
     if (o.controls.includes('width')) UI.choice(side, [2, 4, 8, 32].map(v => ({ value: v, label: v + ' neurons' })), o.hidden[0], v => { o.hidden = [v]; makeNet(); draw(); });
-    if (o.readouts !== false) { R.epoch = UI.readout(side, 'epoch'); R.loss = UI.readout(side, 'mse'); }
+    if (o.readouts !== false) { R.epoch = UI.readout(side, 'epoch'); R.loss = UI.readout(side, o.lossLabel || 'error'); }
     function sync() { if (playBtn) playBtn.textContent = S.playing ? 'Pause' : 'Train'; }
     makeNet(); sync(); draw();
     api.loop(() => {

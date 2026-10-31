@@ -213,7 +213,7 @@ canvas { display: block; touch-action: none; }
 .ui-btn:focus-visible, .ui-choice button:focus-visible { outline: 3px solid var(--grad); outline-offset: 3px; }
 .ui-btn-primary { background: var(--ink); color: var(--paper); }
 .ui-btn-primary:hover { background: var(--ink); opacity: .88; }
-.ui-choice { display: inline-flex; align-items: center; gap: 0; border: 3px solid var(--ink); border-radius: 8px; overflow: hidden; }
+.ui-choice { align-self: flex-start; display: inline-flex; align-items: center; gap: 0; border: 3px solid var(--ink); border-radius: 8px; overflow: hidden; }
 .ui-choice-label { padding: 0 18px; color: var(--muted); font-size: 26px; }
 .ui-choice button { font-family: var(--font-body); font-size: 28px; font-weight: 700; background: var(--paper); color: var(--ink); border: 0; border-left: 3px solid var(--ink); padding: 10px 22px; cursor: pointer; }
 .ui-choice-label + button { border-left: 3px solid var(--ink); }

@@ -11,6 +11,8 @@ Deck.css(`
 .sec-act .demo { display: grid; grid-template-columns: auto 1fr; gap: 64px; align-items: start; flex: 1; min-height: 0; }
 .sec-act .side { display: flex; flex-direction: column; gap: 32px; min-width: 0; }
 .sec-act .side .ui-slider { grid-template-columns: 210px 1fr auto; }
+.sec-act .side .ui-choice { align-self: flex-start; }
+.sec-act .q-chain { margin: 12px 0 24px; }
 .sec-act .ro-row { display: flex; gap: 48px; flex-wrap: wrap; }
 .sec-act .zoo { display: grid; grid-template-columns: repeat(5, 336px); gap: 12px; }
 .sec-act .zoo-cell { display: flex; flex-direction: column; gap: 10px; }
@@ -71,16 +73,16 @@ Deck.css(`
      1. Predict: 10 linear layers vs 1
      ================================================================ */
   const chain = (n, y, label) => {
-    let s = '', x = 150;
-    s += `<circle class="nrn in" cx="80" cy="${y}" r="34"/><text class="lbl-m" x="80" y="${y}">x</text>`;
+    let s = '', x = 160;
+    s += `<circle class="nrn in" cx="80" cy="${y}" r="40"/><text class="lbl-m" x="80" y="${y}">x</text>`;
     for (let i = 0; i < n; i++) {
-      s += `<line class="flow" x1="${x - 34}" y1="${y}" x2="${x - 4}" y2="${y}" style="stroke-width:4"/>`;
-      s += `<rect class="box" x="${x}" y="${y - 40}" width="56" height="80"/>`;
-      x += 96;
+      s += `<line class="flow" x1="${x - 38}" y1="${y}" x2="${x - 6}" y2="${y}" style="stroke-width:4"/>`;
+      s += `<rect class="box" x="${x}" y="${y - 50}" width="68" height="100" style="stroke-width:4"/>`;
+      x += 116;
     }
     s += `<line class="flow" x1="${x - 34}" y1="${y}" x2="${x - 4}" y2="${y}" style="stroke-width:4"/>`;
-    s += `<circle class="nrn out" cx="${x + 34}" cy="${y}" r="34"/><text class="lbl-m" x="${x + 34}" y="${y}">y</text>`;
-    s += `<text class="lbl" x="${x + 100}" y="${y}" style="text-anchor:start">${label}</text>`;
+    s += `<circle class="nrn out" cx="${x + 40}" cy="${y}" r="40"/><text class="lbl-m" x="${x + 40}" y="${y}">y</text>`;
+    s += `<text class="lbl-b" x="${x + 112}" y="${y}" style="text-anchor:start">${label}</text>`;
     return s;
   };
   Deck.slide({
@@ -89,9 +91,9 @@ Deck.css(`
     html: `
     <span class="tag tag-predict">predict</span>
     <div class="big q-big">10 layers with no activation. Versus 1 layer?</div>
-    <svg class="dg" viewBox="0 0 1728 240" width="1728" height="240" role="img" aria-label="a chain of ten linear layers and a single linear layer">
-      ${chain(10, 60, '10 × Linear')}
-      ${chain(1, 190, '1 × Linear')}
+    <svg class="dg q-chain" viewBox="0 0 1728 300" width="1728" height="300" role="img" aria-label="a chain of ten linear layers and a single linear layer">
+      ${chain(10, 70, '10 × Linear')}
+      ${chain(1, 236, '1 × Linear')}
     </svg>
     <div class="q-opts">
       <div class="q-opt"><b>1</b>more shapes</div>
@@ -154,7 +156,7 @@ Deck.css(`
     </div>
     <p class="small muted">Move the pointer over a plot to read the values. Input now: <b class="mono" id="act-z">0.0</b></p>`,
     init(el, api) {
-      const W = 336, H = 420;
+      const W = 336, H = 500;
       let z0 = 0;
       const cells = ZOO.map(k => {
         const c = el.querySelector(`.zoo-cell[data-k="${k}"]`);
@@ -242,7 +244,7 @@ Deck.css(`
         a.forEach((ak, i) => { if (ak) curve(ctx, B, x => ak * relu(x - knots[i]), Plot.alpha(C.ink, 0.3), 4); });
         curve(ctx, B, sum, C.ink, 6);
         knots.forEach(t => Plot.dot(ctx, B.sx(t), B.sy(sum(t)), 9, C.ink, C.paper));
-        Plot.text(ctx, 'target', B.sx(1) + 14, B.sy(1.08), { size: 28, color: C.muted });
+        Plot.text(ctx, 'target', B.sx(2.15), B.sy(0.18), { size: 28, color: C.muted });
         let err = 0;
         for (let x = -1; x <= 3.5; x += 0.05) err = Math.max(err, Math.abs(sum(x) - hat(x)));
         verdict.set(err < 1e-9 ? '<span class="verdict-ok">✓ a hat</span>' : 'not yet');
@@ -357,7 +359,7 @@ with torch.no_grad():
     id: 'act-towers',
     title: 'Steep S-curves make bumps (optional)',
     html: `
-    <h2>Steep S-curves make bumps, bumps make curves</h2>
+    <h2>Steep S-curves make bumps, then curves</h2>
     <div class="demo">
       <div id="act-tw-cv"></div>
       <div class="side" id="act-tw-side">
@@ -375,7 +377,7 @@ with torch.no_grad():
       const B = box(W, H, [-1, 1], [-1.6, 1.4], { l: 70, b: 52 });
       let steep = 8, nb = 16;
       const side = el.querySelector('#act-tw-side');
-      UI.slider(side, { label: 'steepness', min: 0, max: 2.5, step: 0.01, value: Math.log10(steep), map: v => Math.pow(10, v), fmt: v => v.toFixed(0), oninput: v => { steep = v; draw(); } });
+      const stS = UI.slider(side, { label: 'steepness', min: 0, max: 2.5, step: 0.01, value: Math.log10(steep), map: v => Math.pow(10, v), fmt: v => v.toFixed(0), oninput: v => { steep = v; draw(); } });
       UI.choice(side, [4, 8, 16, 32].map(v => ({ value: v, label: String(v) })), nb, v => { nb = v; draw(); }, { label: 'bumps' });
       const bumps = () => Array.from({ length: nb }, (_, j) => {
         const a = -1 + 2 * j / nb, b = j === nb - 1 ? 1.2 : -1 + 2 * (j + 1) / nb;
@@ -398,7 +400,7 @@ with torch.no_grad():
         }
       }
       draw();
-      api.onStep(draw);
+      api.onStep(k => { if (k === 2 && steep < 60) { steep = 60; stS.set(Math.log10(60)); } draw(); });
       api.onTheme(draw);
     },
     notes: `
@@ -477,7 +479,7 @@ with torch.no_grad():
         else curve(ctx, B, x => (x >= -1 && x <= 1 ? target(x) : NaN), C.muted, 3, [12, 10]);
         X.forEach((x, i) => Plot.dot(ctx, B.sx(x[0]), B.sy(Y[i]), 6, C.paper, C.muted));
         curve(ctx, B, x => (out || (x >= -1 && x <= 1) ? net.predict([x]) : NaN), C.ink, 5, null, 600);
-        if (out) Plot.text(ctx, 'straight lines to nowhere', B.sx(1.15), B.sy(-2.55), { size: 28, color: C.ink });
+        if (out) Plot.text(ctx, 'outside: straight lines to nowhere', B.sx(2.95), B.sy(-2.6), { size: 28, color: C.ink, align: 'right' });
       }
       draw();
       api.onStep(draw);
@@ -604,24 +606,24 @@ with torch.no_grad():
           ctx.fillRect(x0 + i * bw + 10, yy, bw - 20, top + h - yy);
         });
         ctx.save(); ctx.strokeStyle = C.muted; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(x0, top + h); ctx.lineTo(x1, top + h); ctx.stroke(); ctx.restore();
-        const fmt = v => v >= 0.01 ? v.toFixed(2) : v.toExponential(0).replace('e-', '·10⁻').replace(/⁻(\d)/, (m, d) => '⁻' + '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
-        Plot.text(ctx, fmt(vals[0]), x0 + bw / 2, Math.min(y(vals[0]) - 12, top + h - 12), { size: 30, mono: true, weight: 600, color: C.grad, align: 'center' });
+        const fmt = v => v >= 0.01 ? v.toFixed(2) : v.toFixed(-Math.floor(Math.log10(v))).replace(/0+$/, '').replace(/\d$/, d => d);
+        Plot.text(ctx, fmt(vals[0]), x0 + 10, Math.min(y(vals[0]), y(vals[1])) - 12, { size: 30, mono: true, weight: 600, color: C.grad, align: 'left' });
         Plot.text(ctx, fmt(vals[9]), x0 + 9.5 * bw, y(vals[9]) - 12, { size: 30, mono: true, weight: 600, color: C.grad, align: 'center' });
       }
       function draw() {
         const C = Plot.colors(), ctx = cv.ctx;
         cv.clear();
         const x0 = 300, x1 = W - 40, bw = (x1 - x0) / 10;
-        row(ctx, C, VG.sigmoid, 70, 250, 'sigmoid', true);
-        row(ctx, C, VG.relu, 400, 250, 'ReLU', api.step >= 1);
+        row(ctx, C, VG.sigmoid, 96, 240, 'sigmoid', true);
+        row(ctx, C, VG.relu, 410, 240, 'ReLU', api.step >= 1);
         for (let i = 0; i < 10; i++) Plot.text(ctx, String(i + 1), x0 + (i + 0.5) * bw, 676, { size: 28, mono: true, color: C.muted, align: 'center', base: 'middle' });
         Plot.text(ctx, 'layer', 0, 676, { size: 28, mono: true, color: C.muted, base: 'middle' });
         // the backward direction
         ctx.save(); ctx.strokeStyle = C.grad; ctx.lineWidth = 5; ctx.setLineDash([14, 10]);
-        ctx.beginPath(); ctx.moveTo(x1 - 10, 24); ctx.lineTo(x0 + 40, 24); ctx.stroke(); ctx.restore();
+        ctx.beginPath(); ctx.moveTo(x1 - 10, 56); ctx.lineTo(x0 + 40, 56); ctx.stroke(); ctx.restore();
         ctx.save(); ctx.strokeStyle = C.grad; ctx.lineWidth = 5; ctx.lineJoin = 'round';
-        ctx.beginPath(); ctx.moveTo(x0 + 60, 8); ctx.lineTo(x0 + 34, 24); ctx.lineTo(x0 + 60, 40); ctx.stroke(); ctx.restore();
-        Plot.text(ctx, 'gradient flows back from the loss', x0 + 80, 6, { size: 28, color: C.grad, base: 'top' });
+        ctx.beginPath(); ctx.moveTo(x0 + 60, 40); ctx.lineTo(x0 + 34, 56); ctx.lineTo(x0 + 60, 72); ctx.stroke(); ctx.restore();
+        Plot.text(ctx, 'gradient flows back from the loss', x0 + 34, 0, { size: 30, color: C.grad, base: 'top' });
       }
       draw();
       api.onStep(draw);
@@ -649,7 +651,7 @@ with torch.no_grad():
       <div class="side" id="act-dd-side"><div class="ro-row" id="act-dd-ro"></div></div>
     </div>`,
     init(el, api) {
-      const Wc = 680;
+      const Wc = 768;
       const fr = Widgets.courtFrame(0, 0, Wc);
       const cv = Plot.canvas(el.querySelector('#act-dd-cv'), Wc, Math.ceil(fr.h));
       const nx = 0.28, ny = 0.96; // the neuron's direction on the court (unit vector)
@@ -658,7 +660,7 @@ with torch.no_grad():
       const ro = el.querySelector('#act-dd-ro');
       const rA = UI.readout(ro, 'active on'), rG = UI.readout(ro, 'learning signal');
       const side = el.querySelector('#act-dd-side');
-      UI.slider(side, { label: 'move the line', min: -1, max: 5, step: 0.05, value: shift, fmt: v => (v * 10).toFixed(0) + ' ft', oninput: v => { shift = v; draw(); } });
+      UI.slider(side, { label: 'line from rim', min: -1, max: 5, step: 0.05, value: shift, fmt: v => (v * 10).toFixed(0) + ' ft', oninput: v => { shift = v; draw(); } });
       UI.choice(side, [{ value: false, label: 'ReLU' }, { value: true, label: 'Leaky ReLU' }], leaky, v => { leaky = v; draw(); });
       function draw() {
         const C = Plot.colors(), ctx = cv.ctx;

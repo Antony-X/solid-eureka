@@ -19,21 +19,22 @@ Deck.css(`
 .sec-loss .lx-card .v { font-family: var(--font-mono); font-size: 120px; font-weight: 600; line-height: 1; }
 .sec-loss .lx-card .tick { position: absolute; right: 28px; top: 22px; font-size: 56px; font-weight: 800; color: var(--ok); opacity: 0; }
 .sec-loss .lx-cards.is-rev .lx-card { opacity: .3; }
-.sec-loss .lx-cards.is-rev .lx-card.ok { opacity: 1; border-color: var(--ok); border-width: 6px; padding: 25px 29px 33px; }
-.sec-loss .lx-cards.is-rev .lx-card.ok .tick { opacity: 1; }
-.sec-loss .lx-facts { display: grid; grid-template-columns: auto 1fr; gap: 18px 40px; align-items: baseline; font-size: 40px; }
+.sec-loss .lx-cards.is-rev .lx-card.is-ans { opacity: 1; border-color: var(--ok); border-width: 6px; padding: 25px 29px 33px; }
+.sec-loss .lx-cards.is-rev .lx-card.is-ans .tick { opacity: 1; }
+.sec-loss .lx-facts { display: grid; grid-template-columns: auto 1fr; gap: 24px 40px; align-items: baseline; font-size: 44px; }
+.sec-loss .lx-facts .k { font-size: 64px !important; }
 .sec-loss .lx-facts .k { font-family: var(--font-mono); font-size: 56px; font-weight: 600; text-align: right; }
-.sec-loss .lx-pick { display: grid; grid-template-columns: 300px 1fr 330px 560px; gap: 0 40px; align-items: center; }
+.sec-loss .lx-pick { display: grid; grid-template-columns: 400px 1fr 280px 560px; gap: 0 40px; align-items: center; }
 .sec-loss .lx-pick .hd { font-family: var(--font-mono); font-size: 28px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 12px; border-bottom: 2px solid var(--rule); align-self: end; }
-.sec-loss .lx-pick .cell { padding: 22px 0; border-bottom: 2px solid var(--rule); min-height: 150px; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
-.sec-loss .lx-pick .what { font-family: var(--font-display); font-weight: 750; font-size: 48px; line-height: 1.05; }
-.sec-loss .lx-pick .eg { font-size: 30px; color: var(--muted); }
-.sec-loss .lx-pick .last { font-size: 38px; }
-.sec-loss .lx-pick .fn { font-family: var(--font-mono); font-size: 36px; font-weight: 600; }
+.sec-loss .lx-pick .cell { padding: 14px 0; border-bottom: 2px solid var(--rule); min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+.sec-loss .lx-pick .what { font-family: var(--font-display); font-weight: 750; font-size: 56px; line-height: 1.05; }
+.sec-loss .lx-pick .eg { font-size: 32px; color: var(--muted); }
+.sec-loss .lx-pick .last { font-size: 44px; }
+.sec-loss .lx-pick .fn { font-family: var(--font-mono); font-size: 40px; font-weight: 600; }
 .sec-loss .lx-pick [data-step] { transition: opacity .35s ease, transform .35s ease; }
 .sec-loss .lx-vote { display: grid; grid-template-columns: 1056px 1fr; gap: 72px; flex: 1; min-height: 0; align-items: start; }
-.sec-loss .lx-opts { display: flex; flex-direction: column; gap: 28px; }
-.sec-loss .lx-opt { display: flex; gap: 28px; align-items: center; font-size: 46px; line-height: 1.1; }
+.sec-loss .lx-opts { display: flex; flex-direction: column; gap: 44px; padding-top: 12px; }
+.sec-loss .lx-opt { display: flex; gap: 28px; align-items: center; font-size: 52px; line-height: 1.1; }
 .sec-loss .lx-opt b { font-family: var(--font-mono); font-size: 40px; font-weight: 600; min-width: 64px; height: 64px; display: grid; place-items: center; border: 3px solid var(--ink); }
 .sec-loss .lx-pipe text { dominant-baseline: central; }
 `);
@@ -85,26 +86,26 @@ Deck.css(`
     <div class="lx-grid">
       <div class="lx-mse-cv"></div>
       <div class="lx-side">
-        <div class="lx-mse-ro ui-row" style="gap:48px"></div>
-        <p class="lx-note">Each miss becomes a square.<br>Loss = the average square.</p>
+        <div class="lx-mse-ro"></div>
+        <p class="lx-note">Each dot: % of Kobe's shots made from that distance.<br>Each miss becomes a square.</p>
         <div class="lx-ctl"><p class="small muted">Drag the line's end dots.</p><div class="ui-row lx-mse-btn"></div></div>
       </div>
     </div>`,
     init(el, api) {
       const W = 960, H = 720, L = 120, R = 36, T = 64, B = 96;
       const cv = Plot.canvas(el.querySelector('.lx-mse-cv'), W, H, 'lx-drag');
-      const sx = Plot.scale(-1, 29, L, W - R), sy = Plot.scale(0, 75, H - B, T);
+      const Y0 = 25, Y1 = 70;
+      const sx = Plot.scale(-1, 29, L, W - R), sy = Plot.scale(Y0, Y1, H - B, T);
       const XA = 0, XB = 28;                      // where the two handles sit
       const S = { c: YBAR, b: 0, fitting: false }; // line: y = c + b (x - 14)
       const yAt = x => S.c + S.b * (x - 14);
       const mse = () => BY.reduce((s, y, i) => s + (yAt(BX[i]) - y) ** 2, 0) / BY.length;
-      const ro = UI.readout(el.querySelector('.lx-mse-ro'), 'loss (MSE)');
-      const roBest = UI.readout(el.querySelector('.lx-mse-ro'), 'flat line');
-      roBest.set(mse().toFixed(0));
+      const ro = UI.readout(el.querySelector('.lx-mse-ro'), 'loss = average square');
+      ro.el.querySelector('.ui-readout-value').style.fontSize = '96px';
       function draw() {
         const C = Plot.colors(), ctx = cv.ctx;
         cv.clear();
-        axes(ctx, C, sx, sy, [0, 5, 10, 15, 20, 25], [0, 20, 40, 60], v => v, v => v + '%');
+        axes(ctx, C, sx, sy, [0, 5, 10, 15, 20, 25], [30, 40, 50, 60, 70], v => v, v => v + '%');
         label(ctx, C, 'shots made', L + 12, T - 34, { size: 28, color: C.ink });
         label(ctx, C, 'feet from the rim', W - R, H - 22, { size: 28, color: C.ink, align: 'right' });
         ctx.save();
@@ -129,7 +130,7 @@ Deck.css(`
         BX.forEach((x, i) => { ctx.lineWidth = 3.5; Plot.dot(ctx, sx(x), sy(BY[i]), 10, C.paper, C.ink); });
         // handles
         [XA, XB].forEach(x => {
-          const y = Math.max(0, Math.min(75, yAt(x)));
+          const y = Math.max(Y0, Math.min(Y1, yAt(x)));
           ctx.beginPath(); ctx.arc(sx(x), sy(y), 15, 0, 2 * Math.PI);
           ctx.fillStyle = C.ink; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = C.paper; ctx.stroke();
         });
@@ -146,7 +147,7 @@ Deck.css(`
       });
       const move = e => {
         if (!drag) return;
-        const y = Math.max(0, Math.min(75, sy.inv(cv.pos(e)[1])));
+        const y = Math.max(Y0, Math.min(Y1, sy.inv(cv.pos(e)[1])));
         if (drag === 'A') setFrom(y, yAt(XB)); else setFrom(yAt(XA), y);
         draw();
       };
@@ -193,7 +194,7 @@ Deck.css(`
       <div class="lx-ce-cv"></div>
       <div class="lx-side">
         <div class="lx-made">Kobe's shot went in.</div>
-        <div class="lx-fc">
+        <div class="lx-fc" style="transition:opacity .3s ease">
           <span class="h">forecast</span><span class="h">loss</span>
           ${FC.map((p, i) => `<span class="p">${p === 0.001 ? '0.1%' : Math.round(p * 100) + '%'}</span>
             <span class="v" data-step="${i + 1}">${(-Math.log(p)).toFixed(2)}${i === 3 ? '<small>× 66</small>' : ''}</span>`).join('')}
@@ -246,15 +247,22 @@ Deck.css(`
           ctx.save(); ctx.setLineDash([8, 8]); ctx.lineWidth = 2.5; ctx.strokeStyle = C.muted;
           ctx.beginPath(); ctx.moveTo(x, sy(0)); ctx.lineTo(x, yy); ctx.stroke(); ctx.restore();
           Plot.dot(ctx, x, yy, 14, S.made ? C.c1 : C.c0); ctx.lineWidth = 4; ctx.strokeStyle = C.paper; ctx.stroke();
-          const right = x < W - 300;
-          label(ctx, C, 'loss ' + y.toFixed(2), x + (right ? 28 : -28), yy - 30, { size: 34, kind: 'mono', weight: 600, align: right ? 'left' : 'right', halo: true });
+          const right = S.made ? x < W - 300 : x < L + 260;
+          label(ctx, C, 'loss ' + y.toFixed(2), x + (right ? 28 : -28), yy - 34, { size: 34, kind: 'mono', weight: 600, align: right ? 'left' : 'right', halo: true });
         }
       }
       // controls (visible from step 5)
       const host = el.querySelector('.lx-ce-ctl');
       const sl = UI.slider(host, { label: 'forecast', min: 0.001, max: 0.999, step: 0.001, value: S.p, fmt: v => (v * 100).toFixed(v < 0.01 || v > 0.99 ? 1 : 0) + '%', oninput: v => { S.p = v; draw(); } });
       sl.el.style.width = '100%';
-      UI.choice(host, [{ value: true, label: 'it went in' }, { value: false, label: 'it missed' }], true, v => { S.made = v; draw(); });
+      const head = el.querySelector('.lx-made'), table = el.querySelector('.lx-fc');
+      UI.choice(host, [{ value: true, label: 'it went in' }, { value: false, label: 'it missed' }], true, v => {
+        S.made = v;
+        head.textContent = v ? "Kobe's shot went in." : "Kobe's shot missed.";
+        head.style.color = v ? 'var(--c1)' : 'var(--c0)';
+        table.style.opacity = v ? 1 : 0.3;
+        draw();
+      });
       api.onStep(k => { S.target = targetFor(Math.min(k, 4)); if (k >= 5) S.shown = S.target; draw(); });
       api.loop(dt => {
         if (Math.abs(Math.log(S.shown) - Math.log(S.target)) > 0.002) {
@@ -295,17 +303,17 @@ Deck.css(`
     html: `
     <h2>Accuracy is flat: no way downhill</h2>
     <div class="lx-acc-cv"></div>
-    <div class="row" style="gap:40px;margin-top:-8px">
+    <div class="row" style="gap:40px;margin-top:-24px">
       <p class="small muted">13 shots, Lakers at Toronto, 7 Dec 2015 · drag the black line</p>
       <div class="ui-row lx-acc-btn" data-step="2" style="margin-left:auto"></div>
     </div>`,
     init(el, api) {
-      const W = 1728, H = 640, L = 250, R = 40;
+      const W = 1728, H = 720, L = 250, R = 40;
       const cv = Plot.canvas(el.querySelector('.lx-acc-cv'), W, H, 'lx-drag');
       const sx = Plot.scale(0, 30, L, W - R);
-      const strip = { y0: 20, y1: 130 };
-      const syA = Plot.scale(0, 0.6, 330, 170);
-      const syB = Plot.scale(0, 1.5, 560, 390);
+      const strip = { y0: 22, y1: 150 };
+      const syA = Plot.scale(0, 0.6, 400, 205);
+      const syB = Plot.scale(0, 1.5, 650, 465);
       const S = { t: 6, rolling: false };
       function curve(ctx, f, sy, color) {
         ctx.beginPath();
@@ -329,9 +337,9 @@ Deck.css(`
         cv.clear();
         const showB = api.step >= 1;
         // row labels
-        label(ctx, C, 'shots', 40, 75, { size: 32, weight: 700 });
-        label(ctx, C, '% wrong', 40, 250, { size: 32, weight: 700 });
-        if (showB) label(ctx, C, 'log loss', 40, 475, { size: 32, weight: 700 });
+        label(ctx, C, 'shots', 40, 100, { size: 34, weight: 700 });
+        label(ctx, C, '% wrong', 40, 300, { size: 34, weight: 700 });
+        if (showB) label(ctx, C, 'log loss', 40, 555, { size: 34, weight: 700 });
         // shot strip
         ctx.save(); ctx.strokeStyle = C.muted; ctx.lineWidth = 2.5;
         ctx.beginPath(); ctx.moveTo(L, strip.y1); ctx.lineTo(W - R, strip.y1); ctx.stroke(); ctx.restore();
@@ -362,7 +370,8 @@ Deck.css(`
         // markers + slopes
         const ea = errAt(S.t);
         Plot.dot(ctx, x, syA(ea), 11, C.ink); ctx.lineWidth = 3; ctx.strokeStyle = C.paper; ctx.stroke();
-        label(ctx, C, Math.round(ea * 100) + '% wrong · slope 0', x + 24, syA(ea) - 30, { size: 30, kind: 'mono', weight: 600, halo: true });
+        const lr = S.t < 21;
+        label(ctx, C, Math.round(ea * 100) + '% wrong · slope 0', x + (lr ? 18 : -18), syA.range[1] - 26, { size: 30, kind: 'mono', weight: 600, align: lr ? 'left' : 'right', halo: true });
         if (showB) {
           const lb = llAt(S.t), g = llGrad(S.t), yy = syB(lb);
           Plot.dot(ctx, x, yy, 11, C.ink); ctx.lineWidth = 3; ctx.strokeStyle = C.paper; ctx.stroke();
@@ -372,7 +381,7 @@ Deck.css(`
             const dy = (syB(lb + g * (len / (sx(1) - sx(0)))) - yy);
             Plot.arrow(ctx, x, yy, x + len, yy + dy, { color: C.grad, width: 5, head: 22 });
           }
-          label(ctx, C, lb.toFixed(2), x + (len < 0 ? 24 : -24), yy + 34, { size: 30, kind: 'mono', weight: 600, align: len < 0 ? 'left' : 'right', halo: true });
+          label(ctx, C, 'log loss ' + lb.toFixed(2), x + (lr ? 18 : -18), syB.range[1] - 26, { size: 30, kind: 'mono', weight: 600, align: lr ? 'left' : 'right', halo: true });
         }
       }
       let drag = false;
@@ -418,10 +427,9 @@ Deck.css(`
     html: `
     <h2>The model outputs a score, not a %</h2>
     <div class="lx-sig-cv"></div>
-    <div class="fill-center" data-step="1">
-      <svg class="dg lx-pipe" viewBox="0 0 1728 250" width="1728" height="250" role="img" aria-label="shot to model to score to BCEWithLogitsLoss to loss">
-        <rect x="372" y="10" width="1100" height="230" rx="0" style="fill:none;stroke:var(--rule);stroke-width:0"/>
-        <text class="lbl-s" x="80" y="125" style="text-anchor:middle">shot (x, y)</text>
+    <div data-step="1" style="width:1728px;height:250px">
+      <svg class="dg lx-pipe" viewBox="0 0 1728 250" width="1728" height="250" style="width:1728px;height:250px;max-width:none" role="img" aria-label="shot to model to score to BCEWithLogitsLoss to loss">
+        <text class="lbl" x="84" y="125">shot</text>
         <line class="flow" x1="175" y1="125" x2="250" y2="125"/>
         <rect class="box" x="262" y="77" width="220" height="96"/><text class="lbl-b" x="372" y="125">model</text>
         <line class="flow" x1="490" y1="125" x2="560" y2="125"/>
@@ -429,7 +437,7 @@ Deck.css(`
         <text class="lbl lx-z" x="650" y="125" style="font-size:44px">1.0</text>
         <line class="flow" x1="740" y1="125" x2="810" y2="125"/>
         <rect x="822" y="30" width="660" height="190" style="fill:none;stroke:var(--ink);stroke-width:3;stroke-dasharray:12 8"/>
-        <text class="lbl-s" x="1152" y="4">nn.BCEWithLogitsLoss()</text>
+        <text class="lbl" x="1152" y="4" style="font-size:32px">nn.BCEWithLogitsLoss()</text>
         <rect class="box act" x="852" y="77" width="140" height="96"/><text class="lbl-m" x="922" y="125">σ</text>
         <line class="flow" x1="1000" y1="125" x2="1060" y2="125"/>
         <text class="lbl lx-p" x="1140" y="125" style="font-size:44px">73%</text>
@@ -441,7 +449,7 @@ Deck.css(`
       </svg>
     </div>`,
     init(el, api) {
-      const W = 1728, H = 400, L = 140, R = 40, T = 40, B = 70;
+      const W = 1728, H = 456, L = 140, R = 40, T = 48, B = 100;
       const cv = Plot.canvas(el.querySelector('.lx-sig-cv'), W, H, 'lx-drag');
       const sx = Plot.scale(-7, 7, L, W - R), sy = Plot.scale(0, 1, H - B, T);
       const S = { z: 1 };
@@ -451,15 +459,15 @@ Deck.css(`
         cv.clear();
         axes(ctx, C, sx, sy, [-6, -4, -2, 0, 2, 4, 6], [0, 0.5, 1], v => (v > 0 ? '+' : '') + v, v => Math.round(v * 100) + '%');
         label(ctx, C, 'chance it goes in', L + 12, T - 6, { size: 28 });
-        label(ctx, C, 'score from the model (logit)', W - R, H - 64, { size: 28, align: 'right', base: 'bottom' });
+        label(ctx, C, 'score from the model (logit)', W - R, H - 6, { size: 28, align: 'right', base: 'bottom' });
         Plot.fn(ctx, sx, sy, sig, { color: C.ink, width: 5 });
         const x = sx(S.z), y = sy(sig(S.z));
         ctx.save(); ctx.setLineDash([8, 8]); ctx.lineWidth = 2.5; ctx.strokeStyle = C.muted;
         ctx.beginPath(); ctx.moveTo(x, sy(0)); ctx.lineTo(x, y); ctx.lineTo(L, y); ctx.stroke(); ctx.restore();
         Plot.dot(ctx, x, y, 15, C.ink); ctx.lineWidth = 4; ctx.strokeStyle = C.paper; ctx.stroke();
         const p = sig(S.z);
-        const right = S.z < 3;
-        label(ctx, C, `score ${S.z >= 0 ? '+' : ''}${S.z.toFixed(1)} → ${(100 * p).toFixed(p < 0.01 || p > 0.99 ? 1 : 0)}%`, x + (right ? 30 : -30), y + (S.z < -3 ? -40 : 40), { size: 36, kind: 'mono', weight: 600, align: right ? 'left' : 'right', halo: true });
+        const right = S.z >= 0;   // the curve is flat on the far side, so the label sits there
+        label(ctx, C, `score ${S.z >= 0 ? '+' : ''}${S.z.toFixed(1)} → ${(100 * p).toFixed(p < 0.01 || p > 0.99 ? 1 : 0)}%`, x + (right ? 30 : -30), y + (right ? 50 : -50), { size: 36, kind: 'mono', weight: 600, align: right ? 'left' : 'right', halo: true });
         zt.textContent = (S.z >= 0 ? '+' : '') + S.z.toFixed(1);
         pt.textContent = (100 * p).toFixed(p < 0.01 || p > 0.99 ? 1 : 0) + '%';
         lt.textContent = (-Math.log(p)).toFixed(2);
@@ -492,7 +500,7 @@ Deck.css(`
     html: `
     <div class="row" style="gap:32px"><span class="tag tag-predict">predict</span><h2>Untrained network on Kobe: first loss?</h2></div>
     <div class="lx-cards lx-start-cards">
-      ${['0', '0.50', '0.69', '1.00'].map((v, i) => `<div class="lx-card${i === 2 ? ' ok' : ''}"><span class="n">${i + 1}</span><span class="v">${v}</span><span class="tick">✓</span></div>`).join('')}
+      ${['0', '0.50', '0.69', '1.00'].map((v, i) => `<div class="lx-card${i === 2 ? ' is-ans' : ''}"><span class="n">${i + 1}</span><span class="v">${v}</span><span class="tick">✓</span></div>`).join('')}
     </div>
     <p class="lead" data-step="1">Untrained = "50% for every shot" → loss <b class="mono">0.69</b></p>
     <div class="lx-facts" data-step="2">
@@ -518,20 +526,20 @@ Deck.css(`
   /* =====================================================================
      6. Which loss: number / yes-no / one of K (softmax shown as numbers)
      ===================================================================== */
-  const glyphNum = `<svg class="dg" viewBox="0 0 260 120" width="260" height="120" aria-hidden="true">
+  const glyphNum = `<svg class="dg" viewBox="0 0 260 120" width="340" height="157" aria-hidden="true">
       <line x1="10" y1="80" x2="250" y2="80" style="stroke:var(--muted);stroke-width:3"/>
       ${[20, 70, 120, 170, 220].map(x => `<line x1="${x}" y1="70" x2="${x}" y2="90" style="stroke:var(--muted);stroke-width:3"/>`).join('')}
       <path d="M150,30 L150,70" style="stroke:var(--ink);stroke-width:5"/><circle cx="150" cy="80" r="11" class="ink"/>
       <text class="lbl" x="150" y="16">3.7</text></svg>`;
-  const glyphYes = `<svg class="dg" viewBox="0 0 260 120" width="260" height="120" aria-hidden="true">
+  const glyphYes = `<svg class="dg" viewBox="0 0 260 120" width="340" height="157" aria-hidden="true">
       <circle cx="70" cy="60" r="34" class="c1"/><text class="lbl" x="70" y="60" style="fill:var(--paper)">in</text>
-      <circle cx="190" cy="60" r="34" class="c0"/><text class="lbl" x="190" y="60" style="fill:var(--paper);font-size:26px">out</text></svg>`;
+      <circle cx="190" cy="60" r="34" class="c0"/><text class="lbl" x="190" y="60" style="fill:var(--paper)">out</text></svg>`;
   // logits for (jump shot, layup, dunk, other) -> softmax 14%, 61%, 22%, 3%
   const glyphK = (() => {
     const z = [0.5, 2.0, 1.0, -1.0], e = z.map(Math.exp), s = e.reduce((a, b) => a + b, 0);
-    return `<svg class="dg" viewBox="0 0 300 150" width="300" height="150" aria-hidden="true">
-      ${e.map((v, i) => { const h = 100 * v / s / 0.61 * 0.9; const x = 14 + i * 72; return `<rect x="${x}" y="${116 - h}" width="52" height="${h}" class="ink"/><text class="lbl-s" x="${x + 26}" y="${100 - h}" style="fill:var(--ink)">${Math.round(100 * v / s)}%</text><text class="lbl-s" x="${x + 26}" y="136" style="font-size:26px">${['jump', 'layup', 'dunk', 'other'][i]}</text>`; }).join('')}
-      <line x1="6" y1="116" x2="294" y2="116" style="stroke:var(--muted);stroke-width:3"/></svg>`;
+    return `<svg class="dg" viewBox="0 0 400 176" width="400" height="176" aria-hidden="true">
+      ${e.map((v, i) => { const h = 96 * v / s / 0.61; const x = 14 + i * 98; return `<rect x="${x}" y="${136 - h}" width="64" height="${h}" class="ink"/><text class="lbl" x="${x + 32}" y="${116 - h}">${Math.round(100 * v / s)}%</text><text class="lbl-s" x="${x + 32}" y="160">${['jump', 'layup', 'dunk', 'other'][i]}</text>`; }).join('')}
+      <line x1="6" y1="136" x2="394" y2="136" style="stroke:var(--muted);stroke-width:3"/></svg>`;
   })();
 
   Deck.slide({
@@ -540,7 +548,7 @@ Deck.css(`
     html: `
     <h2>Pick the loss from what you predict</h2>
     <div class="lx-pick">
-      <span class="hd"></span><span class="hd">you predict</span><span class="hd">model ends with</span><span class="hd">PyTorch loss</span>
+      <span class="hd"></span><span class="hd">you predict</span><span class="hd">last layer</span><span class="hd">PyTorch loss</span>
       <div class="cell" data-step="1">${glyphNum}</div>
       <div class="cell" data-step="1"><span class="what">a number</span><span class="eg">inversion task's output</span></div>
       <div class="cell" data-step="1"><span class="last">1 output</span></div>
@@ -584,7 +592,7 @@ Deck.css(`
                 x = torch.relu(self.fc2(x))
                 return torch.sigmoid(self.fc3(x))
 
-        loss_fn = nn.BCEWithLogitsLoss()`, { hl: '1:6,8' })}
+        loss_fn = nn.BCEWithLogitsLoss()`, { hl: '1:6,8 2:6,8', size: 'l' })}
       <div class="lx-opts">
         <div class="lx-opt"><b>1</b>it crashes</div>
         <div class="lx-opt"><b>2</b>it trains normally</div>

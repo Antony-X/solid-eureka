@@ -9,7 +9,8 @@ two practical tasks: **Kobe** (shot prediction with a tiny legal MLP) and **Inve
 
 | File | What it is |
 |---|---|
-| `lecture.html` | The slide deck. One self-contained file: open it in Chrome or Edge, works offline. All demos run live in the browser. |
+| `lecture.html` | **The lecture** (50 slides, 3 hours with demos, activities and live coding). One self-contained file: open it in Chrome or Edge, works offline. All demos run live in the browser. |
+| `lecture-full.html` | The full bank (≈ 95 slides): every slide that was made, including extra theory, puzzles and bug clinics. Use it to pull extra slides into a longer session or for tomorrow. |
 | `SCRIPT.md` | The teacher's script: slide-by-slide what to say, what to click, questions and answers, timings. Generated from the deck's speaker notes. |
 | `COACH_GUIDE.md` | Background for the coach: setup, the plan, how to teach each topic, the two tasks with hint ladders, Q&A cheat-sheet, stories. Read this first. |
 | `notebooks/01_live_coding.ipynb` | The notebook you type and run live during the second half (with planned mistakes). |
@@ -18,7 +19,7 @@ two practical tasks: **Kobe** (shot prediction with a tiny legal MLP) and **Inve
 | `solutions/` | Reference solutions for the coach. Don't hand these out. |
 | `data/kobe/data_train.csv` | The real Kobe training data (25,000 shots). |
 | `data/inversion_practice/` | A practice replica of the inversion task (not the real task data). |
-| `src/` | Deck sources: engine, libraries, one file per section, the outline, the design spec, the authoring contract. |
+| `src/` | Deck sources: engine, libraries, one file per section, the outline, the design spec, the authoring contract. `src/LEAN.json` picks which slides (and how many minutes per section) go into `lecture.html`: add a slide id there to bring a slide from the full bank into the lecture. |
 | `tools/` | `build.py` (assemble `lecture.html`), `shoot.js` (screenshots), `export_script.js` (regenerate `SCRIPT.md`). |
 
 ## Presenting
@@ -41,6 +42,7 @@ Open `lecture.html`, press **F** for full screen. With a projector as a second s
 ## Rebuilding
 
 ```
-python3 tools/build.py                                  # writes lecture.html
+python3 tools/build.py                                  # writes lecture.html (slides listed in src/LEAN.json)
+python3 tools/build.py --full                           # writes lecture-full.html (every slide)
 NODE_PATH=$(npm root -g) node tools/export_script.js    # regenerates SCRIPT.md from the notes
 ```

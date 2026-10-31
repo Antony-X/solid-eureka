@@ -562,7 +562,7 @@ Orange lines are positive weights, blue negative, thickness is size. Magenta alw
 - At every PREDICT cell stop and take a vote (fingers or a number on paper) before running the next cell.
 - If the notebook breaks, every result is also on the next slides.
 
-**Ask:** Before running cell 1: what fraction of Kobe's shots went in? (Remember the opening.)
+**Ask:** Before running Part 3: what fraction of Kobe's shots went in? (Remember the opening.)
 
 **Answer:** About 45% (44.7% in the task file). So "always miss" is right about 55% of the time; that is the floor every model must beat.
 
@@ -594,10 +594,10 @@ Note: the loss readout at epoch 0 shows about 14.5 for raw inputs (this browser 
 
 **Say:** This is everything that happens before the loop: turn the table into tensors, split 80/20, scale with the training statistics, build the model, choose the loss and the optimizer. Twelve lines.
 
-**Do:** Press → five times; each press highlights a group of lines and the right side shows the result: the shapes, the split sizes, the mean and std, the 105-weight model, the loss and optimizer. The notebook (Parts 3 to 5) does the same with two small differences: it splits with sklearn's train_test_split(..., random_state=0) and writes .view(-1, 1) instead of .unsqueeze(1). Same result.
+**Do:** Press → five times; each press highlights a group of lines and the right side shows the result: the shapes, the split sizes, the mean and std, the 105-weight model, the loss and optimizer. The notebook (Parts 3 to 5) uses these lines and names (X_tr, y_tr, X_va, y_va, .unsqueeze(1)) in a slightly different order: it splits first (Part 3), shows mistake 1 on the raw X_tr and then scales X_tr and X_va with the training mu and sd (Part 4); model, loss and optimizer come in Part 5. Same result.
 
 - **unsqueeze(1)** turns y from shape (25000,) into (25000, 1), the same shape as the model's output. We will break this on purpose later.
-- MLP is the class from the "From one neuron to an MLP" part: fc1 = Linear(2, 8), fc2 = Linear(8, 8), fc3 = Linear(8, 1), ReLU in between, and **no sigmoid at the end**. In the notebook it is cell 3.
+- MLP is the class from the "From one neuron to an MLP" part: fc1 = Linear(2, 8), fc2 = Linear(8, 8), fc3 = Linear(8, 1), ReLU in between, and **no sigmoid at the end**. In the notebook it is defined in Part 1.
 - **BCEWithLogitsLoss** applies the sigmoid itself, in a numerically safe way. That is why the model outputs raw scores (logits).
 
 **Ask:** How many numbers will Adam be adjusting?
@@ -612,11 +612,11 @@ Note: the loss readout at epoch 0 shows about 14.5 for raw inputs (this browser 
 
 **Say:** Two loops. The outer loop runs over epochs: one epoch means the network has seen every training shot once. The inner loop cuts the shuffled shots into batches of 64; every batch gets the five beats we just saw.
 
-**Do:** Press → four times: the outer loop; the shuffle and the batches; the five beats; the print. Then go to notebook Part 5: the same loop sits inside a function train(model, opt), and the shuffle-and-cut is written in one line, torch.randperm(len(X_train_s)).split(64). Point at the five numbered comments, say the beats aloud again, and run the next cell (about 10 seconds on a laptop). The notebook prints the train and validation loss after epochs 1, 5, 10, 20, 30: they fall from 0.674 to 0.664.
+**Do:** Press → four times: the outer loop; the shuffle and the batches; the five beats; the print. Then go to notebook Part 5: the loop cell is this code plus two lines (model.train() at the start of each epoch, and the train and validation loss stored after each epoch for the plot). Point at the five numbered comments, say the beats aloud again, and run it (about 10 seconds on a laptop). It prints the epoch and the last batch's loss: 30 lines that jump between 0.61 and 0.78, ending at 0.640. The next cell measures the model: validation loss 0.6655. Later parts reuse the same loop as a function, train(model, opt, X, y).
 
 - 20,000 / 64 = 312.5, so 313 batches per epoch; the last one has only 32 shots. 30 epochs × 313 = 9,390 updates. (The optimizer section used the Kaggle file with 20,558 training shots, which gives 322 steps per epoch; same idea.)
 - randperm reshuffles every epoch so the batches are different each time.
-- The printed loss is the loss of the last batch only, so it jumps around (0.62 to 0.72 is normal). Do not read too much into one value.
+- The printed loss is the loss of the last batch only (32 shots), so it jumps around (0.61 to 0.78 in the notebook run). Do not read too much into one value.
 
 **Ask:** If I double the batch size to 128 and keep 30 epochs, what happens to the number of steps?
 
@@ -636,7 +636,7 @@ Note: the loss readout at epoch 0 shows about 14.5 for raw inputs (this browser 
 
 **Say:** Is 61% bad? No. Even at the rim Kobe only scored about 63% of the time, so no model that sees only the position can be right much more than 61% of the time. The labels are coin flips with a probability that depends on position. In the task you are fighting for about 5 points between 55% and 61%.
 
-Numbers: mean of 3 seeds on the Kaggle labelled shots, 80/20 split, Adam lr 0.001, batch 64, 30 epochs. Our check of the slide code on the task file (seed 0): constant 0.686, logistic 0.673 (58.6%), MLP 0.6625 (60.6%). The notebook (Part 5, seed 0) prints constant 0.6876 (55.2%), logistic regression 0.6781 (57.3%), MLP 0.6641 (60.8%): the third digit differs from the slide, the order and the gaps do not.
+Numbers: mean of 3 seeds on the Kaggle labelled shots, 80/20 split, Adam lr 0.001, batch 64, 30 epochs. The notebook (Part 5, seed 0) prints constant 0.6860 (always miss 56.1%), logistic regression 0.6729 (58.8%), MLP 0.6655 (60.4%): the third digit differs from the slide, the order and the gaps do not.
 
 ### Slide 34 · Cliffhanger reveal: two sigmoids
 
@@ -646,22 +646,22 @@ Numbers: mean of 3 seeds on the Kaggle labelled shots, 80/20 split, Adam lr 0.00
 
 **Say:** Before the break you voted: a sigmoid as the last layer of the model, and BCEWithLogitsLoss as the loss. Crash, normal, quietly worse, or NaN? Let's run it.
 
-**Do:** Re-take the vote (1 crash, 2 normal, 3 quietly worse, 4 NaN). Run notebook Part 7: the class SigmoidMLP adds nn.Sigmoid() after the MLP's last layer (the same as the first code line on the slide), and trains with the same loop (about 10 s). Then press → for each reveal, running the matching notebook cell:
+**Do:** Re-take the vote (1 crash, 2 normal, 3 quietly worse, 4 NaN). Run notebook Part 7: the class MLPSigmoid is a copy of MLP whose forward ends with return torch.sigmoid(self.fc3(x)), the first code line on the slide; it trains with the same loop (about 10 s). Then press → for each reveal, running the matching notebook cell:
 
-- Step 1: the printed loss ends at 0.685 (the notebook table). Looks like a normal, slightly weak run.
-- Step 2: accuracy (output above 0.5 = "made") is 60.9%, the same as the correct model.
-- Step 3: the histograms of the predicted chances (the notebook draws the same two). The correct model says between 0 and 0.63 for every shot. The buggy one says "less than 1%" for 77% of all shots, including mid-range jumpers that go in 40% of the time.
-- Step 4: score those outputs as probabilities (log loss, which is what Kaggle and many olympiad tasks use): the notebook prints 8.387, against 0.664 for the correct model and 0.688 for a constant guess.
+- Step 1: the printed validation loss is 0.685 (second cell of Part 7). Looks like a normal, slightly weak run.
+- Step 2: accuracy (output above 0.5 = "made") is 61.7%, about the same as the correct model (60.4%).
+- Step 3: the histograms of the predicted chances (the notebook draws the same two). The correct model says between 0 and 0.64 for every shot. The buggy one says "less than 1%" for 76% of all shots, including mid-range jumpers that go in 40% of the time.
+- Step 4: score those outputs as probabilities (log loss, which is what Kaggle and many olympiad tasks use): the notebook prints 4.532 (it clips the probabilities at 1e-7 first, because −log 0 is infinite), against 0.665 for the correct model and 0.686 for a constant guess.
 
 **Answer:** "Quietly worse": no crash, no NaN, normal-looking loss and accuracy, but the probabilities are garbage. A bug can leave accuracy unchanged and still destroy the competition metric.
 
 **Say:** Why: the loss applies its own sigmoid to whatever the model outputs. The model's output is already squeezed between 0 and 1, so the loss only ever sees chances between 50% and 73%. To push a "miss" as low as it can go, the network must push its own output all the way down to 0. So it learns extreme outputs.
 
-The maths, if a student asks: the loss sees σ(σ(z)), and σ(s) for s in (0, 1) lies in (0.5, 0.731). So each made shot costs at least −ln 0.731 = 0.313 and each miss at least −ln 0.5 = 0.693: the printed loss is trapped and can never look very good or very bad. The two fixes: remove the sigmoid from the model (preferred; BCEWithLogitsLoss is numerically safer), or keep it and use nn.BCELoss.
+The maths, if a student asks: the loss sees σ(σ(z)), and σ(s) for s in (0, 1) lies in (0.5, 0.731). So each made shot costs at least −ln 0.731 = 0.313 and each miss at least −ln 0.5 = 0.693: the printed loss is trapped and can never look very good or very bad. Where Kobe makes less than half his shots, the best the loss can see is 0.5, so the output is pushed to 0 (61% of the outputs are below 1e-7). Near the rim, where he makes about 65%, the loss is happiest when σ(output) equals the make rate, so the output settles at about 0.57: the small bump in the histogram. Nothing goes near 1 (largest output 0.62). Accuracy survives only because 65% is above σ(0.5) = 0.62; a zone with a 55% make rate would be called a miss. The two fixes: remove the sigmoid from the model (preferred; BCEWithLogitsLoss is numerically safer), or keep it and use nn.BCELoss.
 
 Kobe task note: a final nn.Sigmoid in the submitted model is allowed (the official baseline has one). If you train with it, use nn.BCELoss; or train without it using BCEWithLogitsLoss and add the sigmoid only in the submitted class. Also: with this bug, "logits > 0" accuracy reads 44% (everything "made"), because the outputs are never negative.
 
-Numbers: all from notebook Part 7 (seed 0). The true log loss depends on how close to 0 the outputs are pushed: each made shot that gets "0%" costs about 16, so other seeds and splits gave 4.6 to 4.7 (the 4.69 quoted in other sections' notes) and the notebook gives 8.39. Either way it is far worse than the 0.69 of a constant guess. Karpathy's mistake #4 is the multi-class cousin: "you passed softmaxed outputs to a loss that expects raw logits".
+Numbers: all from notebook Part 7 (seed 0). The exact true log loss depends on the clip: each made shot with an output below 1e-7 costs −ln(1e-7) ≈ 16. sklearn's log_loss on a float64 array clips at 2.2e-16 and reports about 7.5; with the 1e-7 clip other seeds and splits gave 4.5 to 4.7 (the 4.69 quoted in other sections' notes). A count that does not depend on the clip: 1,453 of the 2,196 made validation shots got less than 1%. Either way it is far worse than the 0.69 of a constant guess. Karpathy's mistake #4 is the multi-class cousin: "you passed softmaxed outputs to a loss that expects raw logits".
 
 ### Slide 35 · Evaluate correctly
 
@@ -678,11 +678,11 @@ Numbers: all from notebook Part 7 (seed 0). The true log loss depends on how clo
 - **logits > 0**: a logit of 0 is exactly 50%, positive means "more likely made". No sigmoid needed to decide.
 - Print three numbers: loss, accuracy, and the fraction predicted "made". If that fraction is 0 or 1, the model is a constant: always check it.
 
-**Ask:** Our model predicts "made" for only about a quarter of the shots, but Kobe made 45%. Is that a bug?
+**Ask:** Our model predicts "made" for only about a third of the shots, but Kobe made 45%. Is that a bug?
 
 **Answer:** No. "Made" is predicted only where the chance is above 50%, which is basically within 3 feet of the rim. Everywhere else the best single guess is "miss", even though 40% of those shots go in.
 
-Numbers: the notebook's model (Part 5, seed 0) gives val loss 0.664, accuracy 60.8%, fraction "made" 0.23; our run of the slide code with another split gave 0.6625, 60.6% and 0.305. The fraction depends on exactly where the 50% line ends up around the rim, so anything from 0.2 to 0.3 is normal.
+Numbers: the notebook's model (Part 5, seed 0) gives val loss 0.6655, accuracy 60.4%, fraction "made" 0.348; other seeds and splits gave 0.23 to 0.31. The fraction depends on exactly where the 50% line ends up around the rim, so anything from 0.2 to 0.35 is normal.
 
 
 ---
@@ -733,7 +733,7 @@ Everyday picture: a student who memorises last year's exam answers scores 100% o
 
 - **More data**: the best cure when you can get it. With all 20,558 shots, a big net (2-64-64-64-1) reaches 0.660 instead of memorising.
 - **Smaller model**: fewer weights means less room to memorise. Our legal 2-8-8-1 on the same 500 shots: best 0.677.
-- **Stop early and keep the best weights**: after every epoch measure the validation loss; whenever it is the best so far, save a copy of the weights (the code on the slide); at the end, load that copy. This is exactly the "Restore best" button from the live demo. On the patient, the best validation loss came very early (step 20): 0.675 instead of 1.23.
+- **Stop early and keep the best weights**: after every epoch measure the validation loss; whenever it is the best so far, save a copy of the weights (the code on the slide); at the end, load that copy. This is exactly the "Restore best" button from the live demo. On the patient, the best validation loss came very early (step 20): 0.675 instead of 1.23 (notebook Part 10: step 10, 0.678 instead of 1.35). That score is slightly optimistic, because we picked the step by looking at the same validation set; report a held-out test set once, at the end.
 - **Weight decay**: every step also shrinks each weight a little toward 0, so the net cannot build the huge, wild weights that memorising needs. In PyTorch: `torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1.0)`. On the patient after 2,000 steps: 0.76 instead of 1.23. Better, but it does not beat stopping early; cures are often combined.
 - **Dropout**: during training, randomly switch off some neurons in every step (watch the crosses jump around), so no neuron can rely on one particular partner. `nn.Dropout(0.5)` between layers; it is switched off automatically by `model.eval()`, which is one reason to always call it before evaluating. On the patient (dropout 0.5 after both hidden layers), after 2,000 steps: 0.71 instead of 1.23.
 

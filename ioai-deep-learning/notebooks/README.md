@@ -27,10 +27,12 @@ Run notebooks from the folder they live in: the data paths are relative (`../dat
 **Google Colab.** *File → Upload notebook* (or open it from GitHub). Then open the Files panel on the left and
 upload the data files:
 - Kobe: `data/kobe/data_train.csv`;
-- Inversion: `model.pt`, `data.csv`, `true_column.csv` from `data/inversion_practice/`.
+- Inversion: `model.pt` and `data.csv` from `data/inversion_practice/`, plus `true_column.csv` to score yourself.
 
-In the first code cell set `DATA_DIR = Path(".")` (Kobe) or `DATA_DIR = "."` (Inversion). Everything else works
-unchanged, `%%writefile` included. Download `kobe_submission/submission.zip` or `submission.csv` from the Files panel.
+You do not have to edit anything. The first code cell sets `DATA_DIR` to `../data/...`, and when that folder does
+not exist, as in Colab, it falls back to the folder the notebook runs in (`.`), where the uploaded files are.
+Everything else works unchanged, `%%writefile` included. Download `kobe_submission/submission.zip` or
+`submission.csv` from the Files panel.
 
 Each notebook runs in under a minute on a CPU. No GPU is needed.
 
@@ -41,8 +43,9 @@ Each notebook runs in under a minute on a CPU. No GPU is needed.
 | `../data/kobe/data_train.csv` | the real task file: 25,000 labelled shots (`loc_x, loc_y, minutes_remaining, shot_distance, shot_made_flag, shot_id`). Only `loc_x, loc_y` may be used. |
 | `../data/inversion_practice/` | a **practice replica** of the inversion task (`model.pt`, `data.csv`, `true_column.csv`). It is NOT the real task data; see its README. Rebuild it with `../tools/make_inversion_practice.py`. |
 
-The real inversion files come with the task itself. On those, delete the self-scoring cell: there is no
-`true_column.csv`.
+The real inversion files come with the task itself. Put them in a folder of their own and point `DATA_DIR` at
+it in the first code cell. They have no `true_column.csv`; the self-scoring cells notice this and print
+"score not available", and every other cell runs as before.
 
 ## Numbers to expect
 

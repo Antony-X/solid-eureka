@@ -7,15 +7,13 @@
   "loss": 12,
   "brk": 10,
   "opt": 15,
-  "loop": 35,
-  "gen": 15,
-  "task": 30,
-  "wrap": 7
+  "loop": 40,
+  "gen": 20,
+  "wrap": 10
  },
  "slides": [
   "open-title",
   "open-refresh",
-  "open-kobe",
   "why-line",
   "why-lift",
   "why-hidden",
@@ -38,7 +36,6 @@
   "opt-race",
   "opt-default",
   "loop-beats",
-  "loop-court",
   "loop-setup",
   "loop-code",
   "loop-results",
@@ -48,14 +45,6 @@
   "gen-overfit",
   "gen-cures",
   "gen-doctor",
-  "task-rules",
-  "task-predict",
-  "task-fold",
-  "task-traps",
-  "task-inv",
-  "task-toys",
-  "task-code",
-  "task-plan",
   "wrap-loop"
  ]
 }

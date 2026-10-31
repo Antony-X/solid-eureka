@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML Quiz Battle · screen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,600..900&family=Atkinson+Hyperlegible+Next:wght@400;700&family=JetBrains+Mono:wght@600&display=swap">
+<link rel="stylesheet" href="/static/app.css">
+<script src="/static/qrcode.min.js"></script>
+<style>
+.lobby { display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: start; }
+.qr { background: #fff; padding: 16px; border-radius: 12px; width: min(42vw, 520px); }
+.qr img, .qr svg { width: 100%; height: auto; display: block; }
+.url { font: 700 clamp(18px, 2vw, 30px) var(--mono); word-break: break-all; }
+.ctl { position: fixed; right: 12px; bottom: 12px; display: flex; gap: 6px; opacity: .55; }
+.ctl:hover { opacity: 1; }
+@media (max-width: 800px) { .lobby { grid-template-columns: 1fr; } .qr { width: 100%; } }
+</style>
+</head>
+<body>
+<main class="wrap" id="app"></main>
+<div class="ctl" id="ctl" hidden>
+  <button class="btn small" data-a="start">Start</button><button class="btn small" data-a="reveal">Reveal</button>
+  <button class="btn small" data-a="leaderboard">Scores</button><button class="btn small primary" data-a="next">Next →</button>
+</div>
+<script>
+(function () {
+  const SH = ['▲', '◆', '●', '■'];
+  const $ = document.getElementById('app');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const KEY = new URLSearchParams(location.search).get('key') || '';
+  let S = null, k = '', got = 0, timer = null;
+  if (KEY) {
+    const ctl = document.getElementById('ctl'); ctl.hidden = false;
+    ctl.querySelectorAll('button').forEach(b => b.onclick = () => act(b.dataset.a));
+    // keyboard: → / space = next, R = reveal, L = scores
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); act(S && S.phase === 'lobby' ? 'start' : 'next'); }
+      if (e.key === 'r') act('reveal');
+      if (e.key === 'l') act('leaderboard');
+    });
+  }
+  function act(a) { fetch('/api/admin/action', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Key': KEY }, body: JSON.stringify({ action: a }) }).then(() => (k = '')); }
+  async function poll() {
+    try {
+      S = await (await fetch('/api/screen')).json(); got = Date.now();
+      const kk = [S.version, S.phase, S.pos, S.answered, S.players, S.join_url].join('|');
+      if (kk !== k) { k = kk; render(); }
+    } catch (e) {}
+    setTimeout(poll, 600);
+  }
+  function qr(url) {
+    try { const q = qrcode(0, 'M'); q.addData(url); q.make(); return q.createSvgTag({ cellSize: 8, margin: 2, scalable: true }); }
+    catch (e) { return ''; }
+  }
+  function board(rows) {
+    return `<div class="board">${(rows || []).map(r => `<div class="r"><span class="p">${r.rank}.</span><span class="nm">${esc(r.nick)}</span><span class="s">${r.score}</span></div>`).join('') || '<p class="muted">No players yet.</p>'}</div>`;
+  }
+  function report(rep) {
+    if (!rep) return '';
+    const pct = x => x == null ? '–' : Math.round(100 * x) + '%';
+    const bars = Object.entries(rep.topics).filter(([, t]) => t.total).map(([n, t]) => {
+      const f = t.right / t.total, c = f >= .7 ? 'good' : f >= .45 ? 'mid' : 'low';
+      return `<div class="bar"><b>${esc(n)}</b><span class="tr"><span class="fl ${c}" style="width:${Math.round(100 * f)}%"></span></span><span class="v">${pct(f)}</span></div>`;
+    }).join('');
+    return `<div class="verdict ${rep.verdict.level}"><span class="kicker">class result · ${pct(rep.overall)} correct</span><h2>${esc(rep.verdict.head)}</h2><p>${esc(rep.verdict.body)}</p></div><div class="bars">${bars}</div>`;
+  }
+  function render() {
+    clearInterval(timer);
+    if (!S) return;
+    if (S.phase === 'lobby') {
+      $.innerHTML = `<div class="lobby"><div class="qr">${qr(S.join_url)}</div>
+        <div class="col"><span class="kicker">scan to join</span><h1>ML Quiz Battle</h1><p class="url">${esc(S.join_url)}</p>
+        <h3>${S.players} player${S.players === 1 ? '' : 's'}</h3><div class="chips">${(S.nicks || []).map(n => `<span class="chip">${esc(n)}</span>`).join('')}</div>
+        <p class="muted">${S.total} questions</p></div></div>`;
+      return;
+    }
+    if (S.phase === 'final') {
+      $.innerHTML = `<span class="kicker">final</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start"><div class="col"><h2>Podium</h2>${board(S.ranking)}</div><div class="col">${report(S.report)}</div></div>`;
+      return;
+    }
+    const q = S.q;
+    if (!q) return;
+    const head = `<div class="spread"><span class="row"><span class="kicker">question ${S.pos + 1} / ${S.total} · ${esc(q.topic)}</span><span class="badge d-${q.difficulty}">${q.difficulty}</span></span>
+      <span class="kicker">${S.phase === 'question' ? `<span id="left"></span> · ` : ''}${S.answered}/${S.players} answered</span></div>`;
+    if (S.phase === 'leaderboard') { $.innerHTML = head + `<h2>Leaderboard</h2>` + board(S.ranking); return; }
+    const reveal = S.phase === 'reveal';
+    const tot = reveal ? Math.max(1, S.dist.reduce((a, b) => a + b, 0)) : 1;
+    $.innerHTML = head + (reveal ? '' : `<div class="timer"><i id="bar"></i></div>`) + `<div class="qtext">${esc(q.text)}</div>
+      <div class="tiles">${q.options.map((o, i) => `<div class="tile t${i} ${reveal ? (i === q.correct ? 'right' : 'dim') : ''}"><span class="sh">${SH[i]}</span>${esc(o)}${reveal ? `<span class="n">${S.dist[i]}</span>` : ''}</div>`).join('')}</div>
+      ${reveal ? `<p class="kicker">${Math.round(100 * S.dist[q.correct] / tot)}% correct</p>${q.explain ? `<h3 style="font-weight:600">${esc(q.explain)}</h3>` : ''}` : ''}`;
+    if (!reveal) {
+      const t0 = got, l0 = S.left, lim = q.time;
+      const upd = () => { const l = Math.max(0, l0 - (Date.now() - t0) / 1000); const b = document.getElementById('bar'), t = document.getElementById('left'); if (b) b.style.width = (100 * l / lim) + '%'; if (t) t.textContent = Math.ceil(l) + ' s'; };
+      upd(); timer = setInterval(upd, 250);
+    }
+  }
+  poll();
+})();
+</script>
+</body>
+</html>

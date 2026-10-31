@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML Quiz Battle · admin</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,600..900&family=Atkinson+Hyperlegible+Next:wght@400;700&family=JetBrains+Mono:wght@600&display=swap">
+<link rel="stylesheet" href="/static/app.css">
+<style>
+table { border-collapse: collapse; font-size: 15px; }
+th, td { padding: 6px 8px; border-bottom: 1px solid var(--rule); text-align: left; white-space: nowrap; }
+th { font: 600 12px var(--mono); color: var(--muted); }
+td.c { text-align: center; font-weight: 700; }
+td.y { color: var(--ok); } td.x { color: var(--bad); } td.cur { background: var(--soft); }
+.scroll { overflow-x: auto; max-width: 100%; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tabs button.on { background: var(--ink); color: var(--bg); }
+.qrow { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); }
+.qrow .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.edit { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.edit .full { grid-column: 1 / -1; }
+.opt { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: center; }
+@media (max-width: 800px) { .edit { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="spread"><div class="col" style="gap:4px"><span class="kicker">admin</span><h2>ML Quiz Battle</h2></div>
+    <div class="row"><a class="btn" id="screenlink" target="_blank">Open projector screen</a></div></div>
+  <div class="card col">
+    <div class="spread"><b>Game</b><span class="kicker" id="phase"></span></div>
+    <div class="row">
+      <button class="btn primary" data-a="start">Start</button>
+      <button class="btn" data-a="reveal">Reveal</button>
+      <button class="btn" data-a="leaderboard">Scores</button>
+      <button class="btn primary" data-a="next">Next →</button>
+      <button class="btn" data-a="final">End game</button>
+      <button class="btn" data-a="reset">New game (keep players)</button>
+      <button class="btn danger" data-a="clear">New game (clear players)</button>
+    </div>
+    <div class="row"><label for="jurl" class="kicker">join link (QR)</label><input type="text" id="jurl" style="max-width:520px"><button class="btn small" id="savejurl">Save link</button></div>
+    <p class="note">Same Wi-Fi: keep the http://… link. Other networks: run <span class="mono">cloudflared tunnel --url http://localhost:PORT</span> and paste its https link here.</p>
+  </div>
+  <div class="tabs"><button class="btn small on" data-tab="progress">Progress</button><button class="btn small" data-tab="questions">Questions</button><button class="btn small" data-tab="report">Report</button></div>
+  <section id="tab-progress" class="col"></section>
+  <section id="tab-questions" class="col" hidden></section>
+  <section id="tab-report" class="col" hidden></section>
+</main>
+<script>
+(function () {
+  const KEY = new URLSearchParams(location.search).get('key') || '';
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const H = { 'Content-Type': 'application/json', 'X-Key': KEY };
+  let S = null, tab = 'progress', editing = null, draft = null, jurlTouched = false;
+  document.getElementById('screenlink').href = '/screen?key=' + encodeURIComponent(KEY);
+  const post = (p, b) => fetch(p, { method: 'POST', headers: H, body: JSON.stringify(b) }).then(r => r.json());
+  document.querySelectorAll('[data-a]').forEach(b => b.onclick = async () => {
+    if (b.dataset.a === 'clear' && !window.confirm('Remove all players?')) return;
+    const r = await post('/api/admin/action', { action: b.dataset.a }); if (r.error) alert(r.error); load();
+  });
+  const jurl = document.getElementById('jurl');
+  jurl.oninput = () => (jurlTouched = true);
+  document.getElementById('savejurl').onclick = async () => { await post('/api/admin/action', { action: 'join_url', url: jurl.value }); jurlTouched = false; load(); };
+  document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
+    tab = b.dataset.tab;
+    document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('on', x === b));
+    ['progress', 'questions', 'report'].forEach(t => (document.getElementById('tab-' + t).hidden = t !== tab));
+    render(true);
+  });
+
+  async function load() {
+    try { S = await (await fetch('/api/admin?key=' + encodeURIComponent(KEY))).json(); render(false); } catch (e) {}
+  }
+  setInterval(load, 1200); load();
+
+  function render(force) {
+    if (!S) return;
+    const cur = S.q ? `question ${S.pos + 1}/${S.total}` : '';
+    document.getElementById('phase').textContent = `${S.phase} ${cur} · ${S.players} players` + (S.q && S.phase === 'question' ? ` · ${S.answered} answered` : '');
+    if (!jurlTouched && document.activeElement !== jurl) jurl.value = S.join_url || '';
+    if (tab === 'progress') renderProgress();
+    if (tab === 'report') renderReport();
+    if (tab === 'questions' && (force || editing === null)) renderQuestions();
+  }
+
+  function renderProgress() {
+    const qs = S.order.map(i => S.questions[i]);
+    const head = `<tr><th>#</th><th>player</th><th>score</th><th>✓</th>${qs.map((q, j) => `<th title="${esc(q.text)}">${j + 1}</th>`).join('')}<th></th></tr>`;
+    const rows = S.ranking.map(r => {
+      const pr = S.progress[r.pid] || {};
+      return `<tr><td>${r.rank}</td><td>${esc(r.nick)}</td><td class="mono">${r.score}</td><td>${r.right}/${r.answered}</td>${qs.map((q, j) => {
+        const v = pr[q.id]; const cur = j === S.pos && S.phase !== 'lobby' && S.phase !== 'final';
+        return `<td class="c ${v === 1 ? 'y' : v === 0 ? 'x' : ''} ${cur ? 'cur' : ''}">${v === 1 ? '✓' : v === 0 ? '✗' : '·'}</td>`;
+      }).join('')}<td><button class="btn small danger" data-kick="${r.pid}">kick</button></td></tr>`;
+    }).join('');
+    const pct = qs.map((q, j) => {
+      let r = 0, t = 0; S.ranking.forEach(p => { const v = (S.progress[p.pid] || {})[q.id]; if (v != null) { t++; r += v; } });
+      return `<td class="c">${t ? Math.round(100 * r / t) + '%' : ''}</td>`;
+    }).join('');
+    const el = document.getElementById('tab-progress');
+    el.innerHTML = `<div class="scroll"><table>${head}${rows}<tr><td></td><td class="muted">class</td><td></td><td></td>${pct}<td></td></tr></table></div>
+      ${S.ranking.length ? '' : '<p class="muted">No players yet. Open the projector screen and let them scan the QR code.</p>'}`;
+    el.querySelectorAll('[data-kick]').forEach(b => b.onclick = async () => { await post('/api/admin/action', { action: 'kick', pid: b.dataset.kick }); load(); });
+  }
+
+  function renderReport() {
+    const rep = S.report, pct = x => x == null ? '–' : Math.round(100 * x) + '%';
+    const bars = Object.entries(rep.topics).filter(([, t]) => t.total).map(([n, t]) => {
+      const f = t.right / t.total, c = f >= .7 ? 'good' : f >= .45 ? 'mid' : 'low';
+      return `<div class="bar"><b>${esc(n)}</b><span class="tr"><span class="fl ${c}" style="width:${Math.round(100 * f)}%"></span></span><span class="v">${pct(f)} <span class="muted">(${t.total})</span></span></div>`;
+    }).join('');
+    document.getElementById('tab-report').innerHTML = `<div class="verdict ${rep.verdict.level}"><span class="kicker">so far · ${pct(rep.overall)} correct</span><h2>${esc(rep.verdict.head)}</h2><p>${esc(rep.verdict.body)}</p></div><div class="bars">${bars || '<p class="muted">No answers yet.</p>'}</div>`;
+  }
+
+  function renderQuestions() {
+    const el = document.getElementById('tab-questions');
+    if (editing !== null) return renderEditor(el);
+    const inGame = new Set(S.order);
+    el.innerHTML = `<div class="row"><button class="btn primary" id="add">Add question</button>
+        <span class="kicker">in this game:</span><button class="btn small" data-sel="all">all</button><button class="btn small" data-sel="easy">easy</button>
+        <button class="btn small" data-sel="medium">medium</button><button class="btn small" data-sel="hard">hard</button><button class="btn small" data-sel="medium+hard">medium+hard</button>
+        <button class="btn small" data-sel="shuffle">shuffle order</button><span class="kicker">${S.order.length} selected</span></div>
+      <div>${S.questions.map((q, i) => `<div class="qrow"><input type="checkbox" data-pick="${i}" ${inGame.has(i) ? 'checked' : ''} aria-label="use in game">
+        <span class="t"><span class="badge d-${q.difficulty}">${q.difficulty}</span> <span class="muted">${esc(q.topic)}</span> · ${esc(q.text)}</span>
+        <span class="row"><button class="btn small" data-up="${i}">↑</button><button class="btn small" data-edit="${i}">edit</button><button class="btn small danger" data-del="${i}">delete</button></span></div>`).join('')}</div>`;
+    el.querySelector('#add').onclick = () => { editing = -1; draft = { id: 'q' + Date.now().toString(36), text: '', options: ['', '', '', ''], correct: 0, topic: 'General', difficulty: 'medium', time: 25, explain: '' }; renderQuestions(); };
+    el.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => { editing = +b.dataset.edit; draft = JSON.parse(JSON.stringify(S.questions[editing])); while (draft.options.length < 4) draft.options.push(''); renderQuestions(); });
+    el.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+      if (!window.confirm('Delete this question?')) return;
+      const qs = S.questions.slice(); qs.splice(+b.dataset.del, 1); await saveAll(qs);
+    });
+    el.querySelectorAll('[data-up]').forEach(b => b.onclick = async () => {
+      const i = +b.dataset.up; if (!i) return; const qs = S.questions.slice(); [qs[i - 1], qs[i]] = [qs[i], qs[i - 1]]; await saveAll(qs);
+    });
+    el.querySelectorAll('[data-pick]').forEach(c => c.onchange = async () => {
+      const sel = S.questions.map((_, i) => i).filter(i => el.querySelector(`[data-pick="${i}"]`).checked);
+      const keep = S.order.filter(i => sel.includes(i)); sel.forEach(i => { if (!keep.includes(i)) keep.push(i); });
+      await post('/api/admin/action', { action: 'order', order: keep }); load();
+    });
+    el.querySelectorAll('[data-sel]').forEach(b => b.onclick = async () => {
+      const m = b.dataset.sel; let ord;
+      if (m === 'shuffle') { ord = S.order.slice(); for (let i = ord.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [ord[i], ord[j]] = [ord[j], ord[i]]; } }
+      else ord = S.questions.map((q, i) => i).filter(i => m === 'all' || m.split('+').includes(S.questions[i].difficulty));
+      await post('/api/admin/action', { action: 'order', order: ord }); load();
+    });
+  }
+  function renderEditor(el) {
+    const d = draft;
+    el.innerHTML = `<div class="card col"><h3>${editing === -1 ? 'New question' : 'Edit question'}</h3>
+      <div class="edit">
+        <label class="full col" style="gap:4px"><span class="kicker">question</span><textarea id="e-text">${esc(d.text)}</textarea></label>
+        ${d.options.slice(0, 4).map((o, i) => `<label class="opt"><input type="radio" name="corr" value="${i}" ${d.correct === i ? 'checked' : ''} aria-label="correct answer ${i + 1}"><input type="text" id="e-o${i}" value="${esc(o)}" placeholder="answer ${i + 1}${i > 1 ? ' (optional)' : ''}"></label>`).join('')}
+        <label class="col" style="gap:4px"><span class="kicker">topic</span><input type="text" id="e-topic" value="${esc(d.topic)}"></label>
+        <label class="col" style="gap:4px"><span class="kicker">difficulty</span><select id="e-diff">${['easy', 'medium', 'hard'].map(x => `<option ${d.difficulty === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label>
+        <label class="col" style="gap:4px"><span class="kicker">seconds</span><input type="number" id="e-time" min="5" max="120" value="${d.time}"></label>
+        <label class="full col" style="gap:4px"><span class="kicker">explanation shown after the answer</span><input type="text" id="e-exp" value="${esc(d.explain)}"></label>
+      </div>
+      <p class="muted">The radio button marks the correct answer. Empty answers are dropped (at least 2).</p>
+      <div class="row"><button class="btn primary" id="e-save">Save</button><button class="btn" id="e-cancel">Cancel</button></div></div>`;
+    el.querySelector('#e-cancel').onclick = () => { editing = null; renderQuestions(); };
+    el.querySelector('#e-save').onclick = async () => {
+      const opts = [0, 1, 2, 3].map(i => el.querySelector('#e-o' + i).value.trim());
+      const corrIdx = +((el.querySelector('input[name=corr]:checked') || {}).value || 0);
+      const kept = opts.map((o, i) => [o, i]).filter(([o]) => o);
+      if (!el.querySelector('#e-text').value.trim() || kept.length < 2) { alert('Write the question and at least 2 answers.'); return; }
+      if (!opts[corrIdx]) { alert('The answer marked correct is empty.'); return; }
+      const q = { id: d.id, text: el.querySelector('#e-text').value.trim(), options: kept.map(x => x[0]), correct: kept.findIndex(x => x[1] === corrIdx),
+        topic: el.querySelector('#e-topic').value.trim() || 'General', difficulty: el.querySelector('#e-diff').value,
+        time: +el.querySelector('#e-time').value || 25, explain: el.querySelector('#e-exp').value.trim() };
+      const qs = S.questions.slice(); if (editing === -1) qs.push(q); else qs[editing] = q;
+      editing = null; await saveAll(qs);
+    };
+  }
+  async function saveAll(qs) {
+    const r = await post('/api/admin/questions', { questions: qs });
+    if (r.error) alert(r.error);
+    await load(); renderQuestions();
+  }
+})();
+</script>
+</body>
+</html>

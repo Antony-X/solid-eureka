@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ML Quiz Battle</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,600..900&family=Atkinson+Hyperlegible+Next:wght@400;700&family=JetBrains+Mono:wght@600&display=swap">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<main class="wrap" id="app" aria-live="polite"></main>
+<script>
+(function () {
+  const SH = ['▲', '◆', '●', '■'];
+  const $ = document.getElementById('app');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  let pid = '', nick = '';
+  try { pid = localStorage.getItem('mlq-pid') || ''; nick = localStorage.getItem('mlq-nick') || ''; } catch (e) {}
+  let S = null, key = '', got = 0, timer = null, sending = false;
+
+  async function api(path, body) {
+    const r = await fetch(path, body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : {});
+    return r.json();
+  }
+  async function poll() {
+    try {
+      S = await api('/api/state?pid=' + encodeURIComponent(pid));
+      got = Date.now();
+      if (!S.joined && pid) { pid = ''; }
+      const k = [S.version, S.joined, S.phase, S.pos, S.mine && S.mine.choice].join('|');
+      if (k !== key) { key = k; render(); }
+    } catch (e) { /* server not reachable: keep trying */ }
+    setTimeout(poll, 700);
+  }
+  function joinForm(msg) {
+    $.innerHTML = `<div class="col"><span class="kicker">ML quiz battle</span><h1>Join</h1></div>
+      <form id="f" class="col" autocomplete="off" style="max-width:420px">
+        <input type="text" id="nick" maxlength="20" placeholder="your nickname" aria-label="Nickname">
+        <button class="btn primary" type="submit">Join the game</button>
+        ${msg ? `<p class="bad">${esc(msg)}</p>` : ''}
+      </form>`;
+    const inp = document.getElementById('nick'); inp.value = nick; inp.focus();
+    document.getElementById('f').onsubmit = async e => {
+      e.preventDefault();
+      const n = inp.value.trim(); if (!n) return;
+      const r = await api('/api/join', { nick: n, pid });
+      if (r.pid) { pid = r.pid; nick = n; try { localStorage.setItem('mlq-pid', pid); localStorage.setItem('mlq-nick', nick); } catch (x) {} key = ''; }
+      else joinForm(r.error || 'Could not join');
+    };
+  }
+  function render() {
+    clearInterval(timer);
+    if (!S || !S.joined) return joinForm();
+    const head = `<div class="spread"><span class="kicker">${esc(S.nick)} · ${S.score} pts</span>${S.q ? `<span class="kicker">${S.pos + 1} / ${S.total}</span>` : ''}</div>`;
+    if (S.phase === 'lobby') {
+      $.innerHTML = head + `<h2>You're in!</h2><p class="muted">Look at the big screen. The game starts soon.</p>
+        <div><button class="btn small" id="rn">Change nickname</button></div>`;
+      document.getElementById('rn').onclick = () => joinForm();
+      return;
+    }
+    if (S.phase === 'final') {
+      $.innerHTML = head + `<span class="kicker">final</span><div class="big">${S.score}</div>
+        <p>${S.right ?? 0} correct${S.rank ? ` · place <b>${S.rank}</b> of ${S.players}` : ''}</p><p class="muted">Podium on the big screen.</p>`;
+      return;
+    }
+    const q = S.q;
+    if (S.phase === 'question') {
+      if (S.mine) {
+        $.innerHTML = head + `<h2>Locked in</h2><div class="tile t${S.mine.choice}"><span class="sh">${SH[S.mine.choice]}</span>${esc(q.options[S.mine.choice])}</div>
+          <p class="muted">Waiting for the others…</p>`;
+        return;
+      }
+      $.innerHTML = head + `<div class="timer"><i id="bar"></i></div><div class="qtext" style="font-size:clamp(20px,5vw,34px)">${esc(q.text)}</div>
+        <div class="tiles">${q.options.map((o, i) => `<button class="tile t${i}" data-i="${i}"><span class="sh">${SH[i]}</span>${esc(o)}</button>`).join('')}</div>`;
+      $.querySelectorAll('.tile').forEach(b => b.onclick = async () => {
+        if (sending) return; sending = true;
+        $.querySelectorAll('.tile').forEach(x => (x.disabled = true));
+        try { await api('/api/answer', { pid, qid: q.id, choice: +b.dataset.i }); } catch (e) {}
+        sending = false; key = '';
+      });
+      const t0 = got, left0 = S.left, lim = q.time;
+      const upd = () => { const l = Math.max(0, left0 - (Date.now() - t0) / 1000); const bar = document.getElementById('bar'); if (bar) bar.style.width = (100 * l / lim) + '%'; };
+      upd(); timer = setInterval(upd, 250);
+      return;
+    }
+    // reveal / leaderboard
+    const m = S.mine;
+    $.innerHTML = head + (m ? (m.correct ? `<h2 class="ok">✓ Correct</h2><div class="big">+${m.points}</div>` : `<h2 class="bad">✗ Not this time</h2>`) : `<h2 class="bad">No answer</h2>`) +
+      `<p>Answer: <b>${esc(q.options[q.correct])}</b></p>${q.explain ? `<p class="muted">${esc(q.explain)}</p>` : ''}
+       <p>Total <b class="mono">${S.score}</b>${S.rank ? ` · place <b>${S.rank}</b> of ${S.players}` : ''}</p>`;
+  }
+  poll();
+})();
+</script>
+</body>
+</html>
